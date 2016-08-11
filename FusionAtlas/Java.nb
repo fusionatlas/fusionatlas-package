@@ -1,0 +1,803 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     31191,        794]
+NotebookOptionsPosition[     29272,        728]
+NotebookOutlinePosition[     29706,        746]
+CellTagsIndexPosition[     29663,        743]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FusionAtlas`Java` package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202909924834576`*^9, 3.4202909948668847`*^9}, {
+  3.441994372308176*^9, 3.441994374395293*^9}}],
+
+Cell["\<\
+Version 0, January 26 2009, Scott Morrison, Emily Peters, Noah Snyder\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420290997931291*^9, 3.420291017779832*^9}, {
+  3.441994379970463*^9, 3.4419943830033197`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Java`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<JLink`\>\"", ",", 
+      "\"\<FusionAtlas`Bigraphs`\>\"", ",", "\"\<FusionAtlas`GraphPairs`\>\"",
+       ",", "\"\<FusionAtlas`TensorSolver`\>\"", ",", 
+      "\"\<FusionAtlas`DisplayGraphs`\>\""}], "}"}]}], "]"}], ";"}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202911560186095`*^9, 3.4202911587124834`*^9}, {
+   3.420295014256483*^9, 3.4202950158788157`*^9}, {3.4202954024747133`*^9, 
+   3.42029543357944*^9}, {3.4202954793853054`*^9, 3.4202955565763006`*^9}, {
+   3.4202956106340322`*^9, 3.420295640847477*^9}, {3.441994420971971*^9, 
+   3.441994434176545*^9}, {3.4419945490155*^9, 3.441994553613*^9}, {
+   3.441994640939397*^9, 3.441994644400791*^9}, {3.494961549141632*^9, 
+   3.494961560171832*^9}, 3.52477199406295*^9, {3.567724734688257*^9, 
+   3.567724738531906*^9}, {3.567796552743195*^9, 3.567796563148716*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FusionAtlasJavaDirectory", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";", 
+  RowBox[{
+   RowBox[{"FusionAtlasScalaDirectory", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.441994441354444*^9, 3.441994450081204*^9}, {
+  3.494776409483568*^9, 3.4947764241209517`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"AsScalaSet", ";", "AsScalaList", ";", "AsScalaOption", ";", 
+  "AsScalaObject", ";", "FromScalaObject", ";", "UnpackJavaLists", ";", 
+  "UnpackJavaObjects", ";"}], "\[IndentingNewLine]", 
+ RowBox[{"GraphToScalaObject", ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.494961266502349*^9, 3.494961279828858*^9}, {
+  3.494961321940345*^9, 3.4949613256669273`*^9}, {3.5406454015972023`*^9, 
+  3.540645401970915*^9}, {3.567724930298462*^9, 3.567724939712281*^9}, {
+  3.5677965760520144`*^9, 3.5677965853636837`*^9}, {3.568497690140271*^9, 
+  3.568497698168392*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RestartJava", ";", "CleanScalaLibraries", ";", 
+  "BuildScalaLibraries", ";", "RebuildScalaLibraries", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5238071479062443`*^9, 3.523807169647636*^9}},
+ CellID->1269338625],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FusionAtlasJavaDirectory", "[", "]"}], ":=", 
+  RowBox[{"ToFileName", "[", 
+   RowBox[{
+    RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", "\"\<java\>\""}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4327594279471197`*^9, 3.432759434236163*^9}, {
+  3.441993874780366*^9, 3.441993878457967*^9}, {3.515333898174892*^9, 
+  3.515333908526669*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ":=", 
+  RowBox[{"ToFileName", "[", 
+   RowBox[{
+    RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", "\"\<scala\>\""}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4327594279471197`*^9, 3.432759434236163*^9}, {
+  3.441993874780366*^9, 3.441993878457967*^9}, {3.494776167516108*^9, 
+  3.494776172286058*^9}, {3.515333902509885*^9, 3.515333906454295*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Add", " ", "old", " ", "java", " ", "libraries", " ", "to", " ", "the", 
+    " ", "classpath"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"AddToClassPath", "[", 
+     RowBox[{
+      RowBox[{"ToFileName", "[", 
+       RowBox[{
+        RowBox[{"FusionAtlasJavaDirectory", "[", "]"}], ",", 
+        "\"\<target\>\""}], "]"}], ",", 
+      RowBox[{"ToFileName", "[", 
+       RowBox[{
+        RowBox[{"FusionAtlasJavaDirectory", "[", "]"}], ",", "\"\<jars\>\""}],
+        "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Next", ",", " ", 
+     RowBox[{
+     "check", " ", "that", " ", "everything", " ", "we", " ", "need", " ", 
+      RowBox[{"exists", ".", " ", "If"}], " ", "not"}], ",", " ", 
+     RowBox[{"run", " ", "sbt", " ", "to", " ", "build", " ", 
+      RowBox[{"things", "."}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ScalaVersion", "=", 
+     RowBox[{
+      RowBox[{"StringCases", "[", 
+       RowBox[{
+        RowBox[{"Import", "[", 
+         RowBox[{"ToFileName", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], "}"}], ",", 
+           "\"\<build.sbt\>\""}], "]"}], "]"}], ",", 
+        RowBox[{
+         RowBox[{"\"\<scalaVersion := \\\"\>\"", "~~", 
+          RowBox[{"v", ":", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"Except", "[", "\"\<\\\"\>\"", "]"}], "..."}], ")"}]}], 
+          "~~", "\"\<\\\"\>\""}], "\[RuleDelayed]", "v"}]}], "]"}], 
+      "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ScalaMajorVersion", "=", 
+     RowBox[{"StringTake", "[", 
+      RowBox[{"ScalaVersion", ",", "4"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ProjectJars", ":=", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"{", 
+       RowBox[{"ToFileName", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+           "\"\<target\>\"", ",", 
+           RowBox[{"\"\<scala-\>\"", "<>", "ScalaMajorVersion"}]}], "}"}], 
+         ",", "\"\<*.jar\>\""}], "]"}], "}"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"CleanScalaLibraries", "[", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"DeleteDirectory", "[", 
+        RowBox[{
+         RowBox[{"ToFileName", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+            "\"\<lib_managed\>\""}], "}"}], "]"}], ",", 
+         RowBox[{"DeleteContents", "\[Rule]", "True"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"DeleteDirectory", "[", 
+        RowBox[{
+         RowBox[{"ToFileName", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+            "\"\<target\>\""}], "}"}], "]"}], ",", 
+         RowBox[{"DeleteContents", "\[Rule]", "True"}]}], "]"}], ";"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"BuildScalaLibraries", "[", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"SetDirectory", "[", 
+        RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Run", "[", "\"\<./sbt clean update package\>\"", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ResetDirectory", "[", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"AddToClassPath", "[", "ProjectJars", "]"}], ";"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"RebuildScalaLibraries", "[", "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"CleanScalaLibraries", "[", "]"}], ";", 
+      RowBox[{"BuildScalaLibraries", "[", "]"}]}], ")"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Length", "[", "ProjectJars", "]"}], "\[Equal]", "0"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{
+        "\"\<The Scala libraries for the FusionAtlas haven't been compiled. \
+I'm doing that now (Scala version \>\"", "<>", "ScalaMajorVersion", "<>", 
+         "\"\<)...\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"CleanScalaLibraries", "[", "]"}], ";", "\[IndentingNewLine]", 
+       
+       RowBox[{"RebuildScalaLibraries", "[", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "ProjectJars", "]"}], "\[Equal]", "0"}], ",",
+          "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+          "Print", "[", 
+           "\"\<Compilation failed. Please complain to Scott Morrison \
+<scott@tqft.net>.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}]}], 
+     "\[IndentingNewLine]", "]"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"AddToClassPath", "[", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"ToFileName", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+          "\"\<target\>\"", ",", 
+          RowBox[{"\"\<scala-\>\"", "<>", "ScalaMajorVersion"}], ",", 
+          "\"\<classes\>\""}], "}"}], ",", "\"\<log4j.xml\>\""}], "]"}], 
+      "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"AddToClassPath", "[", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"ToFileName", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "$HomeDirectory", ",", "\"\<.sbt\>\"", ",", "\"\<boot\>\"", ",", 
+          RowBox[{"\"\<scala-\>\"", "<>", "ScalaVersion"}], ",", 
+          "\"\<lib\>\""}], "}"}], ",", "\"\<*.jar\>\""}], "]"}], "]"}], "]"}],
+     ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"AddToClassPath", "[", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"ToFileName", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+          "\"\<lib_managed\>\"", ",", "\"\<jars\>\""}], "}"}], ",", 
+        "\"\<*/*/*.jar\>\""}], "]"}], "]"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"AddToClassPath", "[", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"ToFileName", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+          "\"\<lib_managed\>\"", ",", "\"\<bundles\>\""}], "}"}], ",", 
+        "\"\<*/*/*.jar\>\""}], "]"}], "]"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"AddToClassPath", "[", "ProjectJars", "]"}], ";"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432758998299317*^9, 3.4327590718050127`*^9}, 
+   3.432759237773664*^9, 3.4327592714020195`*^9, {3.4327594420273666`*^9, 
+   3.432759450219146*^9}, {3.4327633163784094`*^9, 3.432763316799014*^9}, {
+   3.4947761796837*^9, 3.494776184940648*^9}, {3.4947767157189827`*^9, 
+   3.494776718171769*^9}, {3.512397508668861*^9, 3.512397513830508*^9}, {
+   3.514727505969902*^9, 3.514727511527555*^9}, {3.515333328627145*^9, 
+   3.515333381061819*^9}, {3.5153336353858423`*^9, 3.515333651631135*^9}, {
+   3.5153338828427753`*^9, 3.51533395443856*^9}, {3.515333985191291*^9, 
+   3.515334259406979*^9}, {3.515334621631316*^9, 3.515334691278104*^9}, {
+   3.5153349246517143`*^9, 3.515334959134323*^9}, {3.515335059459738*^9, 
+   3.515335090004682*^9}, {3.523461084260952*^9, 3.523461088144827*^9}, {
+   3.523463226931426*^9, 3.523463230785494*^9}, {3.523463261544571*^9, 
+   3.523463300245407*^9}, {3.5234637081715097`*^9, 3.5234637089019337`*^9}, {
+   3.523463750936439*^9, 3.523463814171998*^9}, {3.5234640279587097`*^9, 
+   3.523464063296494*^9}, {3.5234640997479477`*^9, 3.523464103648838*^9}, {
+   3.5236354704842873`*^9, 3.523635502986133*^9}, {3.5236356394736967`*^9, 
+   3.523635648885499*^9}, {3.523807068365139*^9, 3.523807164871068*^9}, {
+   3.523807212064397*^9, 3.523807326025825*^9}, {3.523807403173731*^9, 
+   3.523807473518198*^9}, {3.523807677137116*^9, 3.523807708897085*^9}, {
+   3.524333226828764*^9, 3.524333227956945*^9}, {3.525019947287787*^9, 
+   3.5250199533340273`*^9}, {3.525020120526226*^9, 3.525020120780047*^9}, {
+   3.525119392737495*^9, 3.525119400591928*^9}, {3.52511960897093*^9, 
+   3.525119639232539*^9}, {3.529170410419745*^9, 3.529170410586748*^9}, {
+   3.529702656888356*^9, 3.529702680379127*^9}, 3.529703761485366*^9, {
+   3.5386658297268963`*^9, 3.53866584584548*^9}, {3.5390373506520567`*^9, 
+   3.539037353721923*^9}, {3.543455606389359*^9, 3.543455609052253*^9}, 
+   3.5472344578055067`*^9, {3.5472344945619707`*^9, 3.547234517727236*^9}, 
+   3.547234576901846*^9, {3.547234722286304*^9, 3.5472347374196043`*^9}, {
+   3.547234948851606*^9, 3.547234965240471*^9}, {3.54723501610465*^9, 
+   3.5472350305694103`*^9}, {3.5678042826663713`*^9, 
+   3.5678043499448223`*^9}, {3.575940208858138*^9, 3.575940212313472*^9}, {
+   3.617056601024688*^9, 3.6170566057246428`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RestartJava", "[", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"NumericQ", "[", "Global`$JVMHeap", "]"}]}], ",", 
+       RowBox[{"Global`$JVMHeap", "=", "512"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"javaPath", "=", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"RunThrough", "[", 
+          RowBox[{
+          "\"\<echo \\\\\\\"$(/usr/libexec/java_home -v 1.7)\\\\\\\"\>\"", 
+           ",", "\"\<\>\""}], "]"}], ",", "\"\<bin\>\"", ",", 
+         "\"\<java\>\""}], "}"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ReinstallJava", "[", 
+      RowBox[{
+       RowBox[{"CommandLine", "\[Rule]", "javaPath"}], ",", 
+       RowBox[{"JVMArguments", "\[Rule]", 
+        RowBox[{"\"\<-Xmx\>\"", "<>", 
+         RowBox[{"ToString", "[", "Global`$JVMHeap", "]"}], "<>", 
+         "\"\<m\>\""}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"AllowRaggedArrays", "[", "True", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "LoadJavaClass", "[", 
+      "\"\<org.fusionatlas.v1.odometer.GradedBigraph\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "LoadJavaClass", "[", "\"\<org.fusionatlas.v1.odometer.Proxy\>\"", "]"}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{
+      "\"\<org.fusionatlas.graphs.PairOfBigraphsWithDuals$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<org.fusionatlas.graphs.Bigraph$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<org.fusionatlas.graphs.BigraphWithDuals$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<org.fusionatlas.graphs.FusionGraph$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<org.fusionatlas.graphs.DirectedFusionGraph$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<scala.collection.immutable.List$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<scala.collection.immutable.Set$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<scala.Some$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<scala.None$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<java.util.Arrays\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{"\"\<scala.collection.JavaConversions\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+     "LoadJavaClass", "[", 
+      "\"\<net.tqft.toolkit.algebra.fusion.FusionRing$\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "LoadJavaClass", "[", 
+      "\"\<net.tqft.toolkit.algebra.matrices.Matrix$\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "LoadJavaClass", "[", 
+      "\"\<org.fusionatlas.graphs.obstructions.TriplePointObstruction$\>\"", 
+      "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.524771615799881*^9, 3.5247716177000504`*^9}, {
+   3.524771660470975*^9, 3.5247716641716833`*^9}, {3.5247717432972183`*^9, 
+   3.524771752950972*^9}, {3.524771818260004*^9, 3.5247718548271437`*^9}, {
+   3.524771940725246*^9, 3.52477195566921*^9}, {3.5406474542249413`*^9, 
+   3.540647469624378*^9}, {3.56772475119622*^9, 3.567724782342963*^9}, {
+   3.5685053619837217`*^9, 3.568505371949761*^9}, {3.569350042864361*^9, 
+   3.569350054182892*^9}, 3.569350090752297*^9, {3.575938198011812*^9, 
+   3.5759382232167597`*^9}, 3.57613523168762*^9, {3.5961385625079517`*^9, 
+   3.596138562742934*^9}, 3.621796674544561*^9, {3.621796911038477*^9, 
+   3.621796924414166*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RestartJava", "[", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.505176980856522*^9, 3.505176986992567*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"AsScalaSet", "[", "list_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"scala`collection`JavaConversions`asScalaSet", "[", 
+    RowBox[{"JavaNew", "[", 
+     RowBox[{"\"\<java.util.HashSet\>\"", ",", 
+      RowBox[{"java`util`Arrays`asList", "[", 
+       RowBox[{"MakeJavaObject", "[", "list", "]"}], "]"}]}], "]"}], "]"}], 
+   "@", 
+   RowBox[{"toSet", "[", "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaSet", "[", 
+   RowBox[{"{", "}"}], "]"}], ":=", 
+  RowBox[{"scala`collection`immutable`Set$`MODULE$", "@", 
+   RowBox[{"empty", "[", "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.494787752089286*^9, 3.494787832940843*^9}, {
+  3.494787918486616*^9, 3.494787966466568*^9}, {3.494788176167491*^9, 
+  3.494788177204864*^9}, {3.4949612177221613`*^9, 3.49496124200956*^9}, {
+  3.56685542270982*^9, 3.566855423859578*^9}, {3.5678050314087667`*^9, 
+  3.567805048492585*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"AsScalaOption", "[", 
+   RowBox[{"{", "}"}], "]"}], ":=", 
+  "scala`None$`MODULE$"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaOption", "[", 
+   RowBox[{"{", "x_", "}"}], "]"}], ":=", 
+  RowBox[{"scala`Some$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{"MakeJavaObject", "[", "x", "]"}], "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5406453234584503`*^9, 3.5406453425884333`*^9}, {
+   3.540647413994884*^9, 3.5406474161265087`*^9}, {3.540647479316471*^9, 
+   3.540647520836216*^9}, 3.5406475669803762`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"unpackListRules", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{"Y", ",", "\"\<scala.collection.Traversable\>\""}], "]"}]}], 
+      "\[RuleDelayed]", 
+      RowBox[{"JavaConversions`seqAsJavaList", "[", 
+       RowBox[{"Y", "@", 
+        RowBox[{"toList", "[", "]"}]}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{"Y", ",", "\"\<scala.Tuple2\>\""}], "]"}]}], "\[Rule]", 
+      RowBox[{"Y", "@", 
+       RowBox[{
+        RowBox[{"productIterator", "[", "]"}], "@", 
+        RowBox[{"toList", "[", "]"}]}]}]}], ",", 
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{"Y", ",", "\"\<scala.Tuple3\>\""}], "]"}]}], "\[Rule]", 
+      RowBox[{"Y", "@", 
+       RowBox[{
+        RowBox[{"productIterator", "[", "]"}], "@", 
+        RowBox[{"toList", "[", "]"}]}]}]}], ",", 
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{"Y", ",", "\"\<scala.Tuple4\>\""}], "]"}]}], "\[Rule]", 
+      RowBox[{"Y", "@", 
+       RowBox[{
+        RowBox[{"productIterator", "[", "]"}], "@", 
+        RowBox[{"toList", "[", "]"}]}]}]}], ",", 
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{"Y", ",", "\"\<java.util.List\>\""}], "]"}]}], 
+      "\[RuleDelayed]", 
+      RowBox[{"Y", "@", 
+       RowBox[{"toArray", "[", "]"}]}]}], ",", 
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{
+        "Y", ",", "\"\<net.tqft.toolkit.algebra.matrices.Matrix\>\""}], 
+        "]"}]}], "\[RuleDelayed]", 
+      RowBox[{"Y", "@", 
+       RowBox[{"entries", "[", "]"}]}]}]}], "}"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567727136070491*^9, 3.567727146027302*^9}, {
+  3.567805065095048*^9, 3.567805065478487*^9}, {3.618002329768178*^9, 
+  3.618002330662341*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"UnpackJavaLists", "[", "X_", "]"}], ":=", 
+  RowBox[{"X", "//.", "unpackListRules"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4949595421306887`*^9, 3.4949595519587708`*^9}, {
+  3.494961300271866*^9, 3.494961303150202*^9}, {3.4950322799374638`*^9, 
+  3.495032308606269*^9}, {3.507756226324226*^9, 3.5077562615985117`*^9}, {
+  3.507756300517275*^9, 3.507756300884673*^9}, {3.525116074577257*^9, 
+  3.525116084534513*^9}, {3.567723738854699*^9, 3.5677237630421886`*^9}, {
+  3.567727143102269*^9, 3.567727154945608*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FromScalaObject", "[", "X_", "]"}], ":=", 
+  RowBox[{"X", "//.", 
+   RowBox[{"unpackListRules", "~", "Join", "~", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{
+        "Y", ",", 
+         "\"\<net.tqft.toolkit.mathematica.MathematicaExpression\>\""}], 
+        "]"}]}], "\[RuleDelayed]", 
+      RowBox[{"ToExpression", "[", 
+       RowBox[{"Y", "@", 
+        RowBox[{"toMathematicaInputString", "[", "]"}]}], "]"}]}], "}"}], "~",
+     "Join", "~", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Y_", "/;", 
+       RowBox[{"InstanceOf", "[", 
+        RowBox[{
+        "Y", ",", "\"\<net.tqft.toolkit.algebra.fusion.FusionRing\>\""}], 
+        "]"}]}], "\[RuleDelayed]", 
+      RowBox[{"FusionRules", "[", 
+       RowBox[{"_", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", 
+          RowBox[{"UnpackJavaLists", "[", 
+           RowBox[{"Y", "@", 
+            RowBox[{"structureCoefficients", "[", "]"}]}], "]"}]}], "}"}]}], 
+       "]"}]}], "}"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.494959315351053*^9, 3.494959318128127*^9}, {
+   3.494959349916689*^9, 3.494959470425816*^9}, {3.494959549351907*^9, 
+   3.4949595587273912`*^9}, {3.4949613055414352`*^9, 3.4949613093605556`*^9}, 
+   3.494961429691691*^9, {3.524333196945341*^9, 3.524333198040247*^9}, 
+   3.5243332504008303`*^9, {3.567727161209268*^9, 3.5677272095862417`*^9}, {
+   3.5677273113675203`*^9, 3.567727338364889*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"AsScalaList", "[", 
+   RowBox[{"list", ":", 
+    RowBox[{"{", 
+     RowBox[{"__Integer", "|", "__Real"}], "}"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"scala`collection`JavaConversions`asScalaBuffer", "[", 
+    RowBox[{"java`util`Arrays`asList", "[", 
+     RowBox[{"MakeJavaObject", "/@", "list"}], "]"}], "]"}], "@", 
+   RowBox[{"toList", "[", "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaList", "[", 
+   RowBox[{"list", ":", 
+    RowBox[{"{", "__List", "}"}]}], "]"}], ":=", 
+  RowBox[{"AsScalaList", "[", 
+   RowBox[{"AsScalaList", "/@", "list"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaList", "[", "list_List", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"scala`collection`JavaConversions`asScalaBuffer", "[", 
+    RowBox[{"java`util`Arrays`asList", "[", 
+     RowBox[{"MakeJavaObject", "[", "list", "]"}], "]"}], "]"}], "@", 
+   RowBox[{"toList", "[", "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaList", "[", 
+   RowBox[{"{", "}"}], "]"}], ":=", 
+  RowBox[{"scala`collection`immutable`List$`MODULE$", "@", 
+   RowBox[{"empty", "[", "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567720614334144*^9, 3.567720621410693*^9}, {
+  3.567720654523664*^9, 3.567720676011091*^9}, {3.567720731822373*^9, 
+  3.5677207326500893`*^9}, {3.5677247654667683`*^9, 3.567724771552896*^9}, {
+  3.5677269994289722`*^9, 3.567727075733775*^9}, {3.567804777400037*^9, 
+  3.5678048076200457`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"AsScalaObject", "[", "x_List", "]"}], ":=", 
+  RowBox[{"AsScalaList", "[", "x", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaObject", "[", 
+   RowBox[{"FusionRules", "[", 
+    RowBox[{"_", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "m_"}], "}"}]}], 
+    "]"}], "]"}], ":=", 
+  RowBox[{"net`tqft`toolkit`algebra`fusion`FusionRing$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{"AsScalaList", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"net`tqft`toolkit`algebra`matrices`Matrix$`MODULE$", "@", 
+        RowBox[{"from", "[", 
+         RowBox[{"Map", "[", 
+          RowBox[{"AsScalaList", ",", "#", ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1"}], "}"}]}], "]"}], "]"}]}], "&"}], "/@", 
+      "m"}], "]"}], "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaObject", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"org`fusionatlas`graphs`Bigraph$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{"GraphToString", "[", "g", "]"}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"AsScalaObject", "[", "g_BigraphWithDuals", "]"}], ":=", 
+  RowBox[{"org`fusionatlas`graphs`BigraphWithDuals$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{"GraphToString", "[", "g", "]"}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"AsScalaObject", "[", 
+   RowBox[{"{", 
+    RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "}"}], "]"}],
+   ":=", 
+  RowBox[{"org`fusionatlas`graphs`PairOfBigraphsWithDuals$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{
+     RowBox[{"GraphToString", "[", "g1", "]"}], ",", 
+     RowBox[{"GraphToString", "[", "g2", "]"}]}], 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AsScalaObject", "[", 
+   RowBox[{"X_", "/;", 
+    RowBox[{"JavaObjectQ", "[", "X", "]"}]}], "]"}], ":=", "X"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567720614334144*^9, 3.567720621410693*^9}, {
+  3.567720654523664*^9, 3.567720676011091*^9}, {3.567720731822373*^9, 
+  3.5677207326500893`*^9}, {3.5677247654667683`*^9, 3.567724771552896*^9}, {
+  3.5677269994289722`*^9, 3.567727094786813*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"UnpackJavaObjects", "[", "_", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+     "Print", "[", 
+      "\"\<The UnpackJavaObjects function has been deprecated; please use \
+FromScalaObject instead.\>\"", "]"}], ";", 
+     RowBox[{"Abort", "[", "]"}]}], ")"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"GraphToScalaObject", "[", "_", "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+     "Print", "[", 
+      "\"\<The GraphToScalaObject function has been deprecated; please use \
+AsScalaObject instead.\>\"", "]"}], ";", 
+     RowBox[{"Abort", "[", "]"}]}], ")"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568497579427848*^9, 3.568497647838512*^9}, {
+  3.5686567680720663`*^9, 3.568656772105925*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1219, 811},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+TaggingRules->{"SearchTextTranslated" -> ""},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 191, 3, 51, "Subtitle",
+ InitializationCell->True],
+Cell[761, 27, 237, 5, 30, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1023, 36, 60, 1, 80, "Section",
+ InitializationCell->True],
+Cell[1086, 39, 1016, 19, 46, "Input",
+ InitializationCell->True],
+Cell[2105, 60, 369, 10, 28, "Input",
+ InitializationCell->True],
+Cell[2477, 72, 604, 10, 46, "Input",
+ InitializationCell->True],
+Cell[3084, 84, 259, 5, 28, "Input",
+ InitializationCell->True,
+ CellID->1269338625],
+Cell[3346, 91, 119, 3, 28, "Input",
+ InitializationCell->True],
+Cell[3468, 96, 409, 10, 28, "Input",
+ InitializationCell->True],
+Cell[3880, 108, 457, 10, 28, "Input",
+ InitializationCell->True],
+Cell[4340, 120, 9374, 215, 573, "Input",
+ InitializationCell->True],
+Cell[13717, 337, 4928, 105, 386, "Input",
+ InitializationCell->True],
+Cell[18648, 444, 152, 3, 28, "Input",
+ InitializationCell->True],
+Cell[18803, 449, 941, 21, 63, "Input",
+ InitializationCell->True],
+Cell[19747, 472, 588, 14, 46, "Input",
+ InitializationCell->True],
+Cell[20338, 488, 2006, 55, 80, "Input",
+ InitializationCell->True],
+Cell[22347, 545, 572, 10, 28, "Input",
+ InitializationCell->True],
+Cell[22922, 557, 1596, 40, 114, "Input",
+ InitializationCell->True],
+Cell[24521, 599, 1487, 34, 98, "Input",
+ InitializationCell->True],
+Cell[26011, 635, 2206, 54, 165, "Input",
+ InitializationCell->True],
+Cell[28220, 691, 819, 23, 46, "Input",
+ InitializationCell->True],
+Cell[29042, 716, 96, 3, 28, "Input",
+ InitializationCell->True],
+Cell[29141, 721, 103, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

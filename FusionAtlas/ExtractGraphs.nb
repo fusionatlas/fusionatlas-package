@@ -1,0 +1,2395 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     90957,       2385]
+NotebookOptionsPosition[     87315,       2264]
+NotebookOutlinePosition[     87703,       2281]
+CellTagsIndexPosition[     87660,       2278]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FusionAtlas`ExtractGraphs` package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202909924834576`*^9, 3.4202909948668847`*^9}, {
+  3.441994372308176*^9, 3.441994374395293*^9}, {3.505167209394178*^9, 
+  3.505167217553423*^9}, {3.507649293013688*^9, 3.5076492941350727`*^9}, {
+  3.5710792668912163`*^9, 3.571079270489304*^9}}],
+
+Cell["\<\
+Version 0, February 28 2013, Scott Morrison and David Penneys\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420290997931291*^9, 3.420291017779832*^9}, {
+  3.441994379970463*^9, 3.4419943830033197`*^9}, {3.50516720091601*^9, 
+  3.505167207161769*^9}, {3.571079274544703*^9, 3.571079284936471*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`ExtractGraphs`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`TensorSolver`\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202911560186095`*^9, 3.4202911587124834`*^9}, {
+   3.420295014256483*^9, 3.4202950158788157`*^9}, {3.4202954024747133`*^9, 
+   3.42029543357944*^9}, {3.4202954793853054`*^9, 3.4202955565763006`*^9}, {
+   3.4202956106340322`*^9, 3.420295640847477*^9}, {3.441994420971971*^9, 
+   3.441994434176545*^9}, {3.4419945490155*^9, 3.441994553613*^9}, {
+   3.441994640939397*^9, 3.441994644400791*^9}, {3.494961549141632*^9, 
+   3.494961560171832*^9}, {3.505167220818883*^9, 3.505167241482581*^9}, {
+   3.507649417505335*^9, 3.507649428389289*^9}, {3.507650458181695*^9, 
+   3.5076504600984*^9}, 3.508522580936002*^9, {3.571079292868466*^9, 
+   3.571079295548285*^9}, {3.571079511586323*^9, 3.571079515924659*^9}, 
+   3.571079550045067*^9}],
+
+Cell[BoxData[
+ RowBox[{"ExtractFusionGraphLabels", ";", "ExtractFusionGraph", ";", 
+  "ExtractPairOfBigraphsWithDuals", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.505167244567556*^9, 3.5051672478251743`*^9}, {
+   3.5076477394283447`*^9, 3.507647740643408*^9}, {3.507647872860544*^9, 
+   3.5076478783329287`*^9}, {3.5076485560332403`*^9, 3.507648569271183*^9}, {
+   3.507658063273876*^9, 3.507658063688983*^9}, {3.5089739909031878`*^9, 
+   3.508973991942086*^9}, 3.5105872937836857`*^9, {3.5124097151473846`*^9, 
+   3.512409721914093*^9}, {3.57107931280023*^9, 3.571079319651812*^9}, {
+   3.571079392744773*^9, 3.5710794055136957`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["string from fusion rules", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567807880376142*^9, 3.567807889223219*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"mkString", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "_"}], "]"}], ":=", 
+  "\"\<\>\""}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"mkString", "[", 
+    RowBox[{
+     RowBox[{"{", "x_", "}"}], ",", "sep_"}], "]"}], ":=", 
+   RowBox[{"ToString", "[", "x", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mkString", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"x_", ",", "xs__"}], "}"}], ",", "sep_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"ToString", "[", "x", "]"}], "<>", 
+   RowBox[{"StringJoin", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"sep", "<>", 
+        RowBox[{"ToString", "[", "#", "]"}]}], ")"}], "&"}], "/@", 
+     RowBox[{"{", "xs", "}"}]}], "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5677320763983173`*^9, 3.5677321550492287`*^9}, {
+  3.56773270409035*^9, 3.567732717532032*^9}, {3.568075746059196*^9, 
+  3.568075748142123*^9}, {3.570822789484531*^9, 3.570822801040393*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"matrixToString", "[", "matrix_", "]"}], ":=", 
+  RowBox[{"mkString", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"mkString", "[", 
+       RowBox[{"#", ",", "\"\<x\>\""}], "]"}], "&"}], "/@", "matrix"}], ",", 
+    "\"\<p\>\""}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567732207978076*^9, 3.567732260316092*^9}, {
+  3.5677323267448473`*^9, 3.567732338082074*^9}, {3.5677975521730757`*^9, 
+  3.567797553018141*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"lowerTriangular", "[", "matrix_", "]"}], ":=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"matrix", "\[LeftDoubleBracket]", 
+     RowBox[{"i", ",", 
+      RowBox[{"1", ";;", "i"}]}], "\[RightDoubleBracket]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", "1", ",", 
+      RowBox[{"Length", "[", "matrix", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567732420181272*^9, 3.567732431804459*^9}, {
+  3.567732466805328*^9, 3.5677325136507387`*^9}, {3.567732579052444*^9, 
+  3.5677325846585617`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dfgMatrixToString", "[", "matrix_", "]"}], ":=", 
+  RowBox[{"StringReplace", "[", 
+   RowBox[{
+    RowBox[{"ToString", "[", "matrix", "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\"\<{\>\"", "\[Rule]", "\"\<[\>\""}], ",", 
+      RowBox[{"\"\<}\>\"", "\[Rule]", "\"\<]\>\""}], ",", 
+      RowBox[{"\"\< \>\"", "\[Rule]", "\"\<\>\""}]}], "}"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567797958565159*^9, 3.5677979955191717`*^9}, {
+  3.5677980809229593`*^9, 3.5677980846887903`*^9}, {3.5677986572843323`*^9, 
+  3.5677986788167458`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["extract fusion graph", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5680759674875803`*^9, 3.568075970966782*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"getTensor", "[", 
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"fr", "\[LeftDoubleBracket]", 
+     RowBox[{"2", ",", "1", ",", "2"}], "\[RightDoubleBracket]"}], 
+    "\[LeftDoubleBracket]", 
+    RowBox[{"All", ",", "2", ",", "All"}], "\[RightDoubleBracket]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"getTensor", "[", 
+    RowBox[{
+     RowBox[{"fr", ":", 
+      RowBox[{"FusionRules", "[", 
+       RowBox[{"_", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], 
+         "}"}]}], "]"}]}], ",", "generator_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"fr", "\[LeftDoubleBracket]", 
+     RowBox[{"2", ",", "1", ",", "2"}], "\[RightDoubleBracket]"}], 
+    "\[LeftDoubleBracket]", 
+    RowBox[{"All", ",", "generator", ",", "All"}], 
+    "\[RightDoubleBracket]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568502421893484*^9, 3.568502463113336*^9}, {
+  3.568502498262639*^9, 3.568502499030262*^9}, {3.568502539052066*^9, 
+  3.5685025795703363`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getDual", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], ",", "object_Integer"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"tensor", "=", 
+      RowBox[{"fr", "\[LeftDoubleBracket]", 
+       RowBox[{"2", ",", "1", ",", "2"}], "\[RightDoubleBracket]"}]}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Position", "[", 
+      RowBox[{
+       RowBox[{"tensor", "\[LeftDoubleBracket]", 
+        RowBox[{"object", ",", "All", ",", "1"}], "\[RightDoubleBracket]"}], 
+       ",", "1"}], "]"}], "\[LeftDoubleBracket]", 
+     RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568060695373461*^9, 3.568060761205387*^9}, {
+  3.5685026350533657`*^9, 3.568502669209765*^9}, {3.568502706007455*^9, 
+  3.568502722894034*^9}, {3.5685027561920433`*^9, 3.568502761070156*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getDuals", "[", 
+   RowBox[{"fr", ":", 
+    RowBox[{"FusionRules", "[", 
+     RowBox[{"_", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}], 
+     "]"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"getDual", "[", 
+     RowBox[{"fr", ",", "#"}], "]"}], "&"}], "/@", 
+   RowBox[{"Range", "[", 
+    RowBox[{"Length", "[", 
+     RowBox[{"fr", "\[LeftDoubleBracket]", 
+      RowBox[{"2", ",", "1", ",", "2"}], "\[RightDoubleBracket]"}], "]"}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5685031486095743`*^9, 3.568503300886922*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"dualOfGenerator", "[", 
+    RowBox[{
+     RowBox[{"fr", ":", 
+      RowBox[{"FusionRules", "[", 
+       RowBox[{"_", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], 
+         "}"}]}], "]"}]}], ",", 
+     RowBox[{"generator_Integer:", "2"}]}], "]"}], ":=", 
+   RowBox[{"getDual", "[", 
+    RowBox[{"fr", ",", "generator"}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567800767168095*^9, 3.567800811572446*^9}, {
+   3.567801085358646*^9, 3.5678011006713123`*^9}, {3.568056758696484*^9, 
+   3.568056805098802*^9}, {3.5680568773095512`*^9, 3.568057002829907*^9}, {
+   3.568057054299059*^9, 3.5680571011405993`*^9}, {3.568057169793754*^9, 
+   3.568057171558799*^9}, {3.5680572810453577`*^9, 3.5680573660118093`*^9}, {
+   3.568057458633233*^9, 3.568057543577223*^9}, {3.568057911931834*^9, 
+   3.5680579124441643`*^9}, {3.568059140762041*^9, 3.5680591426808367`*^9}, 
+   3.568060403780014*^9, {3.5680608685329447`*^9, 3.568060877665008*^9}, {
+   3.568060979349855*^9, 3.568060985583398*^9}, {3.568075988910966*^9, 
+   3.568075989482122*^9}, {3.568076031111466*^9, 3.568076034493834*^9}, {
+   3.568502775154101*^9, 3.568502780408328*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "getDepths", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.570820877091441*^9, 3.5708208832115927`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"getDepths", "[", "tensor_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "numberOfObjects", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"numberOfObjects", "=", 
+       RowBox[{"Length", "[", "tensor", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Min", "[", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Table", "[", 
+                 RowBox[{
+                  RowBox[{"MatrixPower", "[", 
+                   RowBox[{"tensor", ",", "i"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"i", ",", 
+                    RowBox[{
+                    RowBox[{"Range", "[", "numberOfObjects", "]"}], "-", 
+                    "1"}]}], "}"}]}], "]"}], "\[LeftDoubleBracket]", 
+                RowBox[{"All", ",", "1", ",", "#"}], 
+                "\[RightDoubleBracket]"}], ",", 
+               RowBox[{"c_Integer", "/;", 
+                RowBox[{"c", ">", "0"}]}]}], "]"}], "]"}], "~", "Join", "~", 
+            RowBox[{"{", "\[Infinity]", "}"}]}], "]"}], "-", "1"}], ")"}], 
+        "&"}], "/@", 
+       RowBox[{"Range", "[", "numberOfObjects", "]"}]}]}]}], 
+    "\[IndentingNewLine]", "]"}]}], "*)"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568502395625379*^9, 3.568502408917758*^9}, {
+  3.568502923477529*^9, 3.568502977004216*^9}, {3.568503037738282*^9, 
+  3.568503076003619*^9}, {3.568503856348134*^9, 3.568503857843206*^9}, {
+  3.570820885886507*^9, 3.5708208882179613`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getDepths", "[", 
+   RowBox[{"tensor_", ",", "duals_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"depths", ",", 
+      RowBox[{"currentDepth", "=", 
+       RowBox[{"-", "1"}]}], ",", "currentVector", ",", "next"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"depths", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"-", "1"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"Length", "[", "tensor", "]"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"next", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{"MemberQ", "[", 
+        RowBox[{"depths", ",", 
+         RowBox[{"-", "1"}]}], "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "next", "]"}], "\[Equal]", "0"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"next", "=", 
+            RowBox[{
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", 
+               RowBox[{"-", "1"}], ",", "1", ",", "1"}], "]"}], 
+             "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"next", "=", 
+            RowBox[{"Union", "[", 
+             RowBox[{"next", "~", "Join", "~", 
+              RowBox[{
+              "duals", "\[LeftDoubleBracket]", "next", 
+               "\[RightDoubleBracket]"}]}], "]"}]}], ";", " ", 
+           RowBox[{"(*", " ", 
+            RowBox[{
+            "dual", " ", "pairs", " ", "should", " ", "be", " ", "t", " ", 
+             "the", " ", "same", " ", "depth"}], " ", "*)"}], 
+           "\[IndentingNewLine]", 
+           RowBox[{"++", "currentDepth"}], ";", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+               "depths", "\[LeftDoubleBracket]", "#", 
+                "\[RightDoubleBracket]"}], "=", "currentDepth"}], ")"}], 
+             "&"}], "/@", "next"}], ";"}]}], "\[IndentingNewLine]", "]"}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"currentVector", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"#", "\[Equal]", "currentDepth"}], ",", "1", ",", "0"}], 
+            "]"}], "&"}], "/@", "depths"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"next", "=", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"Position", "[", 
+           RowBox[{
+            RowBox[{"Transpose", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"tensor", "+", 
+                  RowBox[{"Transpose", "[", "tensor", "]"}]}], ")"}], ".", 
+                "currentVector"}], ",", "depths"}], "}"}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Except", "[", "0", "]"}], ",", 
+              RowBox[{"-", "1"}]}], "}"}], ",", "1"}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"next", "=", 
+         RowBox[{"Union", "[", 
+          RowBox[{"next", "~", "Join", "~", 
+           RowBox[{
+           "duals", "\[LeftDoubleBracket]", "next", 
+            "\[RightDoubleBracket]"}]}], "]"}]}], ";", " ", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+         "dual", " ", "pairs", " ", "should", " ", "be", " ", "t", " ", "the",
+           " ", "same", " ", "depth"}], " ", "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "next", "]"}], ">", "0"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"++", "currentDepth"}], ";", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+               "depths", "\[LeftDoubleBracket]", "#", 
+                "\[RightDoubleBracket]"}], "=", "currentDepth"}], ")"}], 
+             "&"}], "/@", "next"}], ";"}]}], "\[IndentingNewLine]", "]"}], 
+        ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     "depths"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5708198437149773`*^9, 3.570820062376103*^9}, {
+   3.5708200935124063`*^9, 3.57082018512143*^9}, {3.570820218152698*^9, 
+   3.57082029200113*^9}, {3.570820379851836*^9, 3.570820417372279*^9}, {
+   3.570820525947772*^9, 3.570820582997044*^9}, {3.57082061980385*^9, 
+   3.5708206259832973`*^9}, 3.5708207113433647`*^9, {3.570821392971181*^9, 
+   3.570821406814372*^9}, {3.5708215262518063`*^9, 3.5708215420665693`*^9}, {
+   3.5708216774061117`*^9, 3.570821709324031*^9}, {3.5708217643406973`*^9, 
+   3.570821770921543*^9}, {3.570821864600669*^9, 3.570821864921316*^9}, {
+   3.570821895548833*^9, 3.570821915492012*^9}, {3.5708230606300573`*^9, 
+   3.570823060690675*^9}, {3.5708657591077642`*^9, 3.570865770529717*^9}, 
+   3.5709539324819317`*^9}],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "graphDepth", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.570820935787508*^9, 3.570820941708539*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"graphDepth", "[", 
+   RowBox[{"tensor_", ",", "duals_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "depths", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"depths", "=", 
+      RowBox[{"getDepths", "[", 
+       RowBox[{"tensor", ",", "duals"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"Max", "[", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{"depths", ",", "\[Infinity]"}], "]"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568505503841646*^9, 3.568505588079294*^9}, {
+  3.568505694598278*^9, 3.568505696012765*^9}, {3.5708209191796207`*^9, 
+  3.570820933940382*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "dualsAtDepth", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dualsAtDepth", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], ",", "depth_"}], "]"}], ":=", 
+  RowBox[{"dualsAtDepth", "[", 
+   RowBox[{"fr", ",", "depth", ",", "2"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dualsAtDepth", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], ",", "depth_", ",", 
+    RowBox[{"generator_Integer:", "2"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "dog", ",", "tensor", ",", "atDepth", ",", "duals", ",", "depths"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"dog", "=", 
+      RowBox[{"dualOfGenerator", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"tensor", "=", 
+      RowBox[{"getTensor", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"duals", "=", 
+      RowBox[{"getDuals", "[", "fr", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"depths", "=", 
+      RowBox[{"getDepths", "[", 
+       RowBox[{"tensor", ",", "duals"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"DebugPrint", "[", "depths", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"atDepth", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{"depths", ",", "depth", ",", "1"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", "atDepth", "]"}], ";"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Position", "[", 
+         RowBox[{"atDepth", ",", 
+          RowBox[{
+           RowBox[{
+           "duals", "\[LeftDoubleBracket]", "atDepth", 
+            "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "i", 
+           "\[RightDoubleBracket]"}]}], "]"}], "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "atDepth", "]"}]}], "}"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGCQBGIQzWAz2Yhr6ivHtUskTUH0hDen5oLomY2V80H0vzyp
+4yDaZOWO/yC6zKJFjBtIH9p8C0w7LbfyANHKbSvA9L0vRudB9OVvBRdA9IGp
+Mzj5gXTLVkEuEL3t2hpREC2kXyAOol+VmJxsB9Ia1xzB9KzlJlc7gfSOW1cf
+geg5YozvQbRLNS9nF5De7RaxoAdIK2XHg+lZnJHrQfSO3Wc2gOhldYuN+oH0
+pvAAYxBdtUJ2J4jekb1wN4ie0/7uN4guN3j6F0TXVa1YMwFI27zcDqbzHl12
+TZz2yvFJC0cAiFZcOLMdRMuZLATTW4SemycB6VOSIhYgum9evh2IluG2dgbR
+E9V3q+YDaS7/w2Ca4Wj9wsOzXjkWuf8G0wpHa9+cAdJZExW+gehNJ2pKzwLp
+GTk7wDQAg1DQPg==
+  "]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"dualsAtDepth", "[", 
+  RowBox[{"R", ",", "4", ",", "3"}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.570822122674021*^9, 3.570822157631139*^9}}],
+
+Cell[BoxData[
+ RowBox[{"dualsAtDepth", "[", 
+  RowBox[{"R", ",", "4", ",", "3"}], "]"}]], "Output",
+ InitializationCell->True,
+ CellChangeTimes->{{3.570822129114534*^9, 3.5708221580036793`*^9}, 
+   3.57086777277072*^9, 3.570947189671443*^9, 3.6017019831175537`*^9, 
+   3.601702047897031*^9, 3.601702387957387*^9, 3.601702491638145*^9, 
+   3.601702787612533*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{
+  "ExtractFusionGraph", " ", "and", " ", "ExtractDirectedGraph", " ", "and", 
+   " ", "ExtractUndirectedGraph", " ", "assumes", " ", "generator", " ", "is",
+    " ", 
+   RowBox[{"simple", "."}]}], " ", "*)"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568504294139125*^9, 3.568504316218699*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtractFusionGraphLabels", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], ",", 
+    RowBox[{"generator_Integer:", "2"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"tensor", ",", " ", "depths"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"tensor", "=", 
+      RowBox[{"getTensor", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"depths", "=", 
+      RowBox[{"getDepths", "[", 
+       RowBox[{"tensor", ",", 
+        RowBox[{"getDuals", "[", "fr", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"Flatten", "[", 
+        RowBox[{"Position", "[", 
+         RowBox[{"depths", ",", "d", ",", "1"}], "]"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"d", ",", "0", ",", 
+         RowBox[{"Max", "[", 
+          RowBox[{"DeleteCases", "[", 
+           RowBox[{"depths", ",", "\[Infinity]"}], "]"}], "]"}]}], "}"}]}], 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.570819342238821*^9, 3.570819367476726*^9}, {
+  3.5708194079608927`*^9, 3.570819459509982*^9}, {3.570819500741284*^9, 
+  3.570819511297236*^9}, {3.570819573478344*^9, 3.570819612579468*^9}, {
+  3.570820988944256*^9, 3.570820989352645*^9}, {3.570821055932273*^9, 
+  3.570821060176972*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ExtractFusionGraph", "[", 
+   RowBox[{"FusionRules", "[", 
+    RowBox[{"_", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"{", "1", "}"}], "}"}], "}"}]}], "}"}]}], "]"}], "]"}], 
+  ":=", "\"\<fg1v0\>\""}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExtractFusionGraph", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], ",", 
+    RowBox[{"generator_Integer:", "2"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"tensor", ",", "dog", ",", "duals", ",", "dualsAD"}], "}"}], ",",
+     "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"tensor", "=", 
+      RowBox[{"getTensor", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<tensor \>\"", ",", "tensor"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dog", "=", 
+      RowBox[{"dualOfGenerator", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<dual of generator \>\"", ",", "dog"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"duals", "=", 
+      RowBox[{"getDuals", "[", "fr", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dualsAD", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"dualsAtDepth", "[", 
+         RowBox[{"fr", ",", "i", ",", "generator"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"graphDepth", "[", 
+           RowBox[{"tensor", ",", "duals"}], "]"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<duals \>\"", ",", "duals"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"graphDepth", "[", 
+         RowBox[{"tensor", ",", "duals"}], "]"}], "\[Equal]", "0"}], ",", 
+       "\"\<fg1v0\>\"", ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"dog", "\[Equal]", "generator"}], ",", 
+         RowBox[{"ExtractUndirectedGraph", "[", 
+          RowBox[{"tensor", ",", "duals", ",", "dualsAD"}], "]"}], ",", 
+         RowBox[{"ExtractDirectedGraph", "[", 
+          RowBox[{"tensor", ",", "duals", ",", "dualsAD"}], "]"}]}], "]"}]}], 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5677998522384653`*^9, 3.567799918117737*^9}, {
+   3.567807654998466*^9, 3.5678076556407833`*^9}, {3.56780801566669*^9, 
+   3.567808051707116*^9}, {3.5680579389427843`*^9, 3.568057939379724*^9}, {
+   3.568503941301918*^9, 3.568504026850542*^9}, {3.568504089019915*^9, 
+   3.568504115264284*^9}, {3.568504172811795*^9, 3.5685041821151237`*^9}, {
+   3.568504565602174*^9, 3.5685045656842537`*^9}, {3.568504755502532*^9, 
+   3.568504768153344*^9}, 3.568504803523341*^9, {3.568505225763033*^9, 
+   3.568505256892756*^9}, {3.5685054146346292`*^9, 3.568505415206352*^9}, {
+   3.568505448755793*^9, 3.568505449022764*^9}, {3.568505613464699*^9, 
+   3.5685056356100903`*^9}, 3.568505701640667*^9, {3.568505831894685*^9, 
+   3.568505833452753*^9}, {3.5685061506050997`*^9, 3.568506215063196*^9}, {
+   3.570801729022196*^9, 3.570801738303802*^9}, {3.570801866235826*^9, 
+   3.570801870209735*^9}, {3.5708210851132727`*^9, 3.570821105307641*^9}, {
+   3.570822630173918*^9, 3.570822671258223*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "ExtractDirectedGraph", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExtractDirectedGraph", "[", 
+   RowBox[{"tensor_", ",", "duals_", ",", "dualsAD_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"prefix", "=", "\"\<dfg [1];[[0]];\>\""}], ",", "depths", ",", 
+      "selfdual", ",", "dualString", ",", "inclusions", ",", 
+      "inclusionString", ",", "sameDepth", ",", "lastDepth", ",", 
+      "depthOfGraph"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"dualOfGenerator", "[", 
+          RowBox[{"fr", ",", "generator"}], "]"}], "\[Equal]", "generator"}], 
+        ",", 
+        RowBox[{
+         RowBox[{
+         "Print", "[", 
+          "\"\<Generator is self dual. Use ExtractUndirectedGraph.\>\"", " ", 
+          "]"}], ";", 
+         RowBox[{"Abort", "[", "]"}], ";"}]}], "]"}], ";"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"depths", "=", 
+      RowBox[{"getDepths", "[", 
+       RowBox[{"tensor", ",", "duals"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<depths \>\"", ",", "depths"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"depthOfGraph", "=", 
+      RowBox[{"graphDepth", "[", 
+       RowBox[{"tensor", ",", "duals"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<depth of graph \>\"", ",", "depthOfGraph"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dualString", "=", 
+      RowBox[{"dfgMatrixToString", "/@", "dualsAD"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<duals \>\"", ",", "dualString"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"inclusions", "=", 
+      RowBox[{"dfgMatrixToString", "/@", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"tensor", "\[LeftDoubleBracket]", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", "i", ",", "1"}], "]"}], "]"}], ",", 
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", 
+               RowBox[{"i", "+", "1"}], ",", "1"}], "]"}], "]"}]}], 
+           "\[RightDoubleBracket]"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "0", ",", 
+           RowBox[{"depthOfGraph", "-", "1"}]}], "}"}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<inclusions \>\"", ",", "inclusions"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"sameDepth", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"dfgMatrixToString", "[", "#", "]"}], "&"}], "/@", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"tensor", "\[LeftDoubleBracket]", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", "i", ",", "1"}], "]"}], "]"}], ",", 
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", "i", ",", "1"}], "]"}], "]"}]}], 
+           "\[RightDoubleBracket]"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "1", ",", "depthOfGraph"}], "}"}]}], "]"}]}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<same depth \>\"", ",", "sameDepth"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"lastDepth", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"dfgMatrixToString", "[", "#", "]"}], "&"}], "/@", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"tensor", "\[LeftDoubleBracket]", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", 
+               RowBox[{"i", "+", "1"}], ",", "1"}], "]"}], "]"}], ",", 
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", "i", ",", "1"}], "]"}], "]"}]}], 
+           "\[RightDoubleBracket]"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "0", ",", 
+           RowBox[{"depthOfGraph", "-", "1"}]}], "}"}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<last depth \>\"", ",", "lastDepth"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"prefix", "<>", 
+      RowBox[{"mkString", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{
+           "inclusions", ",", "lastDepth", ",", "dualString", ",", 
+            "sameDepth"}], "}"}], "]"}], "]"}], ",", "\"\<;\>\""}], 
+       "]"}]}]}]}], "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQBmIQXVMk2Jg47ZWjUb9gK4i+UN2/BUSXxN8F0129wSdB
+NJeO7SkQncYkcQFEX7wpfQNEfz7J8BhEl/1TANNKO4+9AdEzYj++B9GmnTJf
+QHTPgn3fQPTv59d+g+gpCX//gmi5rZYCSUB6HsMKMJ2lN1MaRN96GKEIopNd
+otRB9LTIqRog+k/odV0QLb3uhR6ITtUK9wTRRhrXfED0aYH/GSA695NCHohu
+27WrBETfEFpXBqKZSr5Ug+hfZr01IPrFMu2LZ2a9cjym4QCmf61cynQWSNsf
+rWMG0UUawttAdMMFm50gGgB+AaLW
+  "]],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "ExtractUndirectedGraph", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExtractUndirectedGraph", "[", 
+   RowBox[{"tensor_", ",", "duals_", ",", "dualsAD_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"prefix", "=", "\"\<fg1v0v\>\""}], ",", "depths", ",", 
+      "dualString", ",", "depthOfGraph", ",", "inclusions", ",", 
+      "sameDepth"}], "}"}], ",", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"dualOfGenerator", "[", 
+          RowBox[{"fr", ",", "generator"}], "]"}], "!=", "generator"}], ",", 
+        RowBox[{
+         RowBox[{
+         "Print", "[", 
+          "\"\<Generator is not self dual. Use ExtractDirectedGraph.\>\"", 
+          " ", "]"}], ";", 
+         RowBox[{"Abort", "[", "]"}], ";"}]}], "]"}], ";"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"depths", "=", 
+      RowBox[{"getDepths", "[", 
+       RowBox[{"tensor", ",", "duals"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<depths \>\"", ",", "depths"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"depthOfGraph", "=", 
+      RowBox[{"graphDepth", "[", 
+       RowBox[{"tensor", ",", "duals"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<depth of graph \>\"", ",", "depthOfGraph"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dualString", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"mkString", "[", 
+         RowBox[{"#", ",", "\"\<x\>\""}], "]"}], "&"}], "/@", "dualsAD"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<duals \>\"", ",", "dualString"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"inclusions", "=", 
+      RowBox[{"matrixToString", "/@", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"tensor", "\[LeftDoubleBracket]", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", "i", ",", "1"}], "]"}], "]"}], ",", 
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", 
+               RowBox[{"i", "+", "1"}], ",", "1"}], "]"}], "]"}]}], 
+           "\[RightDoubleBracket]"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "0", ",", 
+           RowBox[{"depthOfGraph", "-", "1"}]}], "}"}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<inclusions \>\"", ",", "inclusions"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"sameDepth", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"matrixToString", "[", 
+         RowBox[{"lowerTriangular", "[", "#", "]"}], "]"}], "&"}], "/@", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"tensor", "\[LeftDoubleBracket]", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", "i", ",", "1"}], "]"}], "]"}], ",", 
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{"depths", ",", "i", ",", "1"}], "]"}], "]"}]}], 
+           "\[RightDoubleBracket]"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "1", ",", "depthOfGraph"}], "}"}]}], "]"}]}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<same depth \>\"", ",", "sameDepth"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"prefix", "<>", 
+      RowBox[{"mkString", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{"inclusions", ",", "dualString", ",", "sameDepth"}], "}"}],
+           "]"}], "]"}], ",", "\"\<v\>\""}], "]"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.567720660984585*^9, 3.567720661536067*^9}, 
+   3.567720718115406*^9, {3.5677237839995832`*^9, 3.5677238772288103`*^9}, {
+   3.56772395013052*^9, 3.5677239659980087`*^9}, {3.567724655085895*^9, 
+   3.56772466444547*^9}, {3.567725031193384*^9, 3.56772506226362*^9}, 
+   3.567725111507162*^9, {3.567725167096457*^9, 3.567725211375112*^9}, {
+   3.56772566691402*^9, 3.56772568939603*^9}, {3.5677257692560596`*^9, 
+   3.567725818242178*^9}, {3.567725866054056*^9, 3.567725868239264*^9}, {
+   3.5677259269224577`*^9, 3.567725927850041*^9}, {3.567726034729301*^9, 
+   3.567726050536425*^9}, {3.5677262331028852`*^9, 3.56772625328544*^9}, {
+   3.567726331149612*^9, 3.567726337156364*^9}, {3.5677263686545973`*^9, 
+   3.5677263752260427`*^9}, {3.56772973244102*^9, 3.567729774478486*^9}, {
+   3.567729891161285*^9, 3.567730030437532*^9}, 3.567730186952715*^9, {
+   3.567730311460985*^9, 3.567730319961685*^9}, 3.567730378567749*^9, {
+   3.567730759744177*^9, 3.567730779845521*^9}, {3.5677308421174183`*^9, 
+   3.567730902191743*^9}, {3.567730945456456*^9, 3.5677310218291473`*^9}, {
+   3.56773111902071*^9, 3.567731119875155*^9}, {3.5677313019171667`*^9, 
+   3.567731408912477*^9}, {3.567731449358356*^9, 3.5677315278188972`*^9}, {
+   3.567731636010108*^9, 3.567731668852947*^9}, {3.5677317010450087`*^9, 
+   3.567731703138824*^9}, {3.567731763181655*^9, 3.567731811631805*^9}, {
+   3.567731910626883*^9, 3.567731924466621*^9}, {3.567731975012233*^9, 
+   3.56773201313332*^9}, {3.5677327588407393`*^9, 3.5677328317904243`*^9}, {
+   3.567732868804159*^9, 3.56773291994715*^9}, {3.5677329609973717`*^9, 
+   3.5677329652908487`*^9}, {3.567733062298348*^9, 3.567733068130844*^9}, {
+   3.567733253210187*^9, 3.567733309935458*^9}, {3.567797492097825*^9, 
+   3.5677974942749557`*^9}, 3.56779776480027*^9, {3.56780028870539*^9, 
+   3.567800299377618*^9}, {3.567800349264971*^9, 3.567800382729093*^9}, {
+   3.5678015462070417`*^9, 3.567801555366622*^9}, {3.567801694896743*^9, 
+   3.567801746028372*^9}, {3.567801780922007*^9, 3.56780181641634*^9}, {
+   3.5678028664985237`*^9, 3.567802892175027*^9}, {3.567802984545939*^9, 
+   3.567803050443186*^9}, {3.567803114797802*^9, 3.567803114981036*^9}, {
+   3.567803426204165*^9, 3.5678034278127403`*^9}, {3.56780348537204*^9, 
+   3.567803485673621*^9}, {3.567803516644827*^9, 3.5678035184422903`*^9}, {
+   3.567803968241765*^9, 3.567803980876392*^9}, {3.567804049713438*^9, 
+   3.567804050063933*^9}, {3.567806708843121*^9, 3.56780670896139*^9}, {
+   3.56780811712192*^9, 3.567808119411778*^9}, {3.567810820872963*^9, 
+   3.567810827497551*^9}, {3.568057945668993*^9, 3.5680579460458813`*^9}, {
+   3.568066432519114*^9, 3.568066450860511*^9}, {3.5685035905446577`*^9, 
+   3.568503598295089*^9}, {3.568503682081546*^9, 3.5685036850084457`*^9}, {
+   3.5685037828813133`*^9, 3.568503783066841*^9}, {3.568505850793662*^9, 
+   3.568505998594555*^9}, {3.568506085806595*^9, 3.568506133609337*^9}, {
+   3.568506224361958*^9, 3.568506224762611*^9}, {3.57080169223783*^9, 
+   3.570801692410386*^9}, {3.570820753149729*^9, 3.5708207538148203`*^9}, {
+   3.570821174491037*^9, 3.57082117495028*^9}, {3.5708226101395187`*^9, 
+   3.5708226218898487`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"SetDebugMode", "[", "True", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5685060326282988`*^9, 3.568506037430602*^9}}],
+
+Cell[BoxData[
+ RowBox[{"SetDebugMode", "[", "True", "]"}]], "Output",
+ CellChangeTimes->{3.601701983252845*^9, 3.60170204801228*^9, 
+  3.6017023880758677`*^9, 3.60170249173962*^9, 3.601702787746315*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["extract bigraph", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5680759748625298`*^9, 3.568075977854232*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getDual", "[", 
+   RowBox[{"fr_FusionRules", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"l", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", 
+      RowBox[{"r", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", "generator_Integer"}], "}"}]}], "]"}], 
+  ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"tensor", "=", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"l", ",", "r", ",", "l"}], "}"}], "/.", 
+        RowBox[{
+        "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+       ")"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{"r", ",", "l", ",", 
+      RowBox[{
+       RowBox[{"Position", "[", 
+        RowBox[{
+         RowBox[{"tensor", "\[LeftDoubleBracket]", 
+          RowBox[{"generator", ",", "All", ",", "1"}], 
+          "\[RightDoubleBracket]"}], ",", "1"}], "]"}], 
+       "\[LeftDoubleBracket]", 
+       RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}]}], "}"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"dualOfGenerator", "[", 
+    RowBox[{
+     RowBox[{"fr", ":", 
+      RowBox[{"FusionRules", "[", 
+       RowBox[{"_", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+          "__"}], "}"}]}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"l", ":", 
+        RowBox[{"0", "|", "1"}]}], ",", 
+       RowBox[{"r", ":", 
+        RowBox[{"0", "|", "1"}]}], ",", "generator_Integer"}], "}"}]}], "]"}],
+    ":=", 
+   RowBox[{"getDual", "[", 
+    RowBox[{"fr", ",", 
+     RowBox[{"{", 
+      RowBox[{"l", ",", "r", ",", "generator"}], "}"}]}], "]"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568078435139182*^9, 3.568078438090839*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getDuals", "[", 
+   RowBox[{"fr", ":", 
+    RowBox[{"FusionRules", "[", 
+     RowBox[{"_", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+        "__"}], "}"}]}], "]"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "numberOfEvenObjects", ",", "numberOfOddObjects", ",", 
+      "numberOfDualEvenObjects", ",", "duals00", ",", "duals01", ",", 
+      "duals10", ",", "duals11"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"numberOfEvenObjects", "=", 
+      RowBox[{"Length", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], "/.", 
+        RowBox[{
+        "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberOfOddObjects", "=", 
+      RowBox[{"Length", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "1"}], "}"}], "/.", 
+        RowBox[{
+        "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberOfDualEvenObjects", "=", 
+      RowBox[{"Length", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1", ",", "1"}], "}"}], "/.", 
+        RowBox[{
+        "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"duals00", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"getDual", "[", 
+         RowBox[{"fr", ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "#"}], "}"}]}], "]"}], "&"}], "/@", 
+       RowBox[{"Range", "[", "numberOfEvenObjects", "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"duals01", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"getDual", "[", 
+         RowBox[{"fr", ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "1", ",", "#"}], "}"}]}], "]"}], "&"}], "/@", 
+       RowBox[{"Range", "[", "numberOfOddObjects", "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"duals10", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"getDual", "[", 
+         RowBox[{"fr", ",", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "0", ",", "#"}], "}"}]}], "]"}], "&"}], "/@", 
+       RowBox[{"Range", "[", "numberOfOddObjects", "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"duals11", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"getDual", "[", 
+         RowBox[{"fr", ",", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "1", ",", "#"}], "}"}]}], "]"}], "&"}], "/@", 
+       RowBox[{"Range", "[", "numberOfDualEvenObjects", "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0"}], "}"}], "->", "duals00"}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}], "->", "duals01"}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], "->", "duals10"}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}], "->", "duals11"}]}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getTensors", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+         "__"}], "}"}]}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"l", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", 
+      RowBox[{"r", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", "generator_Integer"}], "}"}]}], "]"}], 
+  ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"dog", ",", "tensor", ",", "dualTensor"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"dog", "=", 
+      RowBox[{"dualOfGenerator", "[", 
+       RowBox[{"fr", ",", 
+        RowBox[{"{", 
+         RowBox[{"l", ",", "r", ",", "generator"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"tensor", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"l", ",", "l", ",", "r"}], "}"}], "/.", 
+         RowBox[{
+         "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+        ")"}], "\[LeftDoubleBracket]", 
+       RowBox[{"All", ",", "generator", ",", "All"}], 
+       "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dualTensor", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"l", ",", "r", ",", "l"}], "}"}], "/.", 
+         RowBox[{
+         "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+        ")"}], "\[LeftDoubleBracket]", 
+       RowBox[{"All", ",", 
+        RowBox[{"dog", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}],
+         ",", "All"}], "\[RightDoubleBracket]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"tensor", ",", "dualTensor"}], "}"}]}]}], "\[IndentingNewLine]",
+    "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568070627513487*^9, 3.568070701625042*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "getAlternatingDepths", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"getAlternatingDepths", "[", 
+   RowBox[{"tensor_", ",", "dualTensor_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "numberOfEvenObjects", ",", "numberOfOddObjects", ",", "evenDepths", ",",
+       "oddDepths", ",", "kMatrixPower"}], "}"}], ",", "\[IndentingNewLine]", 
+    
+    RowBox[{
+     RowBox[{
+      RowBox[{"kMatrixPower", "[", 
+       RowBox[{"M_", ",", "0"}], "]"}], ":=", 
+      RowBox[{"IdentityMatrix", "[", 
+       RowBox[{"Length", "[", "M", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"kMatrixPower", "[", 
+       RowBox[{"M_", ",", "n_"}], "]"}], ":=", 
+      RowBox[{"MatrixPower", "[", 
+       RowBox[{"M", ",", "n"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberOfEvenObjects", "=", 
+      RowBox[{"Length", "[", "tensor", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberOfOddObjects", "=", 
+      RowBox[{"Length", "[", "dualTensor", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"evenDepths", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"2", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"Min", "[", 
+            RowBox[{
+             RowBox[{"Flatten", "[", 
+              RowBox[{"Position", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Table", "[", 
+                  RowBox[{
+                   RowBox[{"kMatrixPower", "[", 
+                    RowBox[{
+                    RowBox[{"tensor", ".", "dualTensor"}], ",", "i"}], "]"}], 
+                   ",", 
+                   RowBox[{"{", 
+                    RowBox[{"i", ",", 
+                    RowBox[{
+                    RowBox[{"Range", "[", "numberOfEvenObjects", "]"}], "-", 
+                    "1"}]}], "}"}]}], "]"}], "\[LeftDoubleBracket]", 
+                 RowBox[{"All", ",", "1", ",", "#"}], 
+                 "\[RightDoubleBracket]"}], ",", 
+                RowBox[{"c_Integer", "/;", 
+                 RowBox[{"c", ">", "0"}]}]}], "]"}], "]"}], "~", "Join", "~", 
+             
+             RowBox[{"{", "\[Infinity]", "}"}]}], "]"}], "-", "1"}], ")"}]}], 
+        "&"}], "/@", 
+       RowBox[{"Range", "[", "numberOfEvenObjects", "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"oddDepths", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"2", 
+          RowBox[{"Min", "[", 
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"Position", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Table", "[", 
+                 RowBox[{
+                  RowBox[{"tensor", ".", 
+                   RowBox[{"kMatrixPower", "[", 
+                    RowBox[{
+                    RowBox[{"dualTensor", ".", "tensor"}], ",", "i"}], 
+                    "]"}]}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"i", ",", 
+                    RowBox[{
+                    RowBox[{"Range", "[", "numberOfOddObjects", "]"}], "-", 
+                    "1"}]}], "}"}]}], "]"}], "\[LeftDoubleBracket]", 
+                RowBox[{"All", ",", "1", ",", "#"}], 
+                "\[RightDoubleBracket]"}], ",", 
+               RowBox[{"c_Integer", "/;", 
+                RowBox[{"c", ">", "0"}]}]}], "]"}], "]"}], "~", "Join", "~", 
+            RowBox[{"{", "\[Infinity]", "}"}]}], "]"}]}], "-", "1"}], "&"}], "/@", 
+       RowBox[{"Range", "[", "numberOfOddObjects", "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"evenDepths", ",", "oddDepths"}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568073799212056*^9, 3.568073815089169*^9}, {
+   3.5680738554637957`*^9, 3.568073863346013*^9}, {3.5680738940476313`*^9, 
+   3.568073980947523*^9}, {3.568074035847334*^9, 3.568074065788793*^9}, {
+   3.568074667573826*^9, 3.568074678847765*^9}, {3.568499253161097*^9, 
+   3.568499257720529*^9}, {3.5684992989657593`*^9, 3.568499299434183*^9}, {
+   3.6017023565852633`*^9, 3.601702385634995*^9}, 3.601702489564576*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"dualsAtDepth", "[", 
+    RowBox[{
+     RowBox[{"fr", ":", 
+      RowBox[{"FusionRules", "[", 
+       RowBox[{"_", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+          "__"}], "}"}]}], "]"}]}], ",", 
+     RowBox[{"depth_", "/;", 
+      RowBox[{"EvenQ", "[", "depth", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"dualsAtDepth", "[", 
+    RowBox[{"fr", ",", "depth", ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dualsAtDepth", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+         "__"}], "}"}]}], "]"}]}], ",", 
+    RowBox[{"depth_", "/;", 
+     RowBox[{"EvenQ", "[", "depth", "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"l", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", 
+      RowBox[{"r", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", "generator_Integer"}], "}"}]}], "]"}], 
+  ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "tensor", ",", "dualTensor", ",", "atDepth", ",", "duals", ",", 
+      "evenDepths", ",", "oddDepths"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"Print", "[", "depths", "]"}], ";"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"tensor", ",", "dualTensor"}], "}"}], "=", 
+      RowBox[{"getTensors", "[", 
+       RowBox[{"fr", ",", 
+        RowBox[{"{", 
+         RowBox[{"l", ",", "r", ",", "generator"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"evenDepths", ",", "oddDepths"}], "}"}], "=", 
+      RowBox[{"getAlternatingDepths", "[", 
+       RowBox[{"tensor", ",", "dualTensor"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"atDepth", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{"evenDepths", ",", "depth", ",", "1"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", "atDepth", "]"}], ";"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"duals", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"l", ",", "l"}], "}"}], "/.", 
+         RowBox[{"getDuals", "[", "fr", "]"}]}], ")"}], 
+       "\[LeftDoubleBracket]", 
+       RowBox[{"atDepth", ",", "3"}], "\[RightDoubleBracket]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Position", "[", 
+         RowBox[{"atDepth", ",", 
+          RowBox[{
+          "duals", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}]}], 
+         "]"}], "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "atDepth", "]"}]}], "}"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ObjectsAtDepth", "[", 
+    RowBox[{
+     RowBox[{"fr", ":", 
+      RowBox[{"FusionRules", "[", 
+       RowBox[{"_", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+          "__"}], "}"}]}], "]"}]}], ",", "depth_"}], "]"}], ":=", 
+   RowBox[{"ObjectsAtDepth", "[", 
+    RowBox[{"fr", ",", "depth", ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ObjectsAtDepth", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+         "__"}], "}"}]}], "]"}]}], ",", "depth_", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"l", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", 
+      RowBox[{"r", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", "generator_Integer"}], "}"}]}], "]"}], 
+  ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "atDepth", ",", "tensor", ",", "dualTensor", ",", "evenDepths", ",", 
+      "oddDepths"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"Print", "[", "depths", "]"}], ";"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"tensor", ",", "dualTensor"}], "}"}], "=", 
+      RowBox[{"getTensors", "[", 
+       RowBox[{"fr", ",", 
+        RowBox[{"{", 
+         RowBox[{"l", ",", "r", ",", "generator"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"evenDepths", ",", "oddDepths"}], "}"}], "=", 
+      RowBox[{"getAlternatingDepths", "[", 
+       RowBox[{"tensor", ",", "dualTensor"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"atDepth", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"EvenQ", "[", "depth", "]"}], ",", "evenDepths", ",", 
+           "oddDepths"}], "]"}], ",", "depth", ",", "1"}], "]"}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"depth", "\[Equal]", "generator"}], ",", 
+       RowBox[{
+        RowBox[{"{", "generator", "}"}], "~", "Join", "~", " ", 
+        RowBox[{"DeleteCases", "[", 
+         RowBox[{"atDepth", ",", "generator"}], "]"}]}], ",", "atDepth"}], 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568067819545051*^9, 3.568067893236618*^9}, {
+  3.568067930978078*^9, 3.568067940665386*^9}, {3.568068049024054*^9, 
+  3.568068148625877*^9}, {3.56806827101528*^9, 3.568068276062489*^9}, {
+  3.5680742569591017`*^9, 3.568074265998214*^9}, {3.568074750775104*^9, 
+  3.568074781442305*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PermuteFusionRules", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+         "__"}], "}"}]}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0"}], "}"}], "\[Rule]", 
+       RowBox[{"p00", ":", 
+        RowBox[{"{", "__Integer", "}"}]}]}], ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1"}], "}"}], "\[Rule]", 
+       RowBox[{"p01", ":", 
+        RowBox[{"{", "__Integer", "}"}]}]}], ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], "\[Rule]", 
+       RowBox[{"p10", ":", 
+        RowBox[{"{", "__Integer", "}"}]}]}], ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "1"}], "}"}], "\[Rule]", 
+       RowBox[{"p11", ":", 
+        RowBox[{"{", "__Integer", "}"}]}]}]}], "}"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "p", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"p", "[", 
+       RowBox[{"0", ",", "0"}], "]"}], "=", "p00"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"p", "[", 
+       RowBox[{"0", ",", "1"}], "]"}], "=", "p01"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"p", "[", 
+       RowBox[{"1", ",", "0"}], "]"}], "=", "p10"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"p", "[", 
+       RowBox[{"1", ",", "1"}], "]"}], "=", "p11"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{
+       RowBox[{"fr", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       ",", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"i", ",", "j", ",", "k"}], "}"}], "\[Rule]", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"i", ",", "j", ",", "k"}], "}"}], "/.", 
+              RowBox[{
+              "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+             ")"}], "\[LeftDoubleBracket]", 
+            RowBox[{
+             RowBox[{"p", "[", 
+              RowBox[{"i", ",", "j"}], "]"}], ",", 
+             RowBox[{"p", "[", 
+              RowBox[{"j", ",", "k"}], "]"}], ",", 
+             RowBox[{"p", "[", 
+              RowBox[{"i", ",", "k"}], "]"}]}], "\[RightDoubleBracket]"}]}], 
+          ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"j", ",", "0", ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k", ",", "0", ",", "1"}], "}"}]}], "]"}], "]"}]}], 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568070785363789*^9, 3.5680709380268*^9}, {
+  3.568070973432331*^9, 3.568071184953734*^9}, {3.568071219445352*^9, 
+  3.568071369159523*^9}, {3.568071426482277*^9, 3.568071429295072*^9}, {
+  3.568071573773849*^9, 3.568071580018489*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AlignOddDuals", "[", 
+   RowBox[{"fr", ":", 
+    RowBox[{"FusionRules", "[", 
+     RowBox[{"_", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+        "__"}], "}"}]}], "]"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "oddDuals", ",", "numberOfEvenObjects", ",", "numberOfOddObjects", ",", 
+      "numberOfDualEvenObjects"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"oddDuals", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "1"}], "}"}], "/.", 
+         RowBox[{"getDuals", "[", "fr", "]"}]}], ")"}], 
+       "\[LeftDoubleBracket]", 
+       RowBox[{"All", ",", "3"}], "\[RightDoubleBracket]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", "oddDuals", "]"}], ";"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"numberOfEvenObjects", "=", 
+      RowBox[{"Length", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], "/.", 
+        RowBox[{
+        "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberOfOddObjects", "=", 
+      RowBox[{"Length", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "1"}], "}"}], "/.", 
+        RowBox[{
+        "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberOfDualEvenObjects", "=", 
+      RowBox[{"Length", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1", ",", "1"}], "}"}], "/.", 
+        RowBox[{
+        "fr", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"PermuteFusionRules", "[", 
+      RowBox[{"fr", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0"}], "}"}], "\[Rule]", 
+          RowBox[{"Range", "[", "numberOfEvenObjects", "]"}]}], ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "1"}], "}"}], "\[Rule]", 
+          RowBox[{"Range", "[", "numberOfOddObjects", "]"}]}], ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "0"}], "}"}], "\[Rule]", "oddDuals"}], ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "1"}], "}"}], "\[Rule]", 
+          RowBox[{"Range", "[", "numberOfDualEvenObjects", "]"}]}]}], "}"}]}],
+       "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5680718048961763`*^9, 3.56807183305717*^9}, {
+  3.568071895117373*^9, 3.5680720249934053`*^9}, {3.568072087405242*^9, 
+  3.568072093025035*^9}, {3.5680721279756403`*^9, 3.568072148248789*^9}, {
+  3.568501785561945*^9, 3.568501787499235*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"subfactorDualsAtDepthForFCFusionRules", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], ",", "depth_", ",", 
+    RowBox[{"generator_Integer:", "2"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "dog", ",", "tensor", ",", "dualTensor", ",", "evenDepths", ",", 
+      "oddDepths", ",", "atDepth", ",", "duals"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"dog", "=", 
+      RowBox[{"dualOfGenerator", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"tensor", "=", 
+      RowBox[{"getTensor", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"dualTensor", "=", 
+      RowBox[{"getTensor", "[", 
+       RowBox[{"fr", ",", "dog"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"evenDepths", ",", "oddDepths"}], "}"}], "=", 
+      RowBox[{"getAlternatingDepths", "[", 
+       RowBox[{"tensor", ",", "dualTensor"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"atDepth", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{"evenDepths", ",", "depth", ",", "1"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", "atDepth", "]"}], ";"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"duals", "=", 
+      RowBox[{
+       RowBox[{"getDuals", "[", "fr", "]"}], "\[LeftDoubleBracket]", 
+       "atDepth", "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Position", "[", 
+         RowBox[{"atDepth", ",", 
+          RowBox[{
+          "duals", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}]}], 
+         "]"}], "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "atDepth", "]"}]}], "}"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5685333037932653`*^9, 3.568533387419168*^9}, {
+   3.568533441096879*^9, 3.5685335178801413`*^9}, 3.568533705914228*^9, {
+   3.568533795520896*^9, 3.568533859163068*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "ExtractPairOfBigraphsWithDuals", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ExtractPairOfBigraphsWithDuals", "[", 
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+         "__"}], "}"}]}], "]"}]}], "]"}], ":=", 
+   RowBox[{"ExtractPairOfBigraphsWithDuals", "[", 
+    RowBox[{"fr", ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExtractPairOfBigraphsWithDuals", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], ",", 
+         "__"}], "}"}]}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"l", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", 
+      RowBox[{"r", ":", 
+       RowBox[{"0", "|", "1"}]}], ",", "generator_Integer"}], "}"}]}], "]"}], 
+  ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "dog", ",", "tensor00", ",", "dualTensor00", ",", "depthOfGraph00", ",", 
+      "evenDepths00", ",", "oddDepths00", ",", "evenDuals00", ",", "tensor11",
+       ",", "dualTensor11", ",", "depthOfGraph11", ",", "evenDepths11", ",", 
+      "oddDepths11", ",", "evenDuals11"}], "}"}], ",", "\[IndentingNewLine]", 
+    
+    RowBox[{
+     RowBox[{"dog", "=", 
+      RowBox[{"dualOfGenerator", "[", 
+       RowBox[{"fr", ",", 
+        RowBox[{"{", 
+         RowBox[{"l", ",", "r", ",", "generator"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<dual of generator is \>\"", ",", "dog"}], "]"}], ";"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"tensor00", ",", "dualTensor00"}], "}"}], "=", 
+      RowBox[{"getTensors", "[", 
+       RowBox[{"fr", ",", 
+        RowBox[{"{", 
+         RowBox[{"l", ",", "r", ",", "generator"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"evenDepths00", ",", "oddDepths00"}], "}"}], "=", 
+      RowBox[{"getAlternatingDepths", "[", 
+       RowBox[{"tensor00", ",", "dualTensor00"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{
+        "\"\<depths 00 are \>\"", ",", "evenDepths00", ",", "oddDepths00"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"depthOfGraph00", "=", 
+      RowBox[{"Max", "[", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{
+         RowBox[{"evenDepths00", "~", "Join", "~", "oddDepths00"}], ",", 
+         "\[Infinity]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Depth of graph 00 is \>\"", ",", "depthOfGraph00"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"evenDuals00", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"dualsAtDepth", "[", 
+         RowBox[{"fr", ",", "i", ",", 
+          RowBox[{"{", 
+           RowBox[{"l", ",", "r", ",", "generator"}], "}"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "0", ",", "depthOfGraph00", ",", "2"}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"tensor11", ",", "dualTensor11"}], "}"}], "=", 
+      RowBox[{"getTensors", "[", 
+       RowBox[{"fr", ",", "dog"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"evenDepths11", ",", "oddDepths11"}], "}"}], "=", 
+      RowBox[{"getAlternatingDepths", "[", 
+       RowBox[{"tensor11", ",", "dualTensor11"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{
+        "\"\<Depths 11 are \>\"", ",", "evenDepths11", ",", "oddDepths11"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"depthOfGraph11", "=", 
+      RowBox[{"Max", "[", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{
+         RowBox[{"evenDepths11", "~", "Join", "~", "oddDepths11"}], ",", 
+         "\[Infinity]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Depth of graph 11 is \>\"", ",", "depthOfGraph11"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"evenDuals11", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"dualsAtDepth", "[", 
+         RowBox[{"fr", ",", "i", ",", "dog"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "0", ",", "depthOfGraph11", ",", "2"}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"ExtractBigraphWithDualsFromTensors", "[", 
+        RowBox[{"tensor00", ",", "dualTensor00", ",", "evenDuals00"}], "]"}], 
+       ",", 
+       RowBox[{"ExtractBigraphWithDualsFromTensors", "[", 
+        RowBox[{"tensor11", ",", "dualTensor11", ",", "evenDuals11"}], 
+        "]"}]}], "}"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExtractPairOfBigraphsWithDuals", "[", 
+   RowBox[{
+    RowBox[{"fr", ":", 
+     RowBox[{"FusionRules", "[", 
+      RowBox[{"_", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "_"}], "}"}]}],
+       "]"}]}], ",", 
+    RowBox[{"generator_Integer:", "2"}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "dog", ",", "tensor", ",", "dualTensor", ",", "depthOfGraph00", ",", 
+      "evenDepths00", ",", "oddDepths00", ",", "evenDuals00", ",", "tensor11",
+       ",", "dualTensor11", ",", "depthOfGraph11", ",", "evenDepths11", ",", 
+      "oddDepths11", ",", "evenDuals11"}], "}"}], ",", "\[IndentingNewLine]", 
+    
+    RowBox[{
+     RowBox[{"dog", "=", 
+      RowBox[{"dualOfGenerator", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<dual of generator is \>\"", ",", "dog"}], "]"}], ";"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"tensor", "=", 
+      RowBox[{"getTensor", "[", 
+       RowBox[{"fr", ",", "generator"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"dualTensor", "=", 
+      RowBox[{"getTensor", "[", 
+       RowBox[{"fr", ",", "dog"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"evenDepths00", ",", "oddDepths00"}], "}"}], "=", 
+      RowBox[{"getAlternatingDepths", "[", 
+       RowBox[{"tensor", ",", "dualTensor"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{
+        "\"\<depths 00 are \>\"", ",", "evenDepths00", ",", "oddDepths00"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"depthOfGraph00", "=", 
+      RowBox[{"Max", "[", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{
+         RowBox[{"evenDepths00", "~", "Join", "~", "oddDepths00"}], ",", 
+         "\[Infinity]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Depth of graph 00 is \>\"", ",", "depthOfGraph00"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"dualsAtDepth", " ", "is", " ", "difficult", " ", 
+       RowBox[{"here", "!"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"evenDuals00", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"subfactorDualsAtDepthForFCFusionRules", "[", 
+         RowBox[{"fr", ",", "i", ",", "generator"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "0", ",", "depthOfGraph00", ",", "2"}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"evenDepths11", ",", "oddDepths11"}], "}"}], "=", 
+      RowBox[{"getAlternatingDepths", "[", 
+       RowBox[{"dualTensor", ",", "tensor"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{
+        "\"\<Depths 11 are \>\"", ",", "evenDepths11", ",", "oddDepths11"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"depthOfGraph11", "=", 
+      RowBox[{"Max", "[", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{
+         RowBox[{"evenDepths11", "~", "Join", "~", "oddDepths11"}], ",", 
+         "\[Infinity]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Depth of graph 11 is \>\"", ",", "depthOfGraph11"}], 
+        "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"evenDuals11", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"subfactorDualsAtDepthForFCFusionRules", "[", 
+         RowBox[{"fr", ",", "i", ",", "dog"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "0", ",", "depthOfGraph11", ",", "2"}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"ExtractBigraphWithDualsFromTensors", "[", 
+        RowBox[{"tensor", ",", "dualTensor", ",", "evenDuals00"}], "]"}], ",", 
+       RowBox[{"ExtractBigraphWithDualsFromTensors", "[", 
+        RowBox[{"dualTensor", ",", "tensor", ",", "evenDuals11"}], "]"}]}], 
+      "}"}]}]}], "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5680562645549307`*^9, 3.568056269147603*^9}, {
+   3.568056343238352*^9, 3.568056346845386*^9}, {3.5680565297931213`*^9, 
+   3.568056539669446*^9}, {3.5680566413237743`*^9, 3.5680566495111*^9}, {
+   3.5680579063731003`*^9, 3.568057907093403*^9}, {3.5680615614960318`*^9, 
+   3.5680615852714243`*^9}, 3.5680622736580267`*^9, {3.568062738947013*^9, 
+   3.568062853495987*^9}, {3.5680638765032253`*^9, 3.5680640468757057`*^9}, {
+   3.568064081520002*^9, 3.568064095694442*^9}, {3.5680641762841253`*^9, 
+   3.568064214157804*^9}, {3.568064256019391*^9, 3.568064351083173*^9}, {
+   3.568064405070121*^9, 3.5680644416515923`*^9}, {3.568064531861354*^9, 
+   3.568064541395462*^9}, {3.568064619622181*^9, 3.568064632244536*^9}, {
+   3.568064966871531*^9, 3.5680649975498*^9}, {3.568065358163876*^9, 
+   3.568065366882511*^9}, {3.568066499301682*^9, 3.5680665102213306`*^9}, {
+   3.568066581173629*^9, 3.568066632561994*^9}, {3.568066877719947*^9, 
+   3.56806693230835*^9}, {3.5680669687192917`*^9, 3.5680669883663197`*^9}, {
+   3.5680670270181427`*^9, 3.568067107727194*^9}, {3.568067394999934*^9, 
+   3.568067416724491*^9}, {3.568072549870574*^9, 3.568072735815435*^9}, {
+   3.568072866126184*^9, 3.5680728709245768`*^9}, {3.568073029688692*^9, 
+   3.568073102093211*^9}, {3.5680731470977592`*^9, 3.568073147193722*^9}, {
+   3.568073188356463*^9, 3.5680732034509687`*^9}, {3.5680732735578003`*^9, 
+   3.5680732986348763`*^9}, {3.5680740136893663`*^9, 3.568074019144884*^9}, {
+   3.568074110874318*^9, 3.5680741143282623`*^9}, {3.568074683908474*^9, 
+   3.568074698205894*^9}, {3.568074818127575*^9, 3.568074864496821*^9}, {
+   3.568077871801981*^9, 3.568077964191391*^9}, {3.5680780102442503`*^9, 
+   3.568078017714637*^9}, {3.568078124376142*^9, 3.568078142009933*^9}, {
+   3.5680782091406517`*^9, 3.5680782825746393`*^9}, {3.568078371490017*^9, 
+   3.5680783761139603`*^9}, {3.5680784277278643`*^9, 3.568078429992981*^9}, {
+   3.568078548971426*^9, 3.568078565697167*^9}, {3.568078712246318*^9, 
+   3.568078714804432*^9}, {3.568078858527155*^9, 3.568078880295999*^9}, {
+   3.568078965337346*^9, 3.568079035124215*^9}, {3.568498857956731*^9, 
+   3.568498864226616*^9}, {3.568498901051025*^9, 3.56849894626912*^9}, {
+   3.568498983796924*^9, 3.568498985263073*^9}, {3.568499031839158*^9, 
+   3.568499032541923*^9}, {3.568499088776971*^9, 3.568499092527205*^9}, {
+   3.568501605417742*^9, 3.568501627728891*^9}, {3.568501664899482*^9, 
+   3.5685016730604477`*^9}, {3.568501718520067*^9, 3.5685017221976547`*^9}, {
+   3.568501820907736*^9, 3.5685018339619293`*^9}, {3.568501963087406*^9, 
+   3.568501987236518*^9}, {3.568532347300108*^9, 3.568532374976503*^9}, {
+   3.568533987341715*^9, 3.56853398765231*^9}, {3.601701960012211*^9, 
+   3.601701976447118*^9}, {3.601702041215371*^9, 3.601702046987218*^9}, {
+   3.601702651290351*^9, 3.601702695123537*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "odd", " ", "duals", " ", "are", " ", "correct", " ", "since", " ", "the", 
+    " ", "order", " ", "of", " ", "the", " ", "objects", " ", "at", " ", 
+    "each", " ", "depth", " ", "is", " ", "the", " ", "order", " ", "they", 
+    " ", "appear", " ", "in", " ", "the", " ", "fusion", " ", 
+    RowBox[{"rules", "."}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ExtractBigraphFromTensors", "[", 
+    RowBox[{"tensor_", ",", "dualTensor_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"prefix", "=", "\"\<bwd\>\""}], ",", "depthOfGraph", ",", 
+       "inclusions01", ",", "inclusions10", ",", "evenDepths", ",", 
+       "oddDepths"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"evenDepths", ",", "oddDepths"}], "}"}], "=", 
+       RowBox[{"getAlternatingDepths", "[", 
+        RowBox[{"tensor", ",", "dualTensor"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{"evenDepths", ",", "oddDepths"}], "]"}], ";"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"depthOfGraph", "=", 
+       RowBox[{"Max", "[", 
+        RowBox[{"DeleteCases", "[", 
+         RowBox[{
+          RowBox[{"evenDepths", "~", "Join", "~", "oddDepths"}], ",", 
+          "\[Infinity]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"inclusions01", "=", 
+       RowBox[{"matrixToString", "/@", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Transpose", "[", 
+           RowBox[{"tensor", "\[LeftDoubleBracket]", 
+            RowBox[{
+             RowBox[{"Flatten", "[", 
+              RowBox[{"Position", "[", 
+               RowBox[{"evenDepths", ",", "i", ",", "1"}], "]"}], "]"}], ",", 
+             
+             RowBox[{"Flatten", "[", 
+              RowBox[{"Position", "[", 
+               RowBox[{"oddDepths", ",", 
+                RowBox[{"i", "+", "1"}], ",", "1"}], "]"}], "]"}]}], 
+            "\[RightDoubleBracket]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", 
+            RowBox[{"depthOfGraph", "-", "1"}], ",", "2"}], "}"}]}], 
+         "]"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"Print", "[", "inclusions01", "]"}], ";"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"inclusions10", "=", 
+       RowBox[{"matrixToString", "/@", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Transpose", "[", 
+           RowBox[{"dualTensor", "\[LeftDoubleBracket]", 
+            RowBox[{
+             RowBox[{"Flatten", "[", 
+              RowBox[{"Position", "[", 
+               RowBox[{"oddDepths", ",", "i", ",", "1"}], "]"}], "]"}], ",", 
+             RowBox[{"Flatten", "[", 
+              RowBox[{"Position", "[", 
+               RowBox[{"evenDepths", ",", 
+                RowBox[{"i", "+", "1"}], ",", "1"}], "]"}], "]"}]}], 
+            "\[RightDoubleBracket]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"depthOfGraph", "-", "1"}], ",", "2"}], "}"}]}], 
+         "]"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"Print", "[", "inclusions10", "]"}], ";"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"prefix", "<>", 
+       RowBox[{"mkString", "[", 
+        RowBox[{
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "[", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"{", 
+              RowBox[{"inclusions01", ",", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Length", "[", "inclusions01", "]"}], "\[Equal]", 
+                  RowBox[{"Length", "[", "inclusions10", "]"}]}], ",", 
+                 "inclusions10", ",", 
+                 RowBox[{"PadRight", "[", 
+                  RowBox[{"inclusions10", ",", 
+                   RowBox[{"Length", "[", "inclusions01", "]"}]}], "]"}]}], 
+                "]"}]}], "}"}], "]"}], "]"}], ",", "0"}], "]"}], ",", 
+         "\"\<v\>\""}], "]"}]}]}]}], "\[IndentingNewLine]", 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5680723349425583`*^9, 3.5680724992298927`*^9}, 
+   3.568072530075735*^9, {3.568072808284477*^9, 3.5680728165622272`*^9}, {
+   3.568075489851615*^9, 3.568075494561203*^9}, {3.568075832271604*^9, 
+   3.5680758395020657`*^9}, {3.5680767921631308`*^9, 3.568076809951859*^9}, {
+   3.5680769034967527`*^9, 3.568076909210698*^9}, {3.568077033422429*^9, 
+   3.5680770553881903`*^9}, {3.5680774032890453`*^9, 3.568077408559375*^9}, {
+   3.5680775919432697`*^9, 3.5680776319647827`*^9}, {3.5680776690809*^9, 
+   3.568077680377451*^9}, {3.568077729965094*^9, 3.5680777390057297`*^9}, {
+   3.5680788905268784`*^9, 3.568078892288804*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtractBigraphWithDualsFromTensors", "[", 
+   RowBox[{"tensor_", ",", "dualTensor_", ",", "evenDuals_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"ExtractBigraphFromTensors", "[", 
+    RowBox[{"tensor", ",", "dualTensor"}], "]"}], "<>", "\"\<duals\>\"", "<>", 
+   RowBox[{"mkString", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"mkString", "[", 
+        RowBox[{"#", ",", "\"\<x\>\""}], "]"}], "&"}], "/@", "evenDuals"}], 
+     ",", "\"\<v\>\""}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568077690511818*^9, 3.568077736453677*^9}, 
+   3.568077831799037*^9, 3.56807795214876*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.50516726120844*^9, 3.505167263312408*^9}, 
+   3.507951833764101*^9}],
+
+Cell[BoxData[
+ RowBox[{"EndPackage", "[", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.505167264068708*^9, 3.505167266080318*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1237, 872},
+WindowMargins->{{Automatic, 3}, {Automatic, 0}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 348, 5, 51, "Subtitle",
+ InitializationCell->True],
+Cell[930, 29, 323, 6, 30, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1278, 39, 60, 1, 80, "Section",
+ InitializationCell->True],
+Cell[1341, 42, 1121, 20, 28, "Input",
+ InitializationCell->True],
+Cell[2465, 64, 658, 10, 28, "Input",
+ InitializationCell->True],
+Cell[3126, 76, 119, 3, 28, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[3270, 83, 139, 2, 44, "Subsection",
+ InitializationCell->True],
+Cell[3412, 87, 1016, 29, 63, "Input",
+ InitializationCell->True],
+Cell[4431, 118, 491, 13, 28, "Input",
+ InitializationCell->True],
+Cell[4925, 133, 580, 14, 28, "Input",
+ InitializationCell->True],
+Cell[5508, 149, 618, 15, 28, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6163, 169, 137, 2, 44, "Subsection",
+ InitializationCell->True],
+Cell[6303, 173, 1372, 39, 46, "Input",
+ InitializationCell->True],
+Cell[7678, 214, 1166, 30, 63, "Input",
+ InitializationCell->True],
+Cell[8847, 246, 694, 21, 28, "Input",
+ InitializationCell->True],
+Cell[9544, 269, 1303, 27, 28, "Input",
+ InitializationCell->True],
+Cell[10850, 298, 161, 3, 28, "Input",
+ InitializationCell->True],
+Cell[11014, 303, 1726, 41, 97, "Input",
+ InitializationCell->True],
+Cell[12743, 346, 5163, 123, 352, "Input",
+ InitializationCell->True],
+Cell[17909, 471, 160, 3, 28, "Input",
+ InitializationCell->True],
+Cell[18072, 476, 732, 19, 80, "Input",
+ InitializationCell->True],
+Cell[18807, 497, 3173, 84, 216, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[22005, 585, 191, 4, 28, "Input",
+ InitializationCell->True],
+Cell[22199, 591, 361, 7, 28, "Output",
+ InitializationCell->True]
+}, Open  ]],
+Cell[22575, 601, 358, 8, 28, "Input",
+ InitializationCell->True],
+Cell[22936, 611, 1646, 44, 97, "Input",
+ InitializationCell->True],
+Cell[24585, 657, 3746, 88, 216, "Input",
+ InitializationCell->True],
+Cell[28334, 747, 5465, 137, 369, "Input",
+ InitializationCell->True],
+Cell[33802, 886, 7279, 148, 318, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[41106, 1038, 163, 3, 28, "Input",
+ InitializationCell->True],
+Cell[41272, 1043, 202, 3, 28, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41523, 1052, 132, 2, 44, "Subsection",
+ InitializationCell->True],
+Cell[41658, 1056, 1095, 33, 64, "Input",
+ InitializationCell->True],
+Cell[42756, 1091, 841, 27, 31, "Input",
+ InitializationCell->True],
+Cell[43600, 1120, 3345, 95, 199, "Input",
+ InitializationCell->True],
+Cell[46948, 1217, 2065, 60, 115, "Input",
+ InitializationCell->True],
+Cell[49016, 1279, 4189, 101, 250, "Input",
+ InitializationCell->True],
+Cell[53208, 1382, 3340, 99, 200, "Input",
+ InitializationCell->True],
+Cell[56551, 1483, 3023, 85, 166, "Input",
+ InitializationCell->True],
+Cell[59577, 1570, 3274, 93, 165, "Input",
+ InitializationCell->True],
+Cell[62854, 1665, 3032, 81, 165, "Input",
+ InitializationCell->True],
+Cell[65889, 1748, 2564, 67, 199, "Input",
+ InitializationCell->True],
+Cell[68456, 1817, 12833, 296, 727, "Input",
+ InitializationCell->True],
+Cell[81292, 2115, 4978, 114, 301, "Input",
+ InitializationCell->True],
+Cell[86273, 2231, 658, 16, 46, "Input",
+ InitializationCell->True],
+Cell[86934, 2249, 187, 5, 28, "Input",
+ InitializationCell->True],
+Cell[87124, 2256, 151, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

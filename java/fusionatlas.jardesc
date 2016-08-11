@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="MacRoman" standalone="no"?>
+<jardesc>
+    <jar path="/Users/scott/projects/fusionatlas/package/java/target/org.fusionatlas.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/fusionatlas/fusionatlas.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="false" exportJavaFiles="true" exportOutputFolder="true">
+        <file path="/fusionatlas/.project"/>
+        <file path="/fusionatlas/jars/httpclient-4.0.1.jar"/>
+        <file path="/fusionatlas/jars/commons-logging-1.1.1.jar"/>
+        <file path="/fusionatlas/jars/net-tqft-iterables.jar"/>
+        <file path="/fusionatlas/.classpath"/>
+    </selectedElements>
+</jardesc>

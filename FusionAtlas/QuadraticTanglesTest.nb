@@ -1,0 +1,457 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     13893,        448]
+NotebookOptionsPosition[     11764,        370]
+NotebookOutlinePosition[     12136,        386]
+CellTagsIndexPosition[     12093,        383]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["QuadraticTanglesTest package", "Subsubtitle",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`QuadraticTanglesTest`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+  3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+  3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ParityTest", "::", "usage"}], "=", "\"\<\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"HaagerupTypeBranchTest", "::", "usage"}], "=", 
+   "\"\<HaagerupTypeBranchTest[g] checks if g satisfies the condition on p.33 \
+of the pre-preprint of Quadratic Tangles\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.432518989553521*^9, {3.43251920710723*^9, 3.4325192275855093`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+This used to be called MaximallySuperTransitiveQ until we realized we didn't \
+know what that meant.  
+
+This condition on the low weight space should be equivalent to \"for two \
+steps past the branch point, it looks like Haagerup or dual Haagerup\"\
+\>", "Text",
+ CellChangeTimes->{{3.432517787763151*^9, 3.432517853209517*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"HaagerupTypeBranchingQ", "[", "b_GradedBigraph", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"HasSimpleBranchQ", "[", "b", "]"}], "\[And]", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"DimensionOfLowWeightSpace", "[", "b", "]"}], "[", 
+      RowBox[{
+       RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "2"}], "]"}], 
+     "\[Equal]", "0"}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4322587997438016`*^9, 3.432517707557164*^9, {3.432517779644689*^9, 
+   3.432517783082123*^9}, {3.432518406948318*^9, 3.432518407489772*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ParityTest", "[", "b_GradedBigraph", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"DimensionOfGenerator", "[", "b", "]"}], "\[LessEqual]", "2"}], 
+   "\[Or]", 
+   RowBox[{"Not", "[", 
+    RowBox[{"HaagerupTypeBranchingQ", "[", "b", "]"}], "]"}], "\[Or]", 
+   RowBox[{"OddQ", "[", 
+    RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4301865558822174`*^9, 3.4301865820198016`*^9}, {
+  3.432518439253614*^9, 3.4325184638237333`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"HaagerupTypePrincipalQ", "[", "b_GradedBigraph", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"HaagerupTypeBranchingQ", "[", "b", "]"}], "\[And]", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"List", "@@", "b"}], ")"}], "\[LeftDoubleBracket]", 
+       RowBox[{
+        RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "2"}], 
+       "\[RightDoubleBracket]"}], ")"}], "==", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432518508088451*^9, 3.4325185590091476`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"HaagerupTypeDualQ", "[", "b_GradedBigraph", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"HaagerupTypeBranchingQ", "[", "b", "]"}], "\[And]", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"List", "@@", "b"}], ")"}], "\[LeftDoubleBracket]", 
+       RowBox[{
+        RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "2"}], 
+       "\[RightDoubleBracket]"}], ")"}], "==", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}]}], "}"}]}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432518517264638*^9, 3.4325185648972187`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QRule", "[", 
+   RowBox[{"b_GradedBigraph", ",", "q_"}], "]"}], ":=", 
+  RowBox[{"N", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Solve", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"q", "^", "2"}], "+", "1"}], " ", "\[Equal]", 
+        RowBox[{"q", "*", 
+         RowBox[{"DimensionOfGenerator", "[", "b", "]"}]}]}], ",", " ", "q"}],
+       "]"}], "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+    "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "]"}]}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Quantum", "[", 
+   RowBox[{"n_", ",", " ", "b_GradedBigraph"}], "]"}], " ", ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "q", "}"}], ",", " ", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"q", "^", "n"}], "-", 
+          RowBox[{"q", "^", 
+           RowBox[{"{", 
+            RowBox[{"-", "n"}], "}"}]}]}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"q", "-", 
+          RowBox[{"q", "^", 
+           RowBox[{"{", 
+            RowBox[{"-", "1"}], "}"}]}]}], ")"}]}], "/.", 
+       RowBox[{"(", 
+        RowBox[{"QRule", "[", 
+         RowBox[{"b", ",", "q"}], "]"}], ")"}]}], ")"}], 
+     "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AlmostOneQ", "[", "x_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Abs", "[", 
+     RowBox[{"x", "-", "1"}], "]"}], "<", "0.00001"}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"HaagerupTypeBranchTest", "[", "b_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"DimensionOfGenerator", "[", "b", "]"}], "\[LessEqual]", "2"}], 
+   "\[Or]", "\[IndentingNewLine]", 
+   RowBox[{"Not", "[", 
+    RowBox[{"HaagerupTypePrincipalQ", "[", "b", "]"}], "]"}], " ", "\[Or]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"n", "=", 
+         RowBox[{
+          RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "1"}]}], ",", 
+        " ", 
+        RowBox[{"larger", "=", 
+         RowBox[{"Max", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"NumericDimensionsByDepth", "[", "b", "]"}], 
+             "\[LeftDoubleBracket]", 
+             RowBox[{
+              RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "2"}], 
+             "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"NumericDimensionsByDepth", "[", "b", "]"}], 
+             "\[LeftDoubleBracket]", 
+             RowBox[{
+              RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "2"}], 
+             "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "2", 
+            "\[RightDoubleBracket]"}]}], "]"}]}], ",", 
+        RowBox[{"smaller", "=", 
+         RowBox[{"Min", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"NumericDimensionsByDepth", "[", "b", "]"}], 
+             "\[LeftDoubleBracket]", 
+             RowBox[{
+              RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "2"}], 
+             "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"NumericDimensionsByDepth", "[", "b", "]"}], 
+             "\[LeftDoubleBracket]", 
+             RowBox[{
+              RowBox[{"DepthOfBranchPoint", "[", "b", "]"}], "+", "2"}], 
+             "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "2", 
+            "\[RightDoubleBracket]"}]}], "]"}]}]}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Or", " ", "@@", 
+       RowBox[{"(", 
+        RowBox[{"AlmostOneQ", "/@", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"w", "^", 
+             RowBox[{"{", "n", "}"}]}], "/.", 
+            RowBox[{"Solve", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{"larger", "/", "smaller"}], ")"}], "*", "w"}], "+", 
+                
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{"larger", "/", "smaller"}], ")"}], "^", 
+                  RowBox[{"{", 
+                   RowBox[{"-", "1"}], "}"}]}], "*", "w"}], "-", 
+                RowBox[{"2", "*", "w"}], "-", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"2", "w"}], "+", 
+                   RowBox[{"w", "^", "2"}], "+", "1"}], ")"}], "/", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"Quantum", "[", 
+                    RowBox[{
+                    RowBox[{"n", "+", "2"}], ",", "b"}], "]"}], "*", 
+                   RowBox[{"Quantum", "[", 
+                    RowBox[{"n", ",", "b"}], "]"}]}], ")"}]}]}], "\[Equal]", 
+               "0"}], ",", "w"}], "]"}]}], ")"}], " ", "]"}]}], ")"}]}]}], 
+     "\[IndentingNewLine]", "]"}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4301865867265697`*^9, {3.432518608311001*^9, 3.432518639113847*^9}, {
+   3.432518726770131*^9, 3.4325187656741734`*^9}, {3.432518891762998*^9, 
+   3.4325189103242197`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1272, 679},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 78, 1, 26, "Subsubtitle",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[670, 27, 58, 1, 67, "Section",
+ InitializationCell->True],
+Cell[731, 30, 129, 2, 26, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[897, 37, 60, 1, 67, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[982, 42, 133, 2, 34, "Subsection",
+ InitializationCell->True],
+Cell[1118, 46, 72, 1, 26, "Text",
+ InitializationCell->True],
+Cell[1193, 49, 494, 10, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1724, 64, 63, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[1790, 67, 209, 5, 27, "Input",
+ InitializationCell->True],
+Cell[2002, 74, 359, 8, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2398, 87, 58, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[2459, 90, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2581, 95, 339, 7, 56, "Text"],
+Cell[2923, 104, 629, 16, 43, "Input",
+ InitializationCell->True],
+Cell[3555, 122, 565, 14, 43, "Input",
+ InitializationCell->True],
+Cell[4123, 138, 774, 22, 43, "Input",
+ InitializationCell->True],
+Cell[4900, 162, 769, 22, 43, "Input",
+ InitializationCell->True],
+Cell[5672, 186, 576, 17, 27, "Input",
+ InitializationCell->True],
+Cell[6251, 205, 858, 27, 43, "Input",
+ InitializationCell->True],
+Cell[7112, 234, 226, 7, 27, "Input",
+ InitializationCell->True],
+Cell[7341, 243, 3918, 99, 118, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[11284, 346, 123, 2, 24, "Subsubsection",
+ InitializationCell->True],
+Cell[11410, 350, 96, 3, 70, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11555, 359, 63, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[11621, 362, 103, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

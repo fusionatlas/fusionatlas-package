@@ -1,0 +1,1767 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     71813,       1758]
+NotebookOptionsPosition[     70224,       1699]
+NotebookOutlinePosition[     70565,       1714]
+CellTagsIndexPosition[     70522,       1711]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FusionAtlasPaths", "=", 
+   RowBox[{"{", "\"\<~/projects/fusionatlas/package/\>\"", "}"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"$Path", "=", 
+   RowBox[{"$Path", "~", "Join", "~", "FusionAtlasPaths"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"<<", "FusionAtlas`"}]}], "Input",
+ CellChangeTimes->{{3.4619815107488956`*^9, 3.4619815110119467`*^9}, {
+  3.4875476964059763`*^9, 3.487547696587817*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"g1", "=", 
+   RowBox[{
+   "GraphFromString", "[", "\"\<bwd1v1v1v1p1v1x0p0x1duals1v1v1x2\>\"", 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"g2", "=", 
+   RowBox[{
+   "GraphFromString", "[", "\"\<bwd1v1v1v1p1v1x0p1x0duals1v1v1x2\>\"", 
+    "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.49365681905126*^9, 3.493656873692142*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DisplayBigraph", "[", 
+  RowBox[{"{", 
+   RowBox[{"g1", ",", "g2"}], "}"}], "]"}]], "Input",
+ CellChangeTimes->{{3.493656875961446*^9, 3.4936568829286747`*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     StyleBox[
+      GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+          PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+           PointBox[{6, 0}], PointBox[{6, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+          LineBox[{{2, 1}, {3, 1}}], 
+          LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+           LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+            LineBox[{{5, 2}, {6, 
+             2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}}}, 
+        {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+         LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+          LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}}}],
+      StripOnInput->False,
+      Magnification->0.7 Inherited], 
+     StyleBox[
+      GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+          PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+           PointBox[{6, 0}], PointBox[{6, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+          LineBox[{{2, 1}, {3, 1}}], 
+          LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+           LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+            LineBox[{{5, 0}, {6, 
+             2}}]}, {{}, {}}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}}}, 
+        {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+         LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+          LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}}}],
+      StripOnInput->False,
+      Magnification->0.7 Inherited]}
+   },
+   AutoDelete->False,
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.49365688350875*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindBigraphPairExtensionsUpToDepth", "[", "2.1", "]"}], "[", 
+  RowBox[{"g1", ",", "g2", ",", "1"}], "]"}]], "Input",
+ CellChangeTimes->{{3.4936568937245197`*^9, 3.49365689817804*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FusionAtlas", "::", "\<\"loading\"\>"}], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Loading precomputed data in \
+\\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\(\\\"FusionAtlas`Data`\
+gbg1v1v1v1p1v1x0p0x1`PairExtensions`\\\"\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\".\\\\\\\"\\\", \\\"MT\\\
+\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.493656899206792*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"BigraphWithDuals", "[", 
+       RowBox[{
+        RowBox[{"GradedBigraph", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", "1", "}"}], ",", 
+            RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"DualData", "[", 
+         RowBox[{
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"2", ",", "1"}], "}"}]}], "]"}]}], "]"}], ",", 
+      RowBox[{"BigraphWithDuals", "[", 
+       RowBox[{
+        RowBox[{"GradedBigraph", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", "1", "}"}], ",", 
+            RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"DualData", "[", 
+         RowBox[{
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2"}], "}"}]}], "]"}]}], "]"}]}], "}"}], "}"}], 
+   ",", 
+   RowBox[{"{", "}"}], ",", 
+   RowBox[{"{", "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.493656899253203*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"vines", ",", "weeds", ",", 
+    RowBox[{"{", "}"}]}], "}"}], "=", 
+  RowBox[{
+   RowBox[{"FindBigraphPairExtensionsUpToDepth", "[", "2.2", "]"}], "[", 
+   RowBox[{"g1", ",", "g2", ",", "1"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.4936568937245197`*^9, 3.493656927661496*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"BigraphWithDuals", "[", 
+       RowBox[{
+        RowBox[{"GradedBigraph", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", "1", "}"}], ",", 
+            RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"DualData", "[", 
+         RowBox[{
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"2", ",", "1"}], "}"}]}], "]"}]}], "]"}], ",", 
+      RowBox[{"BigraphWithDuals", "[", 
+       RowBox[{
+        RowBox[{"GradedBigraph", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", "1", "}"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", "1", "}"}], ",", 
+            RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"DualData", "[", 
+         RowBox[{
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2"}], "}"}]}], "]"}]}], "]"}]}], "}"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "2", ",", "1"}], "}"}]}], "]"}]}], "]"}]}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"4", ",", "2", ",", "3", ",", "1"}], "}"}]}], "]"}]}], 
+        "]"}]}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.493656915707944*^9, 3.4936569281958637`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{"DisplayBigraph", ",", "weeds", ",", 
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.4936569530999804`*^9, 3.493656955658414*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, PointBox[{7, 1}]}, {
+         LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+           LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {
+          LineBox[{{6, 0}, {7, 
+           1}}], {}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, \
+{}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+        LineBox[{{7, 1}, {7, 1.5}}]}}], ",", 
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -1}], 
+          PointBox[{7, 1}], PointBox[{7, 3}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+         LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+           LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -1}}], 
+           LineBox[{{6, 0}, {7, 1}}], {}}, {{}, {}, 
+           LineBox[{{6, 2}, {7, 
+            3}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}, \
+{}}, {{}, {}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+         LineBox[{{7, -1}, {7.2, 1}, {7, 3}}], LineBox[{{7, 1}, {7, 1.5}}], 
+         LineBox[{{7, 3}, {7.2, 1}, {7, -1}}]}}}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, 0}], 
+          PointBox[{7, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+         LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+           LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {{
+           LineBox[{{6, 0}, {7, 0}}], {}}, {{}, 
+           LineBox[{{6, 2}, {7, 
+            2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}}, \
+{{}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {LineBox[{{7, 0}, {7, 0.5}}],
+          LineBox[{{7, 2}, {7, 2.5}}]}}}], ",", 
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, PointBox[{7, 1}]}, {
+         LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+           LineBox[{{5, 2}, {6, 2}}]}}, {LineBox[{{6, 0}, {7, 1}}], 
+          LineBox[{{6, 2}, {7, 
+           1}}]}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, {}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+        LineBox[{{7, 1}, {7, 1.5}}]}}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, 0}], 
+          PointBox[{7, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+         LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+           LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {{
+           LineBox[{{6, 0}, {7, 0}}], {}}, {{}, 
+           LineBox[{{6, 2}, {7, 
+            2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}}, \
+{{}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {LineBox[{{7, 0}, {7, 0.5}}],
+          LineBox[{{7, 2}, {7, 2.5}}]}}}], ",", 
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -2}], 
+          PointBox[{7, 0}], PointBox[{7, 2}], PointBox[{7, 4}]}}, {
+         LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+           LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -2}}], 
+           LineBox[{{6, 0}, {7, 0}}], {}, {}}, {{}, {}, 
+           LineBox[{{6, 2}, {7, 2}}], 
+           LineBox[{{6, 2}, {7, 
+            4}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}, \
+{}, {}}, {{}, {}, {}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+         LineBox[{{7, -2}, {7.2, 1}, {7, 4}}], LineBox[{{7, 0}, {7, 0.5}}], 
+         LineBox[{{7, 2}, {7, 2.5}}], 
+         LineBox[{{7, 4}, {7.2, 1}, {7, -2}}]}}}]}], "}"}]}], "}"}]], "Output",\
+
+ CellChangeTimes->{3.49365695660345*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{"GraphToString", ",", "weeds", ",", 
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.493656947652244*^9, 3.493656948113694*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"\<\"bwd1v1v1v1p1v1x0p1x0v1x0duals1v1v1x2v1\"\>", 
+     ",", "\<\"bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1duals1v1v1x2v3x2x1\"\>"}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"bwd1v1v1v1p1v1x0p1x0v1x0p0x1duals1v1v1x2v1x2\"\>", 
+     ",", "\<\"bwd1v1v1v1p1v1x0p0x1v1x1duals1v1v1x2v1\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"bwd1v1v1v1p1v1x0p1x0v1x0p0x1duals1v1v1x2v1x2\"\>", 
+     ",", "\<\"bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1p0x1duals1v1v1x2v4x2x3x1\"\>"}]\
+, "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.493656948468854*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{"DisplayBigraph", ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<bwd1v1v1v1p1v1x0p0x1v1x1duals1v1v1x2v1\>\"", ",", 
+       "\"\<bwd1v1v1v1p1v1x0p1x0v1x0p0x1duals1v1v1x2v1x2\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1duals1v1v1x2v1x3x2\>\"", ",", 
+       "\"\<bwd1v1v1v1p1v1x0p1x0v1x0duals1v1v1x2v1\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1p0x1duals1v1v1x2v1x3x2x4\>\"", 
+       ",", "\"\<bwd1v1v1v1p1v1x0p1x0v1x0p0x1duals1v1v1x2v1x2\>\""}], "}"}]}],
+     "}"}], ",", 
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.493657141855959*^9, 3.493657189717093*^9}, {
+  3.493661188812738*^9, 3.4936612034232883`*^9}, {3.493664951860285*^9, 
+  3.493664968896348*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, PointBox[{7, 1}]}, {
+         LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+           LineBox[{{5, 2}, {6, 2}}]}}, {LineBox[{{6, 0}, {7, 1}}], 
+          LineBox[{{6, 2}, {7, 
+           1}}]}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, {}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, LineBox[{{7, 1}, {7, 1.5}}]}},
+      ImageCache->GraphicsData["CompressedBitmap", "\<\
+eJztl0lME1Ecxh+URcB9BwuUAi0QEaKkAcUFKVstrjf3ikhBWYuGxAsJBsJy
+9sChAcOJCxeSJgSQGA4cOJkAJy6cIOFIIoHK3/fmvZZp8xkl9egk8Gb+832/
+b6adznv/Wlenu77Z1dlY5zJVdbja3I11HlNlawcvGaIYY5P8756JxfB94ru6
+f5PEt+DwXhsMNDc3R06nU4wsBdTSQ+UVFRX0iAMtFguXd3d38xrfFwHkcDgC
+8k5tiKGNjQ1yu900ajYLWooqi4Di4mLq6uqi3d3dNGny6EyDg4O0tLREPCJV
+RU9MTNDIyIgwMFljHdoQG+oQG7+uVEXb29vTW43S2a6gOieLVjXuJrUxI6Zc
+kJQ2QDEAym+uRX4crBVQYgAlDVOSJaUFUGIBJR1TzktKM6DEAYoJU85JyjtA
+iQeUDEw5KylvAeUQoJgx5YykNAFKAqBkYsppSWkElERAycKUU5LiBpQkQMnG
+lJOS0gAohwHFgiknJOUNoBwJUDY3gxQrphyXlHpAKcGOY9LxGjiuYcdR6agD
+juvYIW+AvQKOm9ghPzjmAo4y7JBfGHupHOvr6zQwMKA5yrFDPijshc4hMpaX
+l1kFdsgHlD0HjirskD8M9gw4arBD/iDZU+C4gx3yRcCeAEctdsgXEHsMHPeA
+w+/3yxdf8C36dXaWHDU1ND09zZJpZ2eH1/g+1ahaiq7mqK4OqU1NTVFubi6N
+jo6yB7q0np4eshUViVnIEJrWlZ9PV/hMZrVaeVpvby+v8X1tdhO1FFXLyc6m
+j2E1o9EYnAUfKp7dbicPrznLylhY1Pe+PmotLdXm2GRVg3PxzAx94ZewX5PT
+p81mI4/HQ9vb2/dVeW1tjRoaGuhzZiZ98/nCAmmSz/yLi9qRLVDz+4k+fdKO
+jKrm8/loeHhYgNldrRarkcUzvrq6SjQ0RLS1FX4/f8KnArxTq8WF4sUmIw6Y
+kAYSHKqmS9if5mWKdhR9sKh0EFUNogyRR5lAVCWIiok8KgNE2UFUbORRZhB1
+G0TFRR6VCaJugaj4yKOyQNQNEHUo8qhsEFUKohIij7KAqKsgKjHyKCuIKgZR
+SX8RNT9PtLISGvXzJ5HXqx3lgCgbiAourMbGiH780Ee5AaIIINSyrRHIL+vk
+/f39mlytFZuAvBDQ1QL1LZBfAnK1Kn4H5BeBXC3Fm4E8D8jV+r8FyHOAXDUd
+rUBuAXLV6bQBeRaQq/aqHcjNQK56ug4gNwG5aiQ9QJ4G5KpjDTTGQi6mb7GO
+CWuMy8vLtWmcu1RjHGi+S0pKqJAvJwoKCvjNeb1eXsvLy9OWHdwV3qsLmGi8
+x8fHuZxfDK/xfarm6yRda/8h8ITrWodr/0/981MLC+GnJtHAon4BIgpmGQ==
+\
+\>"]], ",", 
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, 0}], 
+          PointBox[{7, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+         LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+           LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {{
+           LineBox[{{6, 0}, {7, 0}}], {}}, {{}, 
+           LineBox[{{6, 2}, {7, 
+            2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}}, \
+{{}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {LineBox[{{7, 0}, {7, 0.5}}],
+          LineBox[{{7, 2}, {7, 2.5}}]}}}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -1}], 
+          PointBox[{7, 1}], PointBox[{7, 3}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+         LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+           LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -1}}], 
+           LineBox[{{6, 0}, {7, 1}}], {}}, {{}, {}, 
+           LineBox[{{6, 2}, {7, 
+            3}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}, \
+{}}, {{}, {}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+         LineBox[{{7, -1}, {7, -0.5}}], LineBox[{{7, 1}, {7.2, 2}, {7, 3}}], 
+         LineBox[{{7, 3}, {7.2, 2}, {7, 1}}]}}}], ",", 
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, PointBox[{7, 1}]}, {
+         LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+           LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {
+          LineBox[{{6, 0}, {7, 
+           1}}], {}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, \
+{}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+        LineBox[{{7, 1}, {7, 1.5}}]}}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -2}], 
+          PointBox[{7, 0}], PointBox[{7, 2}], PointBox[{7, 4}]}}, {
+         LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+           LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -2}}], 
+           LineBox[{{6, 0}, {7, 0}}], {}, {}}, {{}, {}, 
+           LineBox[{{6, 2}, {7, 2}}], 
+           LineBox[{{6, 2}, {7, 
+            4}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}, \
+{}, {}}, {{}, {}, {}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+         LineBox[{{7, -2}, {7, -1.5}}], LineBox[{{7, 0}, {7.2, 1}, {7, 2}}], 
+         LineBox[{{7, 2}, {7.2, 1}, {7, 0}}], LineBox[{{7, 4}, {7, 4.5}}]}}}],
+      ",", 
+     GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+         PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+          PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, 0}], 
+          PointBox[{7, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+         LineBox[{{2, 1}, {3, 1}}], 
+         LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+          LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+           LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {{
+           LineBox[{{6, 0}, {7, 0}}], {}}, {{}, 
+           LineBox[{{6, 2}, {7, 
+            2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}}, \
+{{}, {}}}}}, 
+       {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+        LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+         LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {LineBox[{{7, 0}, {7, 0.5}}],
+          LineBox[{{7, 2}, {7, 2.5}}]}}}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.493664970337747*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{"DisplayBigraph", ",", "vines", ",", 
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.4936569631316*^9, 3.493656963431582*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+        PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+         PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, 0}], 
+         PointBox[{7, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+        LineBox[{{2, 1}, {3, 1}}], 
+        LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+         LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+          LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, 0}}], {}}, {{}, 
+          LineBox[{{6, 2}, {7, 
+           2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}}, \
+{{}, {}}}}}, 
+      {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+       LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+        LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+        LineBox[{{7, 0}, {7.2, 1}, {7, 2}}], 
+        LineBox[{{7, 2}, {7.2, 1}, {7, 0}}]}}}], ",", 
+    GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+        PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+         PointBox[{6, 0}], PointBox[{6, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+        LineBox[{{2, 1}, {3, 1}}], 
+        LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+         LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+          LineBox[{{5, 0}, {6, 
+           2}}]}, {{}, {}}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}}}, 
+      {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+       LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+        LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}}}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.4936569637688828`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{"GraphToString", ",", "vines", ",", 
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.4936569296508923`*^9, 3.4936569420747433`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"\<\"bwd1v1v1v1p1v1x0p0x1v1x0p0x1duals1v1v1x2v2x1\"\>", 
+    ",", "\<\"bwd1v1v1v1p1v1x0p1x0duals1v1v1x2\"\>"}], "}"}], "}"}]], "Output",\
+
+ CellChangeTimes->{{3.493656933366783*^9, 3.493656942458869*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"vines", ",", "weeds", ",", 
+    RowBox[{"{", "}"}]}], "}"}], "=", 
+  RowBox[{
+   RowBox[{"FindBigraphPairExtensionsUpToDepth", "[", "2.17534", "]"}], "[", 
+   RowBox[{"g1", ",", "g2", ",", "\[Infinity]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.4936568937245197`*^9, 3.493656927661496*^9}, {
+  3.4936762619838533`*^9, 3.493676278687088*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"2", ",", "1"}], "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", "1"}], "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "2", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "2", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "2", ",", "1"}], "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "2", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "2", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"4", ",", "2", ",", "3", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"BigraphWithDuals", "[", 
+        RowBox[{
+         RowBox[{"GradedBigraph", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "1", "}"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"{", "1", "}"}], "}"}]}], "]"}], ",", 
+         RowBox[{"DualData", "[", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}]}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", "}"}], ",", 
+   RowBox[{"{", "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.493676290646496*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DisplayBigraph", "/@", "vines"}]], "Input",
+ CellChangeTimes->{{3.493676294757853*^9, 3.4936762975380983`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[GridBox[{
+      {
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, 0}], 
+             PointBox[{7, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{
+              LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+              LineBox[{{5, 2}, {6, 2}}]}}, {{
+              LineBox[{{6, 0}, {7, 0}}], {}}, {{}, 
+              LineBox[{{6, 2}, {7, 
+               2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, \
+{}}, {{}, {}}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+            LineBox[{{7, 0}, {7.2, 1}, {7, 2}}], 
+            LineBox[{{7, 2}, {7.2, 1}, {7, 0}}]}}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited], 
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}}, {LineBox[{{1, 1}, {2, 1}}],
+             LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+              LineBox[{{5, 0}, {6, 
+               2}}]}, {{}, {}}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, \
+{}}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited]}
+     },
+     AutoDelete->False,
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+    "Grid"], ",", 
+   TagBox[GridBox[{
+      {
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, 0}], 
+             PointBox[{7, 2}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+              LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {{
+              LineBox[{{6, 0}, {7, 0}}], {}}, {{}, 
+              LineBox[{{6, 2}, {7, 
+               2}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, \
+{}}, {{}, {}}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+            LineBox[{{7, 0}, {7, 0.5}}], LineBox[{{7, 2}, {7, 2.5}}]}}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited], 
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, PointBox[{7, 1}]}, {
+            LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{
+              LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+              LineBox[{{5, 2}, {6, 2}}]}}, {LineBox[{{6, 0}, {7, 1}}], 
+             LineBox[{{6, 2}, {7, 
+              1}}]}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, {}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+           LineBox[{{7, 1}, {7, 1.5}}]}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited]}
+     },
+     AutoDelete->False,
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+    "Grid"], ",", 
+   TagBox[GridBox[{
+      {
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -1}], 
+             PointBox[{7, 1}], PointBox[{7, 3}]}, PointBox[{8, 1}], 
+            PointBox[{9, 1}]}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{
+              LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+              LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -1}}], 
+              LineBox[{{6, 0}, {7, 1}}], {}}, {{}, {}, 
+              LineBox[{{6, 2}, {7, 3}}]}}, {{}, {}, 
+             LineBox[{{7, 3}, {8, 1}}]}, 
+            LineBox[{{8, 1}, {9, 
+             1}}]}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}, \
+{}}, {{}, {}, {}}}, {{}, {}, {}}, {}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+            LineBox[{{7, -1}, {7.2, 1}, {7, 3}}], LineBox[{{7, 1}, {7, 1.5}}],
+             LineBox[{{7, 3}, {7.2, 1}, {7, -1}}]}, {}, 
+           LineBox[{{9, 1}, {9, 1.5}}]}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited], 
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, PointBox[{7, 1}], 
+            PointBox[{8, 1}]}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+              LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {
+             LineBox[{{6, 0}, {7, 1}}], {}}, 
+            LineBox[{{7, 1}, {8, 
+             1}}]}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, {}}, \
+{}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+           LineBox[{{7, 1}, {7, 1.5}}], {}}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited]}
+     },
+     AutoDelete->False,
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+    "Grid"], ",", 
+   TagBox[GridBox[{
+      {
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -1}], 
+             PointBox[{7, 1}], PointBox[{7, 3}]}, {PointBox[{8, 0}], 
+             PointBox[{8, 2}]}, {PointBox[{9, -1}], PointBox[{9, 1}], 
+             PointBox[{9, 3}]}}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{
+              LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+              LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -1}}], 
+              LineBox[{{6, 0}, {7, 1}}], {}}, {{}, {}, 
+              LineBox[{{6, 2}, {7, 3}}]}}, {{{}, {}}, {
+              LineBox[{{7, 1}, {8, 0}}], {}}, {{}, 
+              LineBox[{{7, 3}, {8, 2}}]}}, {{
+              LineBox[{{8, 0}, {9, -1}}], {}, {}}, {{}, 
+              LineBox[{{8, 2}, {9, 1}}], 
+              LineBox[{{8, 2}, {9, 
+               3}}]}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, \
+{}, {}}, {{}, {}, {}}}, {{{}, {}}, {{}, {}}, {{}, {}}}, {{{}, {}, {}}, {{}, \
+{}, {}}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+            LineBox[{{7, -1}, {7.2, 1}, {7, 3}}], LineBox[{{7, 1}, {7, 1.5}}],
+             LineBox[{{7, 3}, {7.2, 1}, {7, -1}}]}, {{}, {}}, {
+            LineBox[{{9, -1}, {9.2, 1}, {9, 3}}], LineBox[{{9, 1}, {9, 1.5}}],
+             LineBox[{{9, 3}, {9.2, 1}, {9, -1}}]}}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited], 
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, 
+            PointBox[{7, 1}], {PointBox[{8, 0}], PointBox[{8, 2}]}}, {
+            LineBox[{{1, 1}, {2, 1}}], LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+              LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {
+             LineBox[{{6, 0}, {7, 1}}], {}}, {LineBox[{{7, 1}, {8, 0}}], 
+             LineBox[{{7, 1}, {8, 
+              2}}]}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, {}}, \
+{{}, {}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+           LineBox[{{7, 1}, {7, 1.5}}], {{}, {}}}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited]}
+     },
+     AutoDelete->False,
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+    "Grid"], ",", 
+   TagBox[GridBox[{
+      {
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, 
+            PointBox[{7, 1}], {PointBox[{8, 0}], PointBox[{8, 2}]}, 
+            PointBox[{9, 1}]}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+              LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {
+             LineBox[{{6, 0}, {7, 1}}], {}}, {LineBox[{{7, 1}, {8, 0}}], 
+             LineBox[{{7, 1}, {8, 2}}]}, {
+             LineBox[{{8, 0}, {9, 
+              1}}], {}}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, \
+{}}, {{}, {}}, {{}, {}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+           LineBox[{{7, 1}, {7, 1.5}}], {{}, {}}, 
+           LineBox[{{9, 1}, {9, 1.5}}]}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited], 
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -1}], 
+             PointBox[{7, 1}], PointBox[{7, 3}]}, {PointBox[{8, 0}], 
+             PointBox[{8, 2}]}, PointBox[{9, 1}]}, {LineBox[{{1, 1}, {2, 1}}],
+             LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{
+              LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+              LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -1}}], 
+              LineBox[{{6, 0}, {7, 1}}], {}}, {{}, {}, 
+              LineBox[{{6, 2}, {7, 3}}]}}, {{{}, {}}, {
+              LineBox[{{7, 1}, {8, 0}}], {}}, {{}, 
+              LineBox[{{7, 3}, {8, 2}}]}}, {LineBox[{{8, 0}, {9, 1}}], 
+             LineBox[{{8, 2}, {9, 
+              1}}]}}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}, \
+{}}, {{}, {}, {}}}, {{{}, {}}, {{}, {}}, {{}, {}}}, {{}, {}}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+            LineBox[{{7, -1}, {7.2, 1}, {7, 3}}], LineBox[{{7, 1}, {7, 1.5}}],
+             LineBox[{{7, 3}, {7.2, 1}, {7, -1}}]}, {{}, {}}, 
+           LineBox[{{9, 1}, {9, 1.5}}]}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited]}
+     },
+     AutoDelete->False,
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+    "Grid"], ",", 
+   TagBox[GridBox[{
+      {
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, {PointBox[{7, -1}], 
+             PointBox[{7, 1}], PointBox[{7, 3}]}, {PointBox[{8, 0}], 
+             PointBox[{8, 2}]}, {PointBox[{9, -2}], PointBox[{9, 0}], 
+             PointBox[{9, 2}], PointBox[{9, 4}]}, PointBox[{10, 1}], 
+            PointBox[{11, 1}]}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{
+              LineBox[{{5, 0}, {6, 0}}], {}}, {{}, 
+              LineBox[{{5, 2}, {6, 2}}]}}, {{LineBox[{{6, 0}, {7, -1}}], 
+              LineBox[{{6, 0}, {7, 1}}], {}}, {{}, {}, 
+              LineBox[{{6, 2}, {7, 3}}]}}, {{{}, {}}, {
+              LineBox[{{7, 1}, {8, 0}}], {}}, {{}, 
+              LineBox[{{7, 3}, {8, 2}}]}}, {{LineBox[{{8, 0}, {9, -2}}], 
+              LineBox[{{8, 0}, {9, 0}}], {}, {}}, {{}, {}, 
+              LineBox[{{8, 2}, {9, 2}}], 
+              LineBox[{{8, 2}, {9, 4}}]}}, {{}, {}, {}, 
+             LineBox[{{9, 4}, {10, 1}}]}, 
+            LineBox[{{10, 1}, {11, 
+             1}}]}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{{}, {}, \
+{}}, {{}, {}, {}}}, {{{}, {}}, {{}, {}}, {{}, {}}}, {{{}, {}, {}, {}}, {{}, \
+{}, {}, {}}}, {{}, {}, {}, {}}, {}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, {
+            LineBox[{{7, -1}, {7.2, 1}, {7, 3}}], LineBox[{{7, 1}, {7, 1.5}}],
+             LineBox[{{7, 3}, {7.2, 1}, {7, -1}}]}, {{}, {}}, {
+            LineBox[{{9, -2}, {9.2, 1}, {9, 4}}], LineBox[{{9, 0}, {9, 0.5}}],
+             LineBox[{{9, 2}, {9, 2.5}}], 
+            LineBox[{{9, 4}, {9.2, 1}, {9, -2}}]}, {}, 
+           LineBox[{{11, 1}, {11, 1.5}}]}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited], 
+       StyleBox[
+        GraphicsBox[{{{PointBox[{1, 1}], PointBox[{2, 1}], PointBox[{3, 1}], 
+            PointBox[{4, 1}], {PointBox[{5, 0}], PointBox[{5, 2}]}, {
+             PointBox[{6, 0}], PointBox[{6, 2}]}, 
+            PointBox[{7, 1}], {PointBox[{8, 0}], PointBox[{8, 2}]}, 
+            PointBox[{9, 1}], PointBox[{10, 1}]}, {LineBox[{{1, 1}, {2, 1}}], 
+            LineBox[{{2, 1}, {3, 1}}], 
+            LineBox[{{3, 1}, {4, 1}}], {LineBox[{{4, 1}, {5, 0}}], 
+             LineBox[{{4, 1}, {5, 2}}]}, {{LineBox[{{5, 0}, {6, 0}}], 
+              LineBox[{{5, 0}, {6, 2}}]}, {{}, {}}}, {
+             LineBox[{{6, 0}, {7, 1}}], {}}, {LineBox[{{7, 1}, {8, 0}}], 
+             LineBox[{{7, 1}, {8, 2}}]}, {LineBox[{{8, 0}, {9, 1}}], {}}, 
+            LineBox[{{9, 1}, {10, 
+             1}}]}, {{}, {}, {}, {{}, {}}, {{{}, {}}, {{}, {}}}, {{}, {}}, \
+{{}, {}}, {{}, {}}, {}}}, 
+          {RGBColor[1, 0, 0], LineBox[{{1, 1}, {1, 1.5}}], {}, 
+           LineBox[{{3, 1}, {3, 1.5}}], {}, {LineBox[{{5, 0}, {5, 0.5}}], 
+            LineBox[{{5, 2}, {5, 2.5}}]}, {{}, {}}, 
+           LineBox[{{7, 1}, {7, 1.5}}], {{}, {}}, 
+           LineBox[{{9, 1}, {9, 1.5}}], {}}}],
+        StripOnInput->False,
+        Magnification->0.7 Inherited]}
+     },
+     AutoDelete->False,
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+    "Grid"]}], "}"}]], "Output",
+ CellChangeTimes->{3.493676298521283*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{"GraphToString", ",", "vines", ",", 
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.493676562588908*^9, 3.493676579788164*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"\<\"bwd1v1v1v1p1v1x0p0x1v1x0p0x1duals1v1v1x2v2x1\"\>", 
+     ",", "\<\"bwd1v1v1v1p1v1x0p1x0duals1v1v1x2\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"bwd1v1v1v1p1v1x0p1x0v1x0p0x1duals1v1v1x2v1x2\"\>", 
+     ",", "\<\"bwd1v1v1v1p1v1x0p0x1v1x1duals1v1v1x2v1\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1v0x0x1v1duals1v1v1x2v3x2x1v1\
+\"\>", ",", "\<\"bwd1v1v1v1p1v1x0p1x0v1x0v1duals1v1v1x2v1\"\>"}], "}"}], ",", 
+   
+   RowBox[{"{", 
+    RowBox[{"\<\"\
+bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1v0x1x0p0x0x1v1x0p0x1p0x1duals1v1v1x2v3x2x1v3x2\
+x1\"\>", ",", "\<\"bwd1v1v1v1p1v1x0p1x0v1x0v1p1duals1v1v1x2v1\"\>"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"bwd1v1v1v1p1v1x0p1x0v1x0v1p1v1x0duals1v1v1x2v1v1\"\>", 
+     ",", "\<\"\
+bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1v0x1x0p0x0x1v1x1duals1v1v1x2v3x2x1v1\"\>"}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"\
+bwd1v1v1v1p1v1x0p0x1v1x0p1x0p0x1v0x1x0p0x0x1v1x0p1x0p0x1p0x1v0x0x0x1v1duals1v1\
+v1x2v3x2x1v4x2x3x1v1\"\>", 
+     ",", "\<\"bwd1v1v1v1p1v1x0p1x0v1x0v1p1v1x0v1duals1v1v1x2v1v1\"\>"}], 
+    "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.493676569810679*^9, 3.493676580188827*^9}}]
+}, Open  ]]
+},
+WindowSize->{1220, 577},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 441, 11, 58, "Input"],
+Cell[989, 33, 386, 11, 43, "Input"],
+Cell[CellGroupData[{
+Cell[1400, 48, 184, 4, 27, "Input"],
+Cell[1587, 54, 1757, 35, 83, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3381, 94, 219, 4, 27, "Input"],
+Cell[3603, 100, 455, 10, 23, "Message"],
+Cell[4061, 112, 2326, 69, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6424, 186, 330, 8, 27, "Input"],
+Cell[6757, 196, 9856, 280, 133, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16650, 481, 198, 4, 27, "Input"],
+Cell[16851, 487, 5888, 105, 334, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22776, 597, 195, 4, 27, "Input"],
+Cell[22974, 603, 609, 14, 58, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23620, 622, 872, 21, 58, "Input"],
+Cell[24495, 645, 7341, 129, 306, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31873, 779, 194, 4, 27, "Input"],
+Cell[32070, 785, 1728, 31, 111, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[33835, 821, 199, 4, 27, "Input"],
+Cell[34037, 827, 260, 6, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[34334, 838, 395, 9, 27, "Input"],
+Cell[34732, 849, 17601, 487, 223, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[52370, 1341, 135, 2, 27, "Input"],
+Cell[52508, 1345, 16210, 311, 179, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[68755, 1661, 195, 4, 27, "Input"],
+Cell[68953, 1667, 1255, 29, 103, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

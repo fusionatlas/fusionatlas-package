@@ -1,0 +1,4263 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[    170547,       4254]
+NotebookOptionsPosition[    163334,       4030]
+NotebookOutlinePosition[    163706,       4046]
+CellTagsIndexPosition[    163663,       4043]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`GraphPlanarAlgebra`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`PackageData`\>\"", ",", 
+      "\"\<FusionAtlas`Debugging`\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.411791124354661*^9, 3.411791125936936*^9}, {
+  3.421197918237237*^9, 3.4211979460372114`*^9}, {3.432428044175173*^9, 
+  3.432428050664504*^9}, {3.432608057742691*^9, 3.4326080604165363`*^9}, {
+  3.4328634732132688`*^9, 3.432863479131779*^9}, {3.4328641929682255`*^9, 
+  3.432864198966851*^9}, {3.4468456261699753`*^9, 3.446845633325498*^9}, {
+  3.446847319782378*^9, 3.446847325859624*^9}, {3.446847404675356*^9, 
+  3.4468474092485123`*^9}, {3.524158355512816*^9, 3.524158358938444*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Vertex", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446846182848318*^9, 3.446846197531752*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAElement", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446845641507465*^9, 3.4468456434488688`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAMatrix", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446856971091947*^9, 3.446856972983529*^9}}],
+
+Cell[BoxData[
+ RowBox[{"NumberFieldGenerator", ";", "EnlargeNumberField", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4468500712413282`*^9, {3.446912800173874*^9, 3.446912801619103*^9}}],
+
+Cell[BoxData[
+ RowBox[{"LopsidedDimension", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.446850074337781*^9}],
+
+Cell[BoxData[
+ RowBox[{"EmptyGPAElement", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446849929568346*^9, 3.4468499410868187`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPACoefficients", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4468500758487053`*^9, 3.44685007810499*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAMultiply", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.446850464138649*^9}],
+
+Cell[BoxData[
+ RowBox[{"RotateOneClick", ";", "RotateTwoClicks", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4468504935128603`*^9, 3.446850493927538*^9}}],
+
+Cell[BoxData[
+ RowBox[{"CapTopLeft", ";", "CapAt", ";", "PartialTrace", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446850506784745*^9, 3.446850507126828*^9}, {
+  3.483034825302074*^9, 3.483034828964506*^9}, {3.523300458672453*^9, 
+  3.523300460446505*^9}}],
+
+Cell[BoxData[
+ RowBox[{"AddStrandOnRight", ";", " ", "AddCupOnTop", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4830348308954897`*^9, 3.483034837085074*^9}}],
+
+Cell[BoxData[
+ RowBox[{"JonesWenzlIdempotent", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446849929568346*^9, 3.4468499410868187`*^9}, {
+  3.483019693501689*^9, 3.483019703676711*^9}}],
+
+Cell[BoxData[
+ RowBox[{"LowestWeightEigenvectorConditions", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.446845679593457*^9}],
+
+Cell[BoxData[
+ RowBox[{"LowestWeightEigenspace", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.446845686224926*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Graph combinatorics", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445965347792564*^9, 3.445965349877118*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"EvenVertices", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"EvenVertices", "[", "g", "]"}], "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"Vertex", "[", 
+       RowBox[{"d", ",", "k"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"d", ",", "0", ",", 
+        RowBox[{"GraphDepth", "[", "g", "]"}], ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "1", ",", 
+        RowBox[{"RankAtDepth", "[", 
+         RowBox[{"g", ",", "d"}], "]"}]}], "}"}]}], "]"}], 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"OddVertices", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"OddVertices", "[", "g", "]"}], "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"Vertex", "[", 
+       RowBox[{"d", ",", "k"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"d", ",", "1", ",", 
+        RowBox[{"GraphDepth", "[", "g", "]"}], ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "1", ",", 
+        RowBox[{"RankAtDepth", "[", 
+         RowBox[{"g", ",", "d"}], "]"}]}], "}"}]}], "]"}], 
+    "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459173738531923`*^9, 3.445917430497703*^9}, {
+  3.445917464653277*^9, 3.445917476806307*^9}, {3.4459178279839907`*^9, 
+  3.445917833981266*^9}, {3.446846228443736*^9, 3.446846240749198*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EdgesAdjacentTo", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"Vertex", "[", 
+     RowBox[{"d_", ",", "k_"}], "]"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"EdgesAdjacentTo", "[", 
+    RowBox[{"g", ",", 
+     RowBox[{"Vertex", "[", 
+      RowBox[{"d", ",", "k"}], "]"}]}], "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"d", "<", 
+        RowBox[{"GraphDepth", "[", "g", "]"}]}], ",", 
+       RowBox[{"Inner", "[", 
+        RowBox[{"List", ",", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Vertex", "[", 
+            RowBox[{
+             RowBox[{"d", "+", "1"}], ",", "l"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"l", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{"g", ",", 
+               RowBox[{"d", "+", "1"}]}], "]"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{
+          RowBox[{"g", "\[LeftDoubleBracket]", 
+           RowBox[{"d", "+", "1"}], "\[RightDoubleBracket]"}], 
+          "\[LeftDoubleBracket]", 
+          RowBox[{"All", ",", "k"}], "\[RightDoubleBracket]"}], ",", "List"}],
+         "]"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}], "~", "Join", "~", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"d", ">", "0"}], ",", 
+       RowBox[{"Inner", "[", 
+        RowBox[{"List", ",", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Vertex", "[", 
+            RowBox[{
+             RowBox[{"d", "-", "1"}], ",", "l"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"l", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{"g", ",", 
+               RowBox[{"d", "-", "1"}]}], "]"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{
+          RowBox[{"g", "\[LeftDoubleBracket]", "d", "\[RightDoubleBracket]"}],
+           "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], ",", 
+         "List"}], "]"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}]}], "/.", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x_", ",", "n_Integer"}], "}"}], "\[RuleDelayed]", 
+     RowBox[{"Sequence", "@@", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"x", ",", "l"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"l", ",", "1", ",", "n"}], "}"}]}], "]"}]}]}]}]}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.445905165937608*^9, 3.4459051817685223`*^9}, {
+  3.44590523081813*^9, 3.445905475256171*^9}, {3.445905645154711*^9, 
+  3.445905689953909*^9}, {3.445916626512273*^9, 3.445916627065357*^9}, {
+  3.445916709316448*^9, 3.445916736113618*^9}, {3.4459167702665577`*^9, 
+  3.445916771871407*^9}, {3.445918064024375*^9, 3.445918071865629*^9}, {
+  3.4468462293542223`*^9, 3.4468462310707293`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphPaths", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"shading", ":", 
+     RowBox[{"(", 
+      RowBox[{"True", "|", "False"}], ")"}]}], ",", "0"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"GraphPaths", "[", 
+    RowBox[{"g", ",", "shading", ",", "0"}], "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", "#", "}"}], "&"}], "/@", 
+    RowBox[{"If", "[", 
+     RowBox[{"shading", ",", 
+      RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+      RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459172787835007`*^9, 3.4459172976516113`*^9}, {
+   3.445917343995199*^9, 3.4459173680029507`*^9}, {3.445917506700576*^9, 
+   3.4459175180366373`*^9}, 3.445917787375805*^9, {3.446148984386691*^9, 
+   3.446148987504237*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"GraphPaths", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", "length_Integer"}], 
+    "]"}], "/;", 
+   RowBox[{"length", ">", "0"}]}], ":=", 
+  RowBox[{
+   RowBox[{"GraphPaths", "[", 
+    RowBox[{"g", ",", "shading", ",", "length"}], "]"}], "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", "path", "}"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"path", "~", "Join", "~", 
+           RowBox[{"Reverse", "[", "#", "]"}]}], "&"}], "/@", 
+         RowBox[{"EdgesAdjacentTo", "[", 
+          RowBox[{"g", ",", 
+           RowBox[{"Last", "[", "path", "]"}]}], "]"}]}]}], "]"}], "/@", 
+      RowBox[{"GraphPaths", "[", 
+       RowBox[{"g", ",", "shading", ",", 
+        RowBox[{"length", "-", "1"}]}], "]"}]}], ",", "1"}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44591724539939*^9, 3.44591726827643*^9}, {
+  3.445917520269636*^9, 3.445917646124483*^9}, {3.44614896746427*^9, 
+  3.4461489748408318`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"GraphPathsFrom", "[", 
+    RowBox[{"g_GradedBigraph", ",", "length_Integer", ",", "initial_Vertex"}],
+     "]"}], "/;", 
+   RowBox[{"length", ">", "0"}]}], ":=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", "path", "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"path", "~", "Join", "~", 
+          RowBox[{"Reverse", "[", "#", "]"}]}], "&"}], "/@", 
+        RowBox[{"EdgesAdjacentTo", "[", 
+         RowBox[{"g", ",", 
+          RowBox[{"Last", "[", "path", "]"}]}], "]"}]}]}], "]"}], "/@", 
+     RowBox[{"GraphPathsFrom", "[", 
+      RowBox[{"g", ",", 
+       RowBox[{"length", "-", "1"}], ",", "initial"}], "]"}]}], ",", "1"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44591724539939*^9, 3.44591726827643*^9}, {
+  3.445917520269636*^9, 3.445917646124483*^9}, {3.446140078912986*^9, 
+  3.4461401145812283`*^9}, {3.446140269120968*^9, 3.446140276191682*^9}, {
+  3.4468462519417267`*^9, 3.4468462833072853`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphPathsFrom", "[", 
+   RowBox[{"g_GradedBigraph", ",", "0", ",", "initial_Vertex"}], "]"}], ":=", 
+  
+  RowBox[{"{", 
+   RowBox[{"{", "initial", "}"}], "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446140140895146*^9, 3.4461401702730007`*^9}, 
+   3.446140274145499*^9, {3.44614490742213*^9, 3.4461449082359543`*^9}, {
+   3.4468462529032583`*^9, 3.4468462837383547`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphPathsTo", "[", 
+   RowBox[{"g_GradedBigraph", ",", "length_Integer", ",", "final_Vertex"}], 
+   "]"}], ":=", 
+  RowBox[{"Reverse", "/@", 
+   RowBox[{"GraphPathsFrom", "[", 
+    RowBox[{"g", ",", "length", ",", "final"}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44614029200578*^9, 3.446140313868135*^9}, 
+   3.44614985842717*^9, {3.4468462535452957`*^9, 3.446846284230493*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphPathsBetween", "[", 
+   RowBox[{
+   "g_GradedBigraph", ",", "length_Integer", ",", "initial_Vertex", ",", 
+    "final_Vertex"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"GraphPathsBetween", "[", 
+    RowBox[{"g", ",", "length", ",", "initial", ",", "final"}], "]"}], "=", 
+   RowBox[{"Cases", "[", 
+    RowBox[{
+     RowBox[{"GraphPathsFrom", "[", 
+      RowBox[{"g", ",", "length", ",", "initial"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"___", ",", "final"}], "}"}]}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44591724539939*^9, 3.44591726827643*^9}, {
+  3.445917520269636*^9, 3.445917646124483*^9}, {3.446140078912986*^9, 
+  3.446140137540612*^9}, {3.446140176105051*^9, 3.4461401963207827`*^9}, {
+  3.446140283676037*^9, 3.446140286093643*^9}, {3.446148950286372*^9, 
+  3.446148962823431*^9}, {3.446846254139083*^9, 3.4468462847061357`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"GraphLoops", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", "length_Integer"}], 
+    "]"}], "/;", 
+   RowBox[{"length", "\[GreaterEqual]", "2"}]}], ":=", 
+  RowBox[{
+   RowBox[{"GraphLoops", "[", 
+    RowBox[{"g", ",", "shading", ",", "length"}], "]"}], "=", 
+   RowBox[{"Cases", "[", 
+    RowBox[{
+     RowBox[{"GraphPaths", "[", 
+      RowBox[{"g", ",", "shading", ",", "length"}], "]"}], ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a_", ",", "z___", ",", "a_"}], "}"}], "\[RuleDelayed]", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "z"}], "}"}]}]}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445917874181498*^9, 3.445918000786942*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Lopsided dimensions", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445965437139605*^9, 3.445965439155334*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NumberFieldGenerator", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"NumberFieldGenerator", "[", "g", "]"}], "=", 
+   RowBox[{"RootReduce", "[", 
+    RowBox[{"Sqrt", "[", 
+     RowBox[{"2", "-", 
+      SuperscriptBox[
+       RowBox[{"ReducedDimensionOfGenerator", "[", "g", "]"}], "2"]}], "]"}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445965366306158*^9, 3.445965400956201*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ToNumberField0", "[", 
+   RowBox[{
+    RowBox[{"x_Real", "?", "NumericQ"}], ",", 
+    RowBox[{"y_", "?", "NumericQ"}]}], "]"}], ":=", 
+  "x"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ToNumberField0", "[", 
+   RowBox[{
+    RowBox[{"x_Complex", "?", "NumericQ"}], ",", 
+    RowBox[{"y_", "?", "NumericQ"}]}], "]"}], ":=", 
+  "x"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ToNumberField0", "[", 
+   RowBox[{
+    RowBox[{"x_", "?", "NumericQ"}], ",", 
+    RowBox[{"y_", "?", "NumericQ"}]}], "]"}], ":=", 
+  RowBox[{"ToNumberField", "[", 
+   RowBox[{
+    RowBox[{"RootReduce", "[", "x", "]"}], ",", "y"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ToNumberField0", "[", 
+   RowBox[{"x_", ",", "y_"}], "]"}], ":=", "x"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.481811346821521*^9, 3.48181138323132*^9}, {
+   3.488680422568572*^9, 3.488680435006353*^9}, 3.488680596773786*^9, {
+   3.4886806798697443`*^9, 3.488680683126719*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"EnlargeNumberField", "[", "g_GradedBigraph", "]"}], "[", 
+   RowBox[{"x_", "?", "NumericQ"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"Off", "[", 
+       RowBox[{"ToNumberField", "::", "\"\<nnfel\>\""}], "]"}], ";"}], "*)"}],
+     "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Switch", "[", 
+      RowBox[{
+       RowBox[{"ToNumberField0", "[", 
+        RowBox[{"x", ",", 
+         RowBox[{"NumberFieldGenerator", "[", "g", "]"}]}], "]"}], ",", 
+       "\[IndentingNewLine]", "_ToNumberField", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"NumberFieldGenerator", "[", "g", "]"}], "=", 
+         RowBox[{
+          RowBox[{"ToNumberField", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"RootReduce", "[", "x", "]"}], ",", 
+             RowBox[{"NumberFieldGenerator", "[", "g", "]"}]}], "}"}], "]"}], 
+          "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"DebugPrint", "[", 
+         RowBox[{"\"\<Enlarging number field for \>\"", ",", 
+          RowBox[{"GraphToString", "[", "g", "]"}], ",", "\"\<: \>\"", ",", 
+          RowBox[{"NumberFieldGenerator", "[", "g", "]"}]}], "]"}]}], ",", 
+       "\[IndentingNewLine]", "_", ",", "0"}], "\[IndentingNewLine]", "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"On", "[", 
+        RowBox[{"ToNumberField", "::", "\"\<nnfel\>\""}], "]"}], ";"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"NumberFieldGenerator", "[", "g", "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446909171476357*^9, 3.446909419044162*^9}, {
+   3.446909604994635*^9, 3.44690962015508*^9}, {3.46913831521391*^9, 
+   3.469138316497611*^9}, 3.4818114029629097`*^9, {3.483274958990704*^9, 
+   3.483274961229281*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LopsidedDimension", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"Vertex", "[", 
+     RowBox[{"d_", ",", "k_"}], "]"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"LopsidedDimension", "[", 
+    RowBox[{"g", ",", 
+     RowBox[{"Vertex", "[", 
+      RowBox[{"d", ",", "k"}], "]"}]}], "]"}], "=", "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Delta]", "=", 
+       RowBox[{"ReducedDimensionOfGenerator", "[", "g", "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ToNumberField0", "[", 
+      RowBox[{
+       RowBox[{"RootReduce", "[", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"OddQ", "[", "d", "]"}], ",", 
+           FractionBox["1", "\[Delta]"], ",", "1"}], "]"}], 
+         RowBox[{
+          RowBox[{"ReducedDimensionsByDepth", "[", "g", "]"}], 
+          "\[LeftDoubleBracket]", 
+          RowBox[{
+           RowBox[{"d", "+", "1"}], ",", "k"}], "\[RightDoubleBracket]"}]}], 
+        "]"}], ",", 
+       RowBox[{"NumberFieldGenerator", "[", "g", "]"}]}], "]"}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459049633267612`*^9, 3.445905128930409*^9}, {
+   3.445958825594243*^9, 3.445958828084826*^9}, {3.445965384944689*^9, 
+   3.445965427534886*^9}, {3.446845751126251*^9, 3.4468457520777893`*^9}, {
+   3.446846233452298*^9, 3.446846234057397*^9}, 3.481811413376189*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Graph planar algebra", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445965332045342*^9, 3.445965336385316*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Planar algebra operations", "Subsubsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445965270784976*^9, 3.445965274822*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EmptyGPAElement", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"shading", ":", 
+     RowBox[{"(", 
+      RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], ":=", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", "#", "}"}], "\[Rule]", "1"}], "&"}], "/@", 
+     RowBox[{"If", "[", 
+      RowBox[{"shading", ",", 
+       RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+       RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}]}], "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.4461439443885117`*^9, 3.4461439709575043`*^9}, {
+  3.4461441725921183`*^9, 3.446144196049198*^9}}],
+
+Cell["\<\
+GPA element takes : a graph, whether or not the left-hand region is shaded, \
+{a,b} meaning a strands going up (?) and b going down(?), and rules assigning \
+any length a+b loop to a number.  Length (a+b) loops are denoted as a \
+sequence of vertices and integers (the integer specifies which edge between \
+the vertices to use).\
+\>", "Text",
+ CellChangeTimes->{{3.4830149685073757`*^9, 3.483015085977614*^9}, {
+  3.483015233838101*^9, 3.4830152902026167`*^9}, {3.4830153960587797`*^9, 
+  3.4830154022817707`*^9}, {3.4830158190388527`*^9, 3.4830158333885937`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"RotateOneClick", "[", 
+   RowBox[{"gpa", ":", 
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"_GradedBigraph", ",", "_Boolean", ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0"}], "}"}], ",", "_List"}], "]"}]}], "]"}], ":=", 
+  "gpa"}], "\n", 
+ RowBox[{
+  RowBox[{"RotateTwoClicks", "[", 
+   RowBox[{"gpa", ":", 
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"_GradedBigraph", ",", "_Boolean", ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0"}], "}"}], ",", "_List"}], "]"}]}], "]"}], ":=", 
+  "gpa"}], "\[IndentingNewLine]"}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446144275568698*^9, 3.4461443323381157`*^9}, {
+  3.446849860589735*^9, 3.4468498659097767`*^9}, {3.4468504708358994`*^9, 
+  3.446850472939177*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RotateOneClick", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "up_Integer"}], "}"}], ",", "coefficients_List"}], 
+     "]"}], "/;", 
+    RowBox[{"up", "\[GreaterEqual]", "2"}]}], "]"}], ":=", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", 
+    RowBox[{"!", "shading"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "up"}], "}"}], ",", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "a_Vertex", ",", "na_Integer", ",", "b_Vertex", ",", "nb_Integer", 
+          ",", "z___"}], "}"}], "\[Rule]", "\[Zeta]_"}], ")"}], 
+      "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"b", ",", "nb", ",", "z", ",", "a", ",", "na"}], "}"}], 
+        "\[Rule]", 
+        RowBox[{"\[Zeta]", 
+         FractionBox[
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "a"}], "]"}], 
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "b"}], "]"}]]}]}], ")"}]}]}]}], "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.445902011097467*^9, 3.4459020366236353`*^9}, {
+   3.4459024350782003`*^9, 3.4459024366527233`*^9}, {3.445902807854198*^9, 
+   3.445902958136176*^9}, {3.445902995198023*^9, 3.445903011413639*^9}, {
+   3.445903061875258*^9, 3.445903157770678*^9}, 3.445903664716629*^9, {
+   3.445916416500105*^9, 3.4459164593966217`*^9}, {3.445916654446621*^9, 
+   3.445916671611927*^9}, {3.4459194563639317`*^9, 3.44591945694668*^9}, {
+   3.446144237947213*^9, 3.446144239857069*^9}, {3.446846255766255*^9, 
+   3.4468462561511927`*^9}, 3.446849867641384*^9, 3.446850475095091*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RotateTwoClicks", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "up_Integer"}], "}"}], ",", "coefficients_List"}], 
+     "]"}], "/;", 
+    RowBox[{"up", "\[GreaterEqual]", "4"}]}], "]"}], ":=", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "up"}], "}"}], ",", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "a_Vertex", ",", "na_Integer", ",", "b_Vertex", ",", "nb_Integer", 
+          ",", "c_Vertex", ",", "nc_Integer", ",", "z___"}], "}"}], "\[Rule]",
+         "\[Zeta]_"}], ")"}], "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "c", ",", "nc", ",", "z", ",", "a", ",", "na", ",", "b", ",", "nb"}],
+          "}"}], "\[Rule]", 
+        RowBox[{"\[Zeta]", 
+         FractionBox[
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "a"}], "]"}], 
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "c"}], "]"}]]}]}], ")"}]}]}]}], "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.445902011097467*^9, 3.4459020366236353`*^9}, {
+   3.4459024350782003`*^9, 3.4459024366527233`*^9}, {3.445902807854198*^9, 
+   3.445902958136176*^9}, {3.445902995198023*^9, 3.445903011413639*^9}, {
+   3.445903061875258*^9, 3.445903157770678*^9}, 3.445903664716629*^9, {
+   3.445916416500105*^9, 3.4459164593966217`*^9}, {3.445916654446621*^9, 
+   3.445916671611927*^9}, {3.445918926196534*^9, 3.4459189801880198`*^9}, {
+   3.44597096956509*^9, 3.445970969808704*^9}, {3.446144245243581*^9, 
+   3.4461442491871567`*^9}, {3.446846256633911*^9, 3.446846257286722*^9}, 
+   3.446849872130395*^9, 3.446850477032382*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RotateOneClick", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients_List"}], "]"}], "/;", 
+    RowBox[{
+     RowBox[{"up", "\[GreaterEqual]", "2"}], "\[And]", 
+     RowBox[{"down", "\[GreaterEqual]", "1"}]}]}], "]"}], ":=", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", 
+    RowBox[{"!", "shading"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"down", ",", "up"}], "}"}], ",", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"z_Vertex", ",", "nz_Integer", ",", 
+          RowBox[{"A", ":", 
+           RowBox[{"RepeatedSequence", "[", 
+            RowBox[{"_Vertex", ",", "_Integer", ",", 
+             RowBox[{"{", 
+              RowBox[{"up", "-", "2"}], "}"}]}], "]"}]}], ",", "b_Vertex", 
+          ",", "nb_Integer", ",", 
+          RowBox[{"D", ":", 
+           RowBox[{"RepeatedSequence", "[", 
+            RowBox[{"_Vertex", ",", "_Integer", ",", 
+             RowBox[{"{", 
+              RowBox[{"up", "-", "1"}], "}"}]}], "]"}]}], ",", "e_Vertex", 
+          ",", "ne_Integer"}], "}"}], "\[Rule]", "\[Zeta]_"}], ")"}], 
+      "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "e", ",", "ne", ",", "z", ",", "nz", ",", "A", ",", "b", ",", "nb", 
+          ",", "D"}], "}"}], "\[Rule]", 
+        RowBox[{"\[Zeta]", 
+         FractionBox[
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "z"}], "]"}], 
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "b"}], "]"}]]}]}], ")"}]}]}]}], "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.445902011097467*^9, 3.4459020366236353`*^9}, {
+   3.4459024350782003`*^9, 3.4459024366527233`*^9}, {3.445902807854198*^9, 
+   3.445902958136176*^9}, {3.445902995198023*^9, 3.445903011413639*^9}, {
+   3.445903061875258*^9, 3.445903157770678*^9}, 3.445903664716629*^9, {
+   3.445916416500105*^9, 3.4459164593966217`*^9}, {3.445916654446621*^9, 
+   3.445916671611927*^9}, {3.445918926196534*^9, 3.4459189801880198`*^9}, {
+   3.44597096956509*^9, 3.445970969808704*^9}, {3.446144245243581*^9, 
+   3.4461442491871567`*^9}, {3.4466503471724367`*^9, 3.446650349732751*^9}, {
+   3.446650401285866*^9, 3.4466504198370323`*^9}, {3.4466504514149027`*^9, 
+   3.446650559485018*^9}, {3.446650676419573*^9, 3.446650758982091*^9}, {
+   3.446846257509015*^9, 3.4468462588895073`*^9}, 3.446849875742581*^9, 
+   3.44685047940378*^9, {3.446866083267819*^9, 3.446866142494179*^9}, 
+   3.446866291917285*^9, {3.446869639781365*^9, 3.446869639851479*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RotateTwoClicks", "[", 
+   RowBox[{
+    RowBox[{"k", ":", 
+     RowBox[{"GPAElement", "[", 
+      RowBox[{"g_GradedBigraph", ",", 
+       RowBox[{"shading", ":", 
+        RowBox[{"(", 
+         RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+       "coefficients_List"}], "]"}]}], "/;", 
+    RowBox[{
+     RowBox[{"up", "==", "2"}], "\[And]", 
+     RowBox[{"down", "\[GreaterEqual]", "1"}]}]}], "]"}], ":=", 
+  RowBox[{"RotateOneClick", "[", 
+   RowBox[{"RotateOneClick", "[", "k", "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.508774270158448*^9, 3.508774306451985*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RotateTwoClicks", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients_List"}], "]"}], "/;", 
+    RowBox[{
+     RowBox[{"up", "\[GreaterEqual]", "3"}], "\[And]", 
+     RowBox[{"down", "\[GreaterEqual]", "2"}]}]}], "]"}], ":=", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{"down", ",", "up"}], "}"}], ",", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"z_Vertex", ",", "nz_Integer", ",", 
+          RowBox[{"A", ":", 
+           RowBox[{"RepeatedSequence", "[", 
+            RowBox[{"_Vertex", ",", "_Integer", ",", 
+             RowBox[{"{", 
+              RowBox[{"up", "-", "3"}], "}"}]}], "]"}]}], ",", "b_Vertex", 
+          ",", "nb_Integer", ",", "c_Vertex", ",", "nc_Integer", ",", 
+          RowBox[{"D", ":", 
+           RowBox[{"RepeatedSequence", "[", 
+            RowBox[{"_Vertex", ",", "_Integer", ",", 
+             RowBox[{"{", 
+              RowBox[{"up", "-", "2"}], "}"}]}], "]"}]}], ",", "e_Vertex", 
+          ",", "ne_Integer", ",", "f_Vertex", ",", "nf_Integer"}], "}"}], 
+        "\[Rule]", "\[Zeta]_"}], ")"}], "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "e", ",", "ne", ",", "f", ",", "nf", ",", "z", ",", "nz", ",", "A", 
+          ",", "b", ",", "nb", ",", "c", ",", "nc", ",", "D"}], "}"}], 
+        "\[Rule]", 
+        RowBox[{"\[Zeta]", 
+         FractionBox[
+          RowBox[{
+           RowBox[{"LopsidedDimension", "[", 
+            RowBox[{"g", ",", "z"}], "]"}], 
+           RowBox[{"LopsidedDimension", "[", 
+            RowBox[{"g", ",", "f"}], "]"}]}], 
+          RowBox[{
+           RowBox[{"LopsidedDimension", "[", 
+            RowBox[{"g", ",", "b"}], "]"}], 
+           RowBox[{"LopsidedDimension", "[", 
+            RowBox[{"g", ",", "c"}], "]"}]}]]}]}], ")"}]}]}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445902011097467*^9, 3.4459020366236353`*^9}, {
+   3.4459024350782003`*^9, 3.4459024366527233`*^9}, {3.445902807854198*^9, 
+   3.445902958136176*^9}, {3.445902995198023*^9, 3.445903011413639*^9}, {
+   3.445903061875258*^9, 3.445903157770678*^9}, 3.445903664716629*^9, {
+   3.445916416500105*^9, 3.4459164593966217`*^9}, {3.445916654446621*^9, 
+   3.445916671611927*^9}, {3.445918926196534*^9, 3.4459189801880198`*^9}, {
+   3.44597096956509*^9, 3.445970969808704*^9}, {3.446144245243581*^9, 
+   3.4461442491871567`*^9}, {3.4466503471724367`*^9, 3.446650349732751*^9}, {
+   3.446650401285866*^9, 3.4466504198370323`*^9}, {3.4466504514149027`*^9, 
+   3.446650559485018*^9}, {3.446650676419573*^9, 3.446650758982091*^9}, {
+   3.446846257509015*^9, 3.4468462588895073`*^9}, 3.446849875742581*^9, 
+   3.44685047940378*^9, {3.446867062044805*^9, 3.4468670621260977`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CapTopLeft", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients_List"}], "]"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"dispatch", "=", 
+      RowBox[{"Dispatch", "[", "coefficients", "]"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"ExpandCoefficientRules", "[", "\[IndentingNewLine]", 
+     RowBox[{"GPAElement", "[", 
+      RowBox[{"g", ",", "shading", ",", 
+       RowBox[{"{", 
+        RowBox[{"down", ",", 
+         RowBox[{"up", "-", "2"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"a_Vertex", ",", "na_Integer", ",", "z___"}], "}"}], 
+         "\[RuleDelayed]", 
+         RowBox[{
+          FractionBox["1", 
+           RowBox[{"LopsidedDimension", "[", 
+            RowBox[{"g", ",", "a"}], "]"}]], 
+          RowBox[{"Plus", "@@", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"a", ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                 ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                 ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                 ",", "a", ",", "na", ",", "z"}], "}"}], "/.", "dispatch"}], 
+              "&"}], "/@", 
+             RowBox[{"EdgesAdjacentTo", "[", 
+              RowBox[{"g", ",", "a"}], "]"}]}], ")"}]}]}]}], "}"}]}], "]"}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.445903265653133*^9, 3.4459033110813103`*^9}, {
+   3.445903362302124*^9, 3.445903492909018*^9}, {3.44590352846031*^9, 
+   3.445903623786755*^9}, 3.4459036539650183`*^9, {3.44591647367689*^9, 
+   3.445916521628215*^9}, {3.445916677253497*^9, 3.4459166800939007`*^9}, {
+   3.445916821839405*^9, 3.445916884011223*^9}, {3.4459185855170403`*^9, 
+   3.445918588201708*^9}, {3.446080982106256*^9, 3.44608098777116*^9}, 
+   3.446141292557818*^9, {3.446150186443223*^9, 3.446150187809655*^9}, {
+   3.446150413858005*^9, 3.446150426864484*^9}, {3.446150673406405*^9, 
+   3.4461506739639797`*^9}, {3.4461524632276163`*^9, 3.446152480439479*^9}, {
+   3.446652873659424*^9, 3.446652899872682*^9}, 3.4468462590781603`*^9, 
+   3.446849880219652*^9, 3.4468504973789454`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"CapAt", "[", 
+    RowBox[{
+     RowBox[{"GPAElement", "[", 
+      RowBox[{"g_GradedBigraph", ",", 
+       RowBox[{"shading", ":", 
+        RowBox[{"(", 
+         RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+       "coefficients_List"}], "]"}], ",", "k_Integer"}], "]"}], "/;", 
+   RowBox[{"1", "\[LessEqual]", "k", "<", "up"}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"dispatch", "=", 
+      RowBox[{"Dispatch", "[", "coefficients", "]"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"ExpandCoefficientRules", "[", "\[IndentingNewLine]", 
+     RowBox[{"GPAElement", "[", 
+      RowBox[{"g", ",", "shading", ",", 
+       RowBox[{"{", 
+        RowBox[{"down", ",", 
+         RowBox[{"up", "-", "2"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"A", ":", 
+            RowBox[{"RepeatedSequence", "[", 
+             RowBox[{"_Vertex", ",", "_Integer", ",", 
+              RowBox[{"{", 
+               RowBox[{"k", "-", "1"}], "}"}]}], "]"}]}], ",", "a_Vertex", 
+           ",", "na_Integer", ",", "z___"}], "}"}], "\[RuleDelayed]", 
+         RowBox[{
+          FractionBox["1", 
+           RowBox[{"LopsidedDimension", "[", 
+            RowBox[{"g", ",", "a"}], "]"}]], 
+          RowBox[{"Plus", "@@", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"A", ",", "a", ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                 ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                 ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                 ",", "a", ",", "na", ",", "z"}], "}"}], "/.", "dispatch"}], 
+              "&"}], "/@", 
+             RowBox[{"EdgesAdjacentTo", "[", 
+              RowBox[{"g", ",", "a"}], "]"}]}], ")"}]}]}]}], "}"}]}], "]"}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.445903265653133*^9, 3.4459033110813103`*^9}, {
+   3.445903362302124*^9, 3.445903492909018*^9}, {3.44590352846031*^9, 
+   3.445903623786755*^9}, 3.4459036539650183`*^9, {3.44591647367689*^9, 
+   3.445916521628215*^9}, {3.445916677253497*^9, 3.4459166800939007`*^9}, {
+   3.445916821839405*^9, 3.445916884011223*^9}, {3.4459185855170403`*^9, 
+   3.445918588201708*^9}, {3.446080982106256*^9, 3.44608098777116*^9}, 
+   3.446141292557818*^9, {3.446150186443223*^9, 3.446150187809655*^9}, {
+   3.446150413858005*^9, 3.446150426864484*^9}, {3.446150673406405*^9, 
+   3.4461506739639797`*^9}, {3.4461524632276163`*^9, 3.446152480439479*^9}, {
+   3.4461673090729303`*^9, 3.446167360874382*^9}, 3.446652878740815*^9, {
+   3.4468462593027143`*^9, 3.446846259526832*^9}, 3.446849882625195*^9, 
+   3.446850499679792*^9, {3.4468653457145023`*^9, 3.4468653563908978`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PartialTrace", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], "/;", 
+      RowBox[{
+       RowBox[{"down", "\[GreaterEqual]", "2"}], "\[And]", 
+       RowBox[{"up", "\[GreaterEqual]", "2"}]}]}], ",", "coefficients_List"}],
+     "]"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"ExpandCoefficientRules", "[", "\[IndentingNewLine]", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"down", "-", "1"}], ",", 
+       RowBox[{"up", "-", "1"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"A", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", 
+             RowBox[{"up", "-", "1"}], "}"}]}], "]"}]}], ",", "a_Vertex", ",",
+          "na_Integer", ",", 
+         RowBox[{"B", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", 
+             RowBox[{"down", "-", "2"}], "}"}]}], "]"}]}]}], "}"}], 
+       "\[RuleDelayed]", 
+       RowBox[{"Plus", "@@", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             FractionBox[
+              RowBox[{"LopsidedDimension", "[", 
+               RowBox[{"g", ",", 
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}],
+                "]"}], 
+              RowBox[{"LopsidedDimension", "[", 
+               RowBox[{"g", ",", "a"}], "]"}]], 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"A", ",", "a", ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                 ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                 ",", 
+                 RowBox[{
+                 "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                 ",", "a", ",", "na", ",", "B"}], "}"}], "/.", 
+               "coefficients"}], ")"}]}], ")"}], "&"}], "/@", 
+          RowBox[{"EdgesAdjacentTo", "[", 
+           RowBox[{"g", ",", "a"}], "]"}]}], ")"}]}]}], "}"}]}], "]"}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446147843493709*^9, 3.446148085947545*^9}, {
+   3.446148417095496*^9, 3.446148421196384*^9}, {3.446148495430513*^9, 
+   3.4461485101668*^9}, {3.4461485424374228`*^9, 3.446148547168029*^9}, {
+   3.446148664112726*^9, 3.4461487311951647`*^9}, {3.446148764023078*^9, 
+   3.446148769238398*^9}, {3.446846259751649*^9, 3.4468462601904593`*^9}, 
+   3.4468498866213913`*^9, 3.4468505196194973`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RepeatedSequence", "[", 
+   RowBox[{"A__", ",", 
+    RowBox[{"repeat", ":", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"_Integer", "|", 
+        RowBox[{"{", "_Integer", "}"}], "|", 
+        RowBox[{"{", 
+         RowBox[{"_Integer", ",", "_Integer"}], "}"}]}], ")"}], ":", 
+      "\[Infinity]"}]}]}], "]"}], ":=", 
+  RowBox[{"Repeated", "[", 
+   RowBox[{
+    RowBox[{"PatternSequence", "[", "A", "]"}], ",", "repeat"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446143190705271*^9, 3.446143327450014*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnUpBottomRightCorner", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients_"}], "]"}], "/;", 
+    RowBox[{"down", "\[GreaterEqual]", "1"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"down", "-", "1"}], ",", 
+      RowBox[{"up", "+", "1"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"A", ":", 
+           RowBox[{"RepeatedSequence", "[", 
+            RowBox[{"_Vertex", ",", "_Integer", ",", 
+             RowBox[{"{", "up", "}"}]}], "]"}]}], ",", "v_Vertex", ",", 
+          "B___"}], "}"}], "\[Rule]", "\[Zeta]_"}], ")"}], "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"A", ",", "v", ",", "B"}], "}"}], "\[Rule]", 
+        RowBox[{"\[Zeta]", " ", 
+         RowBox[{"LopsidedDimension", "[", 
+          RowBox[{"g", ",", "v"}], "]"}]}]}], ")"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44608198800707*^9, 3.446082012311233*^9}, {
+   3.446140367994547*^9, 3.44614053294624*^9}, {3.4461406216048317`*^9, 
+   3.44614065392938*^9}, {3.4461407316218767`*^9, 3.446140734037303*^9}, {
+   3.446141050274499*^9, 3.446141052601837*^9}, 3.446143343759233*^9, {
+   3.446846260391795*^9, 3.446846260581895*^9}, 3.4468498895524282`*^9, 
+   3.446850522924406*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnDownTopRightCorner", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients_"}], "]"}], "/;", 
+    RowBox[{"up", "\[GreaterEqual]", "1"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"down", "+", "1"}], ",", 
+      RowBox[{"up", "-", "1"}]}], "}"}], ",", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"A", ":", 
+           RowBox[{"RepeatedSequence", "[", 
+            RowBox[{"_Vertex", ",", "_Integer", ",", 
+             RowBox[{"{", 
+              RowBox[{"up", "-", "1"}], "}"}]}], "]"}]}], ",", "v_Vertex", 
+          ",", "B___"}], "}"}], "\[Rule]", "\[Zeta]_"}], ")"}], 
+      "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"A", ",", "v", ",", "B"}], "}"}], "\[Rule]", 
+        RowBox[{"\[Zeta]", " ", 
+         FractionBox["1", 
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "v"}], "]"}]]}]}], ")"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44608198800707*^9, 3.446082012311233*^9}, {
+   3.446140367994547*^9, 3.446140411262151*^9}, {3.446140672774551*^9, 
+   3.446140680623767*^9}, {3.4461407184695473`*^9, 3.446140882265745*^9}, {
+   3.4461409741542788`*^9, 3.44614104392402*^9}, {3.446143168346834*^9, 
+   3.446143175116309*^9}, {3.446143347831675*^9, 3.44614335309664*^9}, {
+   3.4468462607923117`*^9, 3.4468462609907*^9}, 3.446849896015937*^9, 
+   3.446850525504931*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnUpBottomLeftCorner", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients_"}], "]"}], "/;", 
+    RowBox[{"down", "\[GreaterEqual]", "1"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", 
+    RowBox[{"!", "shading"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"down", "-", "1"}], ",", 
+      RowBox[{"up", "+", "1"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "a_Vertex", ",", "na_Integer", ",", "B___", ",", "b_Vertex", ",", 
+          "nb_Integer"}], "}"}], "\[Rule]", "\[Zeta]_"}], ")"}], 
+      "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"b", ",", "nb", ",", "a", ",", "na", ",", "B"}], "}"}], 
+        "\[Rule]", 
+        RowBox[{"\[Zeta]", " ", 
+         RowBox[{"LopsidedDimension", "[", 
+          RowBox[{"g", ",", "a"}], "]"}]}]}], ")"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44608198800707*^9, 3.446082012311233*^9}, {
+   3.446140367994547*^9, 3.44614053294624*^9}, {3.4461406216048317`*^9, 
+   3.44614065392938*^9}, {3.4461407316218767`*^9, 3.446140734037303*^9}, {
+   3.446140899620675*^9, 3.4461409325890837`*^9}, {3.4461410328097467`*^9, 
+   3.4461410350659723`*^9}, {3.4461412110924253`*^9, 3.446141245939475*^9}, {
+   3.446846261193063*^9, 3.446846261392714*^9}, 3.4468498984476967`*^9, 
+   3.446850529587123*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnDownTopLeftCorner", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients_"}], "]"}], "/;", 
+    RowBox[{"up", "\[GreaterEqual]", "1"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", 
+    RowBox[{"!", "shading"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"down", "+", "1"}], ",", 
+      RowBox[{"up", "-", "1"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "a_Vertex", ",", "na_Integer", ",", "b_Vertex", ",", "nb_Integer", 
+          ",", "B___"}], "}"}], "\[Rule]", "\[Zeta]_"}], ")"}], 
+      "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"b", ",", "nb", ",", "B", ",", "a", ",", "na"}], "}"}], 
+        "\[Rule]", 
+        RowBox[{"\[Zeta]", " ", 
+         FractionBox["1", 
+          RowBox[{"LopsidedDimension", "[", 
+           RowBox[{"g", ",", "b"}], "]"}]]}]}], ")"}]}]}]}], "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.44608198800707*^9, 3.446082012311233*^9}, {
+   3.446140367994547*^9, 3.446140411262151*^9}, {3.446140672774551*^9, 
+   3.446140680623767*^9}, {3.4461407184695473`*^9, 3.446140882265745*^9}, {
+   3.4461410743260803`*^9, 3.4461411934118156`*^9}, {3.4461412518139763`*^9, 
+   3.446141257349806*^9}, {3.446846261611636*^9, 3.446846261827194*^9}, 
+   3.446849900631482*^9, 3.446865468618416*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddStrandOnRight", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients_"}], "]"}], "/;", 
+    RowBox[{"down", "\[GreaterEqual]", "1"}]}], "]"}], ":=", 
+  RowBox[{"ExpandCoefficientRules", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"down", "+", "1"}], ",", 
+       RowBox[{"up", "+", "1"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"A", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", "up", "}"}]}], "]"}]}], ",", "a_Vertex", ",", 
+         "na_Integer", ",", "b_Vertex", ",", "na_Integer", ",", "a_Vertex", 
+         ",", "nc_Integer", ",", 
+         RowBox[{"B", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", 
+             RowBox[{"down", "-", "1"}], "}"}]}], "]"}]}]}], "}"}], 
+       "\[RuleDelayed]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"A", ",", "a", ",", "nc", ",", "B"}], "}"}], "/.", 
+         "coefficients"}], ")"}]}], "}"}]}], "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446141320966792*^9, 3.446141379198556*^9}, {
+   3.4461414235264397`*^9, 3.446141458365514*^9}, {3.446142643542164*^9, 
+   3.4461426443563223`*^9}, {3.446142715057644*^9, 3.446142717225142*^9}, {
+   3.446142759611849*^9, 3.446142810870644*^9}, {3.44614286142281*^9, 
+   3.446142882885414*^9}, {3.4461429403251657`*^9, 3.446142962897225*^9}, {
+   3.446143359117996*^9, 3.446143360982417*^9}, {3.446148358830414*^9, 
+   3.446148366375103*^9}, {3.446846262023032*^9, 3.446846262870696*^9}, 
+   3.4468499027119703`*^9, 3.446850534550316*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddStrandOnRight", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "up_Integer"}], "}"}], ",", "coefficients_"}], "]"}],
+     "/;", 
+    RowBox[{"up", "\[GreaterEqual]", "1"}]}], "]"}], ":=", 
+  RowBox[{"ExpandCoefficientRules", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"up", "+", "1"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"a_Vertex", ",", "nc_Integer", ",", 
+          RowBox[{"A", ":", 
+           RowBox[{"RepeatedSequence", "[", 
+            RowBox[{"_Vertex", ",", "_Integer", ",", 
+             RowBox[{"{", 
+              RowBox[{"up", "-", "1"}], "}"}]}], "]"}]}], ",", "a_Vertex", 
+          ",", "na_Integer", ",", "b_Vertex", ",", "na_Integer"}], "}"}], 
+        "\[RuleDelayed]", 
+        RowBox[{"{", 
+         RowBox[{"a", ",", "nc", ",", "A"}], "}"}]}], "/.", "coefficients"}], 
+      "}"}]}], "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446141320966792*^9, 3.446141379198556*^9}, {
+   3.4461414235264397`*^9, 3.446141458365514*^9}, {3.446142643542164*^9, 
+   3.4461426443563223`*^9}, {3.446142715057644*^9, 3.446142717225142*^9}, {
+   3.446142759611849*^9, 3.446142810870644*^9}, {3.44614286142281*^9, 
+   3.446142882885414*^9}, {3.4461429403251657`*^9, 3.446142962897225*^9}, {
+   3.446143359117996*^9, 3.446143360982417*^9}, {3.446143823921482*^9, 
+   3.4461439241766033`*^9}, {3.446846263072701*^9, 3.446846263689095*^9}, {
+   3.446849904998807*^9, 3.4468499082240458`*^9}, 3.446850537588409*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddStrandOnRight", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0"}], "}"}], ",", "coefficients_"}], "]"}], "]"}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"ExpandCoefficientRules", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "a_Vertex", ",", "na_Integer", ",", "b_Vertex", ",", "na_Integer"}], 
+        "}"}], "\[RuleDelayed]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", "a", "}"}], "/.", "coefficients"}], ")"}]}], "}"}]}], 
+    "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446141320966792*^9, 3.446141379198556*^9}, {
+   3.4461414235264397`*^9, 3.446141458365514*^9}, {3.446142643542164*^9, 
+   3.4461426443563223`*^9}, {3.446142715057644*^9, 3.446142717225142*^9}, {
+   3.446142759611849*^9, 3.446142810870644*^9}, {3.44614286142281*^9, 
+   3.446142882885414*^9}, {3.4461429403251657`*^9, 3.446142962897225*^9}, {
+   3.446143359117996*^9, 3.446143360982417*^9}, {3.446143823921482*^9, 
+   3.4461439241766033`*^9}, {3.44614438370982*^9, 3.446144425848851*^9}, {
+   3.446144661660145*^9, 3.4461446949050007`*^9}, {3.4468462638980503`*^9, 
+   3.446846264096918*^9}, 3.446849910252736*^9, 3.4468505405335817`*^9, {
+   3.483036127341855*^9, 3.483036149200808*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"AddCupOnTop", "[", 
+    RowBox[{
+     RowBox[{"GPAElement", "[", 
+      RowBox[{"g_GradedBigraph", ",", 
+       RowBox[{"shading", ":", 
+        RowBox[{"(", 
+         RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+       "coefficients_"}], "]"}], ",", "cupPosition_Integer"}], "]"}], "/;", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"up", "+", "down"}], "\[GreaterEqual]", "1"}], " ", "\[And]", 
+     RowBox[{"1", "\[LessEqual]", " ", "cupPosition", "\[LessEqual]", 
+      RowBox[{"up", "+", "1"}]}]}], ")"}]}], ":=", 
+  RowBox[{"ExpandCoefficientRules", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{"down", ",", 
+       RowBox[{"up", "+", "2"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"A", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", 
+             RowBox[{"cupPosition", "-", "1"}], "}"}]}], "]"}]}], ",", 
+         "a_Vertex", ",", "na_Integer", ",", "b_Vertex", ",", "na_Integer", 
+         ",", "a_Vertex", ",", "nc_Integer", ",", 
+         RowBox[{"B", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", 
+             RowBox[{"up", "+", "down", "-", "cupPosition"}], "}"}]}], 
+           "]"}]}]}], "}"}], "\[RuleDelayed]", 
+       RowBox[{
+        RowBox[{"LopsidedDimension", "[", 
+         RowBox[{"g", ",", "b"}], "]"}], "*", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"A", ",", "a", ",", "nc", ",", "B"}], "}"}], "/.", 
+          "coefficients"}], ")"}]}]}], "}"}]}], "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQB2IQLeQpExX8+aXjgxfdySD6SRVPBogW2TI1E0QrzYzM
+B9EtckvB9GQ3iaUguiMkBEwrZ/itBqt73bseRG9QitsMot1LLuwA0TWfcg6B
+xbcePwaiu5ce/waiJZTSfoJoteS1LCFAOu+VLyuIZv6VrAaimW5MB9OzU8/b
+gGg5o1oHsLj3skAQrXVaOAhEbzKYkg2i/xxxzQHRN5bLFIHoR9mNYHqFV0Qv
+iDYOmDMBRG+MezIfRIt9LVsAooX/654B0R5d1WD6zxfOOyB6bbQnmPbbOd81
+GkjbsKa6g+gNx2y9QfScIz1+IHrSE99NMUB6uuWWLSB62iUp+1ggHZiRB6ZX
+uW89DqLvyYacANEABbzLOg==
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddCupOnTop", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0"}], "}"}], ",", "coefficients_"}], "]"}], ",", 
+    "1"}], "]"}], ":=", 
+  RowBox[{"ExpandCoefficientRules", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "a_Vertex", ",", "na_Integer", ",", "b_Vertex", ",", "na_Integer"}], 
+        "}"}], "\[RuleDelayed]", 
+       RowBox[{
+        RowBox[{"LopsidedDimension", "[", 
+         RowBox[{"g", ",", "b"}], "]"}], "*", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", "a", "}"}], "/.", "coefficients"}], ")"}]}]}], "}"}]}],
+     "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483019022915751*^9, 3.483019030522798*^9}, {
+   3.4830191187472677`*^9, 3.483019154743628*^9}, 3.483023406584916*^9, {
+   3.483036157915144*^9, 3.483036161048574*^9}, {3.48303725280827*^9, 
+   3.483037258368245*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GPAMultiply", "[", 
+   RowBox[{
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"down_Integer", ",", "middle_Integer"}], "}"}], ",", 
+      "coefficients1_"}], "]"}], ",", 
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g_GradedBigraph", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"middle_Integer", ",", "up_Integer"}], "}"}], ",", 
+      "coefficients2_"}], "]"}]}], "]"}], ":=", 
+  RowBox[{"ExpandCoefficientRules", "[", "\[IndentingNewLine]", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{"down", ",", "up"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"A", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", "up", "}"}]}], "]"}]}], ",", 
+         RowBox[{"B", ":", 
+          RowBox[{"RepeatedSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer", ",", 
+            RowBox[{"{", "down", "}"}]}], "]"}]}]}], "}"}], "\[RuleDelayed]", 
+       
+       RowBox[{"Plus", "@@", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"{", "A", "}"}], "~", "Join", "~", 
+               RowBox[{"Most", "[", "#", "]"}]}], "/.", "coefficients2"}], 
+             ")"}], 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Most", "[", 
+                RowBox[{"Reverse", "[", "#", "]"}], "]"}], "~", "Join", "~", 
+               RowBox[{"{", "B", "}"}]}], "/.", "coefficients1"}], ")"}]}], 
+           "&"}], "/@", 
+          RowBox[{"GraphPathsBetween", "[", 
+           RowBox[{"g", ",", "middle", ",", 
+            RowBox[{
+             RowBox[{"{", "B", "}"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}], ",", 
+            RowBox[{
+             RowBox[{"{", "A", "}"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}]}], "]"}]}], ")"}]}]}], "}"}]}], 
+    "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446143027737702*^9, 3.446143040387432*^9}, {
+   3.44614309570789*^9, 3.446143148042493*^9}, 3.446143363404314*^9, {
+   3.446143530539763*^9, 3.446143569313798*^9}, {3.44614361534016*^9, 
+   3.4461437986505823`*^9}, {3.446146131363949*^9, 3.446146135448526*^9}, {
+   3.446146205116487*^9, 3.4461462134890013`*^9}, {3.4461462494448643`*^9, 
+   3.446146253269882*^9}, {3.446146299039256*^9, 3.4461463034179688`*^9}, {
+   3.446146474355957*^9, 3.44614650203834*^9}, {3.446846264311413*^9, 
+   3.4468462645354843`*^9}, 3.446849913547138*^9, {3.446850428275291*^9, 
+   3.446850454481435*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"qInteger\[Delta]", "[", "k_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"qInteger\[Delta]", "[", "k", "]"}], "=", 
+   RowBox[{"Function", "[", 
+    RowBox[{
+     RowBox[{"{", "\[Delta]", "}"}], ",", 
+     RowBox[{"Evaluate", "[", 
+      RowBox[{"Collect", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"\[Delta]", " ", 
+          RowBox[{
+           RowBox[{"qInteger\[Delta]", "[", 
+            RowBox[{"k", "-", "1"}], "]"}], "[", "\[Delta]", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"qInteger\[Delta]", "[", 
+           RowBox[{"k", "-", "2"}], "]"}], "[", "\[Delta]", "]"}]}], ",", 
+        "\[Delta]"}], "]"}], "]"}]}], "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"qInteger\[Delta]", "[", "2", "]"}], "=", 
+   RowBox[{"#", "&"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"qInteger\[Delta]", "[", "1", "]"}], "=", 
+   RowBox[{"1", "&"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"qInteger\[Delta]", "[", "0", "]"}], "=", 
+   RowBox[{"0", "&"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4428707067673397`*^9, 3.4428708698941298`*^9}, {
+  3.4428725554708967`*^9, 3.4428725570067*^9}, {3.4432351243828487`*^9, 
+  3.443235134879043*^9}, {3.444689998795965*^9, 3.4446900080094557`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"WenzlRecursion", "[", 
+    RowBox[{"gpa_GPAElement", ",", "x_"}], "]"}], ":=", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"AddStrandOnRight", "[", "gpa", "]"}], "-", 
+    RowBox[{"x", " ", 
+     RowBox[{"GPAMultiply", "[", 
+      RowBox[{
+       RowBox[{"TurnDownTopRightCorner", "[", "gpa", "]"}], ",", 
+       RowBox[{"TurnUpBottomRightCorner", "[", "gpa", "]"}]}], "]"}]}]}]}], 
+  "\[IndentingNewLine]", "*)"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44207086802013*^9, 3.4420708917762613`*^9}, {
+   3.442071004220521*^9, 3.442071005002489*^9}, {3.442074837078445*^9, 
+   3.442074915998242*^9}, {3.442078301039007*^9, 3.4420783254311037`*^9}, {
+   3.442160317554632*^9, 3.442160341399254*^9}, {3.442160534875649*^9, 
+   3.442160847626791*^9}, {3.442160899220743*^9, 3.4421609857430363`*^9}, {
+   3.442161061159869*^9, 3.442161115833652*^9}, {3.442163479438676*^9, 
+   3.442163479947233*^9}, {3.442163650466667*^9, 3.442163689178329*^9}, 
+   3.442163991181943*^9, {3.4421640714322577`*^9, 3.44216413601126*^9}, {
+   3.442164861271735*^9, 3.442164886059987*^9}, {3.44216533703292*^9, 
+   3.4421653411891623`*^9}, {3.4421671612949944`*^9, 3.4421671824211683`*^9}, 
+   3.4421679072639647`*^9, {3.442167939346631*^9, 3.442167949986918*^9}, {
+   3.442169600574132*^9, 3.4421696039463167`*^9}, {3.442870476789954*^9, 
+   3.442870510803516*^9}, {3.44295431225*^9, 3.442954313265625*^9}, {
+   3.443143856840056*^9, 3.443143858223157*^9}, 3.4431447683595533`*^9, {
+   3.443144807244235*^9, 3.443144808460107*^9}, {3.443164681425619*^9, 
+   3.443164682775586*^9}, {3.4432248248128757`*^9, 3.443224826571258*^9}, {
+   3.443237366750311*^9, 3.44323737053924*^9}, {3.446145114126292*^9, 
+   3.446145185611867*^9}, {3.446145334703454*^9, 3.44614533479353*^9}, 
+   3.4468504535397367`*^9, {3.483202556480608*^9, 3.483202559301593*^9}, {
+   3.483202592195426*^9, 3.4832025940113707`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"JonesWenzlIdempotent", "[", 
+     RowBox[{"g_GradedBigraph", ",", "0", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], ":=", 
+    RowBox[{"EmptyGPAElement", "[", 
+     RowBox[{"g", ",", "shading"}], "]"}]}], ";", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"JonesWenzlIdempotent", "[", 
+     RowBox[{"g_GradedBigraph", ",", "1", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"JonesWenzlIdempotent", "[", 
+      RowBox[{"g", ",", "1", ",", "shading"}], "]"}], "=", 
+     RowBox[{"WenzlRecursion", "[", 
+      RowBox[{
+       RowBox[{"JonesWenzlIdempotent", "[", 
+        RowBox[{"g", ",", "0", ",", "shading"}], "]"}], ",", "0"}], "]"}]}]}],
+    ";"}], "\[IndentingNewLine]", "*)"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4428702112511663`*^9, 3.442870266638506*^9}, {
+   3.44287049039583*^9, 3.4428704931554613`*^9}, {3.442870885525857*^9, 
+   3.442871003455031*^9}, {3.4428712417815123`*^9, 3.4428712896736727`*^9}, 
+   3.4428723108258343`*^9, {3.442872467494985*^9, 3.442872514213332*^9}, {
+   3.442895819015916*^9, 3.442895825516017*^9}, {3.443144722300695*^9, 
+   3.443144724594027*^9}, {3.443235136911112*^9, 3.44323513946381*^9}, {
+   3.4461453226159897`*^9, 3.446145344166298*^9}, {3.446145417982871*^9, 
+   3.44614562293731*^9}, {3.446145969814979*^9, 3.44614597360525*^9}, {
+   3.446146014416836*^9, 3.446146040269608*^9}, {3.446146558527294*^9, 
+   3.446146568634858*^9}, {3.446146948202641*^9, 3.446146950004511*^9}, {
+   3.4461469829130497`*^9, 3.446147001499916*^9}, 3.4461472492405443`*^9, 
+   3.446147344672585*^9, 3.446147375486534*^9, {3.446147538519149*^9, 
+   3.446147543482782*^9}, {3.446147658687475*^9, 3.44614765970294*^9}, {
+   3.4461481157772503`*^9, 3.4461481168813972`*^9}, 3.446148152915209*^9, {
+   3.4461488473303432`*^9, 3.446148849435091*^9}, {3.446854783405035*^9, 
+   3.44685482524362*^9}, {3.446854868320126*^9, 3.446854873183865*^9}, {
+   3.446859480454373*^9, 3.446859485613077*^9}, 3.447003367793858*^9, {
+   3.483019693299192*^9, 3.483019693363494*^9}, {3.483032286253389*^9, 
+   3.4830322869367847`*^9}, {3.483202561432819*^9, 3.483202589980322*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"JonesWenzlIdempotent", "[", 
+     RowBox[{"g_GradedBigraph", ",", "k_", ",", 
+      RowBox[{"shading", ":", 
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], "/;", 
+    RowBox[{"k", ">", "1"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"LoadIdempotents", "[", "g", "]"}], ",", 
+     RowBox[{"JonesWenzlIdempotent", "[", 
+      RowBox[{"g", ",", "k", ",", "shading"}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "result", "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"JonesWenzlIdempotent", "[", 
+          RowBox[{"g", ",", "k", ",", "shading"}], "]"}], "=", 
+         RowBox[{"result", "=", 
+          RowBox[{"WenzlRecursion", "[", 
+           RowBox[{
+            RowBox[{"JonesWenzlIdempotent", "[", 
+             RowBox[{"g", ",", 
+              RowBox[{"k", "-", "1"}], ",", "shading"}], "]"}], ",", 
+            RowBox[{"With", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"\[Delta]", "=", 
+                RowBox[{"DimensionOfGenerator", "[", "g", "]"}]}], "}"}], ",", 
+              RowBox[{"ToNumberField0", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"Xor", "[", 
+                    RowBox[{
+                    RowBox[{"EvenQ", "[", "k", "]"}], ",", "shading"}], "]"}],
+                    ",", "\[Delta]", ",", 
+                   FractionBox["1", "\[Delta]"]}], "]"}], 
+                 FractionBox[
+                  RowBox[{
+                   RowBox[{"qInteger\[Delta]", "[", 
+                    RowBox[{"k", "-", "1"}], "]"}], "[", "\[Delta]", "]"}], 
+                  RowBox[{
+                   RowBox[{"qInteger\[Delta]", "[", "k", "]"}], "[", 
+                   "\[Delta]", "]"}]]}], ",", 
+                RowBox[{"NumberFieldGenerator", "[", "g", "]"}]}], "]"}]}], 
+             "]"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"PackageIdempotents", "[", "g", "]"}], ";", 
+        "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", "]"}]}], 
+    "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "*)"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4428702112511663`*^9, 3.442870266638506*^9}, {
+   3.44287049039583*^9, 3.4428704931554613`*^9}, {3.442870885525857*^9, 
+   3.442871003455031*^9}, {3.4428712417815123`*^9, 3.4428712896736727`*^9}, 
+   3.4428723108258343`*^9, {3.442872467494985*^9, 3.442872514213332*^9}, {
+   3.442895819015916*^9, 3.442895825516017*^9}, {3.443144722300695*^9, 
+   3.443144724594027*^9}, {3.443235136911112*^9, 3.44323513946381*^9}, {
+   3.4461453226159897`*^9, 3.446145344166298*^9}, {3.446145417982871*^9, 
+   3.44614562293731*^9}, {3.446145969814979*^9, 3.44614597360525*^9}, {
+   3.446146014416836*^9, 3.446146040269608*^9}, {3.446146558527294*^9, 
+   3.446146568634858*^9}, {3.446146948202641*^9, 3.446146950004511*^9}, {
+   3.4461469829130497`*^9, 3.446147001499916*^9}, 3.4461472492405443`*^9, 
+   3.446147344672585*^9, 3.446147375486534*^9, {3.446147538519149*^9, 
+   3.446147543482782*^9}, {3.446147658687475*^9, 3.44614765970294*^9}, {
+   3.4461481157772503`*^9, 3.4461481168813972`*^9}, 3.446148152915209*^9, {
+   3.4461488473303432`*^9, 3.446148849435091*^9}, {3.446854783405035*^9, 
+   3.44685482524362*^9}, {3.446854868320126*^9, 3.446854873183865*^9}, {
+   3.446859480454373*^9, 3.446859485613077*^9}, 3.447003367793858*^9, {
+   3.447003405717081*^9, 3.447003494432659*^9}, 3.4818114152691317`*^9, {
+   3.4830196933902807`*^9, 3.4830196934586697`*^9}, {3.4830322871721363`*^9, 
+   3.4830322878757553`*^9}, {3.483202566401783*^9, 3.4832025853275023`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"WenzlRecursion", "[", 
+   RowBox[{"gpa_GPAMatrix", ",", "x_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+    "DebugPrint", "[", "\"\<Beginning Wenzl recursion calculation.\>\"", 
+     "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"DebugPrint", "[", "\"\<   adding strand on right\>\"", "]"}], 
+       ";", 
+       RowBox[{"AddStrandOnRight", "[", "gpa", "]"}]}], ")"}], "-", 
+     RowBox[{"x", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+         "DebugPrint", "[", "\"\<   turning down top right\>\"", "]"}], ";", 
+         RowBox[{"TurnDownTopRightCorner", "[", "gpa", "]"}]}], ")"}], ".", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+         "DebugPrint", "[", "\"\<   turning up bottom right\>\"", "]"}], ";", 
+         
+         RowBox[{"TurnUpBottomRightCorner", "[", "gpa", "]"}]}], 
+        ")"}]}]}]}]}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44207086802013*^9, 3.4420708917762613`*^9}, {
+   3.442071004220521*^9, 3.442071005002489*^9}, {3.442074837078445*^9, 
+   3.442074915998242*^9}, {3.442078301039007*^9, 3.4420783254311037`*^9}, {
+   3.442160317554632*^9, 3.442160341399254*^9}, {3.442160534875649*^9, 
+   3.442160847626791*^9}, {3.442160899220743*^9, 3.4421609857430363`*^9}, {
+   3.442161061159869*^9, 3.442161115833652*^9}, {3.442163479438676*^9, 
+   3.442163479947233*^9}, {3.442163650466667*^9, 3.442163689178329*^9}, 
+   3.442163991181943*^9, {3.4421640714322577`*^9, 3.44216413601126*^9}, {
+   3.442164861271735*^9, 3.442164886059987*^9}, {3.44216533703292*^9, 
+   3.4421653411891623`*^9}, {3.4421671612949944`*^9, 3.4421671824211683`*^9}, 
+   3.4421679072639647`*^9, {3.442167939346631*^9, 3.442167949986918*^9}, {
+   3.442169600574132*^9, 3.4421696039463167`*^9}, {3.442870476789954*^9, 
+   3.442870510803516*^9}, {3.44295431225*^9, 3.442954313265625*^9}, {
+   3.443143856840056*^9, 3.443143858223157*^9}, 3.4431447683595533`*^9, {
+   3.443144807244235*^9, 3.443144808460107*^9}, {3.443164681425619*^9, 
+   3.443164682775586*^9}, {3.4432248248128757`*^9, 3.443224826571258*^9}, {
+   3.443237366750311*^9, 3.44323737053924*^9}, {3.446145114126292*^9, 
+   3.446145185611867*^9}, {3.446145334703454*^9, 3.44614533479353*^9}, 
+   3.4468504535397367`*^9, {3.483201202454526*^9, 3.483201210157916*^9}, {
+   3.483201331957724*^9, 3.483201335178288*^9}, {3.4832017163385572`*^9, 
+   3.483201718200325*^9}, {3.483201792680458*^9, 3.483201794701951*^9}, {
+   3.483201887477561*^9, 3.483201889235231*^9}, {3.483202954428892*^9, 
+   3.483203015396006*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"JonesWenzlIdempotent", "[", 
+    RowBox[{"g_GradedBigraph", ",", "0", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], ":=", 
+   RowBox[{"EmptyGPAMatrix", "[", 
+    RowBox[{"g", ",", "shading"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"JonesWenzlIdempotent", "[", 
+    RowBox[{"g_GradedBigraph", ",", "1", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"JonesWenzlIdempotent", "[", 
+     RowBox[{"g", ",", "1", ",", "shading"}], "]"}], "=", 
+    RowBox[{"AddStrandOnRight", "[", 
+     RowBox[{"JonesWenzlIdempotent", "[", 
+      RowBox[{"g", ",", "0", ",", "shading"}], "]"}], "]"}]}]}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4428702112511663`*^9, 3.442870266638506*^9}, {
+   3.44287049039583*^9, 3.4428704931554613`*^9}, {3.442870885525857*^9, 
+   3.442871003455031*^9}, {3.4428712417815123`*^9, 3.4428712896736727`*^9}, 
+   3.4428723108258343`*^9, {3.442872467494985*^9, 3.442872514213332*^9}, {
+   3.442895819015916*^9, 3.442895825516017*^9}, {3.443144722300695*^9, 
+   3.443144724594027*^9}, {3.443235136911112*^9, 3.44323513946381*^9}, {
+   3.4461453226159897`*^9, 3.446145344166298*^9}, {3.446145417982871*^9, 
+   3.44614562293731*^9}, {3.446145969814979*^9, 3.44614597360525*^9}, {
+   3.446146014416836*^9, 3.446146040269608*^9}, {3.446146558527294*^9, 
+   3.446146568634858*^9}, {3.446146948202641*^9, 3.446146950004511*^9}, {
+   3.4461469829130497`*^9, 3.446147001499916*^9}, 3.4461472492405443`*^9, 
+   3.446147344672585*^9, 3.446147375486534*^9, {3.446147538519149*^9, 
+   3.446147543482782*^9}, {3.446147658687475*^9, 3.44614765970294*^9}, {
+   3.4461481157772503`*^9, 3.4461481168813972`*^9}, 3.446148152915209*^9, {
+   3.4461488473303432`*^9, 3.446148849435091*^9}, {3.446854783405035*^9, 
+   3.44685482524362*^9}, {3.446854868320126*^9, 3.446854873183865*^9}, {
+   3.446859480454373*^9, 3.446859485613077*^9}, 3.447003367793858*^9, {
+   3.483019693299192*^9, 3.483019693363494*^9}, {3.483032286253389*^9, 
+   3.4830322869367847`*^9}, {3.483201214800728*^9, 3.48320123395257*^9}, {
+   3.4832015380143547`*^9, 3.483201543918481*^9}, {3.483201765946623*^9, 
+   3.483201770304327*^9}, {3.4832025258596354`*^9, 3.483202531601242*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"JonesWenzlIdempotent", "[", 
+    RowBox[{"g_GradedBigraph", ",", "k_", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], "/;", 
+   RowBox[{"k", ">", "1"}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"LoadIdempotents", "[", "g", "]"}], ",", 
+    RowBox[{"JonesWenzlIdempotent", "[", 
+     RowBox[{"g", ",", "k", ",", "shading"}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "result", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"JonesWenzlIdempotent", "[", 
+         RowBox[{"g", ",", "k", ",", "shading"}], "]"}], "=", 
+        RowBox[{"result", "=", 
+         RowBox[{"WenzlRecursion", "[", 
+          RowBox[{
+           RowBox[{"JonesWenzlIdempotent", "[", 
+            RowBox[{"g", ",", 
+             RowBox[{"k", "-", "1"}], ",", "shading"}], "]"}], ",", 
+           RowBox[{"With", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"\[Delta]", "=", 
+               RowBox[{"DimensionOfGenerator", "[", "g", "]"}]}], "}"}], ",", 
+             
+             RowBox[{"ToNumberField0", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"If", "[", 
+                 RowBox[{
+                  RowBox[{"Xor", "[", 
+                   RowBox[{
+                    RowBox[{"EvenQ", "[", "k", "]"}], ",", "shading"}], "]"}],
+                   ",", "\[Delta]", ",", 
+                  FractionBox["1", "\[Delta]"]}], "]"}], 
+                FractionBox[
+                 RowBox[{
+                  RowBox[{"qInteger\[Delta]", "[", 
+                   RowBox[{"k", "-", "1"}], "]"}], "[", "\[Delta]", "]"}], 
+                 RowBox[{
+                  RowBox[{"qInteger\[Delta]", "[", "k", "]"}], "[", 
+                  "\[Delta]", "]"}]]}], ",", 
+               RowBox[{"NumberFieldGenerator", "[", "g", "]"}]}], "]"}]}], 
+            "]"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"PackageIdempotents", "[", "g", "]"}], ";", 
+       "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4428702112511663`*^9, 3.442870266638506*^9}, {
+   3.44287049039583*^9, 3.4428704931554613`*^9}, {3.442870885525857*^9, 
+   3.442871003455031*^9}, {3.4428712417815123`*^9, 3.4428712896736727`*^9}, 
+   3.4428723108258343`*^9, {3.442872467494985*^9, 3.442872514213332*^9}, {
+   3.442895819015916*^9, 3.442895825516017*^9}, {3.443144722300695*^9, 
+   3.443144724594027*^9}, {3.443235136911112*^9, 3.44323513946381*^9}, {
+   3.4461453226159897`*^9, 3.446145344166298*^9}, {3.446145417982871*^9, 
+   3.44614562293731*^9}, {3.446145969814979*^9, 3.44614597360525*^9}, {
+   3.446146014416836*^9, 3.446146040269608*^9}, {3.446146558527294*^9, 
+   3.446146568634858*^9}, {3.446146948202641*^9, 3.446146950004511*^9}, {
+   3.4461469829130497`*^9, 3.446147001499916*^9}, 3.4461472492405443`*^9, 
+   3.446147344672585*^9, 3.446147375486534*^9, {3.446147538519149*^9, 
+   3.446147543482782*^9}, {3.446147658687475*^9, 3.44614765970294*^9}, {
+   3.4461481157772503`*^9, 3.4461481168813972`*^9}, 3.446148152915209*^9, {
+   3.4461488473303432`*^9, 3.446148849435091*^9}, {3.446854783405035*^9, 
+   3.44685482524362*^9}, {3.446854868320126*^9, 3.446854873183865*^9}, {
+   3.446859480454373*^9, 3.446859485613077*^9}, 3.447003367793858*^9, {
+   3.447003405717081*^9, 3.447003494432659*^9}, 3.4818114152691317`*^9, {
+   3.4830196933902807`*^9, 3.4830196934586697`*^9}, {3.4830322871721363`*^9, 
+   3.4830322878757553`*^9}, {3.483201237864205*^9, 3.483201252594293*^9}, {
+   3.48320204151832*^9, 3.483202067791091*^9}, {3.4832025340820637`*^9, 
+   3.483202543872821*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LoadIdempotents", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Off", "[", 
+      RowBox[{
+       RowBox[{"Get", "::", "noopen"}], ",", 
+       RowBox[{"Needs", "::", "nocont"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Needs", "[", 
+      RowBox[{"\"\<FusionAtlas`Data`\>\"", "<>", 
+       RowBox[{"(", 
+        RowBox[{"StringJoin", "@@", 
+         RowBox[{"(", 
+          RowBox[{"GraphToString", "/@", "G"}], ")"}]}], ")"}], "<>", 
+       "\"\<`Idempotents`\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"On", "[", 
+      RowBox[{
+       RowBox[{"Get", "::", "noopen"}], ",", 
+       RowBox[{"Needs", "::", "nocont"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"LoadIdempotents", "[", "g", "]"}], "=", "False"}], ";", 
+     "\[IndentingNewLine]", "True"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.411927026253885*^9, 3.4119270365386734`*^9}, {
+   3.4140209075797215`*^9, 3.4140209151906652`*^9}, {3.446846517382749*^9, 
+   3.446846561881503*^9}, {3.446846810617436*^9, 3.446846812981331*^9}, 
+   3.446846981170701*^9, {3.446847052448126*^9, 3.446847055221373*^9}, {
+   3.446847383054578*^9, 3.446847384819085*^9}, {3.447003351141345*^9, 
+   3.447003364246028*^9}, {3.527525005555876*^9, 3.527525012777166*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphPlanarAlgebraIdempotent", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"Vertex", "[", 
+     RowBox[{"0", ",", "1"}], "]"}]}], "]"}], ":=", 
+  RowBox[{"EmptyGPAElement", "[", 
+   RowBox[{"g", ",", "False"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.442166591441327*^9, 3.44216659814221*^9}, {
+   3.4461452068442*^9, 3.446145209089991*^9}, 3.446846234894923*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"GraphPlanarAlgebraIdempotent", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"Vertex", "[", 
+      RowBox[{"depth_", ",", "k_"}], "]"}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"depth", ">", "0"}], "\[And]", 
+    RowBox[{
+     RowBox[{"Length", "[", 
+      RowBox[{"Cases", "[", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{
+         "g", "\[LeftDoubleBracket]", "depth", "\[RightDoubleBracket]"}], 
+         "]"}], ",", 
+        RowBox[{"UnitVector", "[", 
+         RowBox[{
+          RowBox[{"RankAtDepth", "[", 
+           RowBox[{"g", ",", "depth"}], "]"}], ",", "k"}], "]"}]}], "]"}], 
+      "]"}], ">", "0"}]}]}], ":=", 
+  RowBox[{
+   RowBox[{"GraphPlanarAlgebraIdempotent", "[", 
+    RowBox[{"g", ",", 
+     RowBox[{"Vertex", "[", 
+      RowBox[{"depth", ",", "k"}], "]"}]}], "]"}], "=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"l", ",", "x"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"l", "=", 
+       RowBox[{"FindFirst", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{
+          "g", "\[LeftDoubleBracket]", "depth", "\[RightDoubleBracket]"}], 
+          "]"}], ",", 
+         RowBox[{"UnitVector", "[", 
+          RowBox[{
+           RowBox[{"RankAtDepth", "[", 
+            RowBox[{"g", ",", "depth"}], "]"}], ",", "k"}], "]"}]}], "]"}]}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"Work", " ", "out", " ", "the", " ", "lopsided", " ", 
+        RowBox[{"version", "."}]}], "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"x", "=", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"depth", ">", "1"}], ",", 
+         RowBox[{"RootReduce", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"g", "\[LeftDoubleBracket]", 
+             RowBox[{
+              RowBox[{"depth", "-", "1"}], ",", "l"}], 
+             "\[RightDoubleBracket]"}], ".", 
+            RowBox[{
+             RowBox[{"ReducedDimensionsByDepth", "[", "g", "]"}], 
+             "\[LeftDoubleBracket]", 
+             RowBox[{"depth", "-", "2", "+", "1"}], 
+             "\[RightDoubleBracket]"}]}], "/", 
+           RowBox[{
+            RowBox[{"ReducedDimensionsByDepth", "[", "g", "]"}], 
+            "\[LeftDoubleBracket]", 
+            RowBox[{
+             RowBox[{"depth", "-", "1", "+", "1"}], ",", "l"}], 
+            "\[RightDoubleBracket]"}]}], "]"}], ",", "0"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"WenzlRecursion", "[", 
+       RowBox[{
+        RowBox[{"GraphPlanarAlgebraIdempotent", "[", 
+         RowBox[{"g", ",", 
+          RowBox[{"Vertex", "[", 
+           RowBox[{
+            RowBox[{"depth", "-", "1"}], ",", "l"}], "]"}]}], "]"}], ",", 
+        "x"}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.442166532186851*^9, 3.442166574345052*^9}, {
+  3.442166605415403*^9, 3.442166697216021*^9}, {3.4421667410162888`*^9, 
+  3.4421667569115133`*^9}, {3.442167026592965*^9, 3.4421671048021917`*^9}, {
+  3.442169374586729*^9, 3.442169489635632*^9}, {3.4421696107636137`*^9, 
+  3.4421696193224087`*^9}, {3.442169660933078*^9, 3.442169748170299*^9}, {
+  3.44216978650008*^9, 3.442169790787341*^9}, {3.44217028608121*^9, 
+  3.442170288037182*^9}, {3.442170384947795*^9, 3.442170386331471*^9}, {
+  3.44217230237982*^9, 3.442172302612628*^9}, {3.442177839627636*^9, 
+  3.442177846046084*^9}, {3.442814107292735*^9, 3.442814126610504*^9}, {
+  3.442870484889958*^9, 3.442870499008409*^9}, {3.446145263131158*^9, 
+  3.446145303441452*^9}, {3.446846235458474*^9, 3.446846237362321*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Arithmetic", "Subsubsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445965260379401*^9, 3.44596526337621*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAElement", "/:", 
+  RowBox[{"z_", " ", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients_List"}], "]"}]}], ":=", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{"down", ",", "up"}], "}"}], ",", 
+    RowBox[{"coefficients", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"loop_List", "\[Rule]", "\[Zeta]_"}], ")"}], "\[RuleDelayed]", 
+      
+      RowBox[{"(", 
+       RowBox[{"loop", "\[Rule]", 
+        RowBox[{"z", " ", "\[Zeta]"}]}], ")"}]}]}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459189949281693`*^9, 3.445919072755118*^9}, {
+  3.4459191436969643`*^9, 3.4459191440651293`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAElement", "/:", 
+  RowBox[{
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients1_List"}], "]"}], "+", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients2_List"}], "]"}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"dispatch1", "=", 
+       RowBox[{"Dispatch", "[", "coefficients1", "]"}]}], ",", 
+      RowBox[{"dispatch2", "=", 
+       RowBox[{"Dispatch", "[", "coefficients2", "]"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"ExpandCoefficientRules", "[", 
+     RowBox[{"GPAElement", "[", 
+      RowBox[{"g", ",", "shading", ",", 
+       RowBox[{"{", 
+        RowBox[{"down", ",", "up"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"loop_List", "\[RuleDelayed]", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"loop", "/.", "dispatch1"}], ")"}], "+", 
+          RowBox[{"(", 
+           RowBox[{"loop", "/.", "dispatch2"}], ")"}]}]}], "}"}]}], "]"}], 
+     "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459190761592703`*^9, 3.445919173400749*^9}, {
+  3.445919267341947*^9, 3.445919269757209*^9}, {3.445919354504414*^9, 
+  3.4459193565107317`*^9}, {3.4461700999440413`*^9, 3.4461701250251827`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAElement", "/:", 
+  RowBox[{
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients1_List"}], "]"}], "+", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients2_List"}], "]"}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"dispatch1", "=", 
+       RowBox[{"Dispatch", "[", "coefficients1", "]"}]}], ",", 
+      RowBox[{"dispatch2", "=", 
+       RowBox[{"Dispatch", "[", "coefficients2", "]"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"GPAElement", "[", 
+     RowBox[{"g", ",", "shading", ",", 
+      RowBox[{"{", 
+       RowBox[{"down", ",", "up"}], "}"}], ",", 
+      RowBox[{"Thread", "[", 
+       RowBox[{
+        RowBox[{"GraphLoops", "[", 
+         RowBox[{"g", ",", "shading", ",", 
+          RowBox[{"down", "+", "up"}]}], "]"}], "\[Rule]", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"GraphLoops", "[", 
+            RowBox[{"g", ",", "shading", ",", 
+             RowBox[{"down", "+", "up"}]}], "]"}], "/.", "dispatch1"}], ")"}],
+          "+", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"GraphLoops", "[", 
+            RowBox[{"g", ",", "shading", ",", 
+             RowBox[{"down", "+", "up"}]}], "]"}], "/.", "dispatch2"}], 
+          ")"}]}]}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459190761592703`*^9, 3.445919173400749*^9}, {
+  3.445919267341947*^9, 3.445919269757209*^9}, {3.445919354504414*^9, 
+  3.4459193565107317`*^9}, {3.4461700999440413`*^9, 3.4461701250251827`*^9}, {
+  3.446170740388773*^9, 3.446170806282733*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Technical details", "Subsubsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459653071431017`*^9, 3.445965328740335*^9}, {
+  3.4461415307942743`*^9, 3.446141531075536*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExpandCoefficientRules", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients_List"}], "]"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "result", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"expansionCounter", "=", "0"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", "\"\<.... expanding coefficients\>\"", "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"result", "=", 
+      RowBox[{"GPAElement", "[", 
+       RowBox[{"g", ",", "shading", ",", 
+        RowBox[{"{", 
+         RowBox[{"down", ",", "up"}], "}"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Mod", "[", 
+                RowBox[{
+                 RowBox[{"++", "expansionCounter"}], ",", "10000"}], "]"}], 
+               "\[Equal]", "0"}], ",", 
+              RowBox[{"DebugPrint", "[", "expansionCounter", "]"}]}], "]"}], 
+            ";", 
+            RowBox[{"#", "\[Rule]", 
+             RowBox[{"Replace", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{"#", "/.", "coefficients"}], ")"}], ",", 
+               RowBox[{"_List", "\[Rule]", "0"}]}], "]"}]}]}], ")"}], "&"}], "/@", 
+         RowBox[{"GraphLoops", "[", 
+          RowBox[{"g", ",", "shading", ",", 
+           RowBox[{"down", "+", "up"}]}], "]"}]}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "DebugPrint", "[", "\"\<.... finished expanding coefficients\>\"", "]"}],
+      ";", "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445905584279745*^9, 3.445905592351304*^9}, 
+   3.445916378944194*^9, {3.4459169756223927`*^9, 3.445917017679369*^9}, {
+   3.445917051977274*^9, 3.4459171738508*^9}, {3.446141514079033*^9, 
+   3.446141525606818*^9}, 3.4461446314527597`*^9, {3.446145766819582*^9, 
+   3.4461457699203453`*^9}, {3.446146438943179*^9, 3.446146450188395*^9}, {
+   3.446150203783448*^9, 3.4461502382642107`*^9}, {3.446151331965104*^9, 
+   3.446151401193177*^9}, {3.446151565565996*^9, 3.446151584103376*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GPACoefficients", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", 
+     "coefficients_List"}], "]"}], "]"}], ":=", 
+  RowBox[{"Last", "/@", "coefficients"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445918764654952*^9, 3.445918801350953*^9}, {
+  3.446850043013908*^9, 3.446850043211912*^9}, {3.4831145834081507`*^9, 
+  3.483114586590336*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"VariableGPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", "f_"}], "]"}], 
+   "/;", 
+   RowBox[{
+    RowBox[{"up", "+", "down"}], "\[GreaterEqual]", "2"}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"ExpandCoefficientRules", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g", ",", "shading", ",", 
+     RowBox[{"{", 
+      RowBox[{"down", ",", "up"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"loop", ":", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"PatternSequence", "[", 
+           RowBox[{"_Vertex", ",", "_Integer"}], "]"}], ".."}], "}"}]}], 
+       "\[RuleDelayed]", 
+       RowBox[{"f", "[", "loop", "]"}]}], "}"}]}], "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445918216196302*^9, 3.445918333769546*^9}, 
+   3.446846264757764*^9, {3.4468632761677*^9, 3.4468632775638647`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Matrices", "Subsection",
+ CellChangeTimes->{{3.446856586284243*^9, 3.446856587533605*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GPAMatrix", "[", 
+   RowBox[{"GPAElement", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_Integer", ",", "up_Integer"}], "}"}], ",", "values_"}], 
+    "]"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "initialVertices", ",", "finalVertices", ",", "pathsList", ",", 
+      "matrices"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"initialVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{"shading", ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"finalVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"Xor", "[", 
+         RowBox[{"shading", ",", 
+          RowBox[{"OddQ", "[", "down", "]"}]}], "]"}], ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"pathsList", "=", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"Outer", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"#1", ",", "#2"}], "}"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", "up", ",", "#1", ",", "#2"}], "]"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", "down", ",", "#1", ",", "#2"}], "]"}]}], 
+              "}"}], "&"}], ",", "initialVertices", ",", "finalVertices"}], 
+           "]"}], ",", "1"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"_Vertex", ",", "_Vertex"}], "}"}], ",", 
+          RowBox[{"{", "}"}]}], "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"matrices", "=", 
+      RowBox[{"pathsList", "/.", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial_Vertex", ",", "final_Vertex"}], "}"}], ",", 
+          "upPaths_List", ",", "downPaths_List"}], "}"}], "\[RuleDelayed]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial", ",", "final"}], "}"}], "\[Rule]", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"Outer", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"#1", "~", "Join", "~", 
+                RowBox[{"Most", "[", 
+                 RowBox[{"Reverse", "[", 
+                  RowBox[{"Most", "[", "#2", "]"}], "]"}], "]"}]}], "&"}], 
+              ",", "upPaths", ",", "downPaths", ",", "1"}], "]"}], "/.", 
+            "values"}], ")"}]}], ")"}]}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"GPAMatrix", "[", 
+      RowBox[{"g", ",", "shading", ",", 
+       RowBox[{"{", 
+        RowBox[{"down", ",", "up"}], "}"}], ",", "matrices"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446852873526499*^9, 3.446852978494426*^9}, {
+   3.446853057325824*^9, 3.446853142093996*^9}, {3.4468531767790813`*^9, 
+   3.4468533538510523`*^9}, {3.4468534247796087`*^9, 3.446853601265432*^9}, {
+   3.483112169476403*^9, 3.483112172584948*^9}, {3.4831123954098387`*^9, 
+   3.483112426914116*^9}, {3.483112471142396*^9, 3.483112530937632*^9}, {
+   3.483113457163494*^9, 3.4831134708577538`*^9}, {3.483114518369149*^9, 
+   3.4831145220588703`*^9}, {3.4831145991087418`*^9, 3.4831146262020607`*^9}, 
+   3.483201873608914*^9}],
+
+Cell[BoxData[
+ RowBox[{"GPAMatrix", "/:", 
+  RowBox[{
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_", ",", "middle_"}], "}"}], ",", "values1_"}], "]"}], ".", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"middle_", ",", "up_"}], "}"}], ",", "values2_"}], "]"}]}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"GPAMatrix", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{"down", ",", "up"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"#", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", "2"}], "\[RightDoubleBracket]"}], ".", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}]}], ")"}], 
+      "&"}], "/@", 
+     RowBox[{"Transpose", "[", 
+      RowBox[{"{", 
+       RowBox[{"values1", ",", "values2"}], "}"}], "]"}]}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446853625571879*^9, 3.446853696613599*^9}, {
+  3.446853729864213*^9, 3.446853797105887*^9}, {3.4468539867328053`*^9, 
+  3.4468540286062393`*^9}, {3.483112182767527*^9, 3.483112205759141*^9}, {
+  3.483113484255209*^9, 3.483113495229582*^9}, {3.483114628595611*^9, 
+  3.483114636768093*^9}, {3.483201849865796*^9, 3.483201851916662*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAMatrix", "/:", 
+  RowBox[{
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", "bdy_", ",", 
+     "values1_"}], "]"}], "+", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", "bdy_", ",", 
+     "values2_"}], "]"}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"GPAMatrix", "[", 
+   RowBox[{"g", ",", "shading", ",", "bdy", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"#", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], "+", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", "2"}], "\[RightDoubleBracket]"}]}]}], ")"}], 
+      "&"}], "/@", 
+     RowBox[{"Transpose", "[", 
+      RowBox[{"{", 
+       RowBox[{"values1", ",", "values2"}], "}"}], "]"}]}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446853625571879*^9, 3.446853696613599*^9}, {
+  3.446853729864213*^9, 3.446853797105887*^9}, {3.4468539867328053`*^9, 
+  3.446854059453747*^9}, {3.483112214553178*^9, 3.483112249045371*^9}, {
+  3.483113497357666*^9, 3.483113504341476*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GPAMatrix", "/:", 
+  RowBox[{"\[Alpha]_", " ", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", "bdy_", ",", "values_"}],
+     "]"}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"GPAMatrix", "[", 
+   RowBox[{"g", ",", "shading", ",", "bdy", ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+        "\[Rule]", 
+        RowBox[{"\[Alpha]", " ", 
+         RowBox[{
+         "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]}], 
+       ")"}], "&"}], "/@", "values"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446854069411498*^9, 3.446854092233837*^9}, {
+  3.483113506683384*^9, 3.483113512370974*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EmptyGPAMatrix", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"shading", ":", 
+     RowBox[{"(", 
+      RowBox[{"True", "|", "False"}], ")"}]}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"GPAMatrix", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{"shading", ",", 
+       RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+       RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}], "/.", 
+     RowBox[{"v_Vertex", "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"v", ",", "v"}], "}"}], "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"{", "1", "}"}], "}"}]}], ")"}]}]}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4832014207087812`*^9, 3.483201512391159*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnDownTopRightCorner", "[", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_", ",", "up_"}], "}"}], ",", "coefficients_"}], "]"}], 
+   "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "initialVertices", ",", "finalVertices", ",", "pathsList", ",", 
+      "matrices", ",", "findMatrixEntry"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"initialVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{"shading", ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"finalVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"Xor", "[", 
+         RowBox[{"shading", ",", 
+          RowBox[{"OddQ", "[", 
+           RowBox[{"down", "+", "1"}], "]"}]}], "]"}], ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"pathsList", "=", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"Outer", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"#1", ",", "#2"}], "}"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{"up", "-", "1"}], ",", "#1", ",", "#2"}], "]"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{"down", "+", "1"}], ",", "#1", ",", "#2"}], "]"}]}], 
+              "}"}], "&"}], ",", "initialVertices", ",", "finalVertices"}], 
+           "]"}], ",", "1"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"_Vertex", ",", "_Vertex"}], "}"}], ",", 
+          RowBox[{"{", "}"}]}], "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"findMatrixEntry", "[", 
+       RowBox[{"upPath_", ",", "downPath_"}], "]"}], ":=", 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"s", ",", "f", ",", "i", ",", "j"}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"s", "=", 
+          RowBox[{
+          "downPath", "\[LeftDoubleBracket]", "1", 
+           "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"f", "=", 
+          RowBox[{"downPath", "\[LeftDoubleBracket]", 
+           RowBox[{"-", "3"}], "\[RightDoubleBracket]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"i", "=", 
+          RowBox[{"FindFirst", "[", 
+           RowBox[{
+            RowBox[{"GraphPathsBetween", "[", 
+             RowBox[{"g", ",", "up", ",", "s", ",", "f"}], "]"}], ",", 
+            RowBox[{"upPath", "~", "Join", "~", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"downPath", "\[LeftDoubleBracket]", 
+                RowBox[{"-", "2"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{"downPath", "\[LeftDoubleBracket]", 
+                RowBox[{"-", "3"}], "\[RightDoubleBracket]"}]}], "}"}]}]}], 
+           "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"j", "=", 
+          RowBox[{"FindFirst", "[", 
+           RowBox[{
+            RowBox[{"GraphPathsBetween", "[", 
+             RowBox[{"g", ",", "down", ",", "s", ",", "f"}], "]"}], ",", 
+            RowBox[{"Drop", "[", 
+             RowBox[{"downPath", ",", 
+              RowBox[{"-", "2"}]}], "]"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"s", ",", "f"}], "}"}], "/.", "coefficients"}], ")"}], 
+          "\[LeftDoubleBracket]", 
+          RowBox[{"i", ",", "j"}], "\[RightDoubleBracket]"}]}]}], 
+       "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"matrices", "=", 
+      RowBox[{"pathsList", "/.", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial_Vertex", ",", "final_Vertex"}], "}"}], ",", 
+          "upPaths_List", ",", "downPaths_List"}], "}"}], "\[RuleDelayed]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial", ",", "final"}], "}"}], "\[Rule]", 
+          RowBox[{"Outer", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", " ", 
+              RowBox[{
+               SuperscriptBox[
+                RowBox[{"LopsidedDimension", "[", 
+                 RowBox[{"g", ",", 
+                  RowBox[{"#2", "\[LeftDoubleBracket]", 
+                   RowBox[{"-", "1"}], "\[RightDoubleBracket]"}]}], "]"}], 
+                RowBox[{"-", "1"}]], 
+               RowBox[{"findMatrixEntry", "[", 
+                RowBox[{"#1", ",", "#2"}], "]"}]}], ")"}], "&"}], ",", 
+            "upPaths", ",", "downPaths", ",", "1"}], "]"}]}], ")"}]}]}]}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"GPAMatrix", "[", 
+      RowBox[{"g", ",", "shading", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"down", "+", "1"}], ",", 
+         RowBox[{"up", "-", "1"}]}], "}"}], ",", "matrices"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQBmIQ/YvDbVfT55eOW15rHwTRPyylT4DoLp5np0F03LMn
+t0B0xMqXYFp856T7IJpDbgmYfrYsSqkZSNe83uMHondwcMaA6HoVoUQQ7XDy
+2VQQXXziyQwQXXdDZy6IXv8mZhGINnjPvRpE253dtwZEq2ZdPQWiZU97XwSL
+P4u7CqKfXdh8G0Qr6qc+ANFzFPufguhJt7nfguiEEIlPIFqgtIGxBUhP+MzC
+AqJT5qZxgOh92S1g+s7XCB4QPXl1K5iWkbouDqLZH9wC09P2lcmAaIEJooog
++lD6lpVrQf7vM14FogEHu7LQ
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TurnUpBottomRightCorner", "[", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_", ",", "up_"}], "}"}], ",", "coefficients_"}], "]"}], 
+   "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "initialVertices", ",", "finalVertices", ",", "pathsList", ",", 
+      "matrices", ",", "findMatrixEntry"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"initialVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{"shading", ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"finalVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"Xor", "[", 
+         RowBox[{"shading", ",", 
+          RowBox[{"OddQ", "[", 
+           RowBox[{"up", "+", "1"}], "]"}]}], "]"}], ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"pathsList", "=", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"Outer", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"#1", ",", "#2"}], "}"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{"up", "+", "1"}], ",", "#1", ",", "#2"}], "]"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{"down", "-", "1"}], ",", "#1", ",", "#2"}], "]"}]}], 
+              "}"}], "&"}], ",", "initialVertices", ",", "finalVertices"}], 
+           "]"}], ",", "1"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"_Vertex", ",", "_Vertex"}], "}"}], ",", 
+          RowBox[{"{", "}"}]}], "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"findMatrixEntry", "[", 
+       RowBox[{"upPath_", ",", "downPath_"}], "]"}], ":=", 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"s", ",", "f", ",", "i", ",", "j"}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"s", "=", 
+          RowBox[{
+          "upPath", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+         ";", "\[IndentingNewLine]", 
+         RowBox[{"f", "=", 
+          RowBox[{"upPath", "\[LeftDoubleBracket]", 
+           RowBox[{"-", "3"}], "\[RightDoubleBracket]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"i", "=", 
+          RowBox[{"FindFirst", "[", 
+           RowBox[{
+            RowBox[{"GraphPathsBetween", "[", 
+             RowBox[{"g", ",", "up", ",", "s", ",", "f"}], "]"}], ",", 
+            RowBox[{"Drop", "[", 
+             RowBox[{"upPath", ",", 
+              RowBox[{"-", "2"}]}], "]"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"j", "=", 
+          RowBox[{"FindFirst", "[", 
+           RowBox[{
+            RowBox[{"GraphPathsBetween", "[", 
+             RowBox[{"g", ",", "down", ",", "s", ",", "f"}], "]"}], ",", 
+            RowBox[{"downPath", "~", "Join", "~", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"upPath", "\[LeftDoubleBracket]", 
+                RowBox[{"-", "2"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{"upPath", "\[LeftDoubleBracket]", 
+                RowBox[{"-", "3"}], "\[RightDoubleBracket]"}]}], "}"}]}]}], 
+           "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"s", ",", "f"}], "}"}], "/.", "coefficients"}], ")"}], 
+          "\[LeftDoubleBracket]", 
+          RowBox[{"i", ",", "j"}], "\[RightDoubleBracket]"}]}]}], 
+       "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"matrices", "=", 
+      RowBox[{"pathsList", "/.", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial_Vertex", ",", "final_Vertex"}], "}"}], ",", 
+          "upPaths_List", ",", "downPaths_List"}], "}"}], "\[RuleDelayed]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial", ",", "final"}], "}"}], "\[Rule]", 
+          RowBox[{"Outer", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"LopsidedDimension", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{"#1", "\[LeftDoubleBracket]", 
+                  RowBox[{"-", "3"}], "\[RightDoubleBracket]"}]}], "]"}], 
+               RowBox[{"findMatrixEntry", "[", 
+                RowBox[{"#1", ",", "#2"}], "]"}]}], ")"}], "&"}], ",", 
+            "upPaths", ",", "downPaths", ",", "1"}], "]"}]}], ")"}]}]}]}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"GPAMatrix", "[", 
+      RowBox[{"g", ",", "shading", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"down", "-", "1"}], ",", 
+         RowBox[{"up", "+", "1"}]}], "}"}], ",", "matrices"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQA2IQ/YvDbVfT55eOW15rHwTRPyylT4DoLp5np0F03LMn
+t0B0xMqXYFp856T7IJpDbgmYfrYsSqkZSNe83uMHondwcMaA6HoVoUQQ7XDy
+2VQQXXziyQwQXXdDZy6IXv8mZhGINnjPvRpE253dtwZEq2ZdPQWiZU97XwSL
+P4u7CqKfXdh8G0Qr6qc+ANFzFPufguhJt7nfguiEEIlPIFqgtIGxBUhP+MzC
+AqJT5qZxgOh92S1g+s7XCB4QPXl1K5iWkbouDqLZH9wC09P2lcmAaIEJooog
+2kVPSH4tkA7zsgPTPv+VVUB0SbeQGYhmj+/yANFGs06B6ar5UqtBtEN5EZgG
+AGKPyoc=
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddStrandOnRight", "[", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_", ",", "up_"}], "}"}], ",", "coefficients_"}], "]"}], 
+   "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "initialVertices", ",", "finalVertices", ",", "pathsList", ",", 
+      "matrices", ",", "findMatrixEntry"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"initialVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{"shading", ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"finalVertices", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"Xor", "[", 
+         RowBox[{"shading", ",", 
+          RowBox[{"OddQ", "[", 
+           RowBox[{"down", "+", "1"}], "]"}]}], "]"}], ",", 
+        RowBox[{"OddVertices", "[", "g", "]"}], ",", 
+        RowBox[{"EvenVertices", "[", "g", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"pathsList", "=", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"Outer", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"#1", ",", "#2"}], "}"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{"up", "+", "1"}], ",", "#1", ",", "#2"}], "]"}], ",", 
+               RowBox[{"GraphPathsBetween", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{"down", "+", "1"}], ",", "#1", ",", "#2"}], "]"}]}], 
+              "}"}], "&"}], ",", "initialVertices", ",", "finalVertices"}], 
+           "]"}], ",", "1"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"_Vertex", ",", "_Vertex"}], "}"}], ",", 
+          RowBox[{"{", "}"}]}], "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"findMatrixEntry", "[", 
+       RowBox[{"upPath_", ",", "downPath_"}], "]"}], ":=", 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"s", ",", "f", ",", "i", ",", "j"}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"downPath", "\[LeftDoubleBracket]", 
+            RowBox[{"-", "3"}], "\[RightDoubleBracket]"}], "=!=", 
+           RowBox[{"upPath", "\[LeftDoubleBracket]", 
+            RowBox[{"-", "3"}], "\[RightDoubleBracket]"}]}], ",", "0", ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"s", "=", 
+            RowBox[{
+            "downPath", "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"f", "=", 
+            RowBox[{"downPath", "\[LeftDoubleBracket]", 
+             RowBox[{"-", "3"}], "\[RightDoubleBracket]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"i", "=", 
+            RowBox[{"FindFirst", "[", 
+             RowBox[{
+              RowBox[{"GraphPathsBetween", "[", 
+               RowBox[{"g", ",", "up", ",", "s", ",", "f"}], "]"}], ",", 
+              RowBox[{"Drop", "[", 
+               RowBox[{"upPath", ",", 
+                RowBox[{"-", "2"}]}], "]"}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"j", "=", 
+            RowBox[{"FindFirst", "[", 
+             RowBox[{
+              RowBox[{"GraphPathsBetween", "[", 
+               RowBox[{"g", ",", "down", ",", "s", ",", "f"}], "]"}], ",", 
+              RowBox[{"Drop", "[", 
+               RowBox[{"downPath", ",", 
+                RowBox[{"-", "2"}]}], "]"}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"s", ",", "f"}], "}"}], "/.", "coefficients"}], ")"}], 
+            "\[LeftDoubleBracket]", 
+            RowBox[{"i", ",", "j"}], "\[RightDoubleBracket]"}]}]}], 
+         "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"matrices", "=", 
+      RowBox[{"pathsList", "/.", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial_Vertex", ",", "final_Vertex"}], "}"}], ",", 
+          "upPaths_List", ",", "downPaths_List"}], "}"}], "\[RuleDelayed]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"initial", ",", "final"}], "}"}], "\[Rule]", 
+          RowBox[{"Outer", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"findMatrixEntry", "[", 
+              RowBox[{"#1", ",", "#2"}], "]"}], "&"}], ",", "upPaths", ",", 
+            "downPaths", ",", "1"}], "]"}]}], ")"}]}]}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"GPAMatrix", "[", 
+      RowBox[{"g", ",", "shading", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"down", "+", "1"}], ",", 
+         RowBox[{"up", "+", "1"}]}], "}"}], ",", "matrices"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQBWIQ/YvDbVfT55eOW15rHwTRPyylT4DoLp5np0F03LMn
+t0B0xMqXYFp856T7IJpDbgmYfrYsSqkZSNe83uMHondwcMaA6HoVoUQQ7XDy
+2VQQXXziyQwQXXdDZy6IXv8mZhGINnjPvRpE253dtwZEq2ZdPQWiZU97XwSL
+P4u7CqKfXdh8G0Qr6qc+ANFzFPufguhJt7nfguiEEIlPIFqgtIGxBUhP+MzC
+AqJT5qZxgOh92S1g+s7XCB4QPXl1K5iWkbouDqLZH9wC09P2lcmAaIEJooog
++lD6lpVrQf7vM14Fop8eDtgOov/xzDoAoq0YJ58B0XMWv70AogG7ZMej
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"down_", ",", "up_"}], "}"}], ",", "values_"}], "]"}], "]"}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"GPAElement", "[", 
+   RowBox[{"g", ",", "shading", ",", 
+    RowBox[{"{", 
+     RowBox[{"down", ",", "up"}], "}"}], ",", 
+    RowBox[{"Flatten", "[", 
+     RowBox[{"values", "/.", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"initial_Vertex", ",", "final_Vertex"}], "}"}], "\[Rule]", 
+         "matrix_"}], ")"}], "\[RuleDelayed]", "\[IndentingNewLine]", 
+       RowBox[{"With", "[", 
+        RowBox[{
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"downPaths", "=", 
+            RowBox[{"GraphPathsBetween", "[", 
+             RowBox[{"g", ",", "down", ",", "initial", ",", "final"}], 
+             "]"}]}], ",", "\[IndentingNewLine]", 
+           RowBox[{"upPaths", "=", 
+            RowBox[{"GraphPathsBetween", "[", 
+             RowBox[{"g", ",", "up", ",", "initial", ",", "final"}], 
+             "]"}]}]}], "\[IndentingNewLine]", "}"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"Length", "[", "downPaths", "]"}], "\[Equal]", "0"}], 
+            "\[Or]", 
+            RowBox[{
+             RowBox[{"Length", "[", "upPaths", "]"}], "\[Equal]", "0"}]}], 
+           ",", 
+           RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"MapThread", "[", 
+            RowBox[{"Rule", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Outer", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"#1", "~", "Join", "~", 
+                   RowBox[{"Most", "[", 
+                    RowBox[{"Reverse", "[", 
+                    RowBox[{"Most", "[", "#2", "]"}], "]"}], "]"}]}], "&"}], 
+                 ",", "upPaths", ",", "downPaths", ",", "1"}], "]"}], ",", 
+               "matrix"}], "}"}], ",", "2"}], "]"}]}], "]"}]}], 
+        "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4468541589085197`*^9, 3.446854192485771*^9}, {
+  3.446854241556961*^9, 3.4468543322057858`*^9}, {3.446854388516992*^9, 
+  3.446854441315452*^9}, {3.483112282765861*^9, 3.483112286455879*^9}, {
+  3.4831125485017853`*^9, 3.483112629054243*^9}, {3.483113531495997*^9, 
+  3.483113539581093*^9}, {3.483114363793109*^9, 3.4831144341971893`*^9}, {
+  3.483114640462757*^9, 3.483114660829763*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GPACoefficients", "[", 
+   RowBox[{"GPAMatrix", "[", 
+    RowBox[{"g_GradedBigraph", ",", 
+     RowBox[{"shading", ":", 
+      RowBox[{"(", 
+       RowBox[{"True", "|", "False"}], ")"}]}], ",", "bdy_", ",", 
+     "matrices_List"}], "]"}], "]"}], ":=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{"Last", "/@", "matrices"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445918764654952*^9, 3.445918801350953*^9}, {
+   3.446850043013908*^9, 3.446850043211912*^9}, {3.446855045633168*^9, 
+   3.446855067408519*^9}, 3.48311229236833*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Lowest weight vectors", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4468456689343987`*^9, 3.446845672399729*^9}}],
+
+Cell["\<\
+Dimension here is really just a stand - in for distance from the trivalent \
+vertex, but allows an easy generalisation to other graphs.\
+\>", "Text",
+ CellChangeTimes->{{3.445969627730257*^9, 3.4459696535337753`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SolveTwoTermEquations", "[", 
+   RowBox[{"conditions_", ",", "variablePattern_", ",", 
+    RowBox[{"variablePreferenceFunction_:", 
+     RowBox[{"(", 
+      RowBox[{"#", "&"}], ")"}]}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "constantConditions", ",", "oneVariableConditions", ",", 
+      "twoVariableConditions", ",", "sortedConditions", ",", "condition", ",",
+       "targetVariable", ",", "solutions"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"sortedConditions", "=", "conditions"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"While", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"DebugPrint", "[", "\"\<... sorting conditions\>\"", "]"}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+          "constantConditions", ",", "oneVariableConditions", ",", 
+           "twoVariableConditions", ",", "sortedConditions"}], "}"}], "=", 
+         RowBox[{"Flatten", "/@", 
+          RowBox[{
+           RowBox[{"Reap", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"Sow", "[", 
+                RowBox[{"#", ",", 
+                 RowBox[{
+                  RowBox[{"Length", "[", 
+                   RowBox[{"Union", "[", 
+                    RowBox[{"Cases", "[", 
+                    RowBox[{"#", ",", "variablePattern", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "\[Infinity]"}], "}"}]}], "]"}], "]"}], 
+                   "]"}], "/.", 
+                  RowBox[{
+                   RowBox[{"n_", "/;", 
+                    RowBox[{"n", "\[GreaterEqual]", "3"}]}], "\[RuleDelayed]",
+                    "\[Infinity]"}]}]}], "]"}], "&"}], "/@", 
+              "sortedConditions"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1", ",", "2", ",", "\[Infinity]"}], "}"}]}], 
+            "]"}], "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}]}],
+         ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", 
+            RowBox[{"DeleteCases", "[", 
+             RowBox[{"constantConditions", ",", "0"}], "]"}], "]"}], ">", 
+           "0"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+           "DebugPrint", "[", 
+            "\"\<... no solution! This should be impossible; 0 always \
+works.\>\"", "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"DebugPrint", "[", "constantConditions", "]"}]}]}], 
+         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"DebugPrint", "[", 
+         RowBox[{"\"\<... found \>\"", ",", 
+          RowBox[{"Length", "[", "oneVariableConditions", "]"}], ",", 
+          "\"\< and \>\"", ",", " ", 
+          RowBox[{"Length", "[", "twoVariableConditions", "]"}], ",", 
+          "\"\< one- and two-variable conditions.\>\""}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "oneVariableConditions", "]"}], "+", 
+          RowBox[{"Length", "[", "twoVariableConditions", "]"}]}], ">", 
+         "0"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Cases", "[", 
+         RowBox[{
+          RowBox[{"Collect", "[", 
+           RowBox[{"oneVariableConditions", ",", "variablePattern", ",", 
+            RowBox[{
+             RowBox[{"RootReduce", "[", 
+              RowBox[{"Together", "[", "#", "]"}], "]"}], "&"}]}], "]"}], ",", 
+          RowBox[{
+           RowBox[{"x", ":", "variablePattern"}], "\[RuleDelayed]", 
+           RowBox[{"(", 
+            RowBox[{"x", "=", "0"}], ")"}]}], ",", "\[Infinity]"}], "]"}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"condition", "=", 
+             RowBox[{"Collect", "[", 
+              RowBox[{"#", ",", "variablePattern", ",", "Together"}], "]"}]}],
+             ";", "\[IndentingNewLine]", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"condition", "=!=", "0"}], ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"targetVariable", "=", 
+                RowBox[{"First", "[", 
+                 RowBox[{"SortBy", "[", 
+                  RowBox[{
+                   RowBox[{"Cases", "[", 
+                    RowBox[{"condition", ",", "variablePattern", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "\[Infinity]"}], "}"}]}], "]"}], ",", 
+                   "variablePreferenceFunction"}], "]"}], "]"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"solutions", "=", 
+                RowBox[{"Solve", "[", 
+                 RowBox[{
+                  RowBox[{"condition", "\[Equal]", "0"}], ",", 
+                  "targetVariable"}], "]"}]}], ";", "\[IndentingNewLine]", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Length", "[", "solutions", "]"}], "\[Equal]", 
+                  "1"}], ",", "\[IndentingNewLine]", 
+                 RowBox[{
+                  RowBox[{"Collect", "[", 
+                   RowBox[{
+                    RowBox[{
+                    "solutions", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", "variablePattern", ",", 
+                    "Together"}], "]"}], "/.", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{"x_", "\[Rule]", "y_"}], ")"}], "\[RuleDelayed]", 
+                   
+                   RowBox[{"(", 
+                    RowBox[{"x", "=", "y"}], ")"}]}]}], ",", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{
+                  RowBox[{"Print", "[", 
+                   RowBox[{
+                   "\"\<Something went wrong:\>\"", ",", "condition", ",", 
+                    "\"\< \>\"", ",", "solutions"}], "]"}], ";"}]}], 
+                "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", 
+             "]"}], ";"}], ")"}], "&"}], "/@", "twoVariableConditions"}], 
+        ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     "sortedConditions"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4668657851027193`*^9, 3.466865842008328*^9}, {
+   3.466865886018044*^9, 3.4668659172220573`*^9}, {3.4668676450338163`*^9, 
+   3.46686765414299*^9}, 3.46686772570022*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ProgressiveSolve", "[", 
+   RowBox[{"conditions_", ",", "variablePattern_", ",", 
+    RowBox[{"variablePreferenceFunction_:", 
+     RowBox[{"(", 
+      RowBox[{"#", "&"}], ")"}]}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"sortedConditions", ",", "n", ",", 
+      RowBox[{"counter", "=", "0"}], ",", "condition", ",", "targetVariable", 
+      ",", "solutions"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"sortedConditions", "=", "conditions"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"sortedConditions", "=", 
+      RowBox[{"SolveTwoTermEquations", "[", 
+       RowBox[{"sortedConditions", ",", "variablePattern"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"++", "counter"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Mod", "[", 
+             RowBox[{"counter", ",", "20"}], "]"}], "\[Equal]", "0"}], ",", 
+           RowBox[{"DebugPrint", "[", 
+            RowBox[{"counter", ",", "\"\</\>\"", ",", 
+             RowBox[{"Length", "[", "sortedConditions", "]"}]}], "]"}]}], 
+          "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"condition", "=", 
+          RowBox[{"Collect", "[", 
+           RowBox[{"#", ",", "variablePattern", ",", "Together"}], "]"}]}], 
+         ";", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"condition", "=!=", "0"}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"targetVariable", "=", 
+             RowBox[{"First", "[", 
+              RowBox[{"SortBy", "[", 
+               RowBox[{
+                RowBox[{"Cases", "[", 
+                 RowBox[{"condition", ",", "variablePattern", ",", 
+                  RowBox[{"{", 
+                   RowBox[{"0", ",", "\[Infinity]"}], "}"}]}], "]"}], ",", 
+                "variablePreferenceFunction"}], "]"}], "]"}]}], ";", 
+            "\[IndentingNewLine]", 
+            RowBox[{"solutions", "=", 
+             RowBox[{"Solve", "[", 
+              RowBox[{
+               RowBox[{"condition", "\[Equal]", "0"}], ",", 
+               "targetVariable"}], "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Length", "[", "solutions", "]"}], "\[Equal]", "1"}], 
+              ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"Collect", "[", 
+                RowBox[{
+                 RowBox[{
+                 "solutions", "\[LeftDoubleBracket]", "1", 
+                  "\[RightDoubleBracket]"}], ",", "variablePattern", ",", 
+                 "Together"}], "]"}], "/.", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"x_", "\[Rule]", "y_"}], ")"}], "\[RuleDelayed]", 
+                RowBox[{"(", 
+                 RowBox[{"x", "=", "y"}], ")"}]}]}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"Print", "[", 
+                RowBox[{
+                "\"\<Something went wrong:\>\"", ",", "condition", ",", 
+                 "\"\< \>\"", ",", "solutions"}], "]"}], ";"}]}], 
+             "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", 
+          "]"}], ";"}], "\[IndentingNewLine]", ")"}], "&"}], "/@", 
+      "sortedConditions"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"{", "}"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445969886381131*^9, 3.445969999803393*^9}, {
+   3.445970303616943*^9, 3.445970589782577*^9}, {3.445970631135971*^9, 
+   3.4459706496792316`*^9}, {3.445970723734116*^9, 3.445970797205065*^9}, {
+   3.44597082848446*^9, 3.4459708593118763`*^9}, {3.4459709081550303`*^9, 
+   3.4459709109420977`*^9}, {3.445970999214727*^9, 3.4459710755865707`*^9}, {
+   3.445971138079391*^9, 3.445971154158495*^9}, {3.445971245790365*^9, 
+   3.445971267441613*^9}, {3.4459712975017433`*^9, 3.445971300966325*^9}, {
+   3.445971469097925*^9, 3.445971479446932*^9}, {3.44597177884158*^9, 
+   3.445971798491016*^9}, {3.445971950736411*^9, 3.445971954690887*^9}, {
+   3.4459720407109947`*^9, 3.445972043197156*^9}, {3.4459721148595943`*^9, 
+   3.445972128055202*^9}, 3.445972161629624*^9, {3.445972196089596*^9, 
+   3.445972218529476*^9}, {3.446150758473439*^9, 3.446150809246923*^9}, {
+   3.44617095278127*^9, 3.446170952994084*^9}, {3.446171080363715*^9, 
+   3.446171084324627*^9}, {3.446171209468307*^9, 3.446171259392158*^9}, {
+   3.446171358787632*^9, 3.446171380257815*^9}, {3.4461714441818247`*^9, 
+   3.446171485227727*^9}, {3.446171533553928*^9, 3.44617156867069*^9}, {
+   3.446171632639716*^9, 3.446171668450346*^9}, {3.446172024189744*^9, 
+   3.4461721032611103`*^9}, 3.446637579466033*^9, {3.44663817785651*^9, 
+   3.446638302212915*^9}, {3.446638338169264*^9, 3.4466384105779247`*^9}, {
+   3.446638464587324*^9, 3.446638575170089*^9}, {3.446638627230872*^9, 
+   3.4466391243800497`*^9}, {3.446639157044132*^9, 3.446639159092073*^9}, {
+   3.4466399085411263`*^9, 3.4466400114135227`*^9}, {3.446640071158626*^9, 
+   3.4466401213408537`*^9}, {3.446640157909232*^9, 3.446640158009733*^9}, {
+   3.446640192294561*^9, 3.446640203466585*^9}, {3.446645735432404*^9, 
+   3.446645762703086*^9}, {3.4466458201130533`*^9, 3.446645833678358*^9}, {
+   3.446645883638495*^9, 3.44664591205562*^9}, {3.446646299457704*^9, 
+   3.446646380105295*^9}, {3.446646411057406*^9, 3.4466464360479183`*^9}, 
+   3.446646498406468*^9, {3.446646614676775*^9, 3.446646619181224*^9}, {
+   3.446646775976603*^9, 3.4466467810976954`*^9}, {3.4466468298944387`*^9, 
+   3.4466468325721703`*^9}, 3.446646868859942*^9, {3.446647694938039*^9, 
+   3.4466477062783337`*^9}, {3.446868349150992*^9, 3.4468683624515123`*^9}, {
+   3.4469095515513287`*^9, 3.446909558837973*^9}, {3.461716465220813*^9, 
+   3.461716475437079*^9}, {3.466865629335499*^9, 3.466865629650984*^9}, {
+   3.4668657488870497`*^9, 3.46686576470743*^9}, {3.4668658364047127`*^9, 
+   3.466865883159504*^9}, {3.4668659325325413`*^9, 3.466865951905347*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"VertexPreferences", "[", "g_GradedBigraph", "]"}], "[", 
+   RowBox[{"Vertex", "[", 
+    RowBox[{"d_", ",", "k_"}], "]"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"-", 
+    RowBox[{"LopsidedDimension", "[", 
+     RowBox[{"g", ",", 
+      RowBox[{"Vertex", "[", 
+       RowBox[{"d", ",", "k"}], "]"}]}], "]"}]}], "+", 
+   RowBox[{"0.1", " ", "k"}], "+", 
+   RowBox[{"0.01", "d"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4459684862396517`*^9, 3.4459684960299177`*^9}, {
+  3.4459685261325808`*^9, 3.445968570840234*^9}, {3.445968741354023*^9, 
+  3.445968746956993*^9}, {3.44596883257246*^9, 3.445968838021318*^9}, {
+  3.446846238711916*^9, 3.4468462393785677`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LoopPreferences", "[", "g_", "]"}], "[", "loop_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"1.", "+", 
+      RowBox[{".01", "k"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", 
+       RowBox[{
+        RowBox[{"Length", "[", "loop", "]"}], "/", "2"}]}], "}"}]}], "]"}], 
+   ".", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"VertexPreferences", "[", "g", "]"}], "/@", 
+     RowBox[{"loop", "\[LeftDoubleBracket]", 
+      RowBox[{";;", ";;", "2"}], "\[RightDoubleBracket]"}]}], 
+    ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445968563682519*^9, 3.445968598231353*^9}, {
+  3.445968691730507*^9, 3.4459686970883493`*^9}, {3.445968902713396*^9, 
+  3.445968972588442*^9}, {3.4461710494049273`*^9, 3.446171066106533*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LowestWeightEigenvectorConditions", "[", 
+    RowBox[{
+     RowBox[{"k", ":", 
+      RowBox[{"GPAElement", "[", 
+       RowBox[{"g_", ",", "shading_", ",", 
+        RowBox[{"{", 
+         RowBox[{"down_", ",", "up_"}], "}"}], ",", "coefficients_"}], 
+       "]"}]}], ",", "\[Lambda]0_"}], "]"}], "/;", 
+   RowBox[{"up", "\[GreaterEqual]", "2"}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"\[Lambda]", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"NumericQ", "[", "\[Lambda]0", "]"}], ",", 
+        RowBox[{"ToNumberField", "[", 
+         RowBox[{
+          RowBox[{"RootReduce", "[", "\[Lambda]0", "]"}], ",", 
+          RowBox[{"NumberFieldGenerator", "[", 
+           RowBox[{
+           "k", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+           "]"}]}], "]"}], ",", "\[Lambda]0"}], "]"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"EnlargeNumberField", "[", 
+       RowBox[{"k", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       "]"}], "[", "\[Lambda]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"DebugPrint", "[", "\"\<... preparing first cap\>\"", "]"}], 
+        ";", 
+        RowBox[{"GPACoefficients", "[", 
+         RowBox[{"CapAt", "[", 
+          RowBox[{"k", ",", "1"}], "]"}], "]"}]}], ")"}], "~", "Join", "~", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"up", "\[GreaterEqual]", "3"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"DebugPrint", "[", "\"\<... preparing second cap\>\"", "]"}],
+          ";", 
+         RowBox[{"GPACoefficients", "[", 
+          RowBox[{"CapAt", "[", 
+           RowBox[{"k", ",", "2"}], "]"}], "]"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+         "DebugPrint", "[", "\"\<... preparing partial trace\>\"", "]"}], ";", 
+         RowBox[{"GPACoefficients", "[", 
+          RowBox[{"PartialTrace", "[", "k", "]"}], "]"}]}]}], 
+       "\[IndentingNewLine]", "]"}], "~", "Join", "~", "\[IndentingNewLine]", 
+      
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"DebugPrint", "[", "\"\<... preparing rotation\>\"", "]"}], 
+        ";", 
+        RowBox[{"GPACoefficients", "[", 
+         RowBox[{
+          RowBox[{"RotateTwoClicks", "[", "k", "]"}], "-", 
+          RowBox[{"\[Lambda]", " ", "k"}]}], "]"}]}], ")"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445919393006501*^9, 3.445919401849578*^9}, {
+   3.445919505999041*^9, 3.445919508006422*^9}, {3.445969726619781*^9, 
+   3.4459698283466253`*^9}, {3.446141299513878*^9, 3.4461413022485943`*^9}, {
+   3.446149684604862*^9, 3.446149744641642*^9}, {3.4461699495977907`*^9, 
+   3.446169959725525*^9}, {3.446850050073351*^9, 3.446850058687944*^9}, {
+   3.446909712188327*^9, 3.4469097435616198`*^9}, {3.446910582277701*^9, 
+   3.446910597450952*^9}, {3.469138329847617*^9, 3.4691383823504877`*^9}, 
+   3.481811417953023*^9, {3.48181334024564*^9, 3.481813343834915*^9}, {
+   3.508773686280005*^9, 3.508773692253665*^9}, {3.50877376957824*^9, 
+   3.508773835937017*^9}, {3.508773952612857*^9, 3.508773955677393*^9}, {
+   3.510589726316659*^9, 3.5105897302994127`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LowestWeightEigenspace", "[", 
+   RowBox[{"g_GradedBigraph", ",", "\[Lambda]_", ",", 
+    RowBox[{"m0_:", "Automatic"}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"LoadLowestWeightEigenspaces", "[", "g", "]"}], ",", 
+    RowBox[{"LowestWeightEigenspace", "[", 
+     RowBox[{"g", ",", "\[Lambda]", ",", "m0"}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "result", ",", "f", ",", "kernel", ",", "conditions", ",", "solution", 
+        ",", "variables", ",", "matrix", ",", "c", ",", "m"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"m", "=", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"m0", "===", "Automatic"}], ",", 
+          RowBox[{
+           RowBox[{"DepthOfBranchPoint", "[", "g", "]"}], "+", "1"}], ",", 
+          "m0"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"DebugPrint", "[", "\"\<Preparing test kernel...\>\"", "]"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"kernel", "=", 
+        RowBox[{"VariableGPAElement", "[", 
+         RowBox[{"g", ",", "False", ",", 
+          RowBox[{"{", 
+           RowBox[{"m", ",", "m"}], "}"}], ",", "f"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", 
+        "\"\<Preparing low weight eigenspace conditions...\>\"", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"conditions", "=", 
+        RowBox[{"LowestWeightEigenvectorConditions", "[", 
+         RowBox[{"kernel", ",", "\[Lambda]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<Beginning progressive solve...\>\"", "]"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"solution", "=", 
+        RowBox[{"ProgressiveSolve", "[", 
+         RowBox[{"conditions", ",", "_f", ",", 
+          RowBox[{
+           RowBox[{"LoopPreferences", "[", 
+            RowBox[{
+            "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+            "]"}], "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<Unfolding definitions for f...\>\"", "]"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"DownValues", "[", "f", "]"}], "=", 
+        RowBox[{
+         RowBox[{"DownValues", "[", "f", "]"}], "/.", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"a_", "\[RuleDelayed]", "b_"}], ")"}], "\[RuleDelayed]", 
+          RowBox[{"(", 
+           RowBox[{"a", "\[RuleDelayed]", 
+            RowBox[{"Evaluate", "[", "b", "]"}]}], ")"}]}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<Applying solution rules to test kernel...\>\"",
+         "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"kernel", "=", 
+        RowBox[{"kernel", "/.", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"x_", "\[Rule]", "y_"}], ")"}], "\[RuleDelayed]", 
+          RowBox[{"(", 
+           RowBox[{"x", "\[Rule]", 
+            RowBox[{"(", 
+             RowBox[{"Collect", "[", 
+              RowBox[{
+               RowBox[{"y", "/.", "solution"}], ",", "_f", ",", "Together"}], 
+              "]"}], ")"}]}], ")"}]}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<Finding remaining variables...\>\"", "]"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"variables", "=", 
+        RowBox[{"Union", "[", 
+         RowBox[{"Cases", "[", 
+          RowBox[{"kernel", ",", "_f", ",", "\[Infinity]"}], "]"}], "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"DebugPrint", "[", "\"\<Replacing variables...\>\"", "]"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"matrix", "=", 
+        RowBox[{
+         RowBox[{"GPAMatrix", "[", "kernel", "]"}], "/.", 
+         RowBox[{"Thread", "[", 
+          RowBox[{"variables", "\[Rule]", 
+           RowBox[{"Table", "[", 
+            RowBox[{
+             RowBox[{"c", "[", "i", "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", "1", ",", 
+               RowBox[{"Length", "[", "variables", "]"}]}], "}"}]}], "]"}]}], 
+          "]"}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"DebugPrint", "[", "\"\<Preparing basis.\>\"", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"GPAMatrix", "[", "kernel", "]"}], "/.", 
+            RowBox[{"Thread", "[", 
+             RowBox[{"variables", "\[Rule]", 
+              RowBox[{"UnitVector", "[", 
+               RowBox[{
+                RowBox[{"Length", "[", "variables", "]"}], ",", "i"}], 
+               "]"}]}], "]"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "1", ",", 
+             RowBox[{"Length", "[", "variables", "]"}]}], "}"}]}], "]"}]}], 
+        "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"result", "=", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"LowestWeightEigenspace", "[", 
+           RowBox[{"g", ",", "\[Lambda]", ",", "m0"}], "]"}], "=", 
+          RowBox[{"Function", "[", 
+           RowBox[{
+            RowBox[{"{", "cc", "}"}], ",", 
+            RowBox[{"Evaluate", "[", 
+             RowBox[{"matrix", "/.", 
+              RowBox[{"c", "\[Rule]", "cc"}]}], "]"}]}], "]"}]}], ")"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<... finished LowestWeightEigenspace\>\"", 
+        "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"PackageLowestWeightEigenspaces", "[", "g", "]"}], ";", 
+       "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJwdxTlIQnEAB2BzCCIaAoNsCLqLsgPE7IB6UI0NBhalUA8cio6lICubIofU
+oYuwIbUs0Uo7DYzAoKYCaXDpIEjhPUkRUStR6f97w8dXRs/IVHwejyck8BJP
+HXQcs9SvtCCKI1ZFHAdcPWlskXvpT/KBLjaJs1fNysQJS4mK9Nyqhz5Nklxq
+3+c2UWYbVuiDDtxo8KRxsYzhvvEImB+y4/XjGz+btHr5KUuZb43bmMk1urCg
+c+sMr4vapgfJKS89i8sv9+ZHyMvhYTVezdhDuD0hDOOxWsnKHFnSoNvATl+O
+FfMfk4c4f013jsXSugts0X65MR2LcDctBD342l94j7vcFVGZk6V8uzXclYZA
+HO9oWvgD5Bf/OKPysdREqoPFtl7Ln70qRHnt9RmcjQX6HWRmUTWEN7vvlPjt
+6H0UP4nzpnBrSTX3P5g45oQ=
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SparseMatrixSolve", "[", 
+   RowBox[{"conditions_", ",", "variablePattern_", ",", 
+    RowBox[{"variablePreferenceFunction_:", 
+     RowBox[{"(", 
+      RowBox[{"#", "&"}], ")"}]}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"variables", "=", 
+       RowBox[{"SortBy", "[", 
+        RowBox[{
+         RowBox[{"Union", "[", 
+          RowBox[{"Cases", "[", 
+           RowBox[{"conditions", ",", "variablePattern", ",", "\[Infinity]"}],
+            "]"}], "]"}], ",", "variablePreferenceFunction"}], "]"}]}], ",", 
+      "arrays", ",", "matrix", ",", "nullspace"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"matrix", "=", 
+       RowBox[{"SparseArray", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"i_", ",", "j_"}], "}"}], "\[RuleDelayed]", 
+          RowBox[{"Coefficient", "[", 
+           RowBox[{
+            RowBox[{
+            "conditions", "\[LeftDoubleBracket]", "i", 
+             "\[RightDoubleBracket]"}], ",", 
+            RowBox[{
+            "variables", "\[LeftDoubleBracket]", "j", 
+             "\[RightDoubleBracket]"}]}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"Length", "[", "conditions", "]"}], ",", 
+           RowBox[{"Length", "[", "variables", "]"}]}], "}"}]}], "]"}]}], 
+      ";"}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"DebugPrint", "[", "\"\<preparing SparseArray\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"arrays", "=", 
+      RowBox[{"CoefficientArrays", "[", 
+       RowBox[{"conditions", ",", "variables"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"matrix", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Length", "[", "arrays", "]"}], "\[Equal]", "2"}], ",", 
+        RowBox[{
+        "arrays", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"{", "}"}], "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", "\"\<finding nullspace...\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"nullspace", "=", 
+      RowBox[{"NullSpace", "[", 
+       RowBox[{"matrix", ",", 
+        RowBox[{"Method", "\[Rule]", "\"\<OneStepRowReduction\>\""}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"TODO", ",", " ", 
+       RowBox[{"prepare", " ", "a", " ", "list", " ", "of", " ", "rules"}]}], 
+      " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Thread", "[", 
+        RowBox[{"variables", "\[Rule]", "#"}], "]"}], "&"}], "/@", 
+      "nullspace"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4667942693629704`*^9, 3.4667943275232964`*^9}, {
+  3.4667950750311127`*^9, 3.4667951334203873`*^9}, {3.4667951666749783`*^9, 
+  3.466795239536755*^9}, {3.466795271537733*^9, 3.4667952829034863`*^9}, {
+  3.46679534240556*^9, 3.466795393547613*^9}, {3.4667955082921057`*^9, 
+  3.466795515008913*^9}, {3.466795741880331*^9, 3.466795742100761*^9}, {
+  3.466798819639162*^9, 3.466798825720826*^9}, {3.466798866221089*^9, 
+  3.466798905562931*^9}, {3.4668006274660063`*^9, 3.4668006588000793`*^9}, {
+  3.466800708384371*^9, 3.466800710411268*^9}, {3.466804501978815*^9, 
+  3.46680452458456*^9}, {3.466804882614112*^9, 3.466804895509995*^9}, {
+  3.508774676111102*^9, 3.5087747098724422`*^9}, {3.508774802391862*^9, 
+  3.50877480571434*^9}, {3.508774877934349*^9, 3.508774895297783*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ManyTermSparseMatrixSolve", "[", 
+   RowBox[{"conditions_", ",", "variablePattern_", ",", 
+    RowBox[{"variablePreferenceFunction_:", 
+     RowBox[{"(", 
+      RowBox[{"#", "&"}], ")"}]}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"SparseMatrixSolve", "[", 
+   RowBox[{
+    RowBox[{"SolveTwoTermEquations", "[", 
+     RowBox[{
+     "conditions", ",", "variablePattern", ",", 
+      "variablePreferenceFunction"}], "]"}], ",", "variablePattern", ",", 
+    "variablePreferenceFunction"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.466866005106608*^9, 3.466866076931291*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CollectGPAMatrix", "[", 
+   RowBox[{
+    RowBox[{"GPAMatrix", "[", 
+     RowBox[{"g_", ",", "s_", ",", "b_", ",", "matrices_"}], "]"}], ",", 
+    "p_"}], "]"}], ":=", 
+  RowBox[{"GPAMatrix", "[", 
+   RowBox[{"g", ",", "s", ",", "b", ",", 
+    RowBox[{"matrices", "/.", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"v_", "\[Rule]", "m_"}], ")"}], "\[RuleDelayed]", 
+       RowBox[{"(", 
+        RowBox[{"v", "\[Rule]", 
+         RowBox[{"Collect", "[", 
+          RowBox[{"m", ",", "p", ",", "Together"}], "]"}]}], ")"}]}], 
+      ")"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4832155202902308`*^9, 3.483215545147975*^9}, {
+  3.483215593859654*^9, 3.483215635629253*^9}, {3.483215761427021*^9, 
+  3.483215770859211*^9}, {3.483216264306465*^9, 3.483216265868951*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LowestWeightEigenspace", "[", 
+   RowBox[{"g_GradedBigraph", ",", "\[Lambda]_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"LoadLowestWeightEigenspaces", "[", "g", "]"}], ",", 
+    RowBox[{"LowestWeightEigenspace", "[", 
+     RowBox[{"g", ",", "\[Lambda]"}], "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "result", ",", "f", ",", "kernel", ",", "conditions", ",", "solutions",
+         ",", "variables", ",", "matrix", ",", "c", ",", "replacements"}], 
+       "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"DebugPrint", "[", "\"\<Preparing test kernel...\>\"", "]"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"kernel", "=", 
+        RowBox[{"VariableGPAElement", "[", 
+         RowBox[{"g", ",", "False", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"DepthOfBranchPoint", "[", "g", "]"}], "+", "1"}], ",", 
+            RowBox[{
+             RowBox[{"DepthOfBranchPoint", "[", "g", "]"}], "+", "1"}]}], 
+           "}"}], ",", "f"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", 
+        "\"\<Preparing low weight eigenspace conditions...\>\"", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"conditions", "=", 
+        RowBox[{"LowestWeightEigenvectorConditions", "[", 
+         RowBox[{"kernel", ",", "\[Lambda]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<Beginning progressive solve...\>\"", "]"}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"solutions", "=", 
+        RowBox[{"ManyTermSparseMatrixSolve", "[", 
+         RowBox[{"conditions", ",", "_f", ",", 
+          RowBox[{
+           RowBox[{"LoopPreferences", "[", 
+            RowBox[{
+            "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+            "]"}], "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"replacements", "=", 
+        RowBox[{"Thread", "[", 
+         RowBox[{
+          RowBox[{"Union", "[", 
+           RowBox[{"Cases", "[", 
+            RowBox[{"solutions", ",", "_f", ",", "\[Infinity]"}], "]"}], 
+           "]"}], "\[Rule]", 
+          RowBox[{
+           RowBox[{"Table", "[", 
+            RowBox[{
+             RowBox[{"c", "[", "i", "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", "1", ",", 
+               RowBox[{"Length", "[", "solutions", "]"}]}], "}"}]}], "]"}], 
+           ".", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"Union", "[", 
+              RowBox[{"Cases", "[", 
+               RowBox[{"solutions", ",", "_f", ",", "\[Infinity]"}], "]"}], 
+              "]"}], "/.", "solutions"}], ")"}]}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"matrix", "=", 
+        RowBox[{
+         RowBox[{"GPAMatrix", "[", "kernel", "]"}], "/.", "replacements"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"matrix", "=", 
+        RowBox[{"CollectGPAMatrix", "[", 
+         RowBox[{"matrix", ",", "_c"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"!", 
+          RowBox[{"FreeQ", "[", 
+           RowBox[{"matrix", ",", "f"}], "]"}]}], ",", "\[IndentingNewLine]", 
+         
+         RowBox[{
+          RowBox[{
+          "DebugPrint", "[", 
+           "\"\<Oh dear --- the variable hasn't disappeared yet...\>\"", 
+           "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"remainingf", "=", 
+           RowBox[{"Union", "[", 
+            RowBox[{"Cases", "[", 
+             RowBox[{"matrix", ",", "_f", ",", "\[Infinity]"}], "]"}], 
+            "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"matrix", "=", 
+           RowBox[{"matrix", "/.", 
+            RowBox[{"Thread", "[", 
+             RowBox[{"remainingf", "\[Rule]", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"c", "[", "i", "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"i", ",", 
+                  RowBox[{
+                   RowBox[{"Length", "[", "solutions", "]"}], "+", "1"}], ",", 
+                  RowBox[{
+                   RowBox[{"Length", "[", "solutions", "]"}], "+", 
+                   RowBox[{"Length", "[", "remainingf", "]"}]}]}], "}"}]}], 
+               "]"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"DebugPrint", "[", "\"\<But now it's gone...\>\"", "]"}], 
+          ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"result", "=", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"LowestWeightEigenspace", "[", 
+           RowBox[{"g", ",", "\[Lambda]"}], "]"}], "=", 
+          RowBox[{"Function", "[", 
+           RowBox[{
+            RowBox[{"{", "cc", "}"}], ",", 
+            RowBox[{"Evaluate", "[", 
+             RowBox[{"matrix", "/.", 
+              RowBox[{"c", "\[Rule]", "cc"}]}], "]"}]}], "]"}]}], ")"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<... finished LowestWeightEigenspace\>\"", 
+        "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"PackageLowestWeightEigenspaces", "[", "g", "]"}], ";", 
+       "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445972779781309*^9, 3.445972864413204*^9}, {
+   3.445972898895255*^9, 3.445972962146593*^9}, {3.4460802780418253`*^9, 
+   3.446080359579668*^9}, {3.446647529522216*^9, 3.446647532408835*^9}, {
+   3.446649834211596*^9, 3.4466498371145163`*^9}, {3.446650181039261*^9, 
+   3.446650207173506*^9}, {3.446650853861106*^9, 3.446650855260021*^9}, {
+   3.446652736647915*^9, 3.446652774964315*^9}, {3.446846572238379*^9, 
+   3.446846644835526*^9}, {3.446846852813343*^9, 3.4468468606635838`*^9}, {
+   3.446848369786813*^9, 3.446848419086179*^9}, {3.446856644990739*^9, 
+   3.4468566508414907`*^9}, {3.4468575573434477`*^9, 3.446857576811185*^9}, {
+   3.446909985692429*^9, 3.446910108380397*^9}, {3.446910248056724*^9, 
+   3.446910263711671*^9}, {3.446910356391973*^9, 3.4469103612881107`*^9}, {
+   3.4469103991103067`*^9, 3.4469103994670877`*^9}, {3.446910431171165*^9, 
+   3.44691048055746*^9}, {3.447363457116119*^9, 3.44736345723777*^9}, {
+   3.447363495142351*^9, 3.4473636015465813`*^9}, {3.464703811307473*^9, 
+   3.464703817874318*^9}, {3.466805187163639*^9, 3.466805233806419*^9}, 
+   3.466866116533052*^9, {3.466876674162283*^9, 3.466876700560186*^9}, {
+   3.483214651752284*^9, 3.483214686734447*^9}, {3.483215213547867*^9, 
+   3.483215240313656*^9}, {3.483216268383532*^9, 3.48321630792622*^9}, {
+   3.483216338547185*^9, 3.483216349293456*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LoadLowestWeightEigenspaces", "[", "g_GradedBigraph", "]"}], ":=", 
+  
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Off", "[", 
+      RowBox[{
+       RowBox[{"Get", "::", "noopen"}], ",", 
+       RowBox[{"Needs", "::", "nocont"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Needs", "[", 
+      RowBox[{"\"\<FusionAtlas`Data`\>\"", "<>", 
+       RowBox[{"GraphToString", "[", "g", "]"}], "<>", 
+       "\"\<`LowestWeightEigenspace`\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"On", "[", 
+      RowBox[{
+       RowBox[{"Get", "::", "noopen"}], ",", 
+       RowBox[{"Needs", "::", "nocont"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"LoadLowestWeightEigenspaces", "[", "g", "]"}], "=", "False"}], 
+     ";", "\[IndentingNewLine]", "True"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.411927026253885*^9, 3.4119270365386734`*^9}, {
+   3.4140209075797215`*^9, 3.4140209151906652`*^9}, {3.446846517382749*^9, 
+   3.446846561881503*^9}, {3.446846810617436*^9, 3.446846812981331*^9}, 
+   3.446846981170701*^9, {3.446847052448126*^9, 3.446847055221373*^9}, {
+   3.446847383054578*^9, 3.446847384819085*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{934, 744},
+WindowMargins->{{Automatic, 24}, {Automatic, 0}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 927, 17, 58, "Input",
+ InitializationCell->True],
+Cell[1475, 39, 142, 3, 27, "Input",
+ InitializationCell->True],
+Cell[1620, 44, 148, 3, 27, "Input",
+ InitializationCell->True],
+Cell[1771, 49, 145, 3, 27, "Input",
+ InitializationCell->True],
+Cell[1919, 54, 210, 4, 27, "Input",
+ InitializationCell->True],
+Cell[2132, 60, 129, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2264, 65, 153, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2420, 70, 152, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2575, 75, 123, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2701, 80, 176, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2880, 85, 279, 5, 27, "Input",
+ InitializationCell->True],
+Cell[3162, 92, 179, 3, 27, "Input",
+ InitializationCell->True],
+Cell[3344, 97, 207, 4, 27, "Input",
+ InitializationCell->True],
+Cell[3554, 103, 145, 3, 27, "Input",
+ InitializationCell->True],
+Cell[3702, 108, 134, 3, 27, "Input",
+ InitializationCell->True],
+Cell[3839, 113, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[3983, 120, 134, 2, 34, "Subsection",
+ InitializationCell->True],
+Cell[4120, 124, 1438, 38, 73, "Input",
+ InitializationCell->True],
+Cell[5561, 164, 2794, 73, 88, "Input",
+ InitializationCell->True],
+Cell[8358, 239, 830, 21, 44, "Input",
+ InitializationCell->True],
+Cell[9191, 262, 1177, 33, 74, "Input",
+ InitializationCell->True],
+Cell[10371, 297, 1080, 28, 58, "Input",
+ InitializationCell->True],
+Cell[11454, 327, 430, 10, 27, "Input",
+ InitializationCell->True],
+Cell[11887, 339, 446, 10, 27, "Input",
+ InitializationCell->True],
+Cell[12336, 351, 918, 20, 43, "Input",
+ InitializationCell->True],
+Cell[13257, 373, 826, 23, 44, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14120, 401, 134, 2, 34, "Subsection",
+ InitializationCell->True],
+Cell[14257, 405, 464, 12, 48, "Input",
+ InitializationCell->True],
+Cell[14724, 419, 1005, 28, 73, "Input",
+ InitializationCell->True],
+Cell[15732, 449, 2067, 49, 178, "Input",
+ InitializationCell->True],
+Cell[17802, 500, 1481, 37, 116, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19320, 542, 135, 2, 34, "Subsection",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[19480, 548, 140, 2, 24, "Subsubsection",
+ InitializationCell->True],
+Cell[19623, 552, 779, 22, 44, "Input",
+ InitializationCell->True],
+Cell[20405, 576, 575, 9, 41, "Text"],
+Cell[20983, 587, 779, 20, 58, "Input",
+ InitializationCell->True],
+Cell[21765, 609, 1894, 47, 109, "Input",
+ InitializationCell->True],
+Cell[23662, 658, 1995, 48, 109, "Input",
+ InitializationCell->True],
+Cell[25660, 708, 2859, 65, 155, "Input",
+ InitializationCell->True],
+Cell[28522, 775, 721, 19, 60, "Input",
+ InitializationCell->True],
+Cell[29246, 796, 3125, 70, 170, "Input",
+ InitializationCell->True],
+Cell[32374, 868, 2771, 64, 223, "Input",
+ InitializationCell->True],
+Cell[35148, 934, 3224, 74, 238, "Input",
+ InitializationCell->True],
+Cell[38375, 1010, 3050, 75, 244, "Input",
+ InitializationCell->True],
+Cell[41428, 1087, 578, 17, 44, "Input",
+ InitializationCell->True],
+Cell[42009, 1106, 1796, 45, 105, "Input",
+ InitializationCell->True],
+Cell[43808, 1153, 1914, 49, 152, "Input",
+ InitializationCell->True],
+Cell[45725, 1204, 1816, 46, 105, "Input",
+ InitializationCell->True],
+Cell[47544, 1252, 1764, 46, 124, "Input",
+ InitializationCell->True],
+Cell[49311, 1300, 2083, 49, 89, "Input",
+ InitializationCell->True],
+Cell[51397, 1351, 1836, 42, 74, "Input",
+ InitializationCell->True],
+Cell[53236, 1395, 1600, 36, 59, "Input",
+ InitializationCell->True],
+Cell[54839, 1433, 2351, 59, 104, "Input",
+ InitializationCell->True],
+Cell[57193, 1494, 1245, 34, 74, "Input",
+ InitializationCell->True],
+Cell[58441, 1530, 3072, 74, 150, "Input",
+ InitializationCell->True],
+Cell[61516, 1606, 1334, 35, 73, "Input",
+ InitializationCell->True],
+Cell[62853, 1643, 1975, 33, 73, "Input",
+ InitializationCell->True],
+Cell[64831, 1678, 2375, 44, 91, "Input",
+ InitializationCell->True],
+Cell[67209, 1724, 3869, 76, 289, "Input",
+ InitializationCell->True],
+Cell[71081, 1802, 2668, 52, 88, "Input",
+ InitializationCell->True],
+Cell[73752, 1856, 2418, 45, 60, "Input",
+ InitializationCell->True],
+Cell[76173, 1903, 3859, 78, 268, "Input",
+ InitializationCell->True],
+Cell[80035, 1983, 1462, 32, 118, "Input",
+ InitializationCell->True],
+Cell[81500, 2017, 436, 10, 27, "Input",
+ InitializationCell->True],
+Cell[81939, 2029, 3697, 89, 163, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[85673, 2123, 127, 2, 24, "Subsubsection",
+ InitializationCell->True],
+Cell[85803, 2127, 928, 25, 60, "Input",
+ InitializationCell->True],
+Cell[86734, 2154, 1735, 44, 90, "Input",
+ InitializationCell->True],
+Cell[88472, 2200, 2120, 55, 120, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[90629, 2260, 188, 3, 24, "Subsubsection",
+ InitializationCell->True],
+Cell[90820, 2265, 2479, 57, 164, "Input",
+ InitializationCell->True],
+Cell[93302, 2324, 609, 15, 44, "Input",
+ InitializationCell->True],
+Cell[93914, 2341, 1095, 30, 59, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[95058, 2377, 96, 1, 34, "Subsection"],
+Cell[95157, 2380, 3787, 93, 179, "Input",
+ InitializationCell->True],
+Cell[98947, 2475, 1729, 43, 60, "Input",
+ InitializationCell->True],
+Cell[100679, 2520, 1470, 37, 60, "Input",
+ InitializationCell->True],
+Cell[102152, 2559, 880, 23, 44, "Input",
+ InitializationCell->True],
+Cell[103035, 2584, 891, 25, 44, "Input",
+ InitializationCell->True],
+Cell[103929, 2611, 6050, 150, 359, "Input",
+ InitializationCell->True],
+Cell[109982, 2763, 6006, 149, 344, "Input",
+ InitializationCell->True],
+Cell[115991, 2914, 5924, 146, 374, "Input",
+ InitializationCell->True],
+Cell[121918, 3062, 2797, 67, 164, "Input",
+ InitializationCell->True],
+Cell[124718, 3131, 586, 14, 44, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[125341, 3150, 138, 2, 34, "Subsection",
+ InitializationCell->True],
+Cell[125482, 3154, 227, 4, 26, "Text"],
+Cell[125712, 3160, 6619, 150, 478, "Input",
+ InitializationCell->True],
+Cell[132334, 3312, 6226, 119, 298, "Input",
+ InitializationCell->True],
+Cell[138563, 3433, 728, 18, 27, "Input",
+ InitializationCell->True],
+Cell[139294, 3453, 840, 23, 27, "Input",
+ InitializationCell->True],
+Cell[140137, 3478, 3380, 78, 163, "Input",
+ InitializationCell->True],
+Cell[143520, 3558, 6309, 150, 403, "Input",
+ InitializationCell->True],
+Cell[149832, 3710, 3645, 84, 208, "Input",
+ InitializationCell->True],
+Cell[153480, 3796, 641, 15, 58, "Input",
+ InitializationCell->True],
+Cell[154124, 3813, 860, 22, 43, "Input",
+ InitializationCell->True],
+Cell[154987, 3837, 6809, 148, 418, "Input",
+ InitializationCell->True],
+Cell[161799, 3987, 1314, 30, 118, "Input",
+ InitializationCell->True],
+Cell[163116, 4019, 96, 3, 27, "Input",
+ InitializationCell->True],
+Cell[163215, 4024, 103, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

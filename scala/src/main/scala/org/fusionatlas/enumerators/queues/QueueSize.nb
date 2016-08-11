@@ -1,0 +1,361 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     11354,        352]
+NotebookOptionsPosition[      9804,        293]
+NotebookOutlinePosition[     10174,        309]
+CellTagsIndexPosition[     10131,        306]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FusionAtlasPaths", "=", 
+   RowBox[{"{", "\"\<~/projects/fusionatlas/package/\>\"", "}"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"$Path", "=", 
+   RowBox[{"$Path", "~", "Join", "~", "FusionAtlasPaths"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"<<", "FusionAtlas`"}]}], "Input",
+ CellChangeTimes->{{3.4619815107488956`*^9, 3.4619815110119467`*^9}, {
+  3.493050798416773*^9, 3.4930507986038713`*^9}, {3.49410371822052*^9, 
+  3.494103739229041*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Loading FusionAtlas` version 0\\n\"\>", 
+   "\[InvisibleSpace]", "\<\"Read more at \
+http://tqft.net/wiki/Atlas_of_subfactors\"\>"}],
+  SequenceForm[
+  "Loading FusionAtlas` version 0\n", 
+   "Read more at http://tqft.net/wiki/Atlas_of_subfactors"],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.494103639738687*^9, 3.494103703456522*^9, 
+  3.4941037339761143`*^9, 3.4941038998168983`*^9, 3.494160851186974*^9, 
+  3.4942087814522657`*^9}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Found precomputed data in \"\>", 
+   "\[InvisibleSpace]", "\<\"/Users/scott/projects/fusionatlas/data\"\>"}],
+  SequenceForm[
+  "Found precomputed data in ", "/Users/scott/projects/fusionatlas/data"],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.494103639738687*^9, 3.494103703456522*^9, 
+  3.4941037339761143`*^9, 3.4941038998168983`*^9, 3.494160851186974*^9, 
+  3.494208781454639*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<JLink`\>\"", "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.4356253807324924`*^9, 3.4356253846080656`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FusionAtlasDirectory", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.494103874623155*^9, 3.494103877804772*^9}}],
+
+Cell[BoxData["\<\"/Users/scott/projects/fusionatlas/package\"\>"], "Output",
+ CellChangeTimes->{{3.494103878052148*^9, 3.494103900771412*^9}, 
+   3.494160859667164*^9, 3.4942087816200323`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FusionAtlasJavaDirectory", "[", "]"}], ":=", 
+  RowBox[{"ToFileName", "[", 
+   RowBox[{
+    RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", "\"\<scala\>\""}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.4327594279471197`*^9, 3.432759434236163*^9}, {
+  3.441993874780366*^9, 3.441993878457967*^9}, {3.4939404683299294`*^9, 
+  3.4939404703346252`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RestartJava", "[", "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"!", 
+         RowBox[{"IntegerQ", "[", "Global`$JVMHeap", "]"}]}], "\[Or]", 
+        RowBox[{"Global`$JVMHeap", "<", "256"}]}], ",", 
+       RowBox[{"Global`$JVMHeap", "=", "256"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ReinstallJava", "[", 
+      RowBox[{
+       RowBox[{"CommandLine", "\[Rule]", "\"\<java\>\""}], ",", 
+       RowBox[{"JVMArguments", "\[Rule]", 
+        RowBox[{"\"\<-Xmx\>\"", "<>", 
+         RowBox[{"ToString", "[", "Global`$JVMHeap", "]"}], "<>", 
+         "\"\<m\>\""}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"AllowRaggedArrays", "[", "True", "]"}], ";"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.493940481517146*^9, 3.49394048236259*^9}},
+ CellID->225080866],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddToClassPath", "[", 
+   RowBox[{
+    RowBox[{"ToFileName", "[", 
+     RowBox[{
+      RowBox[{"FusionAtlasJavaDirectory", "[", "]"}], ",", "\"\<target\>\""}],
+      "]"}], ",", 
+    RowBox[{"ToFileName", "[", 
+     RowBox[{
+      RowBox[{"FusionAtlasJavaDirectory", "[", "]"}], ",", "\"\<jars\>\""}], 
+     "]"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.432758998299317*^9, 3.4327590718050127`*^9}, 
+   3.432759237773664*^9, 3.4327592714020195`*^9, {3.4327594420273666`*^9, 
+   3.432759450219146*^9}, {3.4327633163784094`*^9, 3.432763316799014*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getQueueService", "[", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"!", 
+     RowBox[{"JavaObjectQ", "[", "queueService", "]"}]}], ",", 
+    RowBox[{"queueService", "=", 
+     RowBox[{"JavaNew", "[", 
+      RowBox[{
+      "\"\<com.xerox.amazonws.sqs2.QueueService\>\"", ",", 
+       "\"\<0D4BTQXQJ7SAKKQHF982\>\"", ",", 
+       "\"\<wQsXfibiPzfPFDZ84jWXIjNb9UfqnLh42+FHhqtp\>\""}], "]"}]}], ",", 
+    "queueService"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.435624532312525*^9, 3.435624577587627*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"getQueueService", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.493940498624305*^9, 3.493940501780653*^9}}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\[LeftGuillemet]", 
+   RowBox[{"JavaObject", "[", 
+    RowBox[{
+    "com", ".", "xerox", ".", "amazonws", ".", "sqs2", ".", "QueueService"}], 
+    "]"}], "\[RightGuillemet]"}],
+  JLink`Objects`vm1`JavaObject406757176246273]], "Output",
+ CellChangeTimes->{3.493940502601968*^9, 3.493940594334085*^9, 
+  3.494103658887947*^9, 3.494103912794814*^9, 3.494160860005121*^9, 
+  3.494208781960096*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getEnumerationQueue", "[", "]"}], "=", 
+  RowBox[{
+   RowBox[{"getQueueService", "[", "]"}], "@", 
+   RowBox[{
+   "getOrCreateMessageQueue", "[", "\"\<fusionatlas-enumeration-requests\>\"",
+     "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.493940508071889*^9, 3.493940532740664*^9}, {
+  3.4939405659447403`*^9, 3.4939405723991528`*^9}}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\[LeftGuillemet]", 
+   RowBox[{"JavaObject", "[", 
+    RowBox[{
+    "com", ".", "xerox", ".", "amazonws", ".", "sqs2", ".", "MessageQueue"}], 
+    "]"}], "\[RightGuillemet]"}],
+  JLink`Objects`vm1`JavaObject315359684984833]], "Output",
+ CellChangeTimes->{{3.493940574891205*^9, 3.493940600054927*^9}, 
+   3.494103915939212*^9, 3.494160868096635*^9, 3.494208787810027*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"queueSizes", "=", 
+  RowBox[{"{", "}"}]}]], "Input",
+ CellChangeTimes->{{3.493940978347126*^9, 3.493940981445787*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", "}"}]], "Output",
+ CellChangeTimes->{3.493940982187909*^9, 3.494103916591237*^9, 
+  3.494160868283288*^9, 3.494208788002473*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Date", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.4939410063424397`*^9, 3.493941007571485*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "2010", ",", "9", ",", "22", ",", "22", ",", "33", ",", 
+   "8.006165`7.655999523265516"}], "}"}]], "Output",
+ CellChangeTimes->{3.49394100795887*^9, 3.494103917838727*^9, 
+  3.49416086833955*^9, 3.4942087880455236`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"record", "[", "]"}], ":=", 
+  RowBox[{"queueSizes", "=", 
+   RowBox[{"queueSizes", "~", "Join", "~", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Date", "[", "]"}], ",", 
+       RowBox[{
+        RowBox[{"getEnumerationQueue", "[", "]"}], "@", 
+        RowBox[{"getApproximateNumberOfMessages", "[", "]"}]}]}], "}"}], 
+     "}"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.49394098578516*^9, 3.4939410013778257`*^9}, {
+  3.493941405291718*^9, 3.493941413171814*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Dynamic", "[", 
+  RowBox[{"DateListPlot", "[", 
+   RowBox[{"queueSizes", ",", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.493941533455344*^9, 3.493941574158136*^9}, 
+   3.493941605587244*^9, {3.4939416739198437`*^9, 3.493941677252783*^9}}],
+
+Cell[BoxData[
+ DynamicBox[ToBoxes[
+   DateListPlot[$CellContext`queueSizes, PlotRange -> All], StandardForm],
+  ImageSizeCache->{287., {3., 9.}}]], "Output",
+ CellChangeTimes->{{3.493941542215225*^9, 3.493941565389864*^9}, 
+   3.493941606406311*^9, 3.4939416782449837`*^9, 3.494103921245392*^9, 
+   3.494160868685714*^9, 3.494208788111972*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"While", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"record", "[", "]"}], ";", "True"}], ",", 
+   RowBox[{"Pause", "[", "10", "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.493941418815996*^9, 3.4939415458583813`*^9}, 
+   3.493942020660347*^9}],
+
+Cell[BoxData["$Aborted"], "Output",
+ CellChangeTimes->{
+  3.493941431193755*^9, {3.4939414965046377`*^9, 3.4939415496969833`*^9}, 
+   3.4939416709780827`*^9, 3.493942018941586*^9, 3.4939815176714354`*^9, 
+   3.494160891849977*^9, 3.494208795384016*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getEnumerationQueue", "[", "]"}], "@", 
+  RowBox[{"getApproximateNumberOfMessages", "[", "]"}]}]], "Input",
+ CellChangeTimes->{{3.434571695495387*^9, 3.4345717250578957`*^9}, {
+  3.434571788799552*^9, 3.4345717919440737`*^9}, {3.435611665048914*^9, 
+  3.435611668183421*^9}, {3.4356179202434416`*^9, 3.4356179288057537`*^9}, {
+  3.435618578279651*^9, 3.435618581103712*^9}, {3.4939406134658947`*^9, 
+  3.493940622149805*^9}}],
+
+Cell[BoxData["345"], "Output",
+ CellChangeTimes->{{3.4939406229452477`*^9, 3.493940632026802*^9}, {
+  3.493940673157156*^9, 3.4939406855439034`*^9}, {3.4939409672498217`*^9, 
+  3.493940968843019*^9}}]
+}, Open  ]]
+},
+AutoGeneratedPackage->None,
+WindowSize->{1346, 564},
+WindowMargins->{{36, Automatic}, {104, Automatic}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 489, 12, 58, "Input"],
+Cell[CellGroupData[{
+Cell[1081, 38, 492, 11, 36, "Print"],
+Cell[1576, 51, 441, 9, 20, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[2044, 64, 159, 3, 27, "Input"],
+Cell[CellGroupData[{
+Cell[2228, 71, 134, 2, 27, "Input"],
+Cell[2365, 75, 192, 2, 27, "Output"]
+}, Open  ]],
+Cell[2572, 80, 387, 9, 27, "Input"],
+Cell[2962, 91, 1016, 25, 103, "Input",
+ CellID->225080866],
+Cell[3981, 118, 593, 14, 27, "Input"],
+Cell[4577, 134, 554, 14, 58, "Input"],
+Cell[CellGroupData[{
+Cell[5156, 152, 129, 2, 27, "Input"],
+Cell[5288, 156, 438, 10, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5763, 171, 369, 9, 27, "Input"],
+Cell[6135, 182, 416, 9, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6588, 196, 142, 3, 27, "Input"],
+Cell[6733, 201, 156, 3, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6926, 209, 120, 2, 27, "Input"],
+Cell[7049, 213, 262, 6, 27, "Output"]
+}, Open  ]],
+Cell[7326, 222, 520, 14, 27, "Input"],
+Cell[CellGroupData[{
+Cell[7871, 240, 313, 6, 27, "Input"],
+Cell[8187, 248, 343, 6, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8567, 259, 266, 7, 27, "Input"],
+Cell[8836, 268, 252, 4, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9125, 277, 460, 8, 27, "Input"],
+Cell[9588, 287, 200, 3, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

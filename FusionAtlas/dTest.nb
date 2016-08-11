@@ -1,0 +1,276 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      7395,        267]
+NotebookOptionsPosition[      5671,        202]
+NotebookOutlinePosition[      6043,        218]
+CellTagsIndexPosition[      6000,        215]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["dTest package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+   3.422317712155013*^9, 3.4223177168517666`*^9}, 3.433693993396161*^9}],
+
+Cell["\<\
+A subpackage for FusionAtlas v0.
+May 20, 2008, Noah Snyder\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["\<\
+This package tests whether the global dimension of the even part of a fusion \
+graph is a d-number in the sense of Ostrik.\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}, {
+  3.433694000897842*^9, 3.4336940256646214`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`dTest`\>\"", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\""}], 
+      "}"}], "~", "Join", "~", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"$VersionNumber", "<", "6"}], ",", 
+       RowBox[{"{", "\"\<NumberTheory`AlgebraicNumberFields`\>\"", "}"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}]}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+  3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+  3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+  3.433694035418963*^9, 3.433694036570052*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"DTest", "::", "usage"}], "=", "\"\<\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, 
+   3.433694055616747*^9, {3.4336952074607773`*^9, 3.433695207772744*^9}, {
+   3.433695318932611*^9, 3.43369532284433*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AIPolynomial", "[", 
+   RowBox[{"p_", ",", "x_", ",", "i_Integer"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"CoefficientList", "[", 
+    RowBox[{"p", ",", "x"}], "]"}], "\[LeftDoubleBracket]", 
+   RowBox[{
+    RowBox[{"Length", "[", 
+     RowBox[{"CoefficientList", "[", 
+      RowBox[{"p", ",", "x"}], "]"}], "]"}], "-", "i"}], 
+   "\[RightDoubleBracket]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Divides", "[", 
+   RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Mod", "[", 
+    RowBox[{"b", ",", "a"}], "]"}], "\[Equal]", "0"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dPolynomialQ", "[", 
+   RowBox[{"p_", ",", "x_"}], "]"}], ":=", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"deg", "=", 
+      RowBox[{
+       RowBox[{"Length", "[", 
+        RowBox[{"CoefficientList", "[", 
+         RowBox[{"p", ",", "x"}], "]"}], "]"}], "-", "1"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"And", "@@", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"Divides", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"AIPolynomial", "[", 
+           RowBox[{"p", ",", "x", ",", "deg"}], "]"}], "^", "i"}], ",", 
+         RowBox[{
+          RowBox[{"AIPolynomial", "[", 
+           RowBox[{"p", ",", "x", ",", "i"}], "]"}], "^", "deg"}]}], "]"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", "deg"}], "}"}]}], "]"}]}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dNumberQ", "[", "z_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "x", "}"}], ",", 
+    RowBox[{"dPolynomialQ", "[", 
+     RowBox[{
+      RowBox[{"MinimalPolynomial", "[", 
+       RowBox[{"z", ",", "x"}], "]"}], ",", "x"}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DTest", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"dNumberQ", "[", 
+   RowBox[{"GlobalEvenDimension", "[", "g", "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.433695201006604*^9, 3.433695201253182*^9}, {
+  3.433695313422027*^9, 3.43369532494864*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{790, 694},
+WindowMargins->{{Automatic, 11}, {2, Automatic}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 200, 3, 46, "Subtitle",
+ InitializationCell->True],
+Cell[770, 27, 177, 5, 41, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[972, 36, 58, 1, 67, "Section",
+ InitializationCell->True],
+Cell[1033, 39, 290, 6, 26, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1360, 50, 60, 1, 67, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1445, 55, 106, 1, 34, "Subsection"],
+Cell[1554, 58, 45, 0, 26, "Text"],
+Cell[1602, 60, 772, 17, 58, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2411, 82, 36, 0, 34, "Subsection"],
+Cell[2450, 84, 327, 7, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2814, 96, 31, 0, 34, "Subsection"],
+Cell[2848, 98, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2970, 103, 456, 13, 43, "Input",
+ InitializationCell->True],
+Cell[3429, 118, 223, 7, 27, "Input",
+ InitializationCell->True],
+Cell[3655, 127, 902, 28, 43, "Input",
+ InitializationCell->True],
+Cell[4560, 157, 338, 10, 27, "Input",
+ InitializationCell->True],
+Cell[4901, 169, 319, 7, 27, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[5245, 180, 96, 1, 24, "Subsubsection"],
+Cell[5344, 183, 96, 3, 31, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5489, 192, 36, 0, 34, "Subsection"],
+Cell[5528, 194, 103, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

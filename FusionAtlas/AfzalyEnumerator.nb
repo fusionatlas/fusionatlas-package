@@ -1,0 +1,950 @@
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[         0,          0]
+NotebookDataLength[     38780,        949]
+NotebookOptionsPosition[     36401,        862]
+NotebookOutlinePosition[     36790,        879]
+CellTagsIndexPosition[     36747,        876]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["AfzalyEnumerator package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}, {3.478306474360262*^9, 
+  3.478306475475143*^9}, {3.553551928116612*^9, 3.55355193121031*^9}, {
+  3.5951871177620153`*^9, 3.595187121240302*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas v0.
+December, 2013, Scott Morrison and David Penenys\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}, {
+  3.478306478915522*^9, 3.4783064889387903`*^9}, {3.5535519340261097`*^9, 
+  3.5535519368581057`*^9}, {3.595187125639534*^9, 3.5951871323187227`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`AfzalyEnumerator`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+  3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+  3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+  3.478306491950732*^9, 3.478306504486902*^9}, {3.478306602046698*^9, 
+  3.478306604913982*^9}, {3.485629669415824*^9, 3.485629673797494*^9}, {
+  3.5535519411315107`*^9, 3.55355194412337*^9}, {3.553552032441843*^9, 
+  3.5535520345047827`*^9}, {3.595187138326868*^9, 3.595187143408099*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"FilteredEnumerate", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FilteredEnumerateToRank", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FilteredEnumerateToDepth", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"IgnoredWeeds", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, {
+   3.478306516845941*^9, 3.4783065269636507`*^9}, 3.5535519782277718`*^9, {
+   3.5535520532485847`*^9, 3.5535520562801323`*^9}, {3.594940662574306*^9, 
+   3.59494066620982*^9}, {3.595187185841784*^9, 3.5951872047686157`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"afzalyPath", "=", 
+   RowBox[{"AbsoluteFileName", "[", 
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", "\"\<..\>\"", ",", 
+       "\"\<development\>\"", ",", "\"\<afzaly\>\""}], "}"}], "]"}], "]"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.595186749272531*^9, 3.595186797814323*^9}, 
+   3.595187218545857*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"k0", "=", "0"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"k", ":=", 
+  RowBox[{
+   RowBox[{"ToString", "[", "$KernelID", "]"}], "<>", "\"\<_\>\"", "<>", 
+   RowBox[{"ToString", "[", 
+    RowBox[{"k0", "++"}], "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5867427205368013`*^9, 3.58674272915821*^9}, {
+  3.588562765969615*^9, 3.588562774808773*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"afzalyEnumeratorResumes", "=", "True"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"afzalyEnumeratorTimeLimit", "=", "3600"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"afzalyEnumeratorCaches", "=", "True"}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.601324249456257*^9, 3.601324263756802*^9}, {
+   3.601324324259349*^9, 3.601324368105524*^9}, 3.602983710449209*^9, {
+   3.604100458697001*^9, 3.6041004589595833`*^9}, 3.60529200131015*^9}],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{"afzalyEnumeratorCaches", ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Needs", "[", "\"\<FusionAtlas`Java`\>\"", "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"S3Class", ":=", 
+     RowBox[{"JLink`LoadJavaClass", "[", 
+      RowBox[{"\"\<net.tqft.toolkit.amazon.S3$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}]}], 
+    ";", "\[IndentingNewLine]", 
+    RowBox[{"S3", ":=", "net`tqft`toolkit`amazon`S3$`MODULE$"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"bucket", ":=", 
+     RowBox[{"(", 
+      RowBox[{"S3Class", ";", 
+       RowBox[{"S3", "@", 
+        RowBox[{"apply", "[", "\"\<afzaly-enumerator\>\"", "]"}]}]}], 
+      ")"}]}]}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.60132482634044*^9, 3.6013248546522703`*^9}, {
+   3.601325628390232*^9, 3.6013256517135572`*^9}, {3.6013259286111183`*^9, 
+   3.601325931601494*^9}, 3.601325976725731*^9, {3.601326057791193*^9, 
+   3.601326058580811*^9}, {3.603070059887451*^9, 3.603070063358898*^9}, {
+   3.603070190226906*^9, 3.6030701939712887`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"amazonGet", "[", "s_String", "]"}], ":=", 
+  RowBox[{"bucket", "@", 
+   RowBox[{
+    RowBox[{"get", "[", 
+     RowBox[{"MakeJavaObject", "[", "s", "]"}], "]"}], "@", 
+    RowBox[{"get", "[", "]"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"amazonPut", "[", 
+   RowBox[{"s_String", ",", "v_String"}], "]"}], ":=", 
+  RowBox[{"bucket", "@", 
+   RowBox[{"put", "[", 
+    RowBox[{
+     RowBox[{"MakeJavaObject", "[", "s", "]"}], ",", 
+     RowBox[{"MakeJavaObject", "[", "v", "]"}]}], 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"amazonContains", "[", "s_String", "]"}], ":=", 
+  RowBox[{"bucket", "@", 
+   RowBox[{"contains", "[", 
+    RowBox[{"MakeJavaObject", "[", "s", "]"}], "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.601324881483119*^9, 3.601324965532503*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "FastEnumerate", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FastEnumerate", "[", 
+   RowBox[{
+    RowBox[{"weed", ":", 
+     RowBox[{"{", 
+      RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], ",", 
+    RowBox[{"index_", "?", "NumericQ"}], ",", 
+    RowBox[{"options_String:", "\"\<\>\""}], ",", 
+    RowBox[{"ignoring_List:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "basecmd", ",", "hash", ",", "cmd", ",", "read", ",", "result", ",", 
+      "output", ",", "text", ",", 
+      RowBox[{"resumed", "=", "False"}], ",", 
+      RowBox[{"paused", "=", "False"}], ",", "K"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"K", "=", "k"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"SetDirectory", "[", "afzalyPath", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"basecmd", "=", 
+      RowBox[{"\"\<./enumerate-pgps --maxindex \>\"", "<>", 
+       RowBox[{"ToString", "[", 
+        RowBox[{"N", "[", "index", "]"}], "]"}], "<>", "\"\< \>\"", "<>", 
+       RowBox[{"GraphToString", "[", 
+        RowBox[{
+        "weed", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "]"}],
+        "<>", "\"\<,\>\"", "<>", 
+       RowBox[{"GraphToString", "[", 
+        RowBox[{
+        "weed", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "]"}],
+        "<>", "\"\< \>\"", "<>", "options"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", "basecmd", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"afzalyEnumeratorCaches", "\[And]", 
+        RowBox[{"amazonContains", "[", "basecmd", "]"}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"text", "=", 
+        RowBox[{"amazonGet", "[", "basecmd", "]"}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"hash", "=", 
+         RowBox[{"IntegerString", "[", 
+          RowBox[{
+           RowBox[{"Hash", "[", 
+            RowBox[{"basecmd", ",", "\"\<SHA\>\""}], "]"}], ",", "16"}], 
+          "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"afzalyEnumeratorResumes", "\[And]", 
+           RowBox[{"FileExistsQ", "[", 
+            RowBox[{"\"\<runs-\>\"", "<>", "hash"}], "]"}]}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"FileExistsQ", "[", "\"\<runs-next\>\"", "]"}], ",", 
+             RowBox[{"DeleteFile", "[", "\"\<runs-next\>\"", "]"}]}], "]"}], 
+           ";", "\[IndentingNewLine]", 
+           RowBox[{"resumed", "=", "True"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"RenameFile", "[", 
+            RowBox[{
+             RowBox[{"\"\<runs-\>\"", "<>", "hash"}], ",", 
+             "\"\<runs-next\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{
+           "basecmd", "=", 
+            "\"\<./enumerate-pgps --resume runs-next\>\""}]}]}], 
+         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"cmd", "=", 
+         RowBox[{"basecmd", " ", "<>", "\"\< --printALL out\>\"", "<>", "K", "<>", 
+          RowBox[{"If", "[", 
+           RowBox[{"afzalyEnumeratorResumes", ",", 
+            RowBox[{"\"\< --maxtime \>\"", "<>", 
+             RowBox[{"ToString", "[", "afzalyEnumeratorTimeLimit", "]"}], 
+             "<>", "\"\< runs-\>\"", "<>", "hash"}], ",", "\"\<\>\""}], "]"}],
+           "<>", "\"\< &> err\>\"", "<>", "K"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Print", "[", "cmd", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Run", "[", "cmd", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"FileExistsQ", "[", "\"\<runs-next\>\"", "]"}], ",", 
+          RowBox[{"DeleteFile", "[", "\"\<runs-next\>\"", "]"}]}], "]"}], ";",
+         "\[IndentingNewLine]", 
+        RowBox[{"output", "=", 
+         RowBox[{"Import", "[", 
+          RowBox[{
+           RowBox[{"\"\<err\>\"", "<>", "K"}], ",", "\"\<Text\>\""}], "]"}]}],
+         ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"StringFreeQ", "[", 
+           RowBox[{"output", ",", "\"\<time taken= \>\""}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"StringFreeQ", "[", 
+              RowBox[{"output", ",", "\"\<Resume\>\""}], "]"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"Print", "[", "output", "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"DeleteFile", "[", 
+               RowBox[{"\"\<out\>\"", "<>", "K"}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"DeleteFile", "[", 
+               RowBox[{"\"\<err\>\"", "<>", "K"}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"ResetDirectory", "[", "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"Return", "[", "$Failed", "]"}], ";"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"(*", " ", 
+              RowBox[{
+               RowBox[{"there", "'"}], "s", " ", "a", " ", "resume", " ", 
+               "file"}], " ", "*)"}], "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+              "Print", "[", 
+               "\"\<exceeded time limit; this graph has been paused\>\"", 
+               "]"}], ";", "\[IndentingNewLine]", " ", 
+              RowBox[{"paused", "=", "True"}], ";"}]}], "\[IndentingNewLine]",
+             "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"!", "paused"}], "\[And]", 
+           RowBox[{"FileExistsQ", "[", 
+            RowBox[{"\"\<runs-\>\"", "<>", "hash"}], "]"}]}], ",", 
+          RowBox[{"DeleteFile", "[", 
+           RowBox[{"\"\<runs-\>\"", "<>", "hash"}], "]"}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"text", "=", 
+         RowBox[{"Import", "[", 
+          RowBox[{
+           RowBox[{"\"\<out\>\"", "<>", "K"}], ",", "\"\<Text\>\""}], "]"}]}],
+         ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"afzalyEnumeratorCaches", "\[And]", 
+           RowBox[{"!", "paused"}], "\[And]", 
+           RowBox[{"!", "resumed"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"amazonPut", "[", 
+            RowBox[{"basecmd", ",", "text"}], "]"}], ";"}]}], 
+         "\[IndentingNewLine]", "]"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Print", "[", "\"\<Law of the excluded middle.\>\"", "]"}], 
+        ";", 
+        RowBox[{"Abort", "[", "]"}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"StringQ", "[", "text", "]"}]}], ",", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<No output from \>\"", ",", "basecmd"}], "]"}], ";", 
+        RowBox[{"Print", "[", "text", "]"}], ";", 
+        RowBox[{"Abort", "[", "]"}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"read", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"StringSplit", "[", 
+         RowBox[{"#", ",", "\"\<,\>\""}], "]"}], "&"}], "/@", 
+       RowBox[{"StringSplit", "[", 
+        RowBox[{"text", ",", "\"\<\\n\>\""}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"result", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"GraphFromString", "[", 
+          RowBox[{"StringTrim", "[", "#", "]"}], "]"}], "&"}], ",", "read", 
+        ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"FileExistsQ", "[", 
+        RowBox[{"\"\<out\>\"", "<>", "K"}], "]"}], ",", 
+       RowBox[{"DeleteFile", "[", 
+        RowBox[{"\"\<out\>\"", "<>", "K"}], "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"FileExistsQ", "[", 
+        RowBox[{"\"\<err\>\"", "<>", "K"}], "]"}], ",", 
+       RowBox[{"DeleteFile", "[", 
+        RowBox[{"\"\<err\>\"", "<>", "K"}], "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ResetDirectory", "[", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"result", "=", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{"result", ",", 
+        RowBox[{"Alternatives", "@@", "ignoring"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Cases", "[", 
+        RowBox[{"result", ",", 
+         RowBox[{"c_", "/;", 
+          RowBox[{"FullOcneanuTest", "@@", "c"}]}]}], "]"}], ",", 
+       "\[IndentingNewLine]", "result", ",", "\[IndentingNewLine]", 
+       "paused"}], "\[IndentingNewLine]", "}"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.586590960436433*^9, 3.586591026247986*^9}, {
+   3.586591197711761*^9, 3.586591214344636*^9}, {3.586591340809866*^9, 
+   3.586591345544304*^9}, {3.586661546674049*^9, 3.5866616282636957`*^9}, {
+   3.586661658895837*^9, 3.586661693729568*^9}, {3.586661801075403*^9, 
+   3.586661803851218*^9}, {3.5866618616623087`*^9, 3.586661883944169*^9}, {
+   3.586661922120351*^9, 3.586661923667329*^9}, {3.586661970809311*^9, 
+   3.586661992718505*^9}, {3.58667576341502*^9, 3.586675789005712*^9}, {
+   3.586726271459752*^9, 3.586726273878523*^9}, {3.586726510277398*^9, 
+   3.586726526650577*^9}, {3.586726570189146*^9, 3.586726580081744*^9}, {
+   3.586726611364757*^9, 3.5867266129596453`*^9}, {3.586726984166934*^9, 
+   3.586726986003745*^9}, {3.5867270699438143`*^9, 3.58672714436796*^9}, {
+   3.5867272164037027`*^9, 3.58672733439044*^9}, {3.5867280565888147`*^9, 
+   3.586728058665681*^9}, {3.586728149015547*^9, 3.586728214478642*^9}, {
+   3.58674113521467*^9, 3.586741139802044*^9}, {3.586741259249547*^9, 
+   3.586741274335888*^9}, {3.586741420751421*^9, 3.586741429436615*^9}, {
+   3.5867414865946293`*^9, 3.586741541004211*^9}, {3.586741582546495*^9, 
+   3.586741610423954*^9}, {3.586741781388335*^9, 3.586741782880519*^9}, {
+   3.586742041526815*^9, 3.586742041915525*^9}, {3.586742733297817*^9, 
+   3.586742733650681*^9}, 3.58674301275056*^9, {3.586745479753312*^9, 
+   3.5867455057677803`*^9}, {3.5867455423470707`*^9, 3.586745615535591*^9}, {
+   3.586745672679267*^9, 3.586745707572507*^9}, {3.5867457476335087`*^9, 
+   3.586745766259967*^9}, {3.586832406324851*^9, 3.5868324084359913`*^9}, {
+   3.587155001720125*^9, 3.587155003649575*^9}, {3.5871553906312637`*^9, 
+   3.5871553973412867`*^9}, {3.587243781987164*^9, 3.587243855686137*^9}, {
+   3.587247948577471*^9, 3.587247948909317*^9}, {3.58724797937501*^9, 
+   3.587247982928697*^9}, {3.587676266199285*^9, 3.587676301532316*^9}, {
+   3.587676388324072*^9, 3.587676391969533*^9}, 3.587677300194957*^9, {
+   3.587693256219873*^9, 3.587693259267892*^9}, {3.58823384313305*^9, 
+   3.588233851286797*^9}, {3.5885633446341343`*^9, 3.588563345865013*^9}, {
+   3.588563597223989*^9, 3.588563597715485*^9}, {3.5885645802638474`*^9, 
+   3.588564582939438*^9}, {3.5886209811266117`*^9, 3.5886210001320257`*^9}, {
+   3.5890717060365334`*^9, 3.589071707479529*^9}, {3.590195200106855*^9, 
+   3.590195214819559*^9}, {3.5902657809973288`*^9, 3.5902657825751047`*^9}, {
+   3.590353788443219*^9, 3.590353820828889*^9}, {3.590353874452043*^9, 
+   3.5903539191709223`*^9}, {3.590356454435451*^9, 3.590356460393785*^9}, {
+   3.590357510674015*^9, 3.590357635632883*^9}, {3.590357722408743*^9, 
+   3.590357739802561*^9}, {3.5903577935491753`*^9, 3.590357795583726*^9}, {
+   3.590357890158255*^9, 3.590357891773344*^9}, {3.590360655548456*^9, 
+   3.590360672712904*^9}, {3.590360855282555*^9, 3.590360922085157*^9}, {
+   3.59036112680752*^9, 3.590361127204854*^9}, 3.590363094650466*^9, {
+   3.5903648044711103`*^9, 3.590364818245729*^9}, {3.590365953265703*^9, 
+   3.590365953486664*^9}, {3.5904316518766613`*^9, 3.5904316798326063`*^9}, {
+   3.590431713672347*^9, 3.590431721039897*^9}, {3.5904317651989193`*^9, 
+   3.590431775829529*^9}, {3.590431807286269*^9, 3.590431822509962*^9}, {
+   3.5904318547598257`*^9, 3.590431946355587*^9}, {3.590432210775292*^9, 
+   3.5904322390993137`*^9}, {3.590432288111734*^9, 3.590432288196817*^9}, {
+   3.590434565491391*^9, 3.590434654317273*^9}, {3.5904347243213453`*^9, 
+   3.590434730638814*^9}, {3.590434804333934*^9, 3.590434814116441*^9}, {
+   3.590434851461938*^9, 3.590434851621299*^9}, {3.590435090349742*^9, 
+   3.5904351207732887`*^9}, {3.590443768475425*^9, 3.590443768556291*^9}, {
+   3.59045170245691*^9, 3.590451703781245*^9}, {3.590451743227713*^9, 
+   3.5904517533900757`*^9}, 3.590452002856534*^9, {3.5904525165146914`*^9, 
+   3.590452520358243*^9}, {3.590452817975636*^9, 3.590452818265977*^9}, {
+   3.59045300307045*^9, 3.590453031264072*^9}, {3.590453367302072*^9, 
+   3.59045338339515*^9}, 3.593984995956893*^9, {3.594368641968639*^9, 
+   3.594368642064893*^9}, 3.594369992334194*^9, 3.595186818702344*^9, {
+   3.595186943105336*^9, 3.595186943638845*^9}, {3.601324274393355*^9, 
+   3.6013242961300907`*^9}, {3.601324336714612*^9, 3.601324355849016*^9}, {
+   3.601324390978554*^9, 3.601324439051519*^9}, {3.60132497762339*^9, 
+   3.601325093344733*^9}, {3.601325142633039*^9, 3.601325221324215*^9}, {
+   3.601325485831602*^9, 3.60132550214633*^9}, {3.6013255464533997`*^9, 
+   3.6013255494375153`*^9}, 3.601327087317049*^9, {3.6029807373595047`*^9, 
+   3.602980780724043*^9}, {3.603068973238758*^9, 3.6030690392220087`*^9}, {
+   3.603069174604817*^9, 3.6030691915181007`*^9}, {3.6030694742279243`*^9, 
+   3.603069479940466*^9}, {3.6030698529042797`*^9, 3.6030698665860987`*^9}, {
+   3.603070010146278*^9, 3.6030700282840652`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EnumerateToRank", "[", 
+   RowBox[{
+    RowBox[{"weed", ":", 
+     RowBox[{"{", 
+      RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], ",", 
+    RowBox[{"index_", "?", "NumericQ"}], ",", "maxrank_Integer", ",", 
+    RowBox[{"ignoring_List:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"result", ",", "vines", ",", "weeds", ",", "paused"}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"result", "=", 
+      RowBox[{"FastEnumerate", "[", 
+       RowBox[{"weed", ",", "index", ",", 
+        RowBox[{"\"\< --maxrank \>\"", "<>", 
+         RowBox[{"ToString", "[", "maxrank", "]"}]}], ",", "ignoring"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"result", "===", "$Failed"}], ",", 
+       RowBox[{"Return", "[", "$Failed", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vines", ",", "weeds", ",", "paused"}], "}"}], "=", "result"}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"vines", ",", 
+       RowBox[{"Union", "[", 
+        RowBox[{
+         RowBox[{"Cases", "[", 
+          RowBox[{"weeds", ",", 
+           RowBox[{"c_", "/;", 
+            RowBox[{
+             RowBox[{"maxrank", "-", 
+              RowBox[{"GraphRank", "[", "c", "]"}]}], "\[LessEqual]", 
+             "1"}]}]}], "]"}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{"paused", ",", 
+           RowBox[{"{", "weed", "}"}], ",", 
+           RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5865807378301373`*^9, 3.5865807932994127`*^9}, {
+  3.5865808284366627`*^9, 3.586580901061818*^9}, {3.5865810360061827`*^9, 
+  3.586581036093812*^9}, {3.58658107249792*^9, 3.586581092112018*^9}, {
+  3.586589522444394*^9, 3.5865895249795933`*^9}, {3.586590932210183*^9, 
+  3.586590935167954*^9}, {3.586590993657144*^9, 3.586591000672567*^9}, {
+  3.5866619406387*^9, 3.5866619600783997`*^9}, {3.5866621004145527`*^9, 
+  3.586662119010195*^9}, {3.5866759816757793`*^9, 3.586675982211508*^9}, {
+  3.586725297441024*^9, 3.586725306759829*^9}, {3.58769326349323*^9, 
+  3.587693286784812*^9}, {3.587764239401703*^9, 3.587764240330242*^9}, {
+  3.5885633510452414`*^9, 3.5885633528763437`*^9}, {3.588563601914628*^9, 
+  3.5885636029721947`*^9}, {3.5904525237864532`*^9, 3.59045255446273*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EnumerateToDepth", "[", 
+   RowBox[{
+    RowBox[{"weed", ":", 
+     RowBox[{"{", 
+      RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], ",", 
+    RowBox[{"index_", "?", "NumericQ"}], ",", "maxdepth_Integer", ",", 
+    RowBox[{"ignoring_List:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"result", ",", "vines", ",", "weeds", ",", "paused"}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"result", "=", 
+      RowBox[{"FastEnumerate", "[", 
+       RowBox[{"weed", ",", "index", ",", 
+        RowBox[{"\"\< --maxdepth \>\"", "<>", 
+         RowBox[{"ToString", "[", "maxdepth", "]"}]}], ",", "ignoring"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"result", "===", "$Failed"}], ",", 
+       RowBox[{"Return", "[", "$Failed", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vines", ",", "weeds", ",", "paused"}], "}"}], "=", "result"}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"vines", ",", 
+       RowBox[{"Union", "[", 
+        RowBox[{
+         RowBox[{"Cases", "[", 
+          RowBox[{"weeds", ",", 
+           RowBox[{"c_", "/;", 
+            RowBox[{
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{
+              "c", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              "]"}], "==", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{
+              "c", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+              "]"}], "\[Equal]", "maxdepth"}]}]}], "]"}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{"paused", ",", 
+           RowBox[{"{", "weed", "}"}], ",", 
+           RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5865807378301373`*^9, 3.5865807932994127`*^9}, {
+  3.5865808284366627`*^9, 3.586580901061818*^9}, {3.5865810360061827`*^9, 
+  3.586581036093812*^9}, {3.58658107249792*^9, 3.586581092112018*^9}, {
+  3.586589522444394*^9, 3.5865895249795933`*^9}, {3.586590932210183*^9, 
+  3.586590935167954*^9}, {3.586590993657144*^9, 3.586591000672567*^9}, {
+  3.586591052068029*^9, 3.586591072209393*^9}, {3.5866621246655827`*^9, 
+  3.586662145346345*^9}, {3.586675983427967*^9, 3.586675983595901*^9}, {
+  3.586725300113411*^9, 3.586725312146598*^9}, {3.5876932659756804`*^9, 
+  3.587693297134802*^9}, {3.587764242090138*^9, 3.587764242778048*^9}, {
+  3.588563355209237*^9, 3.5885633564986687`*^9}, {3.588563605010642*^9, 
+  3.588563607275885*^9}, {3.590452561449203*^9, 3.590452572378297*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "IgnoredWeeds", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"IgnoredWeeds", "[", 
+   RowBox[{"weed_", ",", "index_"}], "]"}], ":=", 
+  RowBox[{"{", "}"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5866724952612257`*^9, 3.586672508800252*^9}, {
+  3.586672844201336*^9, 3.586672852817717*^9}, {3.5867262776146727`*^9, 
+  3.586726282754726*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FilteredEnumerate", "[", 
+   RowBox[{
+    RowBox[{"weed", ":", 
+     RowBox[{"{", 
+      RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], ",", 
+    RowBox[{"index_", "?", "NumericQ"}], ",", 
+    RowBox[{"options_String:", "\"\<\>\""}], ",", 
+    RowBox[{"ignoring_List:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "result", ",", "vines", ",", "weeds", ",", "paused", ",", "obstructed", 
+      ",", "shorten"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"result", "=", 
+      RowBox[{"FastEnumerate", "[", 
+       RowBox[{"weed", ",", "index", ",", "options", ",", 
+        RowBox[{"ignoring", "~", "Join", "~", 
+         RowBox[{"IgnoredWeeds", "[", 
+          RowBox[{"weed", ",", "index"}], "]"}]}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"result", "===", "$Failed"}], ",", 
+       RowBox[{"Return", "[", "$Failed", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vines", ",", "weeds", ",", "paused"}], "}"}], "=", "result"}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"obstructed", "=", 
+      RowBox[{"Cases", "[", 
+       RowBox[{"weeds", ",", 
+        RowBox[{"g_", "/;", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"ScalaTriplePointObstruction", "[", "g", "]"}]}], "||", 
+          RowBox[{"!", 
+           RowBox[{"CylinderObstruction", "[", "g", "]"}]}]}]}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "obstructed", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"shorten", "[", "X_", "]"}], ":=", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{"X", ",", 
+           RowBox[{"x_", "/;", 
+            RowBox[{"MemberQ", "[", 
+             RowBox[{"X", ",", 
+              RowBox[{"Truncate", "[", 
+               RowBox[{"x", ",", 
+                RowBox[{"-", "1"}]}], "]"}]}], "]"}]}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"obstructed", "=", 
+         RowBox[{"FixedPoint", "[", 
+          RowBox[{"shorten", ",", " ", "obstructed"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"IgnoredWeeds", "[", 
+          RowBox[{"weed", ",", "index"}], "]"}], "=", 
+         RowBox[{"Union", "[", 
+          RowBox[{
+           RowBox[{"IgnoredWeeds", "[", 
+            RowBox[{"weed", ",", "index"}], "]"}], "~", "Join", "~", 
+           "obstructed"}], "]"}]}]}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Complement", "[", 
+        RowBox[{"vines", ",", "obstructed"}], "]"}], ",", 
+       RowBox[{"Complement", "[", 
+        RowBox[{"weeds", ",", "obstructed"}], "]"}], ",", "paused"}], 
+      "}"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5866697612121973`*^9, 3.5866698228332644`*^9}, {
+  3.586669879837762*^9, 3.5866699061512833`*^9}, {3.586669963308282*^9, 
+  3.586670014868977*^9}, {3.5866724726619053`*^9, 3.5866724858976717`*^9}, {
+  3.586672863514879*^9, 3.586672998137761*^9}, {3.586675474995552*^9, 
+  3.586675478537382*^9}, {3.586675713371375*^9, 3.586675741808778*^9}, {
+  3.586675863311604*^9, 3.586675863470023*^9}, {3.586676382105492*^9, 
+  3.586676391606732*^9}, {3.586728447591454*^9, 3.58672844810221*^9}, {
+  3.587693310371908*^9, 3.58769334136835*^9}, {3.5877642442143507`*^9, 
+  3.587764244851488*^9}, {3.588563362504017*^9, 3.588563432077997*^9}, {
+  3.588563462630818*^9, 3.588563485434122*^9}, {3.588563610976509*^9, 
+  3.588563613235599*^9}, {3.590452578746393*^9, 3.59045260049279*^9}, {
+  3.590452712642625*^9, 3.590452718682016*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FilteredEnumerateToRank", "[", 
+   RowBox[{
+    RowBox[{"weed", ":", 
+     RowBox[{"{", 
+      RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], ",", 
+    RowBox[{"index_", "?", "NumericQ"}], ",", "maxrank_Integer", ",", 
+    RowBox[{"ignoring_List:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"result", ",", "vines", ",", "weeds", ",", "paused"}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"result", "=", 
+      RowBox[{"FilteredEnumerate", "[", 
+       RowBox[{"weed", ",", "index", ",", 
+        RowBox[{"\"\< --maxrank \>\"", "<>", 
+         RowBox[{"ToString", "[", "maxrank", "]"}]}], ",", "ignoring"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"result", "===", "$Failed"}], ",", 
+       RowBox[{"Return", "[", "$Failed", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vines", ",", "weeds", ",", "paused"}], "}"}], "=", "result"}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"vines", ",", 
+       RowBox[{"Union", "[", 
+        RowBox[{
+         RowBox[{"Cases", "[", 
+          RowBox[{"weeds", ",", 
+           RowBox[{"c_", "/;", 
+            RowBox[{
+             RowBox[{"maxrank", "-", 
+              RowBox[{"GraphRank", "[", "c", "]"}]}], "\[LessEqual]", 
+             "1"}]}]}], "]"}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{"paused", ",", 
+           RowBox[{"{", "weed", "}"}], ",", 
+           RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5865807378301373`*^9, 3.5865807932994127`*^9}, {
+   3.5865808284366627`*^9, 3.586580901061818*^9}, {3.5865810360061827`*^9, 
+   3.586581036093812*^9}, {3.58658107249792*^9, 3.586581092112018*^9}, {
+   3.586589522444394*^9, 3.5865895249795933`*^9}, {3.586590932210183*^9, 
+   3.586590935167954*^9}, {3.586590993657144*^9, 3.586591000672567*^9}, {
+   3.5866619406387*^9, 3.5866619600783997`*^9}, {3.5866621004145527`*^9, 
+   3.586662119010195*^9}, {3.5866751924866343`*^9, 3.586675196575066*^9}, {
+   3.586675976461483*^9, 3.586675976611958*^9}, {3.586725290203115*^9, 
+   3.586725314587224*^9}, {3.587693313171502*^9, 3.587693343643318*^9}, {
+   3.587764249209649*^9, 3.5877642497936163`*^9}, 3.5885633680300093`*^9, {
+   3.588563614764101*^9, 3.588563616231572*^9}, {3.590452603967889*^9, 
+   3.5904526276466227`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FilteredEnumerateToDepth", "[", 
+   RowBox[{
+    RowBox[{"weed", ":", 
+     RowBox[{"{", 
+      RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], ",", 
+    RowBox[{"index_", "?", "NumericQ"}], ",", "maxdepth_Integer", ",", 
+    RowBox[{"ignoring_List:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"result", ",", "vines", ",", "weeds", ",", "paused"}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"result", "=", 
+      RowBox[{"FilteredEnumerate", "[", 
+       RowBox[{"weed", ",", "index", ",", 
+        RowBox[{"\"\< --maxdepth \>\"", "<>", 
+         RowBox[{"ToString", "[", "maxdepth", "]"}]}], ",", "ignoring"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"result", "===", "$Failed"}], ",", 
+       RowBox[{"Return", "[", "$Failed", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vines", ",", "weeds", ",", "paused"}], "}"}], "=", "result"}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"vines", ",", 
+       RowBox[{"Union", "[", 
+        RowBox[{
+         RowBox[{"Cases", "[", 
+          RowBox[{"weeds", ",", 
+           RowBox[{"c_", "/;", 
+            RowBox[{
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{
+              "c", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              "]"}], "==", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{
+              "c", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+              "]"}], "\[Equal]", "maxdepth"}]}]}], "]"}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{"paused", ",", 
+           RowBox[{"{", "weed", "}"}], ",", 
+           RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5865807378301373`*^9, 3.5865807932994127`*^9}, {
+   3.5865808284366627`*^9, 3.586580901061818*^9}, {3.5865810360061827`*^9, 
+   3.586581036093812*^9}, {3.58658107249792*^9, 3.586581092112018*^9}, {
+   3.586589522444394*^9, 3.5865895249795933`*^9}, {3.586590932210183*^9, 
+   3.586590935167954*^9}, {3.586590993657144*^9, 3.586591000672567*^9}, {
+   3.586591052068029*^9, 3.586591072209393*^9}, {3.5866621246655827`*^9, 
+   3.586662145346345*^9}, {3.5866751940227127`*^9, 3.5866751994306498`*^9}, {
+   3.586675977980521*^9, 3.586675978148492*^9}, {3.586725294132799*^9, 
+   3.5867253168351*^9}, {3.587693315364087*^9, 3.5876933470151176`*^9}, {
+   3.5877642507140207`*^9, 3.5877642514654408`*^9}, 3.588563370079315*^9, {
+   3.588563617716874*^9, 3.5885636188261213`*^9}, {3.590452321265606*^9, 
+   3.590452325895157*^9}, {3.590452502955627*^9, 3.590452506704077*^9}, {
+   3.590452605629747*^9, 3.5904526245050383`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{972, 1245},
+WindowMargins->{{Automatic, 44}, {Automatic, 2}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[422, 15, 333, 5, 51, "Subtitle",
+ InitializationCell->True],
+Cell[758, 22, 352, 7, 49, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1135, 33, 58, 1, 80, "Section",
+ InitializationCell->True],
+Cell[1196, 36, 129, 2, 30, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1362, 43, 60, 1, 80, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1447, 48, 106, 1, 44, "Subsection"],
+Cell[1556, 51, 45, 0, 30, "Text"],
+Cell[1604, 53, 828, 15, 46, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2469, 73, 36, 0, 44, "Subsection"],
+Cell[2508, 75, 825, 21, 80, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3370, 101, 31, 0, 44, "Subsection"],
+Cell[3404, 103, 119, 3, 28, "Input",
+ InitializationCell->True],
+Cell[3526, 108, 451, 12, 28, "Input",
+ InitializationCell->True],
+Cell[3980, 122, 409, 10, 46, "Input",
+ InitializationCell->True],
+Cell[4392, 134, 525, 12, 63, "Input",
+ InitializationCell->True],
+Cell[4920, 148, 1152, 24, 114, "Input",
+ InitializationCell->True],
+Cell[6075, 174, 851, 23, 63, "Input",
+ InitializationCell->True],
+Cell[6929, 199, 13924, 278, 981, "Input",
+ InitializationCell->True],
+Cell[20856, 479, 2528, 58, 131, "Input",
+ InitializationCell->True],
+Cell[23387, 539, 2754, 63, 131, "Input",
+ InitializationCell->True],
+Cell[26144, 604, 407, 9, 46, "Input",
+ InitializationCell->True],
+Cell[26554, 615, 3908, 93, 233, "Input",
+ InitializationCell->True],
+Cell[30465, 710, 2576, 59, 131, "Input",
+ InitializationCell->True],
+Cell[33044, 771, 2906, 65, 131, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[35975, 840, 96, 1, 35, "Subsubsection"],
+Cell[36074, 843, 96, 3, 31, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[36219, 852, 36, 0, 44, "Subsection"],
+Cell[36258, 854, 103, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

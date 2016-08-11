@@ -1,0 +1,1630 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     66852,       1621]
+NotebookOptionsPosition[     63696,       1514]
+NotebookOutlinePosition[     64066,       1530]
+CellTagsIndexPosition[     64023,       1527]
+WindowFrame->Normal
+ContainsDynamic->False*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FindAllBigraphs package", "Subsubtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432427802467614*^9, 3.4324278029783487`*^9}, {
+  3.432427946835205*^9, 3.4324279491285024`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`FindAllBigraphs`\>\"", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`CyclotomicTest`\>\"", ",", 
+       "\"\<FusionAtlas`KnapsackTest`\>\"", ",", 
+       "\"\<FusionAtlas`QuadraticTanglesTest`\>\"", ",", 
+       "\"\<FusionAtlas`dTest`\>\"", ",", "\"\<FusionAtlas`Debugging`\>\"", 
+       ",", "\"\<FusionAtlas`JavaOdometer`\>\"", ",", 
+       "\"\<FusionAtlas`RemoteInterface`\>\"", ",", 
+       "\"\<FusionAtlas`PackageData`\>\""}], "}"}], "~", "Join", "~", 
+     RowBox[{"If", 
+      StyleBox["[",
+       FontFamily->"Courier"], 
+      StyleBox[
+       RowBox[{
+        RowBox[{"$VersionNumber", "<", "6.0"}], ",", 
+        RowBox[{"{", "\"\<NumberTheory`AlgebraicNumberFields`\>\"", "}"}], 
+        ",", 
+        RowBox[{"{", "}"}]}],
+       FontFamily->"Courier"], 
+      StyleBox["]",
+       FontFamily->"Courier"]}]}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+   3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+   3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+   3.432427810599307*^9, 3.4324278128825903`*^9}, 3.432427952593485*^9, {
+   3.4324282500311794`*^9, 3.4324282546478176`*^9}, {3.432428645970512*^9, 
+   3.43242868181205*^9}, 3.432430119108781*^9, 3.432430329771699*^9, {
+   3.432430515989467*^9, 3.4324305475548563`*^9}, {3.4324314944464192`*^9, 
+   3.432431502397853*^9}, {3.4326082267156625`*^9, 3.432608240014786*^9}, {
+   3.433695421414996*^9, 3.433695431178649*^9}, {3.4343107650828876`*^9, 
+   3.4343107695292816`*^9}, {3.434311326319907*^9, 3.434311326790584*^9}, {
+   3.4345624439022493`*^9, 3.434562449340069*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"AlgebraicIntegerTest", "::", "usage"}], "=", 
+   "\"\<AlgebraicIntegerTest[b] returns True if all the Perron-Frobenius \
+dimensions of the graph b are algebraic integers\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, 
+   3.432427882893261*^9, {3.432614534788992*^9, 3.43261458162881*^9}, {
+   3.432615129590633*^9, 3.432615130070385*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"PositivityTest", "::", "usage"}], "=", 
+   "\"\<PositivityTest[b] returns True if all the Perron-Frobenius dimensions \
+of the graph b are more than or equal to 1\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4324278884412384`*^9, {3.432614575303483*^9, 3.432614589457326*^9}, {
+   3.432615017535239*^9, 3.432615021468766*^9}, {3.432615123054661*^9, 
+   3.432615127094264*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"GHJTest", "::", "usage"}], "=", 
+   "\"\<GHJTest[b] returns True if all the Perron-Frobenius dimensions of the \
+graph b are more than two or of the form 2 Cos[Pi/n]\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4324279275775137`*^9, {3.4326144734367933`*^9, 3.432614474119638*^9}, {
+   3.4326150832795467`*^9, 3.432615133678658*^9}, {3.432615178676059*^9, 
+   3.43261520772959*^9}, {3.4326154621230516`*^9, 3.4326154696885777`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"BigraphConditions", "::", "usage"}], "=", 
+   "\"\<BigraphConditions is a set of triples:  an English name for a test, \
+the Mathematica name for the test, and a description of the test\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.432427928819299*^9, {3.4326144771748123`*^9, 3.432614477863656*^9}, {
+   3.432615494532723*^9, 3.432615576068553*^9}, {3.4338075206835423`*^9, 
+   3.433807528434688*^9}}],
+
+Cell[BoxData[
+ RowBox[{"KnownObstructions", ";", "FindAllObstructions", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4329521616419263`*^9, 3.4329521654373837`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"AllBigraphs", ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindAllBigraphs", "::", "usage"}], "=", 
+   "\"\<FindAllBigraphs[{mdim,Mdim},r] produces a list of all bigraphs with \
+rank less than or equal to r and dimension between mdim and Mdim. \
+FindAllBigraphs[dim,r] produces a list of all bigraphs with rank less than or \
+equal to r and dimension between 0 and dim (if dim is less than or equal to \
+2) or 2 and dim (if dim is more than 2).\>\""}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.432427930021027*^9, {3.432614479998722*^9, 3.432614480759892*^9}, {
+   3.432615956459248*^9, 3.4326159782393436`*^9}, {3.432616032973833*^9, 
+   3.432616035978818*^9}, {3.4326161536809187`*^9, 3.432616260299356*^9}, {
+   3.432616584180357*^9, 3.4326168437112093`*^9}, {3.4329527967551746`*^9, 
+   3.4329528092531457`*^9}, {3.4337973451218033`*^9, 3.433797356828637*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RequestAllBigraphs", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.434761414090339*^9}],
+
+Cell[BoxData[
+ RowBox[{"RequestMoreBigraphs", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.43561841681748*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"fastAlgebraicIntegerQ", "[", "\[Mu]_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"fastAlgebraicIntegerQ", "[", "\[Mu]", "]"}], "=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"p", ",", "x", ",", "c", ",", "d"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"p", "=", 
+       RowBox[{"MinimalPolynomial", "[", 
+        RowBox[{"\[Mu]", ",", "x"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"c", "=", 
+       RowBox[{"LCM", "@@", 
+        RowBox[{"(", 
+         RowBox[{"Denominator", "[", 
+          RowBox[{"CoefficientList", "[", 
+           RowBox[{"p", ",", "x"}], "]"}], "]"}], ")"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"d", "=", 
+       RowBox[{"GCD", "@@", 
+        RowBox[{"CoefficientList", "[", 
+         RowBox[{
+          RowBox[{"c", " ", "p"}], ",", "x"}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Abs", "[", 
+        RowBox[{"Coefficient", "[", 
+         RowBox[{
+          RowBox[{
+           FractionBox["c", "d"], " ", "p"}], ",", "x", ",", 
+          RowBox[{"Exponent", "[", 
+           RowBox[{"p", ",", "x"}], "]"}]}], "]"}], "]"}], "\[Equal]", 
+       "1"}]}]}], "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.433864528473077*^9, 3.4338645421627617`*^9}, {
+  3.4338646186227055`*^9, 3.4338646338946657`*^9}, {3.4338647909505005`*^9, 
+  3.433864831138288*^9}, {3.4338660684674797`*^9, 3.433866130887235*^9}, {
+  3.433866229979723*^9, 3.4338662570186033`*^9}, {3.433866372184203*^9, 
+  3.4338663936751056`*^9}, {3.4338664535311747`*^9, 3.433866459629944*^9}, {
+  3.4338667900951295`*^9, 3.4338667998090973`*^9}, {3.4338668670357647`*^9, 
+  3.4338668815466304`*^9}, {3.433867934600848*^9, 3.4338679365736847`*^9}, {
+  3.435954092626229*^9, 3.4359540931169343`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"productAlgebraicIntegerQ", "[", "x_Times", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"AlgebraicIntegerQ", "/@", 
+     RowBox[{"(", 
+      RowBox[{"And", "@@", "x"}], ")"}]}], ")"}], "\[Or]", 
+   RowBox[{"AlgebraicIntegerQ", "[", "x", "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"productAlgebraicIntegerQ", "[", "x_", "]"}], ":=", 
+  RowBox[{"AlgebraicIntegerQ", "[", "x", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4338074086824927`*^9, 3.4338074973399763`*^9}, {
+  3.4338075303274097`*^9, 3.4338075416637106`*^9}, {3.4338649275168734`*^9, 
+  3.433864931732936*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"safeAlgebraicIntegerQ", "[", "x_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"r1", ",", "t1", ",", "r2", ",", "t2"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"t1", ",", "r1"}], "}"}], "=", 
+      RowBox[{
+       RowBox[{"fastAlgebraicIntegerQ", "[", "x", "]"}], "//", 
+       "AbsoluteTiming"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"t2", ",", "r2"}], "}"}], "=", 
+      RowBox[{
+       RowBox[{"productAlgebraicIntegerQ", "[", "x", "]"}], "//", 
+       "AbsoluteTiming"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"t1", ">", "t2"}], ",", 
+       RowBox[{"Print", "[", 
+        RowBox[{
+        "\"\<Not so fast... \>\"", ",", "t1", ",", "\"\< \>\"", ",", "t2", 
+         ",", "\"\< \>\"", ",", 
+         RowBox[{"t1", "/", "t2"}]}], "]"}], ",", 
+       RowBox[{"Print", "[", "\"\<Fast!\>\"", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"r1", "\[NotEqual]", "r2"}], ",", 
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<Argh! AlgebraicIntegerQ failure: \>\"", ",", "x"}], 
+        "]"}], ",", "r1"}], "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4338649347973423`*^9, 3.4338649886948433`*^9}, {
+  3.4338670036221666`*^9, 3.4338670430989313`*^9}, {3.4338671686795073`*^9, 
+  3.433867173736779*^9}, {3.4338672604915266`*^9, 3.4338672825031776`*^9}, {
+  3.4338679140813427`*^9, 3.4338679143517313`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AlgebraicIntegerTest", "[", "b_GradedBigraph", "]"}], " ", ":=", 
+  RowBox[{
+   RowBox[{"AlgebraicIntegerTest", "[", "b", "]"}], "=", 
+   RowBox[{"fastAlgebraicIntegerQ", " ", "/@", 
+    RowBox[{"(", 
+     RowBox[{"And", "@@", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"DimensionsByDepth", "[", "b", "]"}], "]"}]}], 
+     ")"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202942581792974`*^9, 3.420294261013373*^9}, {
+   3.4204544893647633`*^9, 3.4204544917381763`*^9}, 3.4223073062220163`*^9, 
+   3.42231283836685*^9, {3.4322528185632863`*^9, 3.4322528234803567`*^9}, {
+   3.4329514911177597`*^9, 3.4329515195886993`*^9}, 3.433807607167901*^9, {
+   3.433867909544819*^9, 3.4338679098552656`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PositivityTest", "[", "b_GradedBigraph", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"#", ">", 
+     RowBox[{"1.", "-", 
+      SuperscriptBox["10.", 
+       RowBox[{"-", "6"}]]}]}], "&"}], "/@", 
+   RowBox[{"(", 
+    RowBox[{"And", "@@", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"NumericDimensionsByDepth", "[", "b", "]"}], "]"}]}], 
+    ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420294663492109*^9, 3.420294666045781*^9}, {
+  3.4204622417259583`*^9, 3.4204622550551248`*^9}, {3.4204623499615936`*^9, 
+  3.420462350141853*^9}, {3.4204651046826878`*^9, 3.4204652516940804`*^9}, {
+  3.420465436910408*^9, 3.420465438833173*^9}, {3.420466698264146*^9, 
+  3.4204667041726418`*^9}, {3.4204682105687327`*^9, 3.4204682255803185`*^9}, {
+  3.4204682613417406`*^9, 3.4204682631343184`*^9}, {3.432951508042096*^9, 
+  3.4329515158533278`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GHJQ", "[", "\[Delta]_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"\[Delta]", "\[GreaterEqual]", "2"}], "\[Or]", 
+   RowBox[{
+    RowBox[{"Abs", "[", 
+     RowBox[{"(", 
+      RowBox[{
+       FractionBox["\[Pi]", 
+        RowBox[{"N", "[", 
+         RowBox[{"ArcCos", "[", 
+          RowBox[{
+           RowBox[{"N", "[", "\[Delta]", "]"}], "/", "2"}], "]"}], "]"}]], 
+       "-", 
+       RowBox[{"Round", "[", 
+        RowBox[{"N", "[", 
+         FractionBox["\[Pi]", 
+          RowBox[{"ArcCos", "[", 
+           RowBox[{
+            RowBox[{"N", "[", "\[Delta]", "]"}], "/", "2"}], "]"}]], "]"}], 
+        "]"}]}], ")"}], "]"}], "<", 
+    SuperscriptBox["10", 
+     RowBox[{"-", "3"}]]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.43546291450578*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GHJTest", "[", "g_GradedBigraph", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"GHJQ", "/@", 
+   RowBox[{"(", 
+    RowBox[{"And", "@@", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"NumericDimensionsByDepth", "[", "g", "]"}], "]"}]}], 
+    ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432951525847699*^9, 3.432951530824856*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BigraphConditions", "=", 
+   RowBox[{"{", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Positivity\>\"", ",", "PositivityTest", ",", 
+       "\"\<All bimodule dimensions must be at least 1.\>\""}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<GHJ\>\"", ",", " ", "GHJTest", ",", " ", 
+       "\"\<Bimodule dimensions less than 2 must satisfy the GHJ condition.\>\
+\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Annular Tangles\>\"", ",", "AnnularTanglesTest", ",", 
+       "\"\<Dimensions of low weight spaces must be non-negative. See p.33 of \
+Annular Structure of Subfactors.\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Parity\>\"", ",", "ParityTest", ",", 
+       "\"\<If you start like Haagerup or dual Haagerup, the branch point \
+must be at odd depth.\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<HaagerupTypeBranch\>\"", ",", "HaagerupTypeBranchTest", ",", 
+       "\"\<If you start like Haagerup for two steps past the branch, you \
+must satisfy the identities on p.33 of Quadratic Tangles pre-preprint\>\""}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Algebraic Integer\>\"", ",", "AlgebraicIntegerTest", ",", 
+       "\"\<All bimodule dimensions must be algebraic integers.\>\""}], "}"}],
+      ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Cyclotomic Integer\>\"", ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"CyclotomicTest", "[", 
+          RowBox[{"#", ",", "200"}], "]"}], ")"}], "&"}], ",", 
+       "\"\<The index must be a cyclotomic integer.\>\""}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<d-Number\>\"", ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"DTest", "[", "#", "]"}], ")"}], "&"}], ",", 
+       "\"\<The global dimension of the even part must be an Ostrik d-number.\
+\>\""}], "}"}]}], 
+    RowBox[{"(*", 
+     RowBox[{",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<Knapsack\>\"", ",", "KnapsackTest", ",", 
+        "\"\<It must be possible to write all products of dimensions as \
+N-linear combinations of dimensions.\>\""}], "}"}]}], "*)"}], 
+    "\[IndentingNewLine]", "}"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGCQAmIQLbdxxv7/1S8dH9X8PAaizZVZL4DoPbtdLoPoqB+h
+15hrXjoeETp1A0S7Pr7tywKk2Sa4+4Hos98LO1bWv3RsuPioE0R/UgidA6LL
+nHLngcWztwZsBNJ6DceCQPSm7Xsmgmi3EoEpINq2YttsEJ1kfW4OiPY4FSmx
+CUiblKVIgWjR+UuW9fe9dLSuUVkOoos6HmwG0a+CD+wF0X4129cxTX7p2P9u
+zS4Qnbfyw34QXcK7+wCIvmAtpqYLpLXKbmuC6PIOLUs9IB3UMB9MV8575Qmi
+nf4LeYHodVatzoFAes15ZhcQHbNTM70KSB/oLgDT+zIcctYA6YbiSjD9JMj/
+wVUgLfTB8BGI/sM85SWIfvV711sQbXNM4xOIdjYt+gyijZ63LXKYCvTnhvJV
+IPqPxApBRyD9JmM9mP7A37nQBUj73P0JpgEobd+r
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"KnownObstructions", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"KnownObstructions", "[", "g", "]"}], "=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"result", "=", 
+       RowBox[{"{", "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"DebugPrint", "[", 
+          RowBox[{
+          "\"\<Looking for obstructions: \>\"", ",", "g", ",", "\"\< \>\"", 
+           ",", 
+           RowBox[{"BigraphConditions", "\[LeftDoubleBracket]", 
+            RowBox[{"k", ",", "1"}], "\[RightDoubleBracket]"}]}], "]"}], ";", 
+         
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"!", 
+            RowBox[{
+             RowBox[{"BigraphConditions", "\[LeftDoubleBracket]", 
+              RowBox[{"k", ",", "2"}], "\[RightDoubleBracket]"}], "[", "g", 
+             "]"}]}], ",", 
+           RowBox[{
+            RowBox[{"AppendTo", "[", 
+             RowBox[{"result", ",", 
+              RowBox[{"BigraphConditions", "\[LeftDoubleBracket]", 
+               RowBox[{"k", ",", "3"}], "\[RightDoubleBracket]"}]}], "]"}], 
+            ";", 
+            RowBox[{"Break", "[", "]"}]}]}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", 
+          RowBox[{"Length", "[", "BigraphConditions", "]"}]}], "}"}]}], "]"}],
+       ";", "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4329515976709757`*^9, 3.432951604831272*^9}, {
+  3.432951713217123*^9, 3.432951863533267*^9}, {3.432952983363504*^9, 
+  3.432953017292291*^9}, {3.4338724491524544`*^9, 3.43387245414964*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"KnownObstructions", "[", "S_String", "]"}], ":=", 
+  RowBox[{"KnownObstructions", "[", 
+   RowBox[{"GraphFromString", "[", "S", "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.4345539108322973`*^9, 3.4345539202458334`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindAllObstructions", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FindAllObstructions", "[", "g", "]"}], "=", 
+   RowBox[{
+    RowBox[{"KnownObstructions", "[", "g", "]"}], "=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"result", "=", 
+        RowBox[{"{", "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Do", "[", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"!", 
+            RowBox[{
+             RowBox[{"BigraphConditions", "\[LeftDoubleBracket]", 
+              RowBox[{"k", ",", "2"}], "\[RightDoubleBracket]"}], "[", "g", 
+             "]"}]}], ",", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"result", ",", 
+             RowBox[{"BigraphConditions", "\[LeftDoubleBracket]", 
+              RowBox[{"k", ",", "3"}], "\[RightDoubleBracket]"}]}], "]"}]}], 
+          "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"k", ",", "1", ",", 
+           RowBox[{"Length", "[", "BigraphConditions", "]"}]}], "}"}]}], 
+        "]"}], ";", "\[IndentingNewLine]", "result"}]}], 
+     "\[IndentingNewLine]", "]"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4329518732171917`*^9, 3.432951893346136*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "FindAllBigraphs", "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{"\"\<Package\>\"", "\[Rule]", "False"}], "}"}]}], ";"}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.420467803913992*^9, 3.420467821038616*^9}, {
+   3.4204679609798417`*^9, 3.4204680003865056`*^9}, 3.420471552634387*^9, 
+   3.4329519716387153`*^9, {3.4329548730407267`*^9, 3.4329548764456224`*^9}, {
+   3.43379713469923*^9, 3.433797136161333*^9}, 3.4337972309376144`*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FindAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"minDimension_", ",", "dimension_"}], "}"}], ",", 
+    "maximumRank_Integer"}], "]"}], ":=", 
+  RowBox[{"FindAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"minDimension", ",", "dimension"}], "}"}], ",", "maximumRank", 
+    ",", 
+    RowBox[{"GradedBigraph", "[", 
+     RowBox[{"{", 
+      RowBox[{"{", "1", "}"}], "}"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FindAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"minDimension_", ",", "dimension_"}], "}"}], ",", 
+    "maximumRank_Integer", ",", "seed_GradedBigraph"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FindAllBigraphs", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"minDimension", ",", "dimension"}], "}"}], ",", "maximumRank", 
+     ",", "seed"}], "]"}], "=", "\[IndentingNewLine]", 
+   RowBox[{"With", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"package", "=", 
+       RowBox[{"\"\<Package\>\"", "/.", 
+        RowBox[{"Options", "[", "FindAllBigraphs", "]"}]}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "seeds", ",", "candidates", ",", "allowed", ",", "unknowns", ",", 
+         "canonicalForms", ",", "insideRange", ",", "batch", ",", 
+         "disallowed", ",", "lookup"}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"seeds", "=", 
+         RowBox[{"{", "seed", "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"candidates", "=", "\[IndentingNewLine]", 
+           RowBox[{"Join", "@@", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"DeleteCases", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{
+                  "FindBigraphExtensionsUpToRankAndDepthJava", "[", 
+                   "dimension", "]"}], "[", 
+                  RowBox[{"#", ",", "maximumRank", ",", 
+                   RowBox[{"maximumRank", "-", "1"}]}], "]"}], ",", 
+                 RowBox[{"x_", "/;", 
+                  RowBox[{
+                   RowBox[{"DimensionAtMostQ", "[", "minDimension", "]"}], 
+                   "[", "x", "]"}]}]}], "]"}], "&"}], "/@", "seeds"}], 
+             ")"}]}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"candidates", "=", 
+         RowBox[{"Join", "@@", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{
+              "FindBigraphExtensionsUpToRankAndDepthJava", "[", "dimension", 
+               "]"}], "[", 
+              RowBox[{"#", ",", "maximumRank", ",", 
+               RowBox[{"maximumRank", "-", "1"}]}], "]"}], "&"}], "/@", 
+            "seeds"}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"disallowed", "=", 
+         RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"allowed", "=", 
+         RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"unknowns", "=", 
+         RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"While", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "candidates", "]"}], ">", "0"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"batch", "=", 
+            RowBox[{"Take", "[", 
+             RowBox[{"candidates", ",", 
+              RowBox[{"Min", "[", 
+               RowBox[{"1000", ",", 
+                RowBox[{"Length", "[", "candidates", "]"}]}], "]"}]}], 
+             "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"candidates", "=", 
+            RowBox[{"Drop", "[", 
+             RowBox[{"candidates", ",", 
+              RowBox[{"Min", "[", 
+               RowBox[{"1000", ",", 
+                RowBox[{"Length", "[", "candidates", "]"}]}], "]"}]}], 
+             "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"(*", 
+            RowBox[{"lookup", " ", "canonical", " ", "forms"}], " ", "*)"}], 
+           "\[IndentingNewLine]", 
+           RowBox[{"canonicalForms", "=", 
+            RowBox[{"LookupCanonicalForms", "[", "batch", "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"canonicalForms", "=!=", "$Failed"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"DebugPrint", "[", 
+               RowBox[{"\"\<Found \>\"", ",", 
+                RowBox[{"Length", "[", "canonicalForms", "]"}], ",", 
+                "\"\<-->\>\"", ",", " ", 
+                RowBox[{"Length", "[", 
+                 RowBox[{"Union", "[", 
+                  RowBox[{"Last", "/@", "canonicalForms"}], "]"}], "]"}], 
+                ",", "\"\< canonical forms.\>\""}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"batch", "=", 
+               RowBox[{"Union", "[", 
+                RowBox[{
+                 RowBox[{"Complement", "[", 
+                  RowBox[{"batch", ",", 
+                   RowBox[{"First", "/@", "canonicalForms"}]}], "]"}], "~", 
+                 "Join", "~", 
+                 RowBox[{"(", 
+                  RowBox[{"Last", "/@", "canonicalForms"}], ")"}]}], "]"}]}], 
+              ";"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+              "DebugPrint", "[", 
+               "\"\<Looking up canonical forms failed, probably due to a \
+network error.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"lookup", "=", 
+            RowBox[{"LookupGraphs", "[", "batch", "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"lookup", "=!=", "$Failed"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"DebugPrint", "[", 
+               RowBox[{"\"\<Found information about \>\"", ",", 
+                RowBox[{"Length", "[", "lookup", "]"}], ",", 
+                "\"\< graphs in the database.\>\""}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"insideRange", "=", 
+               RowBox[{"Cases", "[", 
+                RowBox[{"lookup", ",", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                   "graph_", ",", "_", ",", "_", ",", "dim_", ",", "_"}], 
+                   "}"}], "/;", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"dim", ">", 
+                    RowBox[{"minDimension", "-", "0.00001"}]}], "\[And]", 
+                    RowBox[{"dim", "<", 
+                    RowBox[{"dimension", "+", "0.00001"}]}], "\[And]", 
+                    RowBox[{"!", 
+                    RowBox[{
+                    RowBox[{"DimensionAtMostQ", "[", "minDimension", "]"}], 
+                    "[", "graph", "]"}]}], "\[And]", 
+                    RowBox[{
+                    RowBox[{"DimensionAtMostQ", "[", "dimension", "]"}], "[", 
+                    "graph", "]"}]}], ")"}]}]}], "]"}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"DebugPrint", "[", 
+               RowBox[{"\"\<Of those, \>\"", ",", 
+                RowBox[{"Length", "[", "insideRange", "]"}], ",", 
+                "\"\< are in the desired range.\>\""}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"disallowed", "=", 
+               RowBox[{"disallowed", "~", "Join", "~", 
+                RowBox[{"Cases", "[", 
+                 RowBox[{"insideRange", ",", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"g_", ",", "_", ",", "_", ",", "_", ",", 
+                    RowBox[{"obstruction", ":", 
+                    RowBox[{"Except", "[", "Null", "]"}]}]}], "}"}], 
+                   "\[RuleDelayed]", 
+                   RowBox[{"{", 
+                    RowBox[{"g", ",", 
+                    RowBox[{"{", "obstruction", "}"}]}], "}"}]}]}], "]"}]}]}],
+               ";", "\[IndentingNewLine]", 
+              RowBox[{"allowed", "=", 
+               RowBox[{"allowed", "~", "Join", "~", 
+                RowBox[{"Cases", "[", 
+                 RowBox[{"insideRange", ",", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"g_", ",", "_", ",", "_", ",", "_", ",", "Null"}],
+                     "}"}], "\[RuleDelayed]", "g"}]}], "]"}]}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"batch", "=", 
+               RowBox[{"Complement", "[", 
+                RowBox[{"batch", ",", 
+                 RowBox[{"First", "/@", "lookup"}]}], "]"}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"RequestObstructions", "[", "batch", "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Length", "[", "batch", "]"}], ">", "0"}], ",", 
+                RowBox[{
+                 RowBox[{
+                 "DebugPrint", "[", 
+                  "\"\<finished putting obstructions requests on the queue.\>\
+\"", "]"}], ";"}]}], "]"}], ";"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+              "DebugPrint", "[", 
+               "\"\<Graph lookup failed, probably due to a network \
+error.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"unknowns", "=", 
+            RowBox[{"unknowns", "~", "Join", "~", "batch"}]}], ";"}]}], 
+         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"While", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "unknowns", "]"}], ">", "0"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"batch", "=", 
+            RowBox[{"Take", "[", 
+             RowBox[{"unknowns", ",", 
+              RowBox[{"Min", "[", 
+               RowBox[{"100", ",", 
+                RowBox[{"Length", "[", "unknowns", "]"}]}], "]"}]}], "]"}]}], 
+           ";", "\[IndentingNewLine]", 
+           RowBox[{"unknowns", "=", 
+            RowBox[{"Drop", "[", 
+             RowBox[{"unknowns", ",", 
+              RowBox[{"Min", "[", 
+               RowBox[{"100", ",", 
+                RowBox[{"Length", "[", "unknowns", "]"}]}], "]"}]}], "]"}]}], 
+           ";", "\[IndentingNewLine]", 
+           RowBox[{"DebugPrint", "[", 
+            RowBox[{"\"\<Processing \>\"", ",", 
+             RowBox[{"Length", "[", "batch", "]"}], ",", " ", 
+             "\"\< graphs locally.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+           
+           RowBox[{"RecordObstructions", "[", "batch", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"batch", "=", 
+            RowBox[{"Union", "[", 
+             RowBox[{"CanonicalizeBigraph", "/@", "batch"}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"DebugPrint", "[", 
+            RowBox[{"\"\<After canonicalizing, there are \>\"", ",", 
+             RowBox[{"Length", "[", "batch", "]"}], ",", "\"\< graphs\>\""}], 
+            "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"batch", "=", 
+            RowBox[{"Cases", "[", 
+             RowBox[{"batch", ",", 
+              RowBox[{"g_", "/;", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"DimensionAtMostQ", "[", "dimension", "]"}], "[", 
+                 "g", "]"}], "\[And]", 
+                RowBox[{"!", 
+                 RowBox[{
+                  RowBox[{"DimensionAtMostQ", "[", "minDimension", "]"}], "[",
+                   "g", "]"}]}]}]}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"DebugPrint", "[", 
+            RowBox[{"\"\<Of those, \>\"", ",", 
+             RowBox[{"Length", "[", "batch", "]"}], ",", 
+             "\"\< are in the desired range.\>\""}], "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"allowed", "=", 
+            RowBox[{"allowed", "~", "Join", "~", 
+             RowBox[{"Cases", "[", 
+              RowBox[{"batch", ",", 
+               RowBox[{"x_", "/;", 
+                RowBox[{
+                 RowBox[{"Length", "[", 
+                  RowBox[{"KnownObstructions", "[", "x", "]"}], "]"}], 
+                 "\[Equal]", "0"}]}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"disallowed", "=", 
+            RowBox[{"disallowed", "~", "Join", "~", 
+             RowBox[{"Cases", "[", 
+              RowBox[{"batch", ",", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"x_", "/;", 
+                  RowBox[{
+                   RowBox[{"Length", "[", 
+                    RowBox[{"KnownObstructions", "[", "x", "]"}], "]"}], ">", 
+                   "0"}]}], ")"}], "\[RuleDelayed]", 
+                RowBox[{"{", 
+                 RowBox[{"x", ",", 
+                  RowBox[{"KnownObstructions", "[", "x", "]"}]}], "}"}]}]}], 
+              "]"}]}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{
+           "DebugPrint", "[", 
+            "\"\<Finished working on local batch; looking for new data on the \
+server.\>\"", "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"canonicalForms", "=", 
+            RowBox[{"LookupCanonicalForms", "[", 
+             RowBox[{"Take", "[", 
+              RowBox[{"unknowns", ",", 
+               RowBox[{"Min", "[", 
+                RowBox[{"1000", ",", 
+                 RowBox[{"Length", "[", "unknowns", "]"}]}], "]"}]}], "]"}], 
+             "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"canonicalForms", "=!=", "$Failed"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"DebugPrint", "[", 
+               RowBox[{"\"\<Found \>\"", ",", 
+                RowBox[{"Length", "[", "canonicalForms", "]"}], ",", 
+                "\"\< new canonical forms.\>\""}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"unknowns", "=", 
+               RowBox[{"Union", "[", 
+                RowBox[{
+                 RowBox[{"Complement", "[", 
+                  RowBox[{"unknowns", ",", 
+                   RowBox[{"First", "/@", "canonicalForms"}]}], "]"}], "~", 
+                 "Join", "~", 
+                 RowBox[{"(", 
+                  RowBox[{"Last", "/@", "canonicalForms"}], ")"}]}], "]"}]}], 
+              ";"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+              "DebugPrint", "[", 
+               "\"\<Looking up canonical forms failed, probably due to a \
+network error.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"lookup", "=", 
+            RowBox[{"LookupGraphs", "[", 
+             RowBox[{"Take", "[", 
+              RowBox[{"unknowns", ",", 
+               RowBox[{"Min", "[", 
+                RowBox[{"1000", ",", 
+                 RowBox[{"Length", "[", "unknowns", "]"}]}], "]"}]}], "]"}], 
+             "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"lookup", "=!=", "$Failed"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"DebugPrint", "[", 
+               RowBox[{"\"\<Found new information about \>\"", ",", 
+                RowBox[{"Length", "[", "lookup", "]"}], ",", 
+                "\"\< graphs\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+              RowBox[{"insideRange", "=", 
+               RowBox[{"Cases", "[", 
+                RowBox[{"lookup", ",", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                   "graph_", ",", "_", ",", "_", ",", "dim_", ",", "_"}], 
+                   "}"}], "/;", 
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"dim", ">", 
+                    RowBox[{"minDimension", "-", "0.00001"}]}], "\[And]", 
+                    RowBox[{"dim", "<", 
+                    RowBox[{"dimension", "+", "0.00001"}]}], "\[And]", 
+                    RowBox[{"!", 
+                    RowBox[{
+                    RowBox[{"DimensionAtMostQ", "[", "minDimension", "]"}], 
+                    "[", "graph", "]"}]}], "\[And]", 
+                    RowBox[{
+                    RowBox[{"DimensionAtMostQ", "[", "dimension", "]"}], "[", 
+                    "graph", "]"}]}], ")"}]}]}], "]"}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"disallowed", "=", 
+               RowBox[{"disallowed", "~", "Join", "~", 
+                RowBox[{"Cases", "[", 
+                 RowBox[{"insideRange", ",", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"g_", ",", "_", ",", "_", ",", "_", ",", 
+                    RowBox[{"obstruction", ":", 
+                    RowBox[{"Except", "[", "Null", "]"}]}]}], "}"}], 
+                   "\[RuleDelayed]", 
+                   RowBox[{"{", 
+                    RowBox[{"g", ",", 
+                    RowBox[{"{", "obstruction", "}"}]}], "}"}]}]}], "]"}]}]}],
+               ";", "\[IndentingNewLine]", 
+              RowBox[{"allowed", "=", 
+               RowBox[{"allowed", "~", "Join", "~", 
+                RowBox[{"Cases", "[", 
+                 RowBox[{"insideRange", ",", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"g_", ",", "_", ",", "_", ",", "_", ",", "Null"}],
+                     "}"}], "\[RuleDelayed]", "g"}]}], "]"}]}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"unknowns", "=", 
+               RowBox[{"Complement", "[", 
+                RowBox[{"unknowns", ",", 
+                 RowBox[{"First", "/@", "lookup"}]}], "]"}]}], ";"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+              "DebugPrint", "[", 
+               "\"\<Graph lookup failed, probably due to a network \
+error.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";"}]}], 
+         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"allowed", "=", 
+         RowBox[{"Union", "[", 
+          RowBox[{"GraphFromString", "/@", "allowed"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"disallowed", "=", 
+         RowBox[{"Union", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"GraphFromString", "[", 
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               "]"}], ",", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+             "}"}], "&"}], "/@", "disallowed"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{"package", ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"DebugPrint", "[", "\"\<Packaging data ...\>\"", "]"}], 
+           ";", "\[IndentingNewLine]", 
+           RowBox[{"PackageEverything", "[", "dimension", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+           "DebugPrint", "[", "\"\<... finished packaging data.\>\"", "]"}], 
+           ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<Allowed bigraphs\>\"", "\[Rule]", "allowed"}], ",", 
+          RowBox[{"\"\<Disallowed bigraphs\>\"", "\[Rule]", "disallowed"}]}], 
+         "}"}]}]}], "\[IndentingNewLine]", "]"}]}], "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4209088618400803`*^9, 3.4209088831507235`*^9}, {
+   3.420908961793806*^9, 3.420908962584944*^9}, {3.4223056580120063`*^9, 
+   3.422305676408459*^9}, {3.4223201891868095`*^9, 3.422320190178235*^9}, {
+   3.4223918546867375`*^9, 3.42239186290856*^9}, {3.4223920476441965`*^9, 
+   3.4223920484052916`*^9}, {3.4322523071078496`*^9, 3.432252307548483*^9}, {
+   3.432428577892621*^9, 3.4324285862947025`*^9}, {3.432431008057026*^9, 
+   3.4324310083073854`*^9}, {3.4324314424516544`*^9, 
+   3.4324314670970926`*^9}, {3.4324332071391506`*^9, 
+   3.4324332386344385`*^9}, {3.4325137153746753`*^9, 
+   3.4325137201114864`*^9}, {3.4325175113583813`*^9, 3.432517511561953*^9}, {
+   3.4327642041249266`*^9, 3.4327642061578493`*^9}, {3.4327822935963087`*^9, 
+   3.4327822951986127`*^9}, {3.432847119297493*^9, 3.4328471212903585`*^9}, {
+   3.432866286158085*^9, 3.4328662881509504`*^9}, {3.4329519749034095`*^9, 
+   3.432952031825259*^9}, {3.4329548837661486`*^9, 3.432954906158347*^9}, {
+   3.432955035794755*^9, 3.4329550445172977`*^9}, {3.433797103554446*^9, 
+   3.433797130172722*^9}, {3.433797222385317*^9, 3.433797235253821*^9}, {
+   3.4337974642531056`*^9, 3.4337974840015025`*^9}, {3.4338000867741055`*^9, 
+   3.4338000874951425`*^9}, {3.434310523545574*^9, 3.434310531617181*^9}, {
+   3.4343106816328926`*^9, 3.4343108192507772`*^9}, {3.434310900848109*^9, 
+   3.4343109497884817`*^9}, {3.4343111061733522`*^9, 
+   3.4343112494393587`*^9}, {3.434315574338258*^9, 3.434315767626192*^9}, {
+   3.434315805180192*^9, 3.4343159886840577`*^9}, {3.434316049491494*^9, 
+   3.4343160600867295`*^9}, 3.4343164760047903`*^9, {3.4343963132568913`*^9, 
+   3.4343963231511183`*^9}, {3.4343998983720336`*^9, 3.434399946020549*^9}, {
+   3.4344005278772173`*^9, 3.434400535968853*^9}, {3.434403225356002*^9, 
+   3.4344032286807823`*^9}, {3.4344075075835423`*^9, 3.434407536975806*^9}, 
+   3.4344104770834737`*^9, {3.4345536399227486`*^9, 3.434553642095874*^9}, 
+   3.4345538039486065`*^9, {3.4345538444568543`*^9, 3.434553892495931*^9}, {
+   3.434554159349648*^9, 3.4345541692038174`*^9}, {3.4345542399054813`*^9, 
+   3.434554369031155*^9}, {3.434562228632707*^9, 3.43456222900324*^9}, {
+   3.4345623117622414`*^9, 3.434562340463512*^9}, {3.434563105082981*^9, 
+   3.4345634141674223`*^9}, {3.4345634625870466`*^9, 
+   3.4345635988830304`*^9}, {3.434563728709712*^9, 3.4345637491390877`*^9}, {
+   3.434564978266486*^9, 3.4345650543759265`*^9}, {3.434565108313485*^9, 
+   3.434565195889413*^9}, {3.4345660564969053`*^9, 3.434566141999853*^9}, {
+   3.4345662339220304`*^9, 3.4345662406316786`*^9}, {3.434566519392517*^9, 
+   3.434566571457382*^9}, {3.434567161636018*^9, 3.434567224836896*^9}, {
+   3.4345673297377357`*^9, 3.4345673486048656`*^9}, {3.434567607657365*^9, 
+   3.434567620405696*^9}, {3.434567728461072*^9, 3.4345677387358465`*^9}, {
+   3.4345677705616093`*^9, 3.4345678489242897`*^9}, {3.434568127104293*^9, 
+   3.434568137549312*^9}, {3.434568231494398*^9, 3.4345682328763857`*^9}, {
+   3.4345689370389214`*^9, 3.4345689535326385`*^9}, {3.4345690374533105`*^9, 
+   3.4345690485092077`*^9}, {3.434569291208192*^9, 3.4345693100753217`*^9}, {
+   3.4345697210662975`*^9, 3.434569828390622*^9}, {3.4345698635912385`*^9, 
+   3.4345700036426225`*^9}, {3.4345700547861633`*^9, 
+   3.4345701163146367`*^9}, {3.4345708777595406`*^9, 3.4345708791916*^9}, {
+   3.434730069753824*^9, 3.4347302340100126`*^9}, {3.4347302749889374`*^9, 
+   3.434730299083584*^9}, {3.435454693234227*^9, 3.4354546967793245`*^9}, {
+   3.435455145033883*^9, 3.4354551585332947`*^9}, {3.4354555824628754`*^9, 
+   3.4354556030524817`*^9}, {3.435455869675867*^9, 3.435455872319669*^9}, {
+   3.4354563538721075`*^9, 3.435456357347104*^9}, {3.4354567456654787`*^9, 
+   3.435456750081829*^9}, {3.435456788396923*^9, 3.435456826381542*^9}, {
+   3.4354569188945694`*^9, 3.4354569449320097`*^9}, {3.4354572280190687`*^9, 
+   3.4354572585329456`*^9}, {3.4354574383615265`*^9, 3.435457444500354*^9}, {
+   3.435457482464944*^9, 3.4354575145911393`*^9}, {3.4354575561208563`*^9, 
+   3.435457589819312*^9}, {3.4354576680417905`*^9, 3.435457678616997*^9}, {
+   3.4354580111151056`*^9, 3.435458056620539*^9}, 3.4354583392869935`*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FindAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"dimension_", "?", "NumericQ"}], ",", "totalRank_Integer"}], 
+   "]"}], ":=", 
+  RowBox[{"FindAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"dimension", ">", "2"}], ",", "2", ",", "0"}], "]"}], ",", 
+      "dimension"}], "}"}], ",", "totalRank", ",", 
+    RowBox[{"GradedBigraph", "[", 
+     RowBox[{"{", 
+      RowBox[{"{", "1", "}"}], "}"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FindAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"dimension_", "?", "NumericQ"}], ",", "totalRank_Integer", ",", 
+    "seed_GradedBigraph"}], "]"}], ":=", 
+  RowBox[{"FindAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"dimension", ">", "2"}], ",", "2", ",", "0"}], "]"}], ",", 
+      "dimension"}], "}"}], ",", "totalRank", ",", "seed"}], 
+   "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.42045677807064*^9, 3.420456799201024*^9}, {
+  3.420463900851664*^9, 3.420463925717419*^9}, {3.4204648023078947`*^9, 
+  3.4204648232580194`*^9}, {3.420468084076846*^9, 3.4204681026335297`*^9}, {
+  3.4337971388752356`*^9, 3.4337971655435824`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"RequestAllBigraphs", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"minDimension_", ",", "dimension_"}], "}"}], ",", 
+     "maximumRank_Integer", ",", 
+     RowBox[{"k_Integer:", "1"}]}], "]"}], ":=", 
+   RowBox[{"RequestAllBigraphs", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"minDimension", ",", "dimension"}], "}"}], ",", "maximumRank", 
+     ",", 
+     RowBox[{"GradedBigraph", "[", 
+      RowBox[{"{", 
+       RowBox[{"{", "1", "}"}], "}"}], "]"}], ",", "k"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RequestAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"minDimension_", ",", "dimension_"}], "}"}], ",", 
+    "maximumRank_Integer", ",", "seed_GradedBigraph", ",", 
+    RowBox[{"k_Integer:", "1"}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"seeds", ",", "iterator", ",", 
+      RowBox[{"allowed", "=", 
+       RowBox[{"{", "}"}]}], ",", 
+      RowBox[{"disallowed", "=", "0"}], ",", 
+      RowBox[{"unknowns", "=", "0"}], ",", "count", ",", "canonicalForms", 
+      ",", "insideRange", ",", "batch", ",", "lookup"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"seeds", "=", 
+      RowBox[{"{", "seed", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"candidates", "=", "\[IndentingNewLine]", 
+        RowBox[{"Join", "@@", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"DeleteCases", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+               "FindBigraphExtensionsUpToRankAndDepthJava", "[", "dimension", 
+                "]"}], "[", 
+               RowBox[{"#", ",", "maximumRank", ",", 
+                RowBox[{"maximumRank", "-", "1"}]}], "]"}], ",", 
+              RowBox[{"x_", "/;", 
+               RowBox[{
+                RowBox[{"DimensionAtMostQ", "[", "minDimension", "]"}], "[", 
+                "x", "]"}]}]}], "]"}], "&"}], "/@", "seeds"}], ")"}]}]}], 
+       ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"iterator", "=", 
+      RowBox[{
+       RowBox[{
+       "FindBigraphExtensionsUpToRankAndDepthJavaIterator", "[", "dimension", 
+        "]"}], "[", 
+       RowBox[{"seed", ",", "maximumRank", ",", 
+        RowBox[{"maximumRank", "-", "1"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{"iterator", "@", 
+        RowBox[{"hasNext", "[", "]"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"batch", "=", 
+         RowBox[{"iterator", "@", 
+          RowBox[{"next", "[", "]"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"canonicalForms", "=", 
+         RowBox[{"LookupCanonicalForms", "[", "batch", "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"canonicalForms", "=!=", "$Failed"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"DebugPrint", "[", 
+            RowBox[{"\"\<Found \>\"", ",", 
+             RowBox[{"Length", "[", "canonicalForms", "]"}], ",", 
+             "\"\<-->\>\"", ",", " ", 
+             RowBox[{"Length", "[", 
+              RowBox[{"Union", "[", 
+               RowBox[{"Last", "/@", "canonicalForms"}], "]"}], "]"}], ",", 
+             "\"\< canonical forms.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"batch", "=", 
+            RowBox[{"Union", "[", 
+             RowBox[{
+              RowBox[{"Complement", "[", 
+               RowBox[{"batch", ",", 
+                RowBox[{"First", "/@", "canonicalForms"}]}], "]"}], "~", 
+              "Join", "~", 
+              RowBox[{"(", 
+               RowBox[{"Last", "/@", "canonicalForms"}], ")"}]}], "]"}]}], 
+           ";"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+           "DebugPrint", "[", 
+            "\"\<Looking up canonical forms failed, probably due to a network \
+error.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"lookup", "=", 
+         RowBox[{"LookupGraphs", "[", "batch", "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"lookup", "=!=", "$Failed"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"DebugPrint", "[", 
+            RowBox[{"\"\<Found information about \>\"", ",", 
+             RowBox[{"Length", "[", "lookup", "]"}], ",", 
+             "\"\< graphs in the database.\>\""}], "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"count", "=", 
+            RowBox[{"Count", "[", 
+             RowBox[{"lookup", ",", 
+              RowBox[{"{", 
+               RowBox[{"__", ",", "Null"}], "}"}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"allowed", "=", 
+            RowBox[{"Union", "[", 
+             RowBox[{"allowed", "~", "Join", "~", 
+              RowBox[{"Cases", "[", 
+               RowBox[{"lookup", ",", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"g_", ",", "___", ",", "Null"}], "}"}], 
+                 "\[RuleDelayed]", "g"}]}], "]"}]}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"disallowed", "+=", 
+            RowBox[{
+             RowBox[{"Length", "[", "lookup", "]"}], "-", "count"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"batch", "=", 
+            RowBox[{"Complement", "[", 
+             RowBox[{"batch", ",", 
+              RowBox[{"First", "/@", "lookup"}]}], "]"}]}], ";"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+           "DebugPrint", "[", 
+            "\"\<Graph lookup failed, probably due to a network error.\>\"", 
+            "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"unknowns", "+=", 
+         RowBox[{"Length", "[", "batch", "]"}]}], ";", "\[IndentingNewLine]", 
+        
+        RowBox[{"RequestObstructions", "[", 
+         RowBox[{"batch", ",", "k"}], "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "batch", "]"}], ">", "0"}], ",", 
+          RowBox[{
+           RowBox[{
+           "DebugPrint", "[", 
+            "\"\<finished putting obstructions requests on the queue.\>\"", 
+            "]"}], ";"}]}], "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"RecordRequestAllBigraphs", "[", 
+      RowBox[{"dimension", ",", "maximumRank", ",", "seed", ",", 
+       RowBox[{"Length", "[", "allowed", "]"}], ",", "disallowed", ",", 
+       "unknowns"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"unknowns", ">", "0"}], ",", 
+       RowBox[{"QueueExpression", "[", 
+        RowBox[{
+         RowBox[{"RequestAllBigraphs", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"minDimension", ",", "dimension"}], "}"}], ",", 
+           "maximumRank", ",", "seed", ",", "2"}], "]"}], ",", "2"}], "]"}]}],
+       "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"allowed", ",", "disallowed", ",", "unknowns"}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4209088618400803`*^9, 3.4209088831507235`*^9}, {
+   3.420908961793806*^9, 3.420908962584944*^9}, {3.4223056580120063`*^9, 
+   3.422305676408459*^9}, {3.4223201891868095`*^9, 3.422320190178235*^9}, {
+   3.4223918546867375`*^9, 3.42239186290856*^9}, {3.4223920476441965`*^9, 
+   3.4223920484052916`*^9}, {3.4322523071078496`*^9, 3.432252307548483*^9}, {
+   3.432428577892621*^9, 3.4324285862947025`*^9}, {3.432431008057026*^9, 
+   3.4324310083073854`*^9}, {3.4324314424516544`*^9, 
+   3.4324314670970926`*^9}, {3.4324332071391506`*^9, 
+   3.4324332386344385`*^9}, {3.4325137153746753`*^9, 
+   3.4325137201114864`*^9}, {3.4325175113583813`*^9, 3.432517511561953*^9}, {
+   3.4327642041249266`*^9, 3.4327642061578493`*^9}, {3.4327822935963087`*^9, 
+   3.4327822951986127`*^9}, {3.432847119297493*^9, 3.4328471212903585`*^9}, {
+   3.432866286158085*^9, 3.4328662881509504`*^9}, {3.4329519749034095`*^9, 
+   3.432952031825259*^9}, {3.4329548837661486`*^9, 3.432954906158347*^9}, {
+   3.432955035794755*^9, 3.4329550445172977`*^9}, {3.433797103554446*^9, 
+   3.433797130172722*^9}, {3.433797222385317*^9, 3.433797235253821*^9}, {
+   3.4337974642531056`*^9, 3.4337974840015025`*^9}, {3.4338000867741055`*^9, 
+   3.4338000874951425`*^9}, {3.434310523545574*^9, 3.434310531617181*^9}, {
+   3.4343106816328926`*^9, 3.4343108192507772`*^9}, {3.434310900848109*^9, 
+   3.4343109497884817`*^9}, {3.4343111061733522`*^9, 
+   3.4343112494393587`*^9}, {3.434315574338258*^9, 3.434315767626192*^9}, {
+   3.434315805180192*^9, 3.4343159886840577`*^9}, {3.434316049491494*^9, 
+   3.4343160600867295`*^9}, 3.4343164760047903`*^9, {3.4343963132568913`*^9, 
+   3.4343963231511183`*^9}, {3.4343998983720336`*^9, 3.434399946020549*^9}, {
+   3.4344005278772173`*^9, 3.434400535968853*^9}, {3.434403225356002*^9, 
+   3.4344032286807823`*^9}, {3.4344075075835423`*^9, 3.434407536975806*^9}, 
+   3.4344104770834737`*^9, {3.4345536399227486`*^9, 3.434553642095874*^9}, 
+   3.4345538039486065`*^9, {3.4345538444568543`*^9, 3.434553892495931*^9}, {
+   3.434554159349648*^9, 3.4345541692038174`*^9}, {3.4345542399054813`*^9, 
+   3.434554369031155*^9}, {3.434562228632707*^9, 3.43456222900324*^9}, {
+   3.4345623117622414`*^9, 3.434562340463512*^9}, {3.434563105082981*^9, 
+   3.4345634141674223`*^9}, {3.4345634625870466`*^9, 
+   3.4345635988830304`*^9}, {3.434563728709712*^9, 3.4345637491390877`*^9}, {
+   3.434564978266486*^9, 3.4345650543759265`*^9}, {3.434565108313485*^9, 
+   3.434565195889413*^9}, {3.4345660564969053`*^9, 3.434566141999853*^9}, {
+   3.4345662339220304`*^9, 3.4345662406316786`*^9}, {3.434566519392517*^9, 
+   3.434566571457382*^9}, {3.434567161636018*^9, 3.434567224836896*^9}, {
+   3.4345673297377357`*^9, 3.4345673486048656`*^9}, {3.434567607657365*^9, 
+   3.434567620405696*^9}, {3.434567728461072*^9, 3.4345677387358465`*^9}, {
+   3.4345677705616093`*^9, 3.4345678489242897`*^9}, {3.434568127104293*^9, 
+   3.434568137549312*^9}, {3.434568231494398*^9, 3.4345682328763857`*^9}, {
+   3.4345689370389214`*^9, 3.4345689535326385`*^9}, {3.4345690374533105`*^9, 
+   3.4345690485092077`*^9}, {3.434569291208192*^9, 3.4345693100753217`*^9}, {
+   3.4345697210662975`*^9, 3.434569828390622*^9}, {3.4345698635912385`*^9, 
+   3.4345700036426225`*^9}, {3.4345700547861633`*^9, 
+   3.4345701163146367`*^9}, {3.4345708777595406`*^9, 3.4345708791916*^9}, {
+   3.434730069753824*^9, 3.4347302340100126`*^9}, {3.4347302749889374`*^9, 
+   3.434730299083584*^9}, {3.434761126927419*^9, 3.4347612035175505`*^9}, {
+   3.434761243745395*^9, 3.434761400120251*^9}, {3.4347620159657936`*^9, 
+   3.434762018058803*^9}, {3.435607890541438*^9, 3.4356078960493584`*^9}, {
+   3.4356079949716015`*^9, 3.435607997054597*^9}, {3.435608221226941*^9, 
+   3.4356083506129885`*^9}, 3.4356084216851854`*^9, {3.4356129480738125`*^9, 
+   3.435612991235877*^9}, {3.4356200587184176`*^9, 3.4356200861578736`*^9}, {
+   3.4358826399513903`*^9, 3.4358826434764595`*^9}, {3.435882686288019*^9, 
+   3.435882718534387*^9}, {3.4358829049824867`*^9, 3.435882977626944*^9}, {
+   3.436033030911821*^9, 3.4360330416672864`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"RequestAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"dimension_", "?", "NumericQ"}], ",", "totalRank_Integer", ",", 
+    RowBox[{"k_Integer:", "1"}]}], "]"}], ":=", 
+  RowBox[{"RequestAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"dimension", ">", "2"}], ",", "2", ",", "0"}], "]"}], ",", 
+      "dimension"}], "}"}], ",", "totalRank", ",", 
+    RowBox[{"GradedBigraph", "[", 
+     RowBox[{"{", 
+      RowBox[{"{", "1", "}"}], "}"}], "]"}], ",", "k"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RequestAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"dimension_", "?", "NumericQ"}], ",", "totalRank_Integer", ",", 
+    "seed_GradedBigraph", ",", 
+    RowBox[{"k_Integer:", "1"}]}], "]"}], ":=", 
+  RowBox[{"RequestAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"dimension", ">", "2"}], ",", "2", ",", "0"}], "]"}], ",", 
+      "dimension"}], "}"}], ",", "totalRank", ",", "seed", ",", "k"}], 
+   "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.42045677807064*^9, 3.420456799201024*^9}, {
+  3.420463900851664*^9, 3.420463925717419*^9}, {3.4204648023078947`*^9, 
+  3.4204648232580194`*^9}, {3.420468084076846*^9, 3.4204681026335297`*^9}, {
+  3.4337971388752356`*^9, 3.4337971655435824`*^9}, {3.434761481997986*^9, 
+  3.4347614886775904`*^9}, {3.4356200201729918`*^9, 3.4356200513778625`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AllBigraphs", "[", "arguments__", "]"}], ":=", 
+  RowBox[{"\"\<Allowed bigraphs\>\"", "/.", 
+   RowBox[{"FindAllBigraphs", "[", "arguments", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.433797275121147*^9, 3.433797316280331*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{"list_List", ",", "f_"}], "]"}], ":=", 
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "list", ",", "f"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{"maxima_List", ",", 
+    RowBox[{"{", "}"}], ",", "f_"}], "]"}], ":=", 
+  "maxima"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{"maxima_List", ",", 
+    RowBox[{"{", 
+     RowBox[{"first_", ",", "rest___"}], "}"}], ",", "f_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"Or", "@@", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"f", "[", 
+           RowBox[{"first", ",", "#"}], "]"}], "&"}], "/@", "maxima"}], 
+        ")"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"MaximaOfPartialOrdering", "[", 
+       RowBox[{"maxima", ",", 
+        RowBox[{"{", "rest", "}"}], ",", "f"}], "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"MaximaOfPartialOrdering", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", "first", "}"}], "~", "Join", "~", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{"maxima", ",", 
+           RowBox[{"c_", "/;", 
+            RowBox[{"f", "[", 
+             RowBox[{"c", ",", "first"}], "]"}]}]}], "]"}]}], ",", 
+        RowBox[{"{", "rest", "}"}], ",", "f"}], "]"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]}], "Input",\
+
+ CellChangeTimes->{{3.4337945193184977`*^9, 3.4337945987827616`*^9}, {
+  3.433794732615203*^9, 3.4337948302155457`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RequestMoreBigraphs", "[", 
+   RowBox[{"k_Integer:", "1"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"requests", ",", "norm", ",", "rank", ",", "seed"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"DisplayBigraphRequests", "[", "]"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"requests", "=", 
+      RowBox[{"MaximalIncompleteBigraphRequests", "[", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"requests", "=", 
+        RowBox[{"Cases", "[", 
+         RowBox[{"requests", ",", 
+          RowBox[{"{", 
+           RowBox[{"___", ",", "0"}], "}"}]}], "]"}]}], ";"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"norm", ",", "rank", ",", "seed"}], "}"}], "=", 
+      RowBox[{"Take", "[", 
+       RowBox[{
+        RowBox[{"First", "[", 
+         RowBox[{"SortBy", "[", 
+          RowBox[{"requests", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "5", "\[RightDoubleBracket]"}], "+", 
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "6", "\[RightDoubleBracket]"}]}], 
+            "&"}]}], "]"}], "]"}], ",", "3"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<About to run RequestAllBigraphs[\>\"", ",", "norm", ",", 
+       "\"\<, \>\"", ",", 
+       RowBox[{"rank", "+", "1"}], ",", "\"\<, \>\"", ",", 
+       RowBox[{"DisplayBigraph", "[", "seed", "]"}], ",", "\"\<]\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"RequestAllBigraphs", "[", 
+      RowBox[{"norm", ",", 
+       RowBox[{"rank", "+", "1"}], ",", "seed", ",", "k"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQA2IQ/eUUz61pU186xmyzfQqiDxyZyTEdSHsWB3GDaPWa
+FV4g+ljCf28QzcDg9XkGmF4Hpi/E/4h+C6QzIjXyQPQv9l1FIHpOnHU5iF4w
+VWs7iPZgcQTTWqY7Lrya8dLxQ96RiyCaoWf/NRB9xLvqDohmLDj9BES38HI8
+A9HbxLjeg+hHy93A9EXOHfyvgfQ/z9tgOp5/qyKIvtL5Gkwf6ditCaKNvn0x
+BNF6SqEOIPrOmU9g2srvugeILmNfHgiiP51fGgmim+etAtPd9an5INpHKLMA
+RLfxqv4C0dzzbFnfAOkQprLLIPpucP4VEC1zY+UNEF0W8QFM893VX/gW5I79
+qYtANABWSMsY
+  "]],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1272, 679},
+WindowMargins->{{-9, Automatic}, {Automatic, 0}},
+FrontEndVersion->"6.0 for Mac OS X x86 (32-bit) (March 13, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[590, 23, 192, 3, 26, "Subsubtitle",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[807, 30, 58, 1, 67, "Section",
+ InitializationCell->True],
+Cell[868, 33, 129, 2, 26, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1034, 40, 60, 1, 67, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1119, 45, 133, 2, 34, "Subsection",
+ InitializationCell->True],
+Cell[1255, 49, 72, 1, 26, "Text",
+ InitializationCell->True],
+Cell[1330, 52, 1860, 38, 73, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3227, 95, 63, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[3293, 98, 459, 9, 27, "Input",
+ InitializationCell->True],
+Cell[3755, 109, 454, 10, 27, "Input",
+ InitializationCell->True],
+Cell[4212, 121, 510, 10, 27, "Input",
+ InitializationCell->True],
+Cell[4725, 133, 482, 11, 43, "Input",
+ InitializationCell->True],
+Cell[5210, 146, 185, 3, 27, "Input",
+ InitializationCell->True],
+Cell[5398, 151, 936, 16, 88, "Input",
+ InitializationCell->True],
+Cell[6337, 169, 130, 3, 27, "Input",
+ InitializationCell->True],
+Cell[6470, 174, 130, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6637, 182, 58, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[6698, 185, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[6820, 190, 1881, 44, 142, "Input",
+ InitializationCell->True],
+Cell[8704, 236, 651, 15, 43, "Input",
+ InitializationCell->True],
+Cell[9358, 253, 1653, 42, 103, "Input",
+ InitializationCell->True],
+Cell[11014, 297, 760, 16, 27, "Input",
+ InitializationCell->True],
+Cell[11777, 315, 929, 22, 46, "Input",
+ InitializationCell->True],
+Cell[12709, 339, 803, 25, 47, "Input",
+ InitializationCell->True],
+Cell[13515, 366, 393, 11, 43, "Input",
+ InitializationCell->True],
+Cell[13911, 379, 2951, 69, 193, "Input",
+ InitializationCell->True],
+Cell[16865, 450, 1750, 43, 88, "Input",
+ InitializationCell->True],
+Cell[18618, 495, 258, 5, 27, "Input"],
+Cell[18879, 502, 1295, 33, 73, "Input",
+ InitializationCell->True],
+Cell[20177, 537, 512, 11, 27, "Input",
+ InitializationCell->True],
+Cell[20692, 550, 23875, 502, 1168, "Input",
+ InitializationCell->True],
+Cell[44570, 1054, 1298, 35, 43, "Input",
+ InitializationCell->True],
+Cell[45871, 1091, 11493, 238, 508, "Input",
+ InitializationCell->True],
+Cell[57367, 1331, 1509, 38, 73, "Input",
+ InitializationCell->True],
+Cell[58879, 1371, 262, 5, 27, "Input"],
+Cell[59144, 1378, 1741, 47, 133, "Input"],
+Cell[60888, 1427, 2303, 59, 133, "Input"],
+Cell[CellGroupData[{
+Cell[63216, 1490, 123, 2, 25, "Subsubsection",
+ InitializationCell->True],
+Cell[63342, 1494, 96, 3, 70, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[63487, 1503, 63, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[63553, 1506, 103, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -1,0 +1,888 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     32195,        879]
+NotebookOptionsPosition[     29503,        785]
+NotebookOutlinePosition[     29896,        802]
+CellTagsIndexPosition[     29853,        799]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FormalCodegrees package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}, {3.478306474360262*^9, 
+  3.478306475475143*^9}, {3.553551928116612*^9, 3.55355193121031*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas v0.
+August, 2012, Scott Morrison\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}, {
+  3.478306478915522*^9, 3.4783064889387903`*^9}, {3.5535519340261097`*^9, 
+  3.5535519368581057`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`FormalCodegrees`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`TensorSolver`\>\"", ",", 
+      "\"\<FusionAtlas`Utilities`IntersectSubspaces`\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+  3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+  3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+  3.478306491950732*^9, 3.478306504486902*^9}, {3.478306602046698*^9, 
+  3.478306604913982*^9}, {3.485629669415824*^9, 3.485629673797494*^9}, {
+  3.5535519411315107`*^9, 3.55355194412337*^9}, {3.553552032441843*^9, 
+  3.5535520345047827`*^9}, {3.6330425166701097`*^9, 3.633042517590187*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"FormalCodegreesInDimensionFieldTest", "::", "usage"}], "=", 
+   "\"\<\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"FPDimensions", ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, {
+   3.478306516845941*^9, 3.478306519942227*^9}, 3.553551967572063*^9, {
+   3.6345915925302134`*^9, 3.634591594032805*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"FormalCodegrees", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindDimensionFunctions", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FormalCodegreesInequalityTest", "::", "usage"}], "=", 
+   "\"\<\>\""}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, {
+   3.478306516845941*^9, 3.4783065269636507`*^9}, 3.5535519782277718`*^9, {
+   3.5535520532485847`*^9, 3.5535520562801323`*^9}, {3.594940662574306*^9, 
+   3.59494066620982*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Eigenspaces", "[", "m_", "]"}], ":=", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"e", "=", 
+      RowBox[{"RootReduce", "[", 
+       RowBox[{"Eigensystem", "[", "m", "]"}], "]"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"#", ",", 
+        RowBox[{"Cases", "[", 
+         RowBox[{
+          RowBox[{"Transpose", "[", "e", "]"}], ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"#", ",", "v_"}], "}"}], "\[RuleDelayed]", "v"}]}], 
+         "]"}]}], "}"}], "&"}], "/@", 
+     RowBox[{"Union", "[", 
+      RowBox[{"e", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483184869428533*^9, 3.483184949480255*^9}, {
+  3.63304204901003*^9, 3.6330420532417*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"proportionalQ", "[", 
+   RowBox[{"v_", ",", "w_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"RootReduce", "[", 
+    RowBox[{
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"v", ".", "w"}], ")"}], "2"], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"v", ".", "v"}], ")"}], 
+      RowBox[{"(", 
+       RowBox[{"w", ".", "w"}], ")"}]}]}], "]"}], "\[Equal]", 
+   "0"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5535536064972486`*^9, 3.553553639654166*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "FindDimensionFunctions", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FindDimensionFunctions", "[", 
+   RowBox[{"FusionRules", "[", 
+    RowBox[{"g_", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", 
+       "multiplicities_"}], "}"}]}], "]"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FindDimensionFunctions", "[", 
+    RowBox[{"FusionRules", "[", 
+     RowBox[{"g", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", 
+        "multiplicities"}], "}"}]}], "]"}], "]"}], "=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "simultaneousEigenspaces", ",", "n", ",", "eigenspaces", ",", 
+       "candidates", ",", "verify", ",", "obj"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"n", "=", 
+       RowBox[{"Length", "[", "multiplicities", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"obj", "[", "i_", "]"}], ":=", 
+       RowBox[{
+        RowBox[{"obj", "[", "i", "]"}], "=", 
+        RowBox[{"multiplicities", "\[LeftDoubleBracket]", 
+         RowBox[{"All", ",", "i"}], "\[RightDoubleBracket]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"simultaneousEigenspaces", "=", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", "}"}], ",", 
+          RowBox[{"IdentityMatrix", "[", "n", "]"}]}], "}"}], "}"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Function", "[", 
+        RowBox[{
+         RowBox[{"{", "i", "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"DebugPrint", "[", 
+           RowBox[{"\"\<Finding eigenspaces for object \>\"", ",", "i"}], 
+           "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"eigenspaces", "=", 
+           RowBox[{"Eigenspaces", "[", 
+            RowBox[{"obj", "[", "i", "]"}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"simultaneousEigenspaces", "=", 
+           RowBox[{"Union", "[", 
+            RowBox[{"DeleteCases", "[", 
+             RowBox[{
+              RowBox[{"Flatten", "[", 
+               RowBox[{
+                RowBox[{"Outer", "[", 
+                 RowBox[{
+                  RowBox[{"Function", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"se", ",", "e"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    "se", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], "~", "Join", "~", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "e", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], "}"}]}], ",", 
+                    RowBox[{"IntersectSubspaces", "[", 
+                    RowBox[{"n", ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{
+                    "se", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{
+                    "e", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}]}], "}"}]}], "]"}]}], "}"}]}], 
+                   "]"}], ",", "simultaneousEigenspaces", ",", "eigenspaces", 
+                  ",", "1"}], "]"}], ",", "1"}], "]"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"_", ",", 
+                RowBox[{"{", "}"}]}], "}"}]}], "]"}], "]"}]}], ";"}]}], 
+        "\[IndentingNewLine]", "]"}], "/@", 
+       RowBox[{"Range", "[", 
+        RowBox[{"1", ",", "n"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"candidates", "=", 
+       RowBox[{"First", "/@", "simultaneousEigenspaces"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"verify", "[", "x_", "]"}], ":=", 
+       RowBox[{"And", "@@", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"proportionalQ", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"obj", "[", "i", "]"}], ".", "x"}], ",", "x"}], "]"}], 
+          ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", "n"}], "}"}]}], "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Select", "[", 
+       RowBox[{"candidates", ",", "verify"}], "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483184669333053*^9, 3.483184775454117*^9}, {
+   3.483184855102169*^9, 3.483184859302136*^9}, {3.483185128393903*^9, 
+   3.483185139688527*^9}, {3.483185177419777*^9, 3.483185310522297*^9}, {
+   3.48318535159199*^9, 3.483185388712042*^9}, {3.483185451037796*^9, 
+   3.483185452509742*^9}, {3.483185662309483*^9, 3.4831856660979548`*^9}, 
+   3.4831858766536093`*^9, {3.483185933311545*^9, 3.483186003759251*^9}, {
+   3.483186088822584*^9, 3.483186088915799*^9}, 3.483186286653139*^9, {
+   3.4831863578850803`*^9, 3.483186369933586*^9}, {3.483188488501388*^9, 
+   3.483188492026758*^9}, 3.48319024892133*^9, {3.483190309024865*^9, 
+   3.483190309862425*^9}, {3.483199663294224*^9, 3.483199671682667*^9}, {
+   3.553553590670373*^9, 3.553553596077189*^9}, {3.553553652160638*^9, 
+   3.5535537436827374`*^9}, 3.633042396796723*^9, {3.633042676454253*^9, 
+   3.633042676886704*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindDimensionFunctions", "[", "g_GradedGraph", "]"}], ":=", 
+  RowBox[{"FindDimensionFunctions", "/@", 
+   RowBox[{"FindFusionRules", "[", "g", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483104657787929*^9, 3.483104691559897*^9}, 
+   3.483121355290598*^9, {3.4831278898476887`*^9, 3.483127938222176*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FormalCodegree", "[", 
+   RowBox[{"v_", "?", "VectorQ"}], "]"}], ":=", 
+  RowBox[{"RootReduce", "[", 
+   RowBox[{"v", ".", 
+    RowBox[{"Conjugate", "[", "v", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483184328901058*^9, 3.483184340213578*^9}, {
+  3.483190339181282*^9, 3.483190341532838*^9}, {3.623452041991074*^9, 
+  3.623452043645331*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "FormalCodegrees", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4831843426529016`*^9, 3.4831843770386887`*^9}, {
+  3.554069971149116*^9, 3.554069976806553*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FormalCodegrees", "[", "f_FusionRules", "]"}], ":=", 
+  RowBox[{"FormalCodegree", "/@", 
+   RowBox[{"FindDimensionFunctions", "[", "f", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4831843426529016`*^9, 3.4831843770386887`*^9}, {
+  3.554069971149116*^9, 3.554069976806553*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FormalCodegrees", "[", "g_GradedGraph", "]"}], ":=", 
+  RowBox[{"FormalCodegrees", "/@", 
+   RowBox[{"FindFusionRules", "[", "g", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483186842415503*^9, 3.483186868991003*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FormalCodegrees", "[", 
+    RowBox[{"g0_BigraphWithDuals", ",", "g1_BigraphWithDuals"}], "]"}], "/;", 
+   RowBox[{"MatchQ", "[", 
+    RowBox[{
+     RowBox[{"FindFusionRules", "[", 
+      RowBox[{"g0", ",", "g1"}], "]"}], ",", "_List"}], "]"}]}], ":=", 
+  RowBox[{
+   RowBox[{"FormalCodegrees", "[", 
+    RowBox[{"g0", ",", "g1"}], "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"FormalCodegrees", "[", 
+        RowBox[{"EvenPartFusionRules", "[", "#", "]"}], "]"}], ",", 
+       RowBox[{"FormalCodegrees", "[", 
+        RowBox[{"EvenPartFusionRules", "[", 
+         RowBox[{"FlipFusionRules", "[", "#", "]"}], "]"}], "]"}]}], "}"}], 
+     "&"}], "/@", 
+    RowBox[{"FindFusionRules", "[", 
+     RowBox[{"g0", ",", "g1"}], "]"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4831867139497213`*^9, 3.4831867722938538`*^9}, {
+  3.483186809582843*^9, 3.4831868365594053`*^9}, {3.483188422716312*^9, 
+  3.483188430609775*^9}, {3.52605744778307*^9, 3.5260574496033773`*^9}, {
+  3.553552679509796*^9, 3.553552685036088*^9}, {3.5540699535700693`*^9, 
+  3.554069960336197*^9}, {3.554070014025961*^9, 3.5540700556650763`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DimensionFieldGenerator", "[", "g_GradedGraph", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"\[Theta]", ",", "dimensions"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"\[Theta]", "=", 
+      RowBox[{"ToNumberField", "[", 
+       RowBox[{"DimensionOfGenerator", "[", "g", "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dimensions", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"ReducedDimensionsByDepth", "[", "g", "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"ToNumberField", "[", 
+        RowBox[{
+         RowBox[{"{", "\[Theta]", "}"}], "~", "Join", "~", 
+         RowBox[{"Cases", "[", 
+          RowBox[{"dimensions", ",", 
+           RowBox[{"d_", "/;", 
+            RowBox[{"MatchQ", "[", 
+             RowBox[{
+              RowBox[{"ToNumberField", "[", 
+               RowBox[{"d", ",", "\[Theta]"}], "]"}], ",", "_ToNumberField"}],
+              "]"}]}]}], "]"}]}], "]"}], "\[LeftDoubleBracket]", "1", 
+       "\[RightDoubleBracket]"}], "/.", 
+      RowBox[{
+       RowBox[{"AlgebraicNumber", "[", 
+        RowBox[{"r_", ",", "_"}], "]"}], "\[RuleDelayed]", "r"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483187388439616*^9, 3.483187518224729*^9}, {
+  3.483187552236562*^9, 3.48318755386469*^9}, {3.4848786667333193`*^9, 
+  3.484878674443446*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DimensionFieldGenerator", "[", 
+   RowBox[{"g0_BigraphWithDuals", ",", "g1_BigraphWithDuals"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"\[Theta]", ",", "dimensions"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"\[Theta]", "=", 
+      RowBox[{
+       RowBox[{"ToNumberField", "[", 
+        RowBox[{
+         RowBox[{"ReducedDimensionsByDepth", "[", 
+          RowBox[{
+          "g0", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "]"}],
+          "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], "]"}], 
+       "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"dimensions", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"ReducedDimensionsByDepth", "[", 
+         RowBox[{"g0", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+          "]"}], "\[LeftDoubleBracket]", 
+        RowBox[{"1", ";;", ";;", "2"}], "\[RightDoubleBracket]"}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"ToNumberField", "[", 
+        RowBox[{
+         RowBox[{"{", "\[Theta]", "}"}], "~", "Join", "~", 
+         RowBox[{"Cases", "[", 
+          RowBox[{"dimensions", ",", 
+           RowBox[{"d_", "/;", 
+            RowBox[{"MatchQ", "[", 
+             RowBox[{
+              RowBox[{"ToNumberField", "[", 
+               RowBox[{"d", ",", "\[Theta]"}], "]"}], ",", "_ToNumberField"}],
+              "]"}]}]}], "]"}]}], "]"}], "\[LeftDoubleBracket]", "1", 
+       "\[RightDoubleBracket]"}], "/.", 
+      RowBox[{
+       RowBox[{"AlgebraicNumber", "[", 
+        RowBox[{"r_", ",", "_"}], "]"}], "\[RuleDelayed]", "r"}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DimensionFieldGenerator", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"DimensionFieldGenerator", "[", "fr", "]"}], "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{
+         RowBox[{"ToNumberField", "[", 
+          RowBox[{"FPDimensions", "[", "fr", "]"}], "]"}], ",", "_Integer"}], 
+        "]"}], "/.", 
+       RowBox[{
+        RowBox[{"AlgebraicNumber", "[", 
+         RowBox[{"r_", ",", "_"}], "]"}], "\[RuleDelayed]", "r"}]}], "/.", 
+      RowBox[{
+       RowBox[{"{", "}"}], "\[Rule]", 
+       RowBox[{"{", "1", "}"}]}]}], ")"}], "\[LeftDoubleBracket]", "1", 
+    "\[RightDoubleBracket]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483187388439616*^9, 3.483187518224729*^9}, {
+  3.483187552236562*^9, 3.48318755386469*^9}, {3.4848786667333193`*^9, 
+  3.484878674443446*^9}, {3.532898641766357*^9, 3.532898642094721*^9}, {
+  3.532898691938757*^9, 3.532898714605268*^9}, {3.532898745703753*^9, 
+  3.532898780518857*^9}, {3.634592221990806*^9, 3.6345922381639977`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"NumbersInFieldQ", "[", 
+   RowBox[{"numbers_", ",", "generator_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Quiet", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Not", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"MatchQ", "[", 
+          RowBox[{
+           RowBox[{"ToNumberField", "[", 
+            RowBox[{
+             RowBox[{"RootReduce", "[", "#", "]"}], ",", "generator"}], "]"}],
+            ",", "_ToNumberField"}], "]"}], "&"}], "/@", 
+        RowBox[{"(", 
+         RowBox[{"Or", "@@", 
+          RowBox[{"(", 
+           RowBox[{"numbers", "~", "Join", "~", 
+            RowBox[{"{", "1", "}"}]}], ")"}]}], ")"}]}], "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"ToNumberField", "::", "nnfel"}], "}"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"NumbersInFieldQ", "[", 
+   RowBox[{"numbers_", ",", "1"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Length", "[", 
+    RowBox[{"DeleteCases", "[", 
+     RowBox[{
+      RowBox[{"RootReduce", "[", "numbers", "]"}], ",", 
+      RowBox[{"_Integer", "|", "_Rational"}]}], "]"}], "]"}], "\[Equal]", 
+   "0"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4831877821401854`*^9, 3.483187858002508*^9}, {
+  3.634591891985874*^9, 3.634591940773987*^9}, {3.6345919884677267`*^9, 
+  3.6345920455190287`*^9}, {3.634844868754211*^9, 3.63484487357001*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "FormalCodegreesInDimensionFieldTest", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FormalCodegreesInDimensionFieldTest", "[", 
+    RowBox[{"g0_BigraphWithDuals", ",", "g1_BigraphWithDuals"}], "]"}], "/;", 
+   RowBox[{"MatchQ", "[", 
+    RowBox[{
+     RowBox[{"FindFusionRules", "[", 
+      RowBox[{"g0", ",", "g1"}], "]"}], ",", "_List"}], "]"}]}], ":=", 
+  RowBox[{
+   RowBox[{"FormalCodegreesInDimensionFieldTest", "[", 
+    RowBox[{"g0", ",", "g1"}], "]"}], "=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"fg0", ",", "fg1", ",", "formalCodegrees"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"fg0", "=", 
+       RowBox[{"DimensionFieldGenerator", "[", 
+        RowBox[{"g0", ",", "g1"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"fg1", "=", 
+       RowBox[{"DimensionFieldGenerator", "[", 
+        RowBox[{"g1", ",", "g0"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"formalCodegrees", "=", 
+       RowBox[{"FormalCodegrees", "[", 
+        RowBox[{"g0", ",", "g1"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Length", "[", 
+        RowBox[{"Cases", "[", 
+         RowBox[{"formalCodegrees", ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"nnfc_", ",", "mmfc_"}], "}"}], "/;", 
+           RowBox[{
+            RowBox[{"NumbersInFieldQ", "[", 
+             RowBox[{"nnfc", ",", "fg0"}], "]"}], "\[And]", 
+            RowBox[{"NumbersInFieldQ", "[", 
+             RowBox[{"mmfc", ",", "fg1"}], "]"}]}]}]}], "]"}], "]"}], ">", 
+       "0"}]}]}], "\[IndentingNewLine]", "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483186872698629*^9, 3.483186950146205*^9}, {
+  3.483187589794067*^9, 3.483187645833799*^9}, {3.48318769030249*^9, 
+  3.483187720359476*^9}, {3.483187758293603*^9, 3.483187773765965*^9}, {
+  3.4831879263446617`*^9, 3.483187952897151*^9}, {3.4831882703068457`*^9, 
+  3.4831882739779882`*^9}, {3.5328988049931498`*^9, 3.532898809599889*^9}, {
+  3.553552661961055*^9, 3.55355266662158*^9}, {3.554069986357739*^9, 
+  3.554069988045073*^9}, {3.55407007724559*^9, 3.554070090899685*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FPDimensions", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FPDimensions", "[", "fr", "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Max", "[", 
+      RowBox[{"Cases", "[", 
+       RowBox[{
+        RowBox[{"Eigenvalues", "[", "#", "]"}], ",", 
+        RowBox[{"x_", "/;", 
+         RowBox[{
+          RowBox[{"Im", "[", "x", "]"}], "\[Equal]", "0"}]}]}], "]"}], "]"}], 
+     "&"}], "/@", 
+    RowBox[{"fr", "\[LeftDoubleBracket]", 
+     RowBox[{"2", ",", "1", ",", "2"}], 
+     "\[RightDoubleBracket]"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"GlobalDimension", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"GlobalDimension", "[", "fr", "]"}], "=", 
+   RowBox[{"ToNumberField", "[", 
+    RowBox[{
+     SuperscriptBox[
+      RowBox[{"Norm", "[", 
+       RowBox[{"FPDimensions", "[", "fr", "]"}], "]"}], "2"], ",", 
+     RowBox[{"DimensionFieldGenerator", "[", "fr", "]"}]}], 
+    "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.634592162378282*^9, 3.6345922010874434`*^9}, {
+  3.6345922492295218`*^9, 3.6345922582225857`*^9}, {3.634842184745018*^9, 
+  3.63484219900167*^9}, {3.6548217197848597`*^9, 3.654821730218567*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "FormalCodegreesInDimensionFieldTest", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FormalCodegreesInDimensionFieldTest", "[", "fr_FusionRules", "]"}],
+   ":=", 
+  RowBox[{
+   RowBox[{"FormalCodegreesInDimensionFieldTest", "[", "fr", "]"}], "=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"field", ",", "formalCodegrees"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"field", "=", 
+       RowBox[{"DimensionFieldGenerator", "[", "fr", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"formalCodegrees", "=", 
+       RowBox[{"FormalCodegrees", "[", "fr", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"NumbersInFieldQ", "[", 
+       RowBox[{"formalCodegrees", ",", "field"}], "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483186872698629*^9, 3.483186950146205*^9}, {
+  3.483187589794067*^9, 3.483187645833799*^9}, {3.48318769030249*^9, 
+  3.483187720359476*^9}, {3.483187758293603*^9, 3.483187773765965*^9}, {
+  3.4831879263446617`*^9, 3.483187952897151*^9}, {3.4831882703068457`*^9, 
+  3.4831882739779882`*^9}, {3.5328988049931498`*^9, 3.532898809599889*^9}, {
+  3.553552661961055*^9, 3.55355266662158*^9}, {3.554069986357739*^9, 
+  3.554069988045073*^9}, {3.55407007724559*^9, 3.554070090899685*^9}, {
+  3.634591536425655*^9, 3.634591551165297*^9}, {3.634591613468863*^9, 
+  3.634591646531888*^9}, {3.634591680199238*^9, 3.634591710144939*^9}, {
+  3.63459176881133*^9, 3.6345917699042664`*^9}, {3.634591844844409*^9, 
+  3.6345918776447353`*^9}, {3.634592219250372*^9, 3.634592244801309*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"From", " ", 
+     RowBox[{"http", ":"}]}], "//", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"arxiv", ".", "org"}], "/", "abs"}], "/", "1309.4822"}]}], " ", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Clear", "[", "FormalCodegreesInequalityTest", "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"FormalCodegreesInequalityTest", "[", 
+     RowBox[{"f", ":", 
+      RowBox[{"FusionRules", "[", 
+       RowBox[{"_", ",", "___"}], "]"}]}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"FormalCodegreesInequalityTest", "[", "f", "]"}], "=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"Plus", "@@", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             SuperscriptBox["#", 
+              RowBox[{"-", "2"}]], "&"}], "/@", 
+            RowBox[{"DeleteCases", "[", 
+             RowBox[{
+              RowBox[{"FormalCodegrees", "[", "f", "]"}], ",", "0"}], "]"}]}],
+            ")"}]}], ")"}], "\[LessEqual]", 
+        RowBox[{
+         FractionBox["1", "2"], 
+         RowBox[{"(", 
+          RowBox[{"1", "+", 
+           SuperscriptBox[
+            RowBox[{"GlobalDimension", "[", "f", "]"}], 
+            RowBox[{"-", "1"}]]}], ")"}]}]}]}], "\[IndentingNewLine]", 
+      "]"}]}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQB2IQrR0tdn3Z55eO29YeeQCi/2fsNFgOpKvX7TIH0Qzr
+PG1B9JUGbkcQbZR60hVEn2za4Q6iK9hPR4Hosq0ycSB63cWTrWDa274NRD86
+Pt+uIuiVo5eRsT2I/nZgn9LdyleOfx4HK4PomUXee25WvXK0LWwE0w9uLz8O
+oi1OxZwE0S3FEqznTrxy5FH8DaabVj7gAtPFF0RBdE5CvgyI3iLHIweir7yv
+1ADRFxec0QTR+xSKX4PojQcL34BotZzQDyD6/e5/YPooX8U/EP1Cgo3hPJAO
+6xEVAtEHtRokQLRHx29FEC2wwUMZRH9qNVYH0cZqqwxBtNcf/1wQXeEQAqYP
+2IYZ54u8drzydyeYrl+U5vMKSN+ungemAc2/0t4=
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FormalCodegreesInequalityTest", "[", 
+   RowBox[{"f", ":", 
+    RowBox[{"FusionRules", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}], ",", 
+      "___"}], "]"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FormalCodegreesInequalityTest", "[", "f", "]"}], "=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"FormalCodegreesInequalityTest", "[", 
+       RowBox[{"EvenPartFusionRules", "[", "f", "]"}], "]"}], "\[And]", 
+      RowBox[{"FormalCodegreesInequalityTest", "[", 
+       RowBox[{"EvenPartFusionRules", "[", 
+        RowBox[{"FlipFusionRules", "[", "f", "]"}], "]"}], "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5949428480312862`*^9, 3.5949428938135977`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FormalCodegreesInequalityTest", "[", 
+    RowBox[{"g0_BigraphWithDuals", ",", "g1_BigraphWithDuals"}], "]"}], "/;", 
+   RowBox[{"MatchQ", "[", 
+    RowBox[{
+     RowBox[{"FindFusionRules", "[", 
+      RowBox[{"g0", ",", "g1"}], "]"}], ",", "_List"}], "]"}]}], ":=", 
+  RowBox[{"Or", "@@", 
+   RowBox[{"(", 
+    RowBox[{"FormalCodegreesInequalityTest", "/@", 
+     RowBox[{"FindFusionRules", "[", 
+      RowBox[{"g0", ",", "g1"}], "]"}]}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483186872698629*^9, 3.483186950146205*^9}, {
+  3.483187589794067*^9, 3.483187645833799*^9}, {3.48318769030249*^9, 
+  3.483187720359476*^9}, {3.483187758293603*^9, 3.483187773765965*^9}, {
+  3.4831879263446617`*^9, 3.483187952897151*^9}, {3.4831882703068457`*^9, 
+  3.4831882739779882`*^9}, {3.5328988049931498`*^9, 3.532898809599889*^9}, {
+  3.553552661961055*^9, 3.55355266662158*^9}, {3.554069986357739*^9, 
+  3.554069988045073*^9}, {3.55407007724559*^9, 3.554070090899685*^9}, {
+  3.594940456764101*^9, 3.594940463847784*^9}, {3.594940503020692*^9, 
+  3.5949405905141*^9}, {3.5949406434805202`*^9, 3.594940656378748*^9}, {
+  3.594940739810526*^9, 3.594940750394631*^9}, {3.594942299597747*^9, 
+  3.594942307554894*^9}, {3.5949423386694517`*^9, 3.594942343960441*^9}, {
+  3.594942451751803*^9, 3.5949424641905403`*^9}, {3.594942675219239*^9, 
+  3.594942709569622*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1339, 852},
+WindowMargins->{{Automatic, 327}, {Automatic, 22}},
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 281, 4, 51, "Subtitle",
+ InitializationCell->True],
+Cell[864, 28, 284, 7, 49, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1173, 39, 58, 1, 64, "Section",
+ InitializationCell->True],
+Cell[1234, 42, 129, 2, 30, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1400, 49, 60, 1, 64, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1485, 54, 106, 1, 44, "Subsection"],
+Cell[1594, 57, 45, 0, 30, "Text"],
+Cell[1642, 59, 946, 18, 46, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2625, 82, 36, 0, 44, "Subsection"],
+Cell[2664, 84, 420, 9, 46, "Input",
+ InitializationCell->True],
+Cell[3087, 95, 662, 17, 63, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3786, 117, 31, 0, 44, "Subsection"],
+Cell[3820, 119, 119, 3, 28, "Input",
+ InitializationCell->True],
+Cell[3942, 124, 916, 26, 63, "Input",
+ InitializationCell->True],
+Cell[4861, 152, 521, 17, 35, "Input",
+ InitializationCell->True],
+Cell[5385, 171, 5451, 129, 301, "Input",
+ InitializationCell->True],
+Cell[10839, 302, 366, 7, 28, "Input",
+ InitializationCell->True],
+Cell[11208, 311, 412, 10, 28, "Input",
+ InitializationCell->True],
+Cell[11623, 323, 218, 4, 28, "Input",
+ InitializationCell->True],
+Cell[11844, 329, 337, 7, 28, "Input",
+ InitializationCell->True],
+Cell[12184, 338, 278, 6, 28, "Input",
+ InitializationCell->True],
+Cell[12465, 346, 1223, 29, 46, "Input",
+ InitializationCell->True],
+Cell[13691, 377, 1493, 38, 97, "Input",
+ InitializationCell->True],
+Cell[15187, 417, 2914, 71, 131, "Input",
+ InitializationCell->True],
+Cell[18104, 490, 1584, 41, 150, "Input",
+ InitializationCell->True],
+Cell[19691, 533, 2211, 49, 148, "Input",
+ InitializationCell->True],
+Cell[21905, 584, 1226, 32, 52, "Input",
+ InitializationCell->True],
+Cell[23134, 618, 1685, 34, 114, "Input",
+ InitializationCell->True],
+Cell[24822, 654, 1897, 52, 139, "Input",
+ InitializationCell->True],
+Cell[26722, 708, 901, 22, 63, "Input",
+ InitializationCell->True],
+Cell[27626, 732, 1426, 27, 46, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[29077, 763, 96, 1, 35, "Subsubsection"],
+Cell[29176, 766, 96, 3, 31, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29321, 775, 36, 0, 44, "Subsection"],
+Cell[29360, 777, 103, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
