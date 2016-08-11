@@ -1,0 +1,6 @@
+\documentclass{article}
+\pagestyle{empty}
+
+\usepackage{tikz}
+
+\begin{document}

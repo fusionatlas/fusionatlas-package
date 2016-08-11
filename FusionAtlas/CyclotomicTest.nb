@@ -1,0 +1,431 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     13905,        422]
+NotebookOptionsPosition[     11985,        352]
+NotebookOutlinePosition[     12362,        368]
+CellTagsIndexPosition[     12319,        365]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["CyclotomicTest package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas v0.
+May 20, 2008, Noah Snyder\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`CyclotomicTest`\>\"", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\""}], 
+      "}"}], "~", "Join", "~", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"$VersionNumber", "<", "6"}], ",", 
+       RowBox[{"{", "\"\<NumberTheory`AlgebraicNumberFields`\>\"", "}"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}]}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+  3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+  3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"CyclotomicTest", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LeadingTerm", "[", 
+   RowBox[{"polynomial_", ",", "x_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Coefficient", "[", 
+   RowBox[{"polynomial", ",", 
+    RowBox[{"x", "^", 
+     RowBox[{"(", 
+      RowBox[{"Exponent", "[", 
+       RowBox[{"polynomial", ",", "x"}], "]"}], ")"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"$VersionNumber", "<", "6.0"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Discriminant", "[", 
+     RowBox[{"polynomial_", ",", "x_"}], "]"}], ":=", "\[IndentingNewLine]", 
+    RowBox[{"Together", "[", 
+     RowBox[{
+      RowBox[{"Resultant", "[", 
+       RowBox[{"polynomial", ",", " ", 
+        RowBox[{"D", "[", 
+         RowBox[{"polynomial", ",", "x"}], "]"}], ",", "x"}], "]"}], "/", 
+      RowBox[{"LeadingTerm", "[", 
+       RowBox[{"polynomial", ",", "x"}], "]"}]}], "]"}]}]}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4204570983211374`*^9, 3.420457112451456*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GoodPrimes", "[", 
+   RowBox[{"polynomial_", ",", "x_", ",", "n_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"Discriminant", "=", 
+      RowBox[{"Abs", "[", 
+       RowBox[{"Discriminant", "[", 
+        RowBox[{"polynomial", ",", "x"}], "]"}], "]"}]}], "}"}], ",", " ", 
+    RowBox[{"Select", "[", 
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Prime", "[", "k", "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "1", ",", "n"}], "}"}]}], "]"}], ",", 
+      RowBox[{
+       RowBox[{"Not", "[", 
+        RowBox[{
+         RowBox[{"Mod", "[", 
+          RowBox[{"Discriminant", ",", "#"}], "]"}], "\[Equal]", "0"}], "]"}],
+        "&"}]}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4756049568544064`*^9, 3.475604966806655*^9}, {
+  3.4756050107617607`*^9, 3.475605015474029*^9}, {3.475605101346775*^9, 
+  3.4756052271904373`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FactorPowersModp", "[", 
+   RowBox[{"polynomial_", ",", "p_Integer", ",", "x_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Exponent", "[", 
+     RowBox[{
+      RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+      ",", "x"}], "]"}], "&"}], "/@", 
+   RowBox[{"Rest", "[", 
+    RowBox[{"FactorList", "[", 
+     RowBox[{"polynomial", ",", 
+      RowBox[{"Modulus", "\[Rule]", "p"}]}], "]"}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.475600697107148*^9, 3.4756007009984694`*^9}, {
+  3.475600769447299*^9, 3.475600825287044*^9}, {3.4756009047256804`*^9, 
+  3.4756009227333107`*^9}, {3.475600976942219*^9, 3.4756009824857073`*^9}, {
+  3.475601020149288*^9, 3.475601103789864*^9}, {3.4756066182835817`*^9, 
+  3.475606618683095*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AllTheSame", "[", "a_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Length", "[", 
+    RowBox[{"Union", "[", "a", "]"}], "]"}], "\[Equal]", "1"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"PolynomialCyclotomicTest", "[", 
+    RowBox[{"polynomial_", ",", "n_Integer", ",", " ", "x_"}], "]"}], " ", ":=",
+    "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"j", ",", 
+       RowBox[{"goodprimes", "=", 
+        RowBox[{"GoodPrimes", "[", 
+         RowBox[{"polynomial", ",", "x", ",", "n"}], "]"}]}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Exponent", "[", 
+          RowBox[{"polynomial", ",", "x"}], "]"}], "\[Equal]", "1"}], ",", 
+        RowBox[{
+         RowBox[{"Return", "[", "True", "]"}], ";"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"For", "[", 
+          RowBox[{
+           RowBox[{"j", "=", "1"}], ",", 
+           RowBox[{"j", "\[LessEqual]", 
+            RowBox[{"Length", "[", "goodprimes", "]"}]}], ",", 
+           RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"Not", "[", 
+               RowBox[{"AllTheSame", "[", 
+                RowBox[{"FactorPowersModp", "[", 
+                 RowBox[{"polynomial", ",", 
+                  RowBox[{"goodprimes", "[", 
+                   RowBox[{"[", "j", "]"}], "]"}], ",", "x"}], "]"}], "]"}], 
+               "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"Return", "[", "False", "]"}], ";"}]}], 
+             "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", 
+          "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Return", "[", "True", "]"}], ";"}]}], "\[IndentingNewLine]", 
+    "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.475600436661611*^9, 3.475600591055029*^9}, {
+   3.475600623644442*^9, 3.4756006673618813`*^9}, {3.4756015969779253`*^9, 
+   3.47560191499676*^9}, {3.475601965325532*^9, 3.475601992211775*^9}, {
+   3.475602049490169*^9, 3.475602068674898*^9}, {3.4756028994375477`*^9, 
+   3.475602906905232*^9}, {3.47560311555663*^9, 3.4756031594384117`*^9}, {
+   3.475603204919519*^9, 3.4756032950166683`*^9}, {3.475603332756692*^9, 
+   3.47560333585673*^9}, {3.4756033970688047`*^9, 3.475603418354443*^9}, {
+   3.475604493792845*^9, 3.475604579994302*^9}, {3.475604654069756*^9, 
+   3.4756046797803907`*^9}, {3.475606624508677*^9, 3.475606625186685*^9}, {
+   3.475607022393577*^9, 3.475607048910078*^9}, 3.4767353309899282`*^9, 
+   3.4771766783183937`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CyclotomicTest", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"n_:", "200"}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"x", ",", 
+      RowBox[{"index", "=", 
+       RowBox[{"GraphIndex", "[", "g", "]"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"PolynomialCyclotomicTest", "[", 
+     RowBox[{
+      RowBox[{"MinimalPolynomial", "[", 
+       RowBox[{"index", ",", "x"}], "]"}], ",", "n", ",", "x"}], "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420457207958789*^9, 3.4204572083493505`*^9}, {
+  3.4204626912823887`*^9, 3.4204627582486815`*^9}, {3.420462938397723*^9, 
+  3.42046295755527*^9}, {3.43251727601047*^9, 3.432517276265791*^9}, {
+  3.4325222929886785`*^9, 3.4325223058972397`*^9}, {3.4326057038880143`*^9, 
+  3.432605734982726*^9}, {3.476735298918417*^9, 3.476735299462421*^9}, {
+  3.476735345035804*^9, 3.476735345569458*^9}}],
+
+Cell["\<\
+And the old version, which checked all the dimensions of the even objects.\
+\>", "Text",
+ CellChangeTimes->{{3.432605742203109*^9, 3.4326057537897696`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"CyclotomicTest", "[", 
+    RowBox[{"g_GradedBigraph", ",", "n_"}], "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x", ",", 
+       RowBox[{"dimensions", "=", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"DimensionsByDepth", "[", "g", "]"}], 
+            "\[LeftDoubleBracket]", "k", "\[RightDoubleBracket]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k", ",", "1", ",", 
+             RowBox[{
+              RowBox[{"GraphDepth", "[", "g", "]"}], "+", "1"}], ",", "2"}], 
+            "}"}]}], "]"}], "]"}]}], ",", 
+       RowBox[{"r", "=", "True"}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Do", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"(", 
+            RowBox[{"r", "=", 
+             RowBox[{"PolyCyclotomicTest", "[", 
+              RowBox[{
+               RowBox[{"MinimalPolynomial", "[", 
+                RowBox[{
+                 RowBox[{
+                 "dimensions", "\[LeftDoubleBracket]", "i", 
+                  "\[RightDoubleBracket]"}], ",", "x"}], "]"}], ",", "n", ",",
+                "x"}], "]"}]}], ")"}]}], ",", 
+          RowBox[{"Break", "[", "]"}]}], "]"}], "\[IndentingNewLine]", ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "dimensions", "]"}]}], "}"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", "r"}]}], "\[IndentingNewLine]", "]"}]}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.420457207958789*^9, 3.4204572083493505`*^9}, {
+  3.4204626912823887`*^9, 3.4204627582486815`*^9}, {3.420462938397723*^9, 
+  3.42046295755527*^9}, {3.43251727601047*^9, 3.432517276265791*^9}, {
+  3.4325222929886785`*^9, 3.4325223058972397`*^9}, {3.432605737776744*^9, 
+  3.43260574001997*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{790, 694},
+WindowMargins->{{Automatic, 40}, {Automatic, 0}},
+FrontEndVersion->"7.0 for Microsoft Windows (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 186, 3, 49, "Subtitle",
+ InitializationCell->True],
+Cell[756, 27, 177, 5, 47, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[958, 36, 58, 1, 71, "Section",
+ InitializationCell->True],
+Cell[1019, 39, 129, 2, 29, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1185, 46, 60, 1, 71, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1270, 51, 106, 1, 36, "Subsection"],
+Cell[1379, 54, 45, 0, 29, "Text"],
+Cell[1427, 56, 732, 16, 72, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2196, 77, 36, 0, 36, "Subsection"],
+Cell[2235, 79, 189, 5, 31, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2461, 89, 31, 0, 36, "Subsection"],
+Cell[2495, 91, 119, 3, 31, "Input",
+ InitializationCell->True],
+Cell[2617, 96, 371, 10, 52, "Input",
+ InitializationCell->True],
+Cell[2991, 108, 694, 17, 92, "Input",
+ InitializationCell->True],
+Cell[3688, 127, 1008, 28, 72, "Input",
+ InitializationCell->True],
+Cell[4699, 157, 846, 20, 52, "Input",
+ InitializationCell->True],
+Cell[5548, 179, 213, 6, 31, "Input",
+ InitializationCell->True],
+Cell[5764, 187, 2590, 58, 232, "Input",
+ InitializationCell->True],
+Cell[8357, 247, 1021, 23, 92, "Input",
+ InitializationCell->True],
+Cell[9381, 272, 166, 3, 29, "Text"],
+Cell[9550, 277, 1984, 49, 172, "Input"],
+Cell[CellGroupData[{
+Cell[11559, 330, 96, 1, 27, "Subsubsection"],
+Cell[11658, 333, 96, 3, 31, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11803, 342, 36, 0, 36, "Subsection"],
+Cell[11842, 344, 103, 3, 31, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

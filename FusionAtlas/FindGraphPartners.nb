@@ -1,0 +1,656 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     23315,        647]
+NotebookOptionsPosition[     20789,        556]
+NotebookOutlinePosition[     21179,        573]
+CellTagsIndexPosition[     21136,        570]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FindGraphPartners package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}, {3.4328640520355744`*^9, 
+  3.4328640537880945`*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas`.
+2010 NCGOA, Scott Morrison.
+2011, Scott Morrison\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}, {
+  3.432864062190176*^9, 3.4328640704820995`*^9}, {3.509134146331242*^9, 
+  3.5091341595377274`*^9}, {3.532895061708662*^9, 3.532895067858292*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["\<\
+This is the *third* generation of FindGraphPartners. This one uses the Scala \
+enumerator, and can find partner weeds as well.\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}, {
+  3.5091341625936127`*^9, 3.5091342050882273`*^9}, {3.532895072210423*^9, 
+  3.532895094337751*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`FindGraphPartners`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Java`\>\"", ",", 
+      "\"\<FusionAtlas`Bigraphs`\>\"", ",", "\"\<FusionAtlas`GraphPairs`\>\"",
+       ",", "\"\<FusionAtlas`DisplayGraphs`\>\"", ",", 
+      "\"\<FusionAtlas`Debugging`\>\"", ",", "\"\<JLink`\>\""}], "}"}]}], 
+   "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+   3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+   3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+   3.432864059205885*^9, 3.4328640906911583`*^9}, 3.4328680306265073`*^9, {
+   3.4338797600149584`*^9, 3.4338797610965137`*^9}, {3.434047294825952*^9, 
+   3.4340473012451825`*^9}, {3.434047508162715*^9, 3.434047514441744*^9}, {
+   3.4346390881011953`*^9, 3.4346390929381504`*^9}, {3.50913421980243*^9, 
+   3.509134222609681*^9}, {3.5092870051865187`*^9, 3.509287022211122*^9}, {
+   3.509287056573889*^9, 3.50928705782823*^9}, {3.5092871177007723`*^9, 
+   3.509287120312963*^9}, {3.532895258527792*^9, 3.532895260860528*^9}, {
+   3.532895374289608*^9, 3.5328953744647007`*^9}, {3.5328957284153748`*^9, 
+   3.532895731100642*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindGraphPartners", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"FindWeedPartners", ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, 
+   3.432864129446886*^9, {3.532895106211424*^9, 3.532895106427753*^9}, 
+   3.568502498722208*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"make", " ", "sure", " ", "Scala", " ", "gets", " ", "loaded"}], 
+   " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"FusionAtlasScalaDirectory", "[", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.532895661979023*^9, 3.532895673370488*^9}}],
+
+Cell[BoxData["\<\"/Users/scott/projects/fusionatlas/package/scala\"\>"], \
+"Output",
+ CellChangeTimes->{{3.542925688880773*^9, 3.542925693857671*^9}, 
+   3.568502504927932*^9}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"AsOldScalaObject", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"org`fusionatlas`graphs`Bigraph$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{"GraphToString", "[", "g", "]"}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"AsOldScalaObject", "[", "g_BigraphWithDuals", "]"}], ":=", 
+  RowBox[{"org`fusionatlas`graphs`BigraphWithDuals$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{"GraphToString", "[", "g", "]"}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"AsOldScalaObject", "[", 
+   RowBox[{"{", 
+    RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "}"}], "]"}],
+   ":=", 
+  RowBox[{"org`fusionatlas`graphs`PairOfBigraphsWithDuals$`MODULE$", "@", 
+   RowBox[{"apply", "[", 
+    RowBox[{
+     RowBox[{"GraphToString", "[", "g1", "]"}], ",", 
+     RowBox[{"GraphToString", "[", "g2", "]"}]}], "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6294906754593573`*^9, 3.6294906813862247`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphIsomorphicQ", "[", 
+   RowBox[{
+    RowBox[{"G1", ":", 
+     RowBox[{"{", "__BigraphWithDuals", "}"}]}], ",", 
+    RowBox[{"G2", ":", 
+     RowBox[{"{", "__BigraphWithDuals", "}"}]}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"AsOldScalaObject", "[", "G1", "]"}], "@", 
+   RowBox[{"isIsomorphicTo", "[", 
+    RowBox[{"AsOldScalaObject", "[", "G2", "]"}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052433667117*^9, 3.52605250708253*^9}, {
+  3.568497537262053*^9, 3.568497540952013*^9}, {3.629490687101347*^9, 
+  3.629490688814106*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TrivialDualData", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"BigraphWithDuals", "[", 
+   RowBox[{"g", ",", 
+    RowBox[{"DualData", "@@", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"Range", "[", 
+        RowBox[{"1", ",", 
+         RowBox[{"RankAtDepth", "[", 
+          RowBox[{"g", ",", "i"}], "]"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "0", ",", 
+         RowBox[{"GraphDepth", "[", "g", "]"}], ",", "2"}], "}"}]}], 
+      "]"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052554413101*^9, 3.526052624241064*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphIsomorphicQ", "[", 
+   RowBox[{"g1_GradedBigraph", ",", "g2_GradedBigraph"}], "]"}], ":=", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"h1", "=", 
+       RowBox[{"TrivialDualData", "[", "g1", "]"}]}], ",", 
+      RowBox[{"h2", "=", 
+       RowBox[{"TrivialDualData", "[", "g2", "]"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"GraphIsomorphicQ", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"h1", ",", "h1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"h2", ",", "h2"}], "}"}]}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052535609282*^9, 3.526052550313747*^9}, {
+  3.52605262547615*^9, 3.526052672769288*^9}, {3.526054547653264*^9, 
+  3.526054554700412*^9}, {3.526054729065022*^9, 3.5260547293187647`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"enumerator", ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"LoadJavaClass", "[", 
+      RowBox[{
+      "\"\<org.fusionatlas.enumerators.InMemoryPairEnumerator$\>\"", ",", 
+       RowBox[{"\"\<AllowShortContext\>\"", "\[Rule]", "False"}]}], "]"}], 
+     ";", "org`fusionatlas`enumerators`InMemoryPairEnumerator$`MODULE$"}], 
+    ")"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526053398078429*^9, 3.526053404502099*^9}, {
+  3.5260534465010967`*^9, 3.526053461824318*^9}, {3.532895523851296*^9, 
+  3.5328955244506197`*^9}, {3.56850478715915*^9, 3.568504794717822*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"roundUp", "[", "x_", "]"}], ":=", 
+  RowBox[{"N", "[", 
+   RowBox[{"Ceiling", "[", 
+    RowBox[{"x", ",", 
+     RowBox[{"Power", "[", 
+      RowBox[{"10", ",", 
+       RowBox[{"-", "5"}]}], "]"}]}], "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.568498601869792*^9, 3.5684986064459867`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtendOneDepth", "[", 
+   RowBox[{"d_", ",", 
+    RowBox[{"G", ":", 
+     RowBox[{"{", "__BigraphWithDuals", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"FromScalaObject", "[", 
+   RowBox[{"enumerator", "@", 
+    RowBox[{"extend", "[", 
+     RowBox[{"d", ",", 
+      RowBox[{"AsOldScalaObject", "[", "G", "]"}], ",", 
+      RowBox[{"AsScalaOption", "[", 
+       RowBox[{"{", "}"}], "]"}]}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052838316793*^9, 3.526052849394238*^9}, {
+   3.5260534688954906`*^9, 3.5260534846444263`*^9}, {3.5260535430438433`*^9, 
+   3.52605355700159*^9}, {3.5260538568092546`*^9, 3.526053862292594*^9}, {
+   3.526053971932014*^9, 3.526053973179558*^9}, {3.542925673979322*^9, 
+   3.542925678478403*^9}, {3.568497767282044*^9, 3.568497773983735*^9}, 
+   3.629490696478485*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtendOneDepthMatching", "[", 
+   RowBox[{"d_", ",", 
+    RowBox[{"G", ":", 
+     RowBox[{"{", "__BigraphWithDuals", "}"}]}], ",", "g_GradedBigraph"}], 
+   "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Cases", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"H_", "/;", 
+       RowBox[{"Or", "[", 
+        RowBox[{
+         RowBox[{"GraphIsomorphicQ", "[", 
+          RowBox[{
+           RowBox[{"H", "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+           RowBox[{"Truncate", "[", 
+            RowBox[{"g", ",", 
+             RowBox[{
+              RowBox[{"GraphDepth", "[", 
+               RowBox[{
+               "G", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               "]"}], "+", "1"}]}], "]"}]}], "]"}], ",", 
+         RowBox[{"GraphIsomorphicQ", "[", 
+          RowBox[{
+           RowBox[{"H", "\[LeftDoubleBracket]", 
+            RowBox[{"2", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+           RowBox[{"Truncate", "[", 
+            RowBox[{"g", ",", 
+             RowBox[{
+              RowBox[{"GraphDepth", "[", 
+               RowBox[{
+               "G", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               "]"}], "+", "1"}]}], "]"}]}], "]"}]}], "]"}]}]}], "]"}], "&"}],
+    "/@", 
+   RowBox[{"ExtendOneDepth", "[", 
+    RowBox[{"d", ",", "G"}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052974298848*^9, 3.5260530956223297`*^9}, {
+  3.5260535603378887`*^9, 3.526053565139761*^9}, {3.526053878061163*^9, 
+  3.526053882215879*^9}, {3.5260539756878967`*^9, 3.526054014338978*^9}, {
+  3.5260546609880667`*^9, 3.526054724728999*^9}, {3.568502447679887*^9, 
+  3.568502455649078*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtendOneDepthMatching", "[", 
+   RowBox[{"d_", ",", 
+    RowBox[{"G", ":", 
+     RowBox[{"{", "__BigraphWithDuals", "}"}]}], ",", "g_GradedBigraph"}], 
+   "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "cases", "}"}], ",", 
+    RowBox[{
+     RowBox[{"cases", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Cases", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{"H_", "/;", 
+           RowBox[{"Or", "[", 
+            RowBox[{
+             RowBox[{"GraphIsomorphicQ", "[", 
+              RowBox[{
+               RowBox[{"H", "\[LeftDoubleBracket]", 
+                RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{"Truncate", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{
+                  RowBox[{"GraphDepth", "[", 
+                   RowBox[{
+                   "G", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], "]"}], "+", "1"}]}], "]"}]}], 
+              "]"}], ",", 
+             RowBox[{"GraphIsomorphicQ", "[", 
+              RowBox[{
+               RowBox[{"H", "\[LeftDoubleBracket]", 
+                RowBox[{"2", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+               RowBox[{"Truncate", "[", 
+                RowBox[{"g", ",", 
+                 RowBox[{
+                  RowBox[{"GraphDepth", "[", 
+                   RowBox[{
+                   "G", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], "]"}], "+", "1"}]}], "]"}]}], 
+              "]"}]}], "]"}]}]}], "]"}], "&"}], "/@", 
+       RowBox[{"ExtendOneDepth", "[", 
+        RowBox[{"d", ",", "G"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+     "cases"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052974298848*^9, 3.5260530956223297`*^9}, {
+   3.5260535603378887`*^9, 3.526053565139761*^9}, {3.526053878061163*^9, 
+   3.526053882215879*^9}, {3.5260539756878967`*^9, 3.526054014338978*^9}, {
+   3.5260546609880667`*^9, 3.526054724728999*^9}, {3.531055492198326*^9, 
+   3.531055514140334*^9}, {3.531055656490533*^9, 3.531055680656904*^9}, 
+   3.532895272558992*^9, {3.5685024585246267`*^9, 3.568502463858404*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtendOneDepthMatching", "[", 
+   RowBox[{"d_", ",", 
+    RowBox[{"Gs", ":", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", "__BigraphWithDuals", "}"}], "..."}], "}"}]}], ",", 
+    "g_GradedBigraph"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"vines", ",", "weeds", ",", "extend"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"extend", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ExtendOneDepthMatching", "[", 
+         RowBox[{"d", ",", "#", ",", "g"}], "]"}], "&"}], "/@", "Gs"}]}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"vines", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"extend", "\[LeftDoubleBracket]", 
+         RowBox[{"All", ",", "1"}], "\[RightDoubleBracket]"}], ",", "1"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"weeds", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"extend", "\[LeftDoubleBracket]", 
+         RowBox[{"All", ",", "2"}], "\[RightDoubleBracket]"}], ",", "1"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"vines", ",", "weeds"}], "}"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526053114614354*^9, 3.526053146412463*^9}, {
+  3.5260535679228973`*^9, 3.526053570873424*^9}, {3.526053884883441*^9, 
+  3.526053890495742*^9}, {3.526054024911386*^9, 3.526054037155149*^9}, {
+  3.5260540837559013`*^9, 3.526054106723596*^9}, {3.5260542973433723`*^9, 
+  3.52605434740663*^9}, {3.526054780965671*^9, 3.526054783477605*^9}, {
+  3.5260548305293818`*^9, 3.5260548312196407`*^9}, {3.5260549449469347`*^9, 
+  3.526054945185751*^9}, {3.5260550527919197`*^9, 3.5260550529162827`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindGraphPartners", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FindGraphPartners", "[", "g", "]"}], "=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"branch", "=", 
+        RowBox[{"DepthOfBranchPoint", "[", "g", "]"}]}], ",", 
+       RowBox[{"d", "=", 
+        RowBox[{"roundUp", "[", 
+         RowBox[{"DimensionOfGenerator", "[", "g", "]"}], "]"}]}], ",", 
+       "weeds", ",", "vines", ",", "otherVines", ",", "finalWeeds"}], "}"}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"weeds", "=", 
+       RowBox[{"Nest", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"ExtendOneDepthMatching", "[", 
+            RowBox[{"d", ",", "#", ",", "g"}], "]"}], "\[LeftDoubleBracket]", 
+           "2", "\[RightDoubleBracket]"}], "&"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"TrivialDualData", "[", 
+             RowBox[{"AnBigraph", "[", 
+              RowBox[{"branch", "+", "1"}], "]"}], "]"}], ",", 
+            RowBox[{"TrivialDualData", "[", 
+             RowBox[{"AnBigraph", "[", 
+              RowBox[{"branch", "+", "1"}], "]"}], "]"}]}], "}"}], "}"}], ",", 
+         RowBox[{
+          RowBox[{"GraphDepth", "[", "g", "]"}], "-", "branch", "-", "1"}]}], 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"vines", "=", 
+       RowBox[{
+        RowBox[{"ExtendOneDepthMatching", "[", 
+         RowBox[{"d", ",", "weeds", ",", "g"}], "]"}], "\[LeftDoubleBracket]",
+         "1", "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"finalWeeds", "=", 
+       RowBox[{
+        RowBox[{"ExtendOneDepthMatching", "[", 
+         RowBox[{"d", ",", "weeds", ",", "g"}], "]"}], "\[LeftDoubleBracket]",
+         "2", "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"otherVines", "=", 
+       RowBox[{
+        RowBox[{"ExtendOneDepthMatching", "[", 
+         RowBox[{"d", ",", "finalWeeds", ",", "g"}], "]"}], 
+        "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"vines", "~", "Join", "~", "otherVines"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052691245661*^9, 3.526052703991173*^9}, {
+   3.526052868350966*^9, 3.526052930202969*^9}, {3.526053173543507*^9, 
+   3.5260532246325703`*^9}, {3.526053575777355*^9, 3.526053603421279*^9}, {
+   3.5260539090826406`*^9, 3.5260539230665503`*^9}, {3.526054124898364*^9, 
+   3.526054212897131*^9}, {3.5260549547618027`*^9, 3.526054974773395*^9}, {
+   3.526055161368555*^9, 3.526055163354538*^9}, {3.526055223310708*^9, 
+   3.526055223645801*^9}, {3.526055488870699*^9, 3.526055516300117*^9}, 
+   3.5260555488199997`*^9, {3.526057617815373*^9, 3.526057621342013*^9}, {
+   3.531055569668474*^9, 3.53105557207369*^9}, {3.532895136482136*^9, 
+   3.5328951554361267`*^9}, 3.5328953403253803`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindWeedPartners", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FindWeedPartners", "[", "g", "]"}], "=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"branch", "=", 
+        RowBox[{"DepthOfBranchPoint", "[", "g", "]"}]}], ",", 
+       RowBox[{"d", "=", 
+        RowBox[{"roundUp", "[", 
+         RowBox[{"DimensionOfGenerator", "[", "g", "]"}], "]"}]}], ",", 
+       "weeds"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"weeds", "=", 
+      RowBox[{"Nest", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"ExtendOneDepthMatching", "[", 
+           RowBox[{"d", ",", "#", ",", "g"}], "]"}], "\[LeftDoubleBracket]", 
+          "2", "\[RightDoubleBracket]"}], "&"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"TrivialDualData", "[", 
+            RowBox[{"AnBigraph", "[", 
+             RowBox[{"branch", "+", "1"}], "]"}], "]"}], ",", 
+           RowBox[{"TrivialDualData", "[", 
+            RowBox[{"AnBigraph", "[", 
+             RowBox[{"branch", "+", "1"}], "]"}], "]"}]}], "}"}], "}"}], ",", 
+        
+        RowBox[{
+         RowBox[{"GraphDepth", "[", "g", "]"}], "-", "branch"}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.526052691245661*^9, 3.526052703991173*^9}, {
+   3.526052868350966*^9, 3.526052930202969*^9}, {3.526053173543507*^9, 
+   3.5260532246325703`*^9}, {3.526053575777355*^9, 3.526053603421279*^9}, {
+   3.5260539090826406`*^9, 3.5260539230665503`*^9}, {3.526054124898364*^9, 
+   3.526054212897131*^9}, {3.5260549547618027`*^9, 3.526054974773395*^9}, {
+   3.526055161368555*^9, 3.526055163354538*^9}, {3.526055223310708*^9, 
+   3.526055223645801*^9}, {3.526055488870699*^9, 3.526055516300117*^9}, 
+   3.5260555488199997`*^9, {3.526057617815373*^9, 3.526057621342013*^9}, {
+   3.52968333178594*^9, 3.529683383270486*^9}, {3.531055578875461*^9, 
+   3.531055581179377*^9}, {3.5328951470999393`*^9, 3.5328951524621687`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1102, 846},
+WindowMargins->{{218, Automatic}, {Automatic, 0}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 242, 4, 51, "Subtitle",
+ InitializationCell->True],
+Cell[812, 28, 346, 8, 68, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1183, 40, 58, 1, 80, "Section",
+ InitializationCell->True],
+Cell[1244, 43, 345, 7, 30, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1626, 55, 60, 1, 80, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1711, 60, 133, 2, 44, "Subsection",
+ InitializationCell->True],
+Cell[1847, 64, 72, 1, 30, "Text",
+ InitializationCell->True],
+Cell[1922, 67, 1327, 23, 63, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3286, 95, 63, 1, 44, "Subsection",
+ InitializationCell->True],
+Cell[3352, 98, 379, 9, 46, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3768, 112, 58, 1, 44, "Subsection",
+ InitializationCell->True],
+Cell[3829, 115, 119, 3, 28, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[3973, 122, 318, 7, 46, "Input",
+ InitializationCell->True],
+Cell[4294, 131, 176, 3, 28, "Output"]
+}, Open  ]],
+Cell[4485, 137, 969, 22, 80, "Input",
+ InitializationCell->True],
+Cell[5457, 161, 601, 15, 46, "Input",
+ InitializationCell->True],
+Cell[6061, 178, 631, 17, 46, "Input",
+ InitializationCell->True],
+Cell[6695, 197, 856, 22, 46, "Input",
+ InitializationCell->True],
+Cell[7554, 221, 632, 14, 46, "Input",
+ InitializationCell->True],
+Cell[8189, 237, 354, 10, 28, "Input",
+ InitializationCell->True],
+Cell[8546, 249, 862, 19, 28, "Input",
+ InitializationCell->True],
+Cell[9411, 270, 1753, 44, 63, "Input",
+ InitializationCell->True],
+Cell[11167, 316, 2226, 52, 131, "Input",
+ InitializationCell->True],
+Cell[13396, 370, 1787, 43, 114, "Input",
+ InitializationCell->True],
+Cell[15186, 415, 3008, 65, 182, "Input",
+ InitializationCell->True],
+Cell[18197, 482, 2087, 46, 97, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[20309, 532, 123, 2, 35, "Subsubsection",
+ InitializationCell->True],
+Cell[20435, 536, 96, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20580, 545, 63, 1, 44, "Subsection",
+ InitializationCell->True],
+Cell[20646, 548, 103, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

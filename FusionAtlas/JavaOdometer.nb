@@ -1,0 +1,858 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     32055,        849]
+NotebookOptionsPosition[     29666,        764]
+NotebookOutlinePosition[     30106,        782]
+CellTagsIndexPosition[     30063,        779]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["JavaOdometer package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}, {3.4327775537006736`*^9, 
+  3.4327775569353247`*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas v0.
+October 12, 2008, Scott Morrison\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}, {
+  3.432777559849515*^9, 3.432777570454765*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`JavaOdometer`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`Debugging`\>\"", ",", 
+      "\"\<FusionAtlas`RemoteInterface`\>\"", ",", 
+      "\"\<FusionAtlas`Java`\>\"", ",", "\"\<JLink`\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+  3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+  3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+  3.432777576673707*^9, 3.4327775869484816`*^9}, {3.4327796677505283`*^9, 
+  3.432779670003768*^9}, {3.434561456512453*^9, 3.434561465345154*^9}, {
+  3.441994559392016*^9, 3.441994566564913*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsUpToRankJava", "::", "usage"}], "=", 
+   "\"\<\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, 
+   3.4327778032294784`*^9, {3.432777920347886*^9, 3.432777920688376*^9}}],
+
+Cell[BoxData[
+ RowBox[{"FindBigraphExtensionsUpToRankAndDepthJava", ";", 
+  "FindBigraphExtensionsUpToRankAndDepthJavaIterator", ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsMatching", "::", "usage"}], "=", 
+   "\"\<\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.442072346855373*^9, 3.442072358203993*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsUpToRankJava", "[", "norm_", "]"}], "[", 
+   RowBox[{"g_GradedBigraph", ",", "totalRank_", ",", 
+    RowBox[{"maximalLoops_:", 
+     RowBox[{"(", 
+      RowBox[{"-", "1"}], ")"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "timing", ",", "expressionStrings", ",", "expression", ",", "union", ",",
+       "result"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"totalRank", "-", 
+         RowBox[{"FusionAtlas`Bigraphs`GraphRank", "[", "g", "]"}]}], 
+        "\[LessEqual]", "0"}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<Entering java ... \>\"", ",", "g", ",", 
+       "\"\<.findExtensionsUpToRank(\>\"", ",", "norm", ",", "\"\<,\>\"", ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"totalRank", "\[Equal]", "\[Infinity]"}], ",", 
+         RowBox[{"-", "1"}], ",", 
+         RowBox[{"totalRank", "-", 
+          RowBox[{"FusionAtlas`Bigraphs`GraphRank", "[", "g", "]"}]}]}], 
+        "]"}], ",", "\"\<,\>\"", ",", "maximalLoops", ",", "\"\<)\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"timing", ",", "expressionStrings"}], "}"}], "=", 
+      RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
+       RowBox[{"Proxy`findExtensionsUpToRank", "[", 
+        RowBox[{
+         RowBox[{"GraphToString", "[", "g", "]"}], ",", 
+         RowBox[{
+          RowBox[{"N", "[", "norm", "]"}], "+", 
+          SuperscriptBox["10.", 
+           RowBox[{"-", "6"}]]}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"totalRank", "\[Equal]", "\[Infinity]"}], ",", 
+           RowBox[{"-", "1"}], ",", 
+           RowBox[{"totalRank", "-", 
+            RowBox[{"FusionAtlas`Bigraphs`GraphRank", "[", "g", "]"}]}]}], 
+          "]"}], ",", "maximalLoops"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<... expression returned from java in \>\"", ",", "timing", ",", 
+       "\"\< seconds, with \>\"", ",", 
+       RowBox[{"Length", "[", "expressionStrings", "]"}], ",", " ", 
+       "\"\< strings.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"expression", "=", 
+      RowBox[{"GraphFromString", "/@", "expressionStrings"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<Finished interpreting, \>\"", ",", 
+       RowBox[{"Length", "[", "expression", "]"}], ",", " ", 
+       "\"\< GradedBigraphs returned.\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"union", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{
+       "FusionAtlas`Bigraphs`CanonicalizeBigraph", "/@", "expression"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<Reduced to \>\"", ",", 
+       RowBox[{"Length", "[", "union", "]"}], ",", " ", 
+       "\"\< GradedBigraphs after canonicalizing.\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"result", "=", 
+      RowBox[{"Cases", "[", 
+       RowBox[{"union", ",", 
+        RowBox[{"c_", "/;", 
+         RowBox[{
+          RowBox[{"FusionAtlas`Bigraphs`DimensionAtMostQ", "[", "norm", "]"}],
+           "[", "c", "]"}]}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<... of which \>\"", ",", 
+       RowBox[{"Length", "[", "result", "]"}], ",", " ", 
+       "\"\< actually have small enough norm.\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445381856512425*^9, 3.445381858726368*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsUpToRankAndDepthJava", "[", "norm_", "]"}], 
+   "[", 
+   RowBox[{"g_GradedBigraph", ",", "totalRank_", ",", "depth_"}], "]"}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "timing", ",", "expressionStrings", ",", "expression", ",", "union", ",",
+       "result"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"totalRank", "\[LessEqual]", 
+        RowBox[{"FusionAtlas`Bigraphs`GraphRank", "[", "g", "]"}]}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"depth", "<", 
+        RowBox[{"FusionAtlas`Bigraphs`GraphDepth", "[", "g", "]"}]}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"depth", "==", 
+        RowBox[{"FusionAtlas`Bigraphs`GraphDepth", "[", "g", "]"}]}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", 
+         RowBox[{"GraphToString", "[", "g", "]"}], "}"}], "]"}]}], "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<Entering java ... \>\"", ",", "g", ",", 
+       "\"\<.findExtensionsUpToRankAndDepth(\>\"", ",", "norm", ",", 
+       "\"\<,\>\"", ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"totalRank", "\[Equal]", "\[Infinity]"}], ",", 
+         RowBox[{"-", "1"}], ",", "totalRank"}], "]"}], ",", "\"\<,\>\"", ",",
+        "depth", ",", "\"\<)\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"timing", ",", "expressionStrings"}], "}"}], "=", 
+      RowBox[{"AbsoluteTiming", "[", 
+       RowBox[{"GradedBigraph`iterableToStringArray", "[", 
+        RowBox[{
+         RowBox[{"JavaNew", "[", 
+          RowBox[{"\"\<org.fusionatlas.odometer.GradedBigraph\>\"", ",", 
+           RowBox[{"List", "@@", "g"}]}], "]"}], "@", 
+         RowBox[{"findExtensionsUpToRankAndDepth", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"N", "[", "norm", "]"}], "+", 
+            SuperscriptBox["10.", 
+             RowBox[{"-", "6"}]]}], ",", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"totalRank", "\[Equal]", "\[Infinity]"}], ",", 
+             RowBox[{"-", "1"}], ",", "totalRank"}], "]"}], ",", "depth"}], 
+          "]"}]}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<... expression returned from java in \>\"", ",", "timing", ",", 
+       "\"\< seconds, with \>\"", ",", 
+       RowBox[{"Length", "[", "expressionStrings", "]"}], ",", " ", 
+       "\"\< strings.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     "expressionStrings"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434392094410488*^9, 3.4343922061311345`*^9}, {
+  3.434392240700843*^9, 3.434392274569544*^9}, {3.434552398788085*^9, 
+  3.4345524078411026`*^9}, {3.434552444834296*^9, 3.43455244618624*^9}, {
+  3.434552752256347*^9, 3.4345527545496445`*^9}, {3.4345528138549213`*^9, 
+  3.434552820244109*^9}, {3.434561472245075*^9, 3.4345614929548545`*^9}, {
+  3.4345615238793216`*^9, 3.434561525932274*^9}, {3.434562275720416*^9, 
+  3.4345623020983458`*^9}, {3.434760796342061*^9, 3.434760797003011*^9}, {
+  3.442086198058364*^9, 3.442086211969821*^9}, {3.445713824331167*^9, 
+  3.445713826829687*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+   "FindBigraphExtensionsUpToRankAndDepthJavaIterator", "[", "norm_", "]"}], 
+   "[", 
+   RowBox[{"g_GradedBigraph", ",", "totalRank_", ",", "depth_"}], "]"}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "timing", ",", "iter", ",", "expression", ",", "union", ",", "result"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"totalRank", "\[LessEqual]", 
+        RowBox[{"FusionAtlas`Bigraphs`GraphRank", "[", "g", "]"}]}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"depth", "<", 
+        RowBox[{"FusionAtlas`Bigraphs`GraphDepth", "[", "g", "]"}]}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"depth", "==", 
+        RowBox[{"FusionAtlas`Bigraphs`GraphDepth", "[", "g", "]"}]}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", "g", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<Entering java ... \>\"", ",", "g", ",", 
+       "\"\<.findExtensionsUpToRankAndDepth(\>\"", ",", "norm", ",", 
+       "\"\<,\>\"", ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"totalRank", "\[Equal]", "\[Infinity]"}], ",", 
+         RowBox[{"-", "1"}], ",", "totalRank"}], "]"}], ",", "\"\<,\>\"", ",",
+        "depth", ",", "\"\<)\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"timing", ",", "iter"}], "}"}], "=", 
+      RowBox[{"AbsoluteTiming", "[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"GradedBigraph`iterableToStringArrayIterable", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"JavaNew", "[", 
+             RowBox[{"\"\<org.fusionatlas.odometer.GradedBigraph\>\"", ",", 
+              RowBox[{"List", "@@", "g"}]}], "]"}], "@", 
+            RowBox[{"findExtensionsUpToRankAndDepth", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"N", "[", "norm", "]"}], "+", 
+               SuperscriptBox["10.", 
+                RowBox[{"-", "6"}]]}], ",", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{"totalRank", "\[Equal]", "\[Infinity]"}], ",", 
+                RowBox[{"-", "1"}], ",", "totalRank"}], "]"}], ",", "depth"}],
+              "]"}]}], ",", "10000"}], "]"}], ")"}], "@", 
+        RowBox[{"iterator", "[", "]"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<... iterator returned from java in \>\"", ",", "timing", ",", 
+       "\"\< seconds.\>\""}], "]"}], ";", "\[IndentingNewLine]", "iter"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434760834126392*^9, 3.4347609186879854`*^9}, {
+   3.434761519832389*^9, 3.43476152322727*^9}, {3.4347615567554817`*^9, 
+   3.4347615748114448`*^9}, {3.4347617320976114`*^9, 
+   3.4347617799464145`*^9}, {3.4347619562799697`*^9, 3.4347619885964384`*^9}, 
+   3.4347622917122974`*^9, {3.4358836690611773`*^9, 3.4358836695318546`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsMatching", "[", "norm_", "]"}], "[", 
+   RowBox[{"short_GradedBigraph", ",", "long_GradedBigraph"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"FindBigraphExtensionsMatching", "[", "norm", "]"}], "[", 
+    RowBox[{"short", ",", 
+     RowBox[{"{", "long", "}"}]}], "]"}], "\[LeftDoubleBracket]", "1", 
+   "\[RightDoubleBracket]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4420723837393637`*^9, 3.4420724269392567`*^9}, {
+  3.442072701491269*^9, 3.442072823841445*^9}, {3.442696988068746*^9, 
+  3.442696990488093*^9}, {3.4434822435127783`*^9, 3.4434822599158278`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsMatching", "[", "norm_", "]"}], "[", 
+   RowBox[{"short_GradedBigraph", ",", 
+    RowBox[{"longs", ":", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"{", "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.443475073272481*^9, 3.443475081031682*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsMatchingServer", "[", "norm_", "]"}], "[", 
+   RowBox[{"short_GradedBigraph", ",", 
+    RowBox[{"longs", ":", 
+     RowBox[{"List", "[", "__GradedBigraph", "]"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "URL", ",", " ", "timing", ",", "expressionStrings", ",", "graphs", ",", 
+      "result"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"URL", "=", 
+      RowBox[{"\"\<http://localhost:8182/graphs/\>\"", "<>", 
+       RowBox[{"GraphToString", "[", "short", "]"}], "<>", 
+       "\"\</ExtensionsMatching/\>\"", "<>", 
+       RowBox[{"ToString", "[", 
+        RowBox[{
+         RowBox[{"N", "[", "norm", "]"}], "+", 
+         SuperscriptBox["10.", 
+          RowBox[{"-", "6"}]]}], "]"}], "<>", "\"\</\>\"", "<>", 
+       RowBox[{"StringReplace", "[", 
+        RowBox[{
+         RowBox[{"ToString", "[", 
+          RowBox[{"GraphToString", "/@", "longs"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"\"\< \>\"", "\[Rule]", "\"\<\>\""}], ",", 
+           RowBox[{"\"\<{\>\"", "\[Rule]", "\"\<%7B\>\""}], ",", 
+           RowBox[{"\"\<}\>\"", "\[Rule]", "\"\<%7D\>\""}]}], "}"}]}], 
+        "]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<Calling server ... \>\"", ",", 
+       RowBox[{"Short", "[", "URL", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"timing", ",", "expressionStrings"}], "}"}], "=", 
+      RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
+       RowBox[{"ToExpression", "[", 
+        RowBox[{"Import", "[", "URL", "]"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"expressionStrings", "===", "$Failed"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"ServerCrash", "=", 
+         RowBox[{"{", 
+          RowBox[{"short", ",", "longs"}], "}"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+        "Print", "[", 
+         "\"\<It appears an error occurred while calling the server. Is it \
+running?\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<... expression returned from server in \>\"", ",", "timing", ",", 
+       "\"\< seconds, with \>\"", ",", 
+       RowBox[{"Plus", "@@", 
+        RowBox[{"(", 
+         RowBox[{"Length", "/@", "expressionStrings"}], ")"}]}], ",", " ", 
+       "\"\< strings.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"graphs", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{"CachedGraphFromString", ",", "expressionStrings", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ClearCachedGraphFromString", "[", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "DebugPrint", "[", "\"\<... finished converting strings.\>\"", "]"}], 
+     ";", "\[IndentingNewLine]", "graphs"}]}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"result", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Cases", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{"g_", "/;", 
+           RowBox[{
+            RowBox[{
+            "FusionAtlas`Bigraphs`DimensionAtMostQ", "[", "norm", "]"}], "[", 
+            "g", "]"}]}]}], "]"}], "&"}], "/@", "graphs"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<... finished verifying dimensions (\>\"", ",", 
+       RowBox[{"Length", "[", 
+        RowBox[{"Flatten", "[", "result", "]"}], "]"}], ",", "\"\</\>\"", ",", 
+       RowBox[{"Length", "[", 
+        RowBox[{"Flatten", "[", "graphs", "]"}], "]"}], ",", "\"\<)\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", "result"}], "*)"}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445625219134348*^9, 3.445625219856688*^9}, {
+  3.445625251065813*^9, 3.445625372352798*^9}, {3.445625520968815*^9, 
+  3.445625523676929*^9}, {3.445626072645421*^9, 3.4456260827682257`*^9}, {
+  3.445626120555354*^9, 3.4456261389362793`*^9}, {3.445627242169641*^9, 
+  3.445627243760001*^9}, {3.4475529749223223`*^9, 3.447552983634282*^9}, {
+  3.4476923080014973`*^9, 3.447692314377625*^9}},
+ CellID->1705122343],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsMatchingJLink", "[", "norm_", "]"}], "[", 
+   RowBox[{"short_GradedBigraph", ",", 
+    RowBox[{"longs", ":", 
+     RowBox[{"List", "[", "__GradedBigraph", "]"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "timing", ",", "expressionStrings", ",", "graphs", ",", "result"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<Entering java ... \>\"", ",", "short", ",", 
+       "\"\<.findExtensionsMatching(\>\"", ",", 
+       RowBox[{"Short", "[", "longs", "]"}], ",", "\"\<,\>\"", ",", "norm", 
+       ",", "\"\<)\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"timing", ",", "expressionStrings"}], "}"}], "=", 
+      RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
+       RowBox[{"Proxy`findExtensionsMatching", "[", 
+        RowBox[{
+         RowBox[{"GraphToString", "[", "short", "]"}], ",", 
+         RowBox[{"GraphToString", "/@", "longs"}], ",", 
+         RowBox[{
+          RowBox[{"N", "[", "norm", "]"}], "+", 
+          SuperscriptBox["10.", 
+           RowBox[{"-", "6"}]]}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"expressionStrings", "===", "$Failed"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+        "Print", "[", 
+         "\"\<It appears an error occurred in Java during \
+FindBigraphExtensionsMatchingNoDuplicates. Restarting Java and trying again .\
+\>\"", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"JavaCrash", "=", 
+         RowBox[{"{", 
+          RowBox[{"short", ",", "longs"}], "}"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"RestartJava", "[", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Return", "[", 
+         RowBox[{
+          RowBox[{"FindBigraphExtensionsMatchingJLink", "[", "norm", "]"}], 
+          "[", 
+          RowBox[{"short", ",", "longs"}], "]"}], "]"}], ";"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<... expression returned from java in \>\"", ",", "timing", ",", 
+       "\"\< seconds, with \>\"", ",", 
+       RowBox[{"Plus", "@@", 
+        RowBox[{"(", 
+         RowBox[{"Length", "/@", "expressionStrings"}], ")"}]}], ",", " ", 
+       "\"\< strings.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"graphs", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{"CachedGraphFromString", ",", "expressionStrings", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ClearCachedGraphFromString", "[", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "DebugPrint", "[", "\"\<... finished converting strings.\>\"", "]"}], 
+     ";", "\[IndentingNewLine]", "graphs"}]}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"result", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Cases", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{"g_", "/;", 
+           RowBox[{
+            RowBox[{
+            "FusionAtlas`Bigraphs`DimensionAtMostQ", "[", "norm", "]"}], "[", 
+            "g", "]"}]}]}], "]"}], "&"}], "/@", "graphs"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<... finished verifying dimensions (\>\"", ",", 
+       RowBox[{"Length", "[", 
+        RowBox[{"Flatten", "[", "result", "]"}], "]"}], ",", "\"\</\>\"", ",", 
+       RowBox[{"Length", "[", 
+        RowBox[{"Flatten", "[", "graphs", "]"}], "]"}], ",", "\"\<)\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", "result"}], "*)"}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4456252282807293`*^9, 3.445625233399832*^9}, {
+   3.447552580080841*^9, 3.447552589780335*^9}, {3.447552957347796*^9, 
+   3.447552967290031*^9}, {3.447692229413391*^9, 3.4476922724539843`*^9}, 
+   3.494210026147893*^9, {3.494210064103641*^9, 3.494210064539879*^9}},
+ CellID->789912702],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RLE", "[", "list_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"First", "[", "#", "]"}], ",", 
+      RowBox[{"Length", "[", "#", "]"}]}], "}"}], "&"}], "/@", 
+   RowBox[{"Split", "[", "list", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.464194155269595*^9, 3.4641941901524887`*^9}, {
+  3.464194284842902*^9, 3.464194285789028*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RLD", "[", "list_", "]"}], ":=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+        ",", 
+        RowBox[{"{", 
+         RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+         "}"}]}], "]"}], "&"}], "/@", "list"}], ",", "1"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.464194196240114*^9, 3.4641942360119247`*^9}, {
+  3.464194288946207*^9, 3.464194289809188*^9}, {3.464197353935155*^9, 
+  3.4641973540030937`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindBigraphExtensionsMatching", "[", "norm_", "]"}], "[", 
+   RowBox[{"short_GradedBigraph", ",", 
+    RowBox[{"longs", ":", 
+     RowBox[{"List", "[", "__GradedBigraph", "]"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"union", "=", 
+       RowBox[{"Union", "[", "longs", "]"}]}], ",", "noduplicates", ",", 
+      "graphs", ",", "repeats", ",", "result"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"graphs", ",", "repeats"}], "}"}], "=", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"RLE", "[", "longs", "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "union", "]"}], "\[NotEqual]", 
+        RowBox[{"Length", "[", "graphs", "]"}]}], ",", 
+       RowBox[{
+       "DebugPrint", "[", "\"\<Hmm, maybe RLE isn't the right solution!\>\"", 
+        "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"Length", "[", "graphs", "]"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"noduplicates", "=", 
+      RowBox[{
+       RowBox[{"FindBigraphExtensionsMatchingJLink", "[", "norm", "]"}], "[", 
+       RowBox[{"short", ",", "graphs"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<Beginning RLD, \>\"", ",", 
+       RowBox[{"Tally", "[", "repeats", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"result", "=", 
+      RowBox[{"RLD", "[", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", 
+         RowBox[{"noduplicates", ",", "repeats"}], "}"}], "]"}], "]"}]}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", "\"\<Finished RLD\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", "result"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4434823835927753`*^9, 3.443482475535256*^9}, {
+  3.44348252812402*^9, 3.443482535603636*^9}, {3.4456252395344048`*^9, 
+  3.445625240309558*^9}, {3.4456253894155893`*^9, 3.445625390152379*^9}, {
+  3.44563024224196*^9, 3.445630243055408*^9}, {3.464193222048945*^9, 
+  3.464193227806891*^9}, {3.464193865830929*^9, 3.464193867433123*^9}, {
+  3.464194783967224*^9, 3.46419485044193*^9}, {3.464194887759261*^9, 
+  3.46419491745905*^9}, {3.464196020534657*^9, 3.464196090823475*^9}, {
+  3.464197777665058*^9, 3.464197778048661*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"FindBigraphExtensionsMatching", "[", "norm_", "]"}], "[", 
+     RowBox[{"short_GradedBigraph", ",", 
+      RowBox[{"longs", ":", 
+       RowBox[{"List", "[", "__GradedBigraph", "]"}]}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"union", "=", 
+         RowBox[{"Union", "[", "longs", "]"}]}], ",", "noduplicates"}], "}"}],
+       ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"noduplicates", "=", 
+        RowBox[{
+         RowBox[{"FindBigraphExtensionsMatchingJLink", "[", "norm", "]"}], 
+         "[", 
+         RowBox[{"short", ",", "union"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "it", " ", "seems", " ", "this", " ", "is", " ", "really", " ", 
+         "slow"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"noduplicates", "\[LeftDoubleBracket]", 
+          RowBox[{"FindFirst", "[", 
+           RowBox[{"union", ",", 
+            RowBox[{
+            "longs", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}]}],
+            "]"}], "\[RightDoubleBracket]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "1", ",", 
+           RowBox[{"Length", "[", "longs", "]"}]}], "}"}]}], "]"}]}]}], 
+     "\[IndentingNewLine]", "]"}]}], "*)"}], "\[IndentingNewLine]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4434823835927753`*^9, 3.443482475535256*^9}, {
+  3.44348252812402*^9, 3.443482535603636*^9}, {3.4456252395344048`*^9, 
+  3.445625240309558*^9}, {3.4456253894155893`*^9, 3.445625390152379*^9}, {
+  3.44563024224196*^9, 3.445630243055408*^9}, {3.464193222048945*^9, 
+  3.464193227806891*^9}, {3.464193865830929*^9, 3.464193867433123*^9}, {
+  3.464194783967224*^9, 3.46419488224469*^9}, {3.4641952077358828`*^9, 
+  3.464195209716257*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{994, 675},
+WindowMargins->{{Automatic, 76}, {Automatic, 80}},
+ShowSelection->True,
+TaggingRules->{"SearchTextTranslated" -> ""},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 237, 4, 46, "Subtitle",
+ InitializationCell->True],
+Cell[807, 28, 233, 6, 41, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1065, 38, 58, 1, 67, "Section",
+ InitializationCell->True],
+Cell[1126, 41, 129, 2, 26, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1292, 48, 60, 1, 67, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1377, 53, 106, 1, 34, "Subsection"],
+Cell[1486, 56, 45, 0, 26, "Text"],
+Cell[1534, 58, 848, 17, 58, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2419, 80, 36, 0, 34, "Subsection"],
+Cell[2458, 82, 310, 7, 27, "Input",
+ InitializationCell->True],
+Cell[2771, 91, 172, 3, 27, "Input",
+ InitializationCell->True],
+Cell[2946, 96, 228, 6, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3211, 107, 31, 0, 34, "Subsection"],
+Cell[3245, 109, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[3367, 114, 3883, 92, 292, "Input",
+ InitializationCell->True],
+Cell[7253, 208, 3595, 80, 243, "Input",
+ InitializationCell->True],
+Cell[10851, 290, 3328, 77, 247, "Input",
+ InitializationCell->True],
+Cell[14182, 369, 662, 14, 43, "Input",
+ InitializationCell->True],
+Cell[14847, 385, 342, 9, 27, "Input",
+ InitializationCell->True],
+Cell[15192, 396, 4372, 103, 342, "Input",
+ InitializationCell->True,
+ CellID->1705122343],
+Cell[19567, 501, 4109, 97, 377, "Input",
+ InitializationCell->True,
+ CellID->789912702],
+Cell[23679, 600, 431, 12, 27, "Input",
+ InitializationCell->True],
+Cell[24113, 614, 646, 17, 27, "Input",
+ InitializationCell->True],
+Cell[24762, 633, 2505, 58, 178, "Input",
+ InitializationCell->True],
+Cell[27270, 693, 1945, 45, 118, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[29240, 742, 96, 1, 24, "Subsubsection"],
+Cell[29339, 745, 96, 3, 70, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29484, 754, 36, 0, 34, "Subsection"],
+Cell[29523, 756, 103, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

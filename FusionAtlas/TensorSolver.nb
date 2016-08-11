@@ -1,0 +1,2276 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     87592,       2267]
+NotebookOptionsPosition[     84042,       2148]
+NotebookOutlinePosition[     84415,       2164]
+CellTagsIndexPosition[     84372,       2161]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["TensorSolver package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}, {3.43286303931936*^9, 
+  3.432863040651275*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas.
+NCGOA 2010, Scott Morrison, James Tener, Dave Penneys, Emily Peters\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}, {
+  3.432863042844429*^9, 3.4328630476513405`*^9}, {3.50913478632286*^9, 
+  3.509134790698635*^9}, {3.509134854227016*^9, 3.5091348629467373`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["TODO: throw out solutions with rational entries!", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}, {
+  3.50913479633034*^9, 3.5091348046980457`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`TensorSolver`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`Debugging`\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+   3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+   3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+   3.4328630497143073`*^9, 3.4328630598388653`*^9}, {3.4328631112628098`*^9, 
+   3.432863117131248*^9}, {3.43421742420932*^9, 3.4342174304082336`*^9}, {
+   3.4346391926615458`*^9, 3.4346391985700417`*^9}, 3.50913474509414*^9, {
+   3.514559797188693*^9, 3.514559798510384*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindFusionRules", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, {
+  3.432863233959238*^9, 3.4328632505731277`*^9}, {3.5091347496847057`*^9, 
+  3.509134750556608*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindFusionRulesTimeLimit", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4339653864274592`*^9, {3.509134754021656*^9, 3.509134760156085*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FlipFusionRules", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.43421732547735*^9, 3.434217326118272*^9}, {
+  3.509134763419896*^9, 3.509134768091873*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FusionRules", "::", "usage"}], "=", 
+   "\"\<A wrapper for fusion rules. Contains a list with elements of the form \
+{a,b,c}->T, which gives the multiplicities of ab modules with bc \
+modules.\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.514559868492284*^9, 3.514559910098756*^9}, 
+   3.532378691434411*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"EvenPartFusionRules", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4338737603178177`*^9, 3.433873779295106*^9}, 
+   3.4338744729425216`*^9, {3.509134774013318*^9, 3.509134777291615*^9}, {
+   3.526057398579788*^9, 3.526057399824563*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "FindFusionRules", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5540696684943953`*^9, 3.554069671909296*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"PrepareFusionEquations", "[", 
+    RowBox[{"g_GradedGraph", ",", "Z_"}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"RankAtDepth", "[", 
+     RowBox[{"g", ",", "1"}], "]"}], "\[Equal]", "1"}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"PrepareAssociativityEquations", "[", 
+      RowBox[{"g", ",", "Z"}], "]"}], "~", "Join", "~", 
+     RowBox[{"PreparePrincipalGraphEquations", "[", 
+      RowBox[{"g", ",", "Z"}], "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483014820983801*^9, 3.483014847652089*^9}, {
+  3.483016617355928*^9, 3.4830166409436493`*^9}, {3.483017747685618*^9, 
+  3.483017758823674*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"PrepareFusionEquations", "[", 
+    RowBox[{
+    "h0_BigraphWithDuals", ",", " ", "h1_BigraphWithDuals", ",", "Z_", ",", 
+     RowBox[{"extensions", ":", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}], ":", "False"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RankAtDepth", "[", 
+      RowBox[{"h0", ",", "1"}], "]"}], "\[Equal]", "1"}], "\[And]", 
+    RowBox[{
+     RowBox[{"RankAtDepth", "[", 
+      RowBox[{"h1", ",", "1"}], "]"}], "\[Equal]", "1"}]}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g", ",", "h", ",", "equations"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"h", "[", "0", "]"}], ",", 
+        RowBox[{"h", "[", "1", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"h0", ",", "h1"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "0", "]"}], ",", 
+        RowBox[{"g", "[", "1", "]"}]}], "}"}], "=", 
+      RowBox[{"If", "[", 
+       RowBox[{"extensions", ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"EvenQ", "[", 
+             RowBox[{"GraphDepth", "[", "#", "]"}], "]"}], ",", 
+            RowBox[{"BigraphWithDuals", "[", 
+             RowBox[{
+              RowBox[{"Append", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+                ",", 
+                RowBox[{"{", 
+                 RowBox[{"Table", "[", 
+                  RowBox[{"1", ",", 
+                   RowBox[{"{", 
+                    RowBox[{"RankAtDepth", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "#", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"GraphDepth", "[", "#", "]"}]}], "]"}], "}"}]}], 
+                  "]"}], "}"}]}], "]"}], ",", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+             "]"}], ",", "\[IndentingNewLine]", 
+            RowBox[{"BigraphWithDuals", "[", 
+             RowBox[{
+              RowBox[{"Append", "[", 
+               RowBox[{
+                RowBox[{"Append", "[", 
+                 RowBox[{
+                  RowBox[{
+                  "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+                   ",", 
+                  RowBox[{"{", 
+                   RowBox[{"Table", "[", 
+                    RowBox[{"1", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"RankAtDepth", "[", 
+                    RowBox[{
+                    RowBox[{
+                    "#", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"GraphDepth", "[", "#", "]"}]}], "]"}], "}"}]}], 
+                    "]"}], "}"}]}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"{", "1", "}"}], "}"}]}], "]"}], ",", 
+              RowBox[{"Append", "[", 
+               RowBox[{
+                RowBox[{
+                "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+                ",", 
+                RowBox[{"{", "1", "}"}]}], "]"}]}], "]"}]}], 
+           "\[IndentingNewLine]", "]"}], "&"}], "/@", 
+         RowBox[{"{", 
+          RowBox[{"h0", ",", "h1"}], "}"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{"h0", ",", "h1"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ApplyDepthEquations", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"g", "[", "0", "]"}], "\[LeftDoubleBracket]", "1", 
+        "\[RightDoubleBracket]"}], ",", 
+       RowBox[{
+        RowBox[{"g", "[", "1", "]"}], "\[LeftDoubleBracket]", "1", 
+        "\[RightDoubleBracket]"}], ",", "Z"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"equations", "=", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"PrepareAssociativityEquations", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"g", "[", "0", "]"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}], ",", 
+            RowBox[{
+             RowBox[{"g", "[", "1", "]"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}], ",", "Z"}], "]"}], "~", "Join", "~", 
+          RowBox[{"PreparePrincipalGraphEquations", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"g", "[", "0", "]"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}], ",", "0", ",", "Z"}], "]"}], "~", 
+          "Join", "~", 
+          RowBox[{"PreparePrincipalGraphEquations", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"g", "[", "1", "]"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}], ",", "1", ",", "Z"}], "]"}], "~", 
+          "Join", "~", 
+          RowBox[{"PrepareDualityEquations", "[", 
+           RowBox[{
+            RowBox[{"g", "[", "0", "]"}], ",", 
+            RowBox[{"g", "[", "1", "]"}], ",", "Z"}], "]"}]}], ")"}], 
+        RowBox[{"(*", 
+         RowBox[{"/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Z", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"_", ",", "_", ",", "d1_", ",", "_"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"_", ",", "_", ",", "d2_", ",", "_"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"_", ",", "_", ",", "d3_", ",", "_"}], "}"}]}], "]"}],
+              "/;", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"d3", "<", 
+                RowBox[{"Abs", "[", 
+                 RowBox[{"d1", "-", "d2"}], "]"}]}], ")"}], "\[Or]", 
+              RowBox[{"(", 
+               RowBox[{"d3", ">", 
+                RowBox[{"d1", "+", "d2"}]}], ")"}]}]}], "\[Rule]", "0"}], 
+           "}"}]}], "*)"}], ",", "True"}], "]"}]}], 
+     RowBox[{"(*", 
+      RowBox[{"~", "Join", "~", 
+       RowBox[{"PrepareDepthEquations", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"g", "[", "0", "]"}], "\[LeftDoubleBracket]", "1", 
+          "\[RightDoubleBracket]"}], ",", 
+         RowBox[{
+          RowBox[{"g", "[", "1", "]"}], "\[LeftDoubleBracket]", "1", 
+          "\[RightDoubleBracket]"}], ",", "Z"}], "]"}]}], "*)"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{"extensions", ",", "\[IndentingNewLine]", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{"equations", ",", 
+         RowBox[{"eq_", "/;", 
+          RowBox[{"!", 
+           RowBox[{"FreeQ", "[", 
+            RowBox[{"eq", ",", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"L_", ",", "_", ",", "d_", ",", "1"}], "}"}], "/;", 
+              RowBox[{"d", ">", 
+               RowBox[{"GraphDepth", "[", 
+                RowBox[{"h", "[", "L", "]"}], "]"}]}]}]}], "]"}]}]}]}], "]"}],
+        ",", "\[IndentingNewLine]", "equations"}], "\[IndentingNewLine]", 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4830148777476463`*^9, 3.48301514623482*^9}, {
+   3.483016441999687*^9, 3.483016509920066*^9}, 3.483016603092107*^9, {
+   3.4830177650370617`*^9, 3.483017788540065*^9}, {3.487548205897694*^9, 
+   3.487548259798624*^9}, {3.487548328850123*^9, 3.4875483872998133`*^9}, {
+   3.487548451726274*^9, 3.48754852751661*^9}, {3.4875485652155933`*^9, 
+   3.4875488427957697`*^9}, {3.4875489088829308`*^9, 3.487548980170113*^9}, {
+   3.487549047956717*^9, 3.487549058294263*^9}, {3.487549108505516*^9, 
+   3.487549129122311*^9}, {3.4875497200160217`*^9, 3.487549726141556*^9}, {
+   3.4875501047675333`*^9, 3.487550116009328*^9}, {3.4875501474965467`*^9, 
+   3.48755015235571*^9}, {3.487550981597974*^9, 3.487550986310876*^9}, {
+   3.487551185999992*^9, 3.487551190356843*^9}, {3.4875512211220284`*^9, 
+   3.487551224267372*^9}, {3.487551366013904*^9, 3.487551391630826*^9}, {
+   3.487615547922092*^9, 3.487615591839816*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindPartialFusionRules", "[", 
+    RowBox[{"g_GradedGraph", ",", "Z_"}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"RankAtDepth", "[", 
+     RowBox[{"g", ",", "1"}], "]"}], "\[Equal]", "1"}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "multiplicities", ",", "equations", ",", "d1", ",", "d2", ",", "d3", ",",
+       "k1", ",", "k2", ",", "k3"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"equations", "=", 
+      RowBox[{"SolveAllSolvableEquations", "[", 
+       RowBox[{
+        RowBox[{"PrepareFusionEquations", "[", 
+         RowBox[{"g", ",", "Z"}], "]"}], ",", "Z"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"multiplicities", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Z", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"d1", ",", "k1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"d2", ",", "k2"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"d3", ",", "k3"}], "}"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"d1", ",", "0", ",", 
+            RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k1", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{"g", ",", "d1"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"d2", ",", "0", ",", 
+            RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k2", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{"g", ",", "d2"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"d3", ",", "0", ",", 
+            RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k3", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{"g", ",", "d3"}], "]"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"3", ",", "4"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"5", ",", "6"}], "}"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PartialFusionRules", "[", 
+      RowBox[{"g", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", 
+         "multiplicities"}], "}"}], ",", "equations"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483018756946127*^9, 3.483018814017693*^9}, {
+   3.483018885209866*^9, 3.483018955893556*^9}, {3.483019004326661*^9, 
+   3.4830190063851147`*^9}, {3.4830190614991407`*^9, 3.483019087770523*^9}, {
+   3.483020006950552*^9, 3.483020007211038*^9}, {3.4831037385787*^9, 
+   3.483103739790536*^9}, {3.483103773085579*^9, 3.4831037733942633`*^9}, 
+   3.483103969066032*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindPartialFusionRules", "[", 
+    RowBox[{
+    "g0_BigraphWithDuals", ",", " ", "g1_BigraphWithDuals", ",", "Z_", ",", 
+     RowBox[{"extensions", ":", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"True", "|", "False"}], ")"}], ":", "False"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RankAtDepth", "[", 
+      RowBox[{"g0", ",", "1"}], "]"}], "\[Equal]", "1"}], "\[And]", 
+    RowBox[{
+     RowBox[{"RankAtDepth", "[", 
+      RowBox[{"g1", ",", "1"}], "]"}], "\[Equal]", "1"}]}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "multiplicities", ",", "equations", ",", "ZZ", ",", "d1", ",", "d2", ",",
+       "d3", ",", "k1", ",", "k2", ",", "k3", ",", "g", ",", "L", ",", "M", 
+      ",", "R"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "0", "]"}], ",", 
+        RowBox[{"g", "[", "1", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g0", ",", "g1"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"equations", "=", 
+      RowBox[{"SolveAllSolvableEquations", "[", 
+       RowBox[{
+        RowBox[{"PrepareFusionEquations", "[", 
+         RowBox[{"g0", ",", "g1", ",", "Z", ",", "extensions"}], "]"}], ",", 
+        "Z"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ZZ", "[", 
+       RowBox[{"L_", ",", "M_", ",", "R_"}], "]"}], ":=", 
+      RowBox[{
+       RowBox[{"ZZ", "[", 
+        RowBox[{"L", ",", "M", ",", "R"}], "]"}], "=", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Z", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"L", ",", "M", ",", "d1", ",", "k1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"M", ",", "R", ",", "d2", ",", "k2"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"L", ",", "R", ",", "d3", ",", "k3"}], "}"}]}], "]"}], 
+           ",", 
+           RowBox[{"{", 
+            RowBox[{"d1", ",", 
+             RowBox[{"Mod", "[", 
+              RowBox[{
+               RowBox[{"M", "+", "L"}], ",", "2"}], "]"}], ",", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k1", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{
+               RowBox[{"g", "[", "L", "]"}], ",", "d1"}], "]"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"d2", ",", 
+             RowBox[{"Mod", "[", 
+              RowBox[{
+               RowBox[{"M", "+", "R"}], ",", "2"}], "]"}], ",", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "M", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k2", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{
+               RowBox[{"g", "[", "M", "]"}], ",", "d2"}], "]"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"d3", ",", 
+             RowBox[{"Mod", "[", 
+              RowBox[{
+               RowBox[{"L", "+", "R"}], ",", "2"}], "]"}], ",", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k3", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{
+               RowBox[{"g", "[", "L", "]"}], ",", "d3"}], "]"}]}], "}"}]}], 
+          "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "4"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"5", ",", "6"}], "}"}]}], "}"}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"multiplicities", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"L", ",", "M", ",", "R"}], "}"}], "\[Rule]", 
+          RowBox[{"ZZ", "[", 
+           RowBox[{"L", ",", "M", ",", "R"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"L", ",", "0", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"M", ",", "0", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"R", ",", "0", ",", "1"}], "}"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PartialFusionRules", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g0", ",", "g1"}], "}"}], ",", "multiplicities", ",", 
+       "equations"}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483018756946127*^9, 3.483018814017693*^9}, {
+  3.483018885209866*^9, 3.48301892918335*^9}, {3.483018968416689*^9, 
+  3.483019038526277*^9}, {3.48301909638055*^9, 3.4830191537190933`*^9}, {
+  3.4830194728395767`*^9, 3.4830194899726067`*^9}, {3.483020009795658*^9, 
+  3.483020010030648*^9}, {3.4831037421107063`*^9, 3.483103743059461*^9}, {
+  3.483103777338273*^9, 3.4831037797728443`*^9}, {3.4831039588557873`*^9, 
+  3.4831039610949507`*^9}, {3.487549216066687*^9, 3.487549223061882*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SolvePartialFusionRules", "[", 
+   RowBox[{
+    RowBox[{"PartialFusionRules", "[", 
+     RowBox[{"g_", ",", "multiplicities_", ",", "equations_"}], "]"}], ",", 
+    "Z_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"FusionRules", "[", 
+    RowBox[{"g", ",", "multiplicities"}], "]"}], "/.", 
+   RowBox[{"Solve", "[", 
+    RowBox[{"equations", ",", 
+     RowBox[{"Union", "[", 
+      RowBox[{"Cases", "[", 
+       RowBox[{"equations", ",", "_Z", ",", "\[Infinity]"}], "]"}], "]"}]}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483103749554924*^9, 3.4831037672566833`*^9}, {
+  3.4831038200568237`*^9, 3.483103889208996*^9}, {3.483103926008161*^9, 
+  3.4831039382236223`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindFusionRules", "[", 
+   RowBox[{"g_GradedGraph", ",", "Z_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"partialFusionRules", "=", 
+       RowBox[{"FindPartialFusionRules", "[", 
+        RowBox[{"g", ",", "Z"}], "]"}]}], ",", "possibleDimensionList", ",", 
+      "possibleValues", ",", "vars", ",", "dim", ",", "solutions", ",", 
+      "numberCases"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "DebugPrint", "[", "\"\<Completed partial fusion rules.\>\"", "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"dim", "[", 
+       RowBox[{"d_", ",", "k_"}], "]"}], ":=", 
+      RowBox[{
+       RowBox[{"DimensionsByDepth", "[", "g", "]"}], "\[LeftDoubleBracket]", 
+       RowBox[{
+        RowBox[{"d", "+", "1"}], ",", "k"}], "\[RightDoubleBracket]"}]}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"vars", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{"Cases", "[", 
+        RowBox[{"partialFusionRules", ",", "_Z", ",", "\[Infinity]"}], "]"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"possibleDimensionList", "=", 
+      RowBox[{"(", 
+       RowBox[{"vars", "/.", 
+        RowBox[{"(", 
+         RowBox[{"a_Z", "\[RuleDelayed]", 
+          RowBox[{"{", 
+           RowBox[{"a", ",", 
+            RowBox[{"Range", "[", 
+             RowBox[{"0", ",", 
+              RowBox[{"Floor", "[", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"dim", "@@", 
+                  RowBox[{
+                  "a", "\[LeftDoubleBracket]", "1", 
+                   "\[RightDoubleBracket]"}]}], ")"}], "*", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{"dim", "@@", 
+                   RowBox[{
+                   "a", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}]}], ")"}], "/", 
+                 RowBox[{"(", 
+                  RowBox[{"dim", "@@", 
+                   RowBox[{
+                   "a", "\[LeftDoubleBracket]", "3", 
+                    "\[RightDoubleBracket]"}]}], ")"}]}]}], "]"}]}], "]"}]}], 
+           "}"}]}], ")"}]}], ")"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberCases", "=", 
+      RowBox[{"Times", "@@", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Length", "/@", 
+          RowBox[{"(", 
+           RowBox[{"Last", "/@", "possibleDimensionList"}], ")"}]}]}], 
+        ")"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<Trying \>\"", ",", "numberCases", ",", "\"\< solutions.\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"numberCases", ">", "10000"}], ",", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{
+         "\"\<FindFusionRules is aborting, \>\"", ",", "numberCases", ",", 
+          "\"\< is too many cases to bash.\>\""}], "]"}], ";", 
+        RowBox[{"Return", "[", "$Aborted", "]"}]}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"possibleValues", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Outer", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"Sequence", " ", "@@", 
+           RowBox[{"(", 
+            RowBox[{"Last", "/@", "possibleDimensionList"}], ")"}]}]}], "]"}],
+         ",", 
+        RowBox[{
+         RowBox[{"Length", "[", "possibleDimensionList", "]"}], "-", "1"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"solutions", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"possibleValues", ",", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"And", "@@", 
+            RowBox[{
+            "partialFusionRules", "\[LeftDoubleBracket]", "3", 
+             "\[RightDoubleBracket]"}]}], "/.", 
+           RowBox[{"Thread", "[", 
+            RowBox[{"vars", "\[Rule]", "#"}], "]"}]}], ")"}], "&"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"FusionRules", "[", 
+        RowBox[{"g", ",", "#"}], "]"}], "&"}], "/@", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{
+          "partialFusionRules", "\[LeftDoubleBracket]", "2", 
+           "\[RightDoubleBracket]"}], "/.", 
+          RowBox[{"Thread", "[", 
+           RowBox[{"vars", "\[Rule]", "#"}], "]"}]}], "&"}], "/@", 
+        "solutions"}], ")"}]}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483103984643426*^9, 3.4831040253391848`*^9}, {
+   3.4831081447697973`*^9, 3.483108188327609*^9}, {3.4831082244534683`*^9, 
+   3.483108224614583*^9}, 3.483108263105835*^9, {3.4831083030638866`*^9, 
+   3.483108424631597*^9}, {3.483108456495174*^9, 3.4831084753074827`*^9}, {
+   3.483108528189114*^9, 3.483108616195405*^9}, {3.483108740235589*^9, 
+   3.483108749958284*^9}, {3.4831103354270487`*^9, 3.483110428731708*^9}, {
+   3.483110613095559*^9, 3.483110615280105*^9}, {3.48311064635146*^9, 
+   3.483110693822111*^9}, {3.4831107825883102`*^9, 3.483110783216259*^9}, {
+   3.483110832567708*^9, 3.483110835305224*^9}, {3.483111012973136*^9, 
+   3.483111016691136*^9}, {3.48311106314072*^9, 3.4831111192219257`*^9}, {
+   3.483183102726441*^9, 3.4831831051017838`*^9}, {3.483183285158905*^9, 
+   3.4831832856378727`*^9}, {3.483191416057466*^9, 3.483191421563641*^9}, {
+   3.483197972589993*^9, 3.4831980531830883`*^9}, {3.4831982668589087`*^9, 
+   3.48319832940912*^9}, {3.487549570373776*^9, 3.487549586115587*^9}, 
+   3.509040220042985*^9, {3.509134479371134*^9, 3.509134479531988*^9}, {
+   3.570388786483714*^9, 3.5703888065235853`*^9}, {3.570388843396915*^9, 
+   3.570388843573481*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindFusionRules", "[", 
+   RowBox[{
+   "g0_BigraphWithDuals", ",", " ", "g1_BigraphWithDuals", ",", "Z_"}], "]"}],
+   ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"partialFusionRules", "=", 
+       RowBox[{"FindPartialFusionRules", "[", 
+        RowBox[{"g0", ",", "g1", ",", "Z"}], "]"}]}], ",", 
+      "possibleDimensionList", ",", "possibleValues", ",", "vars", ",", "dim",
+       ",", "solutions", ",", "numberCases", ",", "g", ",", "conditions"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "0", "]"}], ",", 
+        RowBox[{"g", "[", "1", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g0", ",", "g1"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+     "DebugPrint", "[", "\"\<Completed partial fusion rules.\>\"", "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"MemberQ", "[", 
+        RowBox[{
+         RowBox[{
+         "partialFusionRules", "\[LeftDoubleBracket]", "3", 
+          "\[RightDoubleBracket]"}], ",", "False"}], "]"}], ",", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"dim", "[", 
+       RowBox[{"a_", ",", "b_", ",", "d_", ",", "k_"}], "]"}], ":=", 
+      RowBox[{
+       RowBox[{"ReducedDimensionsByDepth", "[", 
+        RowBox[{
+         RowBox[{"g", "[", "a", "]"}], "\[LeftDoubleBracket]", "1", 
+         "\[RightDoubleBracket]"}], "]"}], "\[LeftDoubleBracket]", 
+       RowBox[{
+        RowBox[{"d", "+", "1"}], ",", "k"}], "\[RightDoubleBracket]"}]}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"vars", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{"Cases", "[", 
+        RowBox[{"partialFusionRules", ",", "_Z", ",", "\[Infinity]"}], "]"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"conditions", "=", 
+      RowBox[{"And", "@@", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+         "partialFusionRules", "\[LeftDoubleBracket]", "3", 
+          "\[RightDoubleBracket]"}], "~", "Join", "~", 
+         RowBox[{"Thread", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "[", 
+            RowBox[{"partialFusionRules", "\[LeftDoubleBracket]", 
+             RowBox[{"2", ",", "All", ",", "2"}], "\[RightDoubleBracket]"}], 
+            "]"}], "\[GreaterEqual]", "0"}], "]"}]}], ")"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"possibleDimensionList", "=", 
+      RowBox[{"(", 
+       RowBox[{"vars", "/.", 
+        RowBox[{"(", 
+         RowBox[{"a_Z", "\[RuleDelayed]", 
+          RowBox[{"{", 
+           RowBox[{"a", ",", 
+            RowBox[{"Range", "[", 
+             RowBox[{"0", ",", 
+              RowBox[{"Floor", "[", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"dim", "@@", 
+                  RowBox[{
+                  "a", "\[LeftDoubleBracket]", "1", 
+                   "\[RightDoubleBracket]"}]}], ")"}], "*", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{"dim", "@@", 
+                   RowBox[{
+                   "a", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}]}], ")"}], "/", 
+                 RowBox[{"(", 
+                  RowBox[{"dim", "@@", 
+                   RowBox[{
+                   "a", "\[LeftDoubleBracket]", "3", 
+                    "\[RightDoubleBracket]"}]}], ")"}]}]}], "]"}]}], "]"}]}], 
+           "}"}]}], ")"}]}], ")"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"numberCases", "=", 
+      RowBox[{"Times", "@@", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Length", "/@", 
+          RowBox[{"(", 
+           RowBox[{"Last", "/@", "possibleDimensionList"}], ")"}]}]}], 
+        ")"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<Trying \>\"", ",", "numberCases", ",", "\"\< solutions.\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"numberCases", ">", "200000"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"DebugPrint", "[", "partialFusionRules", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"DebugPrint", "[", "vars", "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"DebugPrint", "[", "conditions", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"DebugPrint", "[", "possibleDimensionList", "]"}], ";"}], 
+        "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Print", "[", 
+         RowBox[{
+         "\"\<Looks too hard for the tensor solver, \>\"", ",", "numberCases",
+           ",", " ", "\"\< cases ...\>\""}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Return", "[", "$Aborted", "]"}], ";"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "vars", "]"}], "\[Equal]", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"solutions", "=", 
+        RowBox[{"{", 
+         RowBox[{"{", "}"}], "}"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"possibleValues", "=", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{
+           RowBox[{"Outer", "[", 
+            RowBox[{"List", ",", 
+             RowBox[{"Sequence", " ", "@@", 
+              RowBox[{"(", 
+               RowBox[{"Last", "/@", "possibleDimensionList"}], ")"}]}]}], 
+            "]"}], ",", 
+           RowBox[{
+            RowBox[{"Length", "[", "possibleDimensionList", "]"}], "-", 
+            "1"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"solutions", "=", 
+         RowBox[{"Select", "[", 
+          RowBox[{"possibleValues", ",", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"conditions", "/.", 
+              RowBox[{"Thread", "[", 
+               RowBox[{"vars", "\[Rule]", "#"}], "]"}]}], ")"}], "&"}]}], 
+          "]"}]}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Cases", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"FusionRules", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"g0", ",", "g1"}], "}"}], ",", "#"}], "]"}], "&"}], "/@", 
+        
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{
+            "partialFusionRules", "\[LeftDoubleBracket]", "2", 
+             "\[RightDoubleBracket]"}], "/.", 
+            RowBox[{"Thread", "[", 
+             RowBox[{"vars", "\[Rule]", "#"}], "]"}]}], "&"}], "/@", 
+          "solutions"}], ")"}]}], ",", 
+       RowBox[{"fr_", "/;", 
+        RowBox[{"FreeQ", "[", 
+         RowBox[{"fr", ",", 
+          RowBox[{"Power", "|", 
+           RowBox[{"(", 
+            RowBox[{"n_Integer", "/;", 
+             RowBox[{"n", "<", "0"}]}], ")"}]}]}], "]"}]}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483103984643426*^9, 3.4831040411597767`*^9}, {
+   3.483108021998066*^9, 3.483108129695207*^9}, {3.483183161742404*^9, 
+   3.483183214955826*^9}, {3.483183257752767*^9, 3.483183258535789*^9}, {
+   3.483183305201092*^9, 3.483183313600884*^9}, {3.483183373822878*^9, 
+   3.4831833745481777`*^9}, {3.483183572649032*^9, 3.483183668323307*^9}, {
+   3.4831837349326143`*^9, 3.4831837649948673`*^9}, {3.483183807217306*^9, 
+   3.483183809647644*^9}, 3.483183893084415*^9, {3.483188178945602*^9, 
+   3.483188211573903*^9}, {3.4831914043818417`*^9, 3.483191412270726*^9}, {
+   3.483198068927593*^9, 3.483198095042893*^9}, {3.483198134570533*^9, 
+   3.483198180058586*^9}, {3.4831982771273108`*^9, 3.483198324305645*^9}, {
+   3.48754920388223*^9, 3.4875492087677803`*^9}, {3.487549305561001*^9, 
+   3.487549308347743*^9}, {3.487550308298765*^9, 3.487550309306752*^9}, {
+   3.487550393513494*^9, 3.487550394239625*^9}, {3.4875504783979073`*^9, 
+   3.487550528299405*^9}, {3.4958467090068083`*^9, 3.495846754098773*^9}, {
+   3.509040210702538*^9, 3.509040225683547*^9}, {3.5091344740861807`*^9, 
+   3.509134474259021*^9}, {3.553555515120551*^9, 3.553555528622245*^9}, {
+   3.554069526496583*^9, 3.5540695382604637`*^9}, {3.554069713404065*^9, 
+   3.554069723456195*^9}, {3.554075345128359*^9, 3.554075361263176*^9}, 
+   3.554075522823394*^9, {3.570388821156271*^9, 3.570388840052671*^9}, {
+   3.587932272138537*^9, 3.587932272233025*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindFusionRulesTimeLimit", "=", "10000"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.508979496436767*^9, 3.508979503485924*^9}, {
+  3.5089797334883204`*^9, 3.508979752629072*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindFusionRules", "[", "g_GradedGraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FindFusionRules", "[", "g", "]"}], "=", 
+   RowBox[{"TimeConstrained", "[", 
+    RowBox[{
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "Z", "}"}], ",", 
+       RowBox[{"FindFusionRules", "[", 
+        RowBox[{"g", ",", "Z"}], "]"}]}], "]"}], ",", 
+     "FindFusionRulesTimeLimit", ",", 
+     RowBox[{
+      RowBox[{"Print", "[", 
+       RowBox[{
+       "\"\<FindFusionRules exceeded FindFusionRulesTimeLimit=\>\"", ",", 
+        "FindFusionRulesTimeLimit"}], "]"}], ";", "$Aborted"}]}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483103984643426*^9, 3.483104063337801*^9}, {
+  3.483131412366289*^9, 3.483131414722253*^9}, {3.50897951762285*^9, 
+  3.508979526173946*^9}, {3.53296166102761*^9, 3.5329617017292*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindFusionRules", "[", 
+   RowBox[{"{", 
+    RowBox[{"g0_BigraphWithDuals", ",", " ", "g1_BigraphWithDuals"}], "}"}], 
+   "]"}], ":=", 
+  RowBox[{"FindFusionRules", "[", 
+   RowBox[{"g0", ",", "g1"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5329617334723186`*^9, 3.532961739551304*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindFusionRules", "[", 
+   RowBox[{"g0_BigraphWithDuals", ",", " ", "g1_BigraphWithDuals"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FindFusionRules", "[", 
+    RowBox[{"g0", ",", " ", "g1"}], "]"}], "=", 
+   RowBox[{"TimeConstrained", "[", 
+    RowBox[{
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "Z", "}"}], ",", 
+       RowBox[{"FindFusionRules", "[", 
+        RowBox[{"g0", ",", "g1", ",", "Z"}], "]"}]}], "]"}], ",", 
+     "FindFusionRulesTimeLimit", ",", 
+     RowBox[{
+      RowBox[{"Print", "[", 
+       RowBox[{
+       "\"\<FindFusionRules exceeded FindFusionRulesTimeLimit=\>\"", ",", 
+        "FindFusionRulesTimeLimit"}], "]"}], ";", "$Aborted"}]}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483103984643426*^9, 3.483104073244437*^9}, {
+   3.4831314189593563`*^9, 3.4831314243204803`*^9}, {3.508979535223275*^9, 
+   3.50897953962351*^9}, 3.532961708034986*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrepareAssociativityEquations", "[", 
+   RowBox[{"g_GradedGraph", ",", "Z_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "ZZ", ",", "d1", ",", "d2", ",", "d3", ",", "k1", ",", "k2", ",", "k3"}],
+      "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"ZZ", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Z", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"d1", ",", "k1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"d2", ",", "k2"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"d3", ",", "k3"}], "}"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"d1", ",", "0", ",", 
+            RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k1", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{"g", ",", "d1"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"d2", ",", "0", ",", 
+            RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k2", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{"g", ",", "d2"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"d3", ",", "0", ",", 
+            RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k3", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{"g", ",", "d3"}], "]"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"3", ",", "4"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"5", ",", "6"}], "}"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"DeleteCases", "[", 
+      RowBox[{
+       RowBox[{"Union", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "\[Equal]", "0"}], "&"}], "/@", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{
+           RowBox[{"ZZ", ".", "ZZ"}], "-", 
+           RowBox[{"Transpose", "[", 
+            RowBox[{
+             RowBox[{"ZZ", ".", 
+              RowBox[{"Transpose", "[", 
+               RowBox[{"ZZ", ",", 
+                RowBox[{"{", 
+                 RowBox[{"2", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "3", ",", "1", ",", "4"}], "}"}]}], "]"}]}], 
+          "]"}]}], "]"}], ",", "True"}], "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483014848925001*^9, 3.483014876224774*^9}, {
+  3.48301503961395*^9, 3.483015041721239*^9}, {3.483015222532688*^9, 
+  3.483015228618185*^9}, {3.483015283229883*^9, 3.483015334372324*^9}, {
+  3.483015364637269*^9, 3.4830154148484497`*^9}, {3.483016658624289*^9, 
+  3.483016790612176*^9}, {3.4830171883611727`*^9, 3.483017197305004*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ApplyDepthEquations", "[", 
+   RowBox[{"g0_GradedBigraph", ",", "g1_GradedBigraph", ",", "Z_"}], "]"}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "g", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "0", "]"}], ",", 
+        RowBox[{"g", "[", "1", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g0", ",", "g1"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Cases", "[", 
+      RowBox[{
+       RowBox[{"Flatten", "[", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Z", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"L", ",", "M", ",", "d1", ",", "k1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"M", ",", "R", ",", "d2", ",", "k2"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"L", ",", "R", ",", "d3", ",", "k3"}], "}"}]}], "]"}], 
+          ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"L", ",", "0", ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"M", ",", "0", ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"R", ",", "0", ",", "1"}], "}"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"d1", ",", 
+            RowBox[{"Mod", "[", 
+             RowBox[{
+              RowBox[{"M", "+", "L"}], ",", "2"}], "]"}], ",", 
+            RowBox[{"GraphDepth", "[", 
+             RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k1", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "L", "]"}], ",", "d1"}], "]"}]}], "}"}], ",", 
+          
+          RowBox[{"{", 
+           RowBox[{"d2", ",", 
+            RowBox[{"Mod", "[", 
+             RowBox[{
+              RowBox[{"M", "+", "R"}], ",", "2"}], "]"}], ",", 
+            RowBox[{"GraphDepth", "[", 
+             RowBox[{"g", "[", "M", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k2", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "M", "]"}], ",", "d2"}], "]"}]}], "}"}], ",", 
+          
+          RowBox[{"{", 
+           RowBox[{"d3", ",", 
+            RowBox[{"Mod", "[", 
+             RowBox[{
+              RowBox[{"L", "+", "R"}], ",", "2"}], "]"}], ",", 
+            RowBox[{"GraphDepth", "[", 
+             RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k3", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "L", "]"}], ",", "d3"}], "]"}]}], "}"}]}], 
+         "]"}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"z", ":", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"Z", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"_", ",", "_", ",", "d1_", ",", "_"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"_", ",", "_", ",", "d2_", ",", "_"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"_", ",", "_", ",", "d3_", ",", "_"}], "}"}]}], "]"}], 
+            "/;", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"d3", "<", 
+               RowBox[{"Abs", "[", 
+                RowBox[{"d1", "-", "d2"}], "]"}]}], ")"}], "\[Or]", 
+             RowBox[{"(", 
+              RowBox[{"d3", ">", 
+               RowBox[{"d1", "+", "d2"}]}], ")"}]}]}], ")"}]}], ")"}], 
+        "\[RuleDelayed]", 
+        RowBox[{"(", 
+         RowBox[{"z", "=", "0"}], ")"}]}]}], "]"}], ";"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.487549910179352*^9, 3.487549946561569*^9}, {
+   3.4875499897169647`*^9, 3.487550085673464*^9}, {3.487550177623159*^9, 
+   3.487550191800021*^9}, {3.4876155293419237`*^9, 3.4876155340630493`*^9}, 
+   3.487615621050097*^9, {3.487616070781687*^9, 3.487616079978442*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrepareAssociativityEquations", "[", 
+   RowBox[{"g0_GradedBigraph", ",", "g1_GradedBigraph", ",", "Z_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "g", ",", "ZZ", ",", "associativityEquations", ",", "d1", ",", "d2", ",",
+       "d3", ",", "k1", ",", "k2", ",", "k3", ",", "A", ",", "B", ",", "C", 
+      ",", "D"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "DebugPrint", "[", 
+      "\"\<beginning preparation of associativity equations\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "0", "]"}], ",", 
+        RowBox[{"g", "[", "1", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g0", ",", "g1"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ZZ", "[", 
+       RowBox[{"L_", ",", "M_", ",", "R_"}], "]"}], ":=", 
+      RowBox[{
+       RowBox[{"ZZ", "[", 
+        RowBox[{"L", ",", "M", ",", "R"}], "]"}], "=", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Z", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"L", ",", "M", ",", "d1", ",", "k1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"M", ",", "R", ",", "d2", ",", "k2"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"L", ",", "R", ",", "d3", ",", "k3"}], "}"}]}], "]"}], 
+           ",", 
+           RowBox[{"{", 
+            RowBox[{"d1", ",", 
+             RowBox[{"Mod", "[", 
+              RowBox[{
+               RowBox[{"M", "+", "L"}], ",", "2"}], "]"}], ",", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k1", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{
+               RowBox[{"g", "[", "L", "]"}], ",", "d1"}], "]"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"d2", ",", 
+             RowBox[{"Mod", "[", 
+              RowBox[{
+               RowBox[{"M", "+", "R"}], ",", "2"}], "]"}], ",", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "M", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k2", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{
+               RowBox[{"g", "[", "M", "]"}], ",", "d2"}], "]"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"d3", ",", 
+             RowBox[{"Mod", "[", 
+              RowBox[{
+               RowBox[{"L", "+", "R"}], ",", "2"}], "]"}], ",", 
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k3", ",", "1", ",", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{
+               RowBox[{"g", "[", "L", "]"}], ",", "d3"}], "]"}]}], "}"}]}], 
+          "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "4"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"5", ",", "6"}], "}"}]}], "}"}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"associativityEquations", "[", 
+       RowBox[{"A_", ",", "B_", ",", "C_", ",", "D_"}], "]"}], ":=", 
+      "\[IndentingNewLine]", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{
+        RowBox[{"Union", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "\[Equal]", "0"}], "&"}], "/@", 
+          RowBox[{"Flatten", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"ZZ", "[", 
+              RowBox[{"A", ",", "B", ",", "C"}], "]"}], ".", 
+             RowBox[{"ZZ", "[", 
+              RowBox[{"A", ",", "C", ",", "D"}], "]"}]}], "-", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"ZZ", "[", 
+                RowBox[{"B", ",", "C", ",", "D"}], "]"}], ".", 
+               RowBox[{"Transpose", "[", 
+                RowBox[{
+                 RowBox[{"ZZ", "[", 
+                  RowBox[{"A", ",", "B", ",", "D"}], "]"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"2", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ",", 
+              RowBox[{"{", 
+               RowBox[{"2", ",", "3", ",", "1", ",", "4"}], "}"}]}], "]"}]}], 
+           "]"}]}], "]"}], ",", "True"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"DebugPrint", "[", 
+          RowBox[{"A", ",", "B", ",", "C", ",", "D"}], "]"}], ";", 
+         RowBox[{"associativityEquations", "[", 
+          RowBox[{"A", ",", "B", ",", "C", ",", "D"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"A", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"B", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"C", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"D", ",", "0", ",", "1"}], "}"}]}], "]"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483014848925001*^9, 3.483014876224774*^9}, {
+  3.48301503961395*^9, 3.483015041721239*^9}, {3.483015222532688*^9, 
+  3.483015228618185*^9}, {3.483015283229883*^9, 3.483015334372324*^9}, {
+  3.483015364637269*^9, 3.4830154148484497`*^9}, {3.483017174090477*^9, 
+  3.48301718228226*^9}, {3.483018026563733*^9, 3.4830180354627037`*^9}, {
+  3.48761565080929*^9, 3.487615662086762*^9}, {3.487615769572118*^9, 
+  3.487615775898211*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PreparePrincipalGraphEquations", "[", 
+   RowBox[{"g_GradedGraph", ",", "Z_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "tensorWithX", ",", "tensorWith1", ",", "d1", ",", "k1", ",", "d2", ",", 
+      "k2"}], "}"}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"tensorWithX", "[", 
+       RowBox[{"d1_", ",", "k1_"}], "]"}], ":=", "\[IndentingNewLine]", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Table", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Z", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"d1", ",", "k1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"d2", ",", "k2"}], "}"}]}], "]"}], "-", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Switch", "[", 
+            RowBox[{
+             RowBox[{"d2", "-", "d1"}], ",", "\[IndentingNewLine]", "0", ",", 
+             
+             RowBox[{"g", "\[LeftDoubleBracket]", 
+              RowBox[{"1", ",", 
+               RowBox[{"d1", "+", "1"}], ",", "k2", ",", "k1"}], 
+              "\[RightDoubleBracket]"}], ",", "\[IndentingNewLine]", "1", ",", 
+             RowBox[{"g", "\[LeftDoubleBracket]", 
+              RowBox[{"2", ",", 
+               RowBox[{"d1", "+", "1"}], ",", "k2", ",", "k1"}], 
+              "\[RightDoubleBracket]"}], ",", "\[IndentingNewLine]", 
+             RowBox[{"-", "1"}], ",", 
+             RowBox[{"g", "\[LeftDoubleBracket]", 
+              RowBox[{"2", ",", "d1", ",", "k1", ",", "k2"}], 
+              "\[RightDoubleBracket]"}], ",", "\[IndentingNewLine]", "_", ",",
+              "0"}], "]"}]}], "\[Equal]", "0"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"d2", ",", "0", ",", 
+           RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"k2", ",", "1", ",", 
+           RowBox[{"RankAtDepth", "[", 
+            RowBox[{"g", ",", "d2"}], "]"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"tensorWith1", "[", 
+       RowBox[{"d1_", ",", "k1_"}], "]"}], ":=", "\[IndentingNewLine]", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"Z", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"d1", ",", "k1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"0", ",", "1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"d2", ",", "k2"}], "}"}]}], "]"}], "-", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"d1", "\[Equal]", "d2"}], "\[And]", 
+                RowBox[{"k1", "\[Equal]", "k2"}]}], ",", "1", ",", "0"}], 
+              "]"}]}], "\[Equal]", "0"}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Z", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"0", ",", "1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"d1", ",", "k1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"d2", ",", "k2"}], "}"}]}], "]"}], "-", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"d1", "\[Equal]", "d2"}], "\[And]", 
+                RowBox[{"k1", "\[Equal]", "k2"}]}], ",", "1", ",", "0"}], 
+              "]"}]}], "\[Equal]", "0"}]}], "\[IndentingNewLine]", "}"}], ",",
+          "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"d2", ",", "0", ",", 
+           RowBox[{"GraphDepth", "[", "g", "]"}], ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"k2", ",", "1", ",", 
+           RowBox[{"RankAtDepth", "[", 
+            RowBox[{"g", ",", "d2"}], "]"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"tensorWithX", "[", 
+          RowBox[{"d1", ",", "k1"}], "]"}], "~", "Join", "~", 
+         RowBox[{"tensorWith1", "[", 
+          RowBox[{"d1", ",", "k1"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"d1", ",", "0", ",", 
+          RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k1", ",", "1", ",", 
+          RowBox[{"RankAtDepth", "[", 
+           RowBox[{"g", ",", "d1"}], "]"}]}], "}"}]}], "]"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483015433254431*^9, 3.483015476554201*^9}, {
+  3.483015575451511*^9, 3.483015664717404*^9}, {3.48301572668926*^9, 
+  3.483015763868299*^9}, {3.4830158152623653`*^9, 3.4830159985348177`*^9}, {
+  3.483016082923429*^9, 3.4830163684788227`*^9}, {3.483016816167405*^9, 
+  3.483016897739711*^9}, {3.483017039261126*^9, 3.483017127873886*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PreparePrincipalGraphEquations", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"L", ":", 
+     RowBox[{"(", 
+      RowBox[{"0", "|", "1"}], ")"}]}], ",", "Z_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "tensorWithX", ",", "tensorWith1", ",", "d1", ",", "k1", ",", "d2", ",", 
+      "k2", ",", "R"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{
+      "\"\<beginning preparation of principal graph \>\"", ",", "L", ",", 
+       " ", "\"\< equations\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"tensorWithX", "[", 
+       RowBox[{"L", ",", "R_", ",", "d1_", ",", "k1_"}], "]"}], ":=", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Table", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Z", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"L", ",", "R", ",", "d1", ",", "k1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"R", ",", 
+               RowBox[{"1", "-", "R"}], ",", "1", ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"L", ",", 
+               RowBox[{"1", "-", "R"}], ",", "d2", ",", "k2"}], "}"}]}], 
+            "]"}], "-", "\[IndentingNewLine]", 
+           RowBox[{"Switch", "[", 
+            RowBox[{
+             RowBox[{"d2", "-", "d1"}], ",", "\[IndentingNewLine]", "1", ",", 
+             
+             RowBox[{"g", "\[LeftDoubleBracket]", 
+              RowBox[{
+               RowBox[{"d1", "+", "1"}], ",", "k2", ",", "k1"}], 
+              "\[RightDoubleBracket]"}], ",", "\[IndentingNewLine]", 
+             RowBox[{"-", "1"}], ",", 
+             RowBox[{"g", "\[LeftDoubleBracket]", 
+              RowBox[{"d1", ",", "k1", ",", "k2"}], "\[RightDoubleBracket]"}],
+              ",", "\[IndentingNewLine]", "_", ",", "0"}], "]"}]}], 
+          "\[Equal]", "0"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"d2", ",", 
+           RowBox[{"1", "-", 
+            RowBox[{"Mod", "[", 
+             RowBox[{"d1", ",", "2"}], "]"}]}], ",", 
+           RowBox[{"GraphDepth", "[", "g", "]"}], ",", "2"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"k2", ",", "1", ",", 
+           RowBox[{"RankAtDepth", "[", 
+            RowBox[{"g", ",", "d2"}], "]"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"tensorWith1", "[", 
+       RowBox[{"L", ",", "R_", ",", "d1_", ",", "k1_"}], "]"}], ":=", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"Z", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"L", ",", "R", ",", "d1", ",", "k1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"R", ",", "R", ",", "0", ",", "1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"L", ",", "R", ",", "d2", ",", "k2"}], "}"}]}], "]"}],
+              "-", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"d1", "\[Equal]", "d2"}], "\[And]", 
+                RowBox[{"k1", "\[Equal]", "k2"}]}], ",", "1", ",", "0"}], 
+              "]"}]}], "\[Equal]", "0"}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Z", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"L", ",", "L", ",", "0", ",", "1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"L", ",", "R", ",", "d1", ",", "k1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"L", ",", "R", ",", "d2", ",", "k2"}], "}"}]}], "]"}],
+              "-", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"d1", "\[Equal]", "d2"}], "\[And]", 
+                RowBox[{"k1", "\[Equal]", "k2"}]}], ",", "1", ",", "0"}], 
+              "]"}]}], "\[Equal]", "0"}]}], "\[IndentingNewLine]", "}"}], ",",
+          "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"d2", ",", 
+           RowBox[{"Mod", "[", 
+            RowBox[{"d1", ",", "2"}], "]"}], ",", 
+           RowBox[{"GraphDepth", "[", "g", "]"}], ",", "2"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"k2", ",", "1", ",", 
+           RowBox[{"RankAtDepth", "[", 
+            RowBox[{"g", ",", "d2"}], "]"}]}], "}"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"tensorWithX", "[", 
+          RowBox[{"L", ",", "R", ",", "d1", ",", "k1"}], "]"}], "~", "Join", 
+         "~", 
+         RowBox[{"tensorWith1", "[", 
+          RowBox[{"L", ",", "R", ",", "d1", ",", "k1"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"R", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"d1", ",", "0", ",", 
+          RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k1", ",", "1", ",", 
+          RowBox[{"RankAtDepth", "[", 
+           RowBox[{"g", ",", "d1"}], "]"}]}], "}"}]}], "]"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483015433254431*^9, 3.483015476554201*^9}, {
+  3.483015575451511*^9, 3.483015664717404*^9}, {3.48301572668926*^9, 
+  3.483015763868299*^9}, {3.4830158152623653`*^9, 3.4830159985348177`*^9}, {
+  3.483016082923429*^9, 3.4830163684788227`*^9}, {3.483017026648725*^9, 
+  3.483017028351754*^9}, {3.483017142115382*^9, 3.4830171478603287`*^9}, {
+  3.483018153784678*^9, 3.483018156869253*^9}, {3.4876156743740063`*^9, 
+  3.487615682478631*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrepareDualityEquations", "[", 
+   RowBox[{
+   "g0_BigraphWithDuals", ",", " ", "g1_BigraphWithDuals", ",", "Z_"}], "]"}],
+   ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "g", ",", "dual", ",", "dualityEquations", ",", "d1", ",", "k1", ",", 
+      "d2", ",", "k2", ",", "d3", ",", "k3", ",", "A", ",", "B", ",", "C"}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "DebugPrint", "[", "\"\<beginning preparation of duality equations\>\"", 
+      "]"}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "0", "]"}], ",", 
+        RowBox[{"g", "[", "1", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g0", ",", "g1"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"dual", "[", 
+       RowBox[{"{", 
+        RowBox[{"A_", ",", "A_", ",", 
+         RowBox[{"d_", "/;", 
+          RowBox[{"EvenQ", "[", "d", "]"}]}], ",", "k_"}], "}"}], "]"}], ":=", 
+      RowBox[{"{", 
+       RowBox[{"A", ",", "A", ",", "d", ",", 
+        RowBox[{
+         RowBox[{"g", "[", "A", "]"}], "\[LeftDoubleBracket]", 
+         RowBox[{"2", ",", 
+          RowBox[{
+           RowBox[{"d", "/", "2"}], "+", "1"}], ",", "k"}], 
+         "\[RightDoubleBracket]"}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"dual", "[", 
+       RowBox[{"{", 
+        RowBox[{"A_", ",", "B_", ",", 
+         RowBox[{"d_", "/;", 
+          RowBox[{"OddQ", "[", "d", "]"}]}], ",", "k_"}], "}"}], "]"}], ":=", 
+      
+      RowBox[{"{", 
+       RowBox[{"B", ",", "A", ",", "d", ",", "k"}], "}"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"dualityEquations", "[", 
+       RowBox[{"L_", ",", "M_", ",", "R_"}], "]"}], ":=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"Z", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"L", ",", "M", ",", "d1", ",", "k1"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"M", ",", "R", ",", "d2", ",", "k2"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"L", ",", "R", ",", "d3", ",", "k3"}], "}"}]}], "]"}], 
+            "-", 
+            RowBox[{"Z", "[", 
+             RowBox[{
+              RowBox[{"dual", "[", 
+               RowBox[{"{", 
+                RowBox[{"L", ",", "R", ",", "d3", ",", "k3"}], "}"}], "]"}], 
+              ",", 
+              RowBox[{"{", 
+               RowBox[{"L", ",", "M", ",", "d1", ",", "k1"}], "}"}], ",", 
+              RowBox[{"dual", "[", 
+               RowBox[{"{", 
+                RowBox[{"M", ",", "R", ",", "d2", ",", "k2"}], "}"}], "]"}]}],
+              "]"}]}], "\[Equal]", "0"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"d1", ",", 
+            RowBox[{"Mod", "[", 
+             RowBox[{
+              RowBox[{"M", "+", "L"}], ",", "2"}], "]"}], ",", 
+            RowBox[{"GraphDepth", "[", 
+             RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k1", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "L", "]"}], ",", "d1"}], "]"}]}], "}"}], ",", 
+          
+          RowBox[{"{", 
+           RowBox[{"d2", ",", 
+            RowBox[{"Mod", "[", 
+             RowBox[{
+              RowBox[{"M", "+", "R"}], ",", "2"}], "]"}], ",", 
+            RowBox[{"GraphDepth", "[", 
+             RowBox[{"g", "[", "M", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k2", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "M", "]"}], ",", "d2"}], "]"}]}], "}"}], ",", 
+          
+          RowBox[{"{", 
+           RowBox[{"d3", ",", 
+            RowBox[{"Mod", "[", 
+             RowBox[{
+              RowBox[{"L", "+", "R"}], ",", "2"}], "]"}], ",", 
+            RowBox[{"GraphDepth", "[", 
+             RowBox[{"g", "[", "L", "]"}], "]"}], ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k3", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "L", "]"}], ",", "d3"}], "]"}]}], "}"}]}], 
+         "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"3", ",", "4"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"5", ",", "6"}], "}"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"dualityEquations", "[", 
+         RowBox[{"A", ",", "B", ",", "C"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"A", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"B", ",", "0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"C", ",", "0", ",", "1"}], "}"}]}], "]"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483016409994101*^9, 3.4830164290397673`*^9}, {
+  3.483017155084105*^9, 3.483017162145241*^9}, {3.48761569044785*^9, 
+  3.487615693318718*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"SolvablePatterns", "[", "Z_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"SolvablePatterns", "[", "Z", "]"}], "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"_Z", "\[Equal]", "0"}], ",", 
+        RowBox[{"SolveSolvableEquations", "[", "Z", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{
+         RowBox[{"-", "_Z"}], "\[Equal]", "0"}], ",", 
+        RowBox[{"SolveSolvableEquations", "[", "Z", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{
+         RowBox[{"_Integer", "+", "_Z"}], "\[Equal]", "0"}], ",", 
+        RowBox[{"SolveSolvableEquations", "[", "Z", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{
+         RowBox[{"_Integer", "-", "_Z"}], "\[Equal]", "0"}], ",", 
+        RowBox[{"SolveSolvableEquations", "[", "Z", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{
+         RowBox[{"a_Z", "+", "b_Z"}], "\[Equal]", "0"}], ",", 
+        RowBox[{"AllVariablesAreZero", "[", "Z", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "a_Z"}], "-", "b_Z"}], "\[Equal]", "0"}], ",", 
+        RowBox[{"AllVariablesAreZero", "[", "Z", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{
+         RowBox[{"a_Z", "-", "b_Z"}], "\[Equal]", "0"}], ",", 
+        RowBox[{"SolveSolvableEquations", "[", "Z", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\[Infinity]", ",", 
+        RowBox[{"e_", "/;", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"SimplifyingEquations", "=", "True"}], ";", 
+           RowBox[{
+            RowBox[{"Length", "[", 
+             RowBox[{"CoefficientArrays", "[", 
+              RowBox[{
+               RowBox[{
+               "e", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+               ",", 
+               RowBox[{"Union", "[", 
+                RowBox[{"Cases", "[", 
+                 RowBox[{"e", ",", "_Z", ",", "\[Infinity]"}], "]"}], "]"}]}],
+               "]"}], "]"}], "\[Equal]", "2"}]}], ")"}]}], ",", 
+        RowBox[{"SolveSolvableEquations", "[", "Z", "]"}]}], "}"}]}], 
+     "}"}]}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.482767909525391*^9, 3.4827679420662127`*^9}, {
+  3.482767973455502*^9, 3.482768091473051*^9}, {3.482768209687199*^9, 
+  3.4827682745383883`*^9}, {3.4827695571241093`*^9, 3.4827695644417953`*^9}, {
+  3.482925591614237*^9, 3.482925664569313*^9}, {3.48292588584669*^9, 
+  3.482925892205082*^9}, {3.4829423298891897`*^9, 3.482942332114427*^9}, {
+  3.483019675619707*^9, 3.483019683805324*^9}, {3.4830197882140007`*^9, 
+  3.4830198038730993`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"SolveSolvableEquations", "[", "Z_", "]"}], "[", "F_", "]"}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "solutions", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"solutions", "=", 
+      RowBox[{"Solve", "[", 
+       RowBox[{"F", ",", 
+        RowBox[{"Union", "[", 
+         RowBox[{"Cases", "[", 
+          RowBox[{"F", ",", "_Z", ",", "\[Infinity]"}], "]"}], "]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Switch", "[", 
+      RowBox[{
+       RowBox[{"Length", "[", "solutions", "]"}], ",", "\[IndentingNewLine]", 
+       "1", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"DebugPrint", "[", 
+         RowBox[{"\"\<solved for \>\"", ",", 
+          RowBox[{"Length", "[", 
+           RowBox[{
+           "solutions", "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], "]"}], ",", " ", 
+          "\"\< variables.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+         "solutions", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+         "/.", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"a_", "\[Rule]", "b_"}], ")"}], "\[RuleDelayed]", 
+          RowBox[{"(", 
+           RowBox[{"a", "=", "b"}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+        "True"}], ",", "\[IndentingNewLine]", "0", ",", "\[IndentingNewLine]",
+        "False", ",", "\[IndentingNewLine]", "_", ",", 
+       RowBox[{
+        RowBox[{
+        "DebugPrint", "[", 
+         "\"\<oh dear, multiple solutions to linear equations!\>\"", "]"}], 
+        ";", "True"}]}], "\[IndentingNewLine]", "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.482764858790422*^9, 3.482764921043509*^9}, {
+  3.482764968571686*^9, 3.482764989639823*^9}, {3.4827698406271*^9, 
+  3.482769843862842*^9}, {3.482943533648182*^9, 3.4829435787066727`*^9}, {
+  3.483018355503894*^9, 3.4830183855906773`*^9}, {3.483018723713512*^9, 
+  3.483018728648933*^9}, {3.483019516068685*^9, 3.483019533965905*^9}, {
+  3.483019721975953*^9, 3.483019737902151*^9}, {3.483019778700777*^9, 
+  3.48301978129263*^9}, {3.487600610370057*^9, 3.4876006633507977`*^9}, {
+  3.487600867087319*^9, 3.487600889783024*^9}, {3.487600947662615*^9, 
+  3.487600956956891*^9}, {3.487601023986312*^9, 3.487601029112954*^9}, {
+  3.4876010684317636`*^9, 3.4876011182556677`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"AllVariablesAreZero", "[", "Z_", "]"}], "[", "eq_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Cases", "[", 
+      RowBox[{"eq", ",", "_Z", ",", "\[Infinity]"}], "]"}], "/.", 
+     RowBox[{"a_Z", "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{"a", "=", "0"}], ")"}]}]}], ";", "True"}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.482768285120369*^9, 3.482768299646882*^9}, {
+  3.482768407922173*^9, 3.482768410090055*^9}, {3.483019741826096*^9, 
+  3.483019742329562*^9}, {3.483019783256494*^9, 3.483019785632166*^9}, {
+  3.487601122882456*^9, 3.487601125986638*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SolveSomeSolvableEquations", "[", 
+   RowBox[{"eq_", ",", "Z_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "equationsWithKVariables", ",", "targetEquations", ",", "i", ",", 
+      "numberOfVariables", ",", "pattern", ",", "solveMethod"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"equationsWithKVariables", "[", "k_", "]"}], ":=", 
+      RowBox[{
+       RowBox[{"equationsWithKVariables", "[", "k", "]"}], "=", 
+       RowBox[{"Cases", "[", 
+        RowBox[{"eq", ",", 
+         RowBox[{"e_", "/;", 
+          RowBox[{
+           RowBox[{"Length", "[", 
+            RowBox[{"Union", "[", 
+             RowBox[{"Cases", "[", 
+              RowBox[{"e", ",", "_Z", ",", "\[Infinity]"}], "]"}], "]"}], 
+            "]"}], "\[LessEqual]", "k"}]}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"For", "[", 
+      RowBox[{
+       RowBox[{"i", "=", "1"}], ",", 
+       RowBox[{"i", "\[LessEqual]", 
+        RowBox[{"Length", "[", 
+         RowBox[{"SolvablePatterns", "[", "Z", "]"}], "]"}]}], ",", 
+       RowBox[{"++", "i"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"DebugPrint", "[", 
+         RowBox[{"\"\<Trying pattern \>\"", ",", "i"}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"numberOfVariables", ",", "pattern", ",", "solveMethod"}], 
+          "}"}], "=", 
+         RowBox[{
+          RowBox[{"SolvablePatterns", "[", "Z", "]"}], "\[LeftDoubleBracket]",
+           "i", "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"targetEquations", "=", 
+         RowBox[{"Cases", "[", 
+          RowBox[{
+           RowBox[{"equationsWithKVariables", "[", "numberOfVariables", "]"}],
+            ",", "pattern"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "targetEquations", "]"}], ">", "0"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"solveMethod", "[", "targetEquations", "]"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"DebugPrint", "[", 
+              RowBox[{"\"\<found \>\"", ",", " ", 
+               RowBox[{"Length", "[", "targetEquations", "]"}], ",", " ", 
+               "\"\< equations\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+             RowBox[{"Return", "[", 
+              RowBox[{"Length", "[", "targetEquations", "]"}], "]"}]}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{
+             "DebugPrint", "[", "\"\<found a contradiction\>\"", "]"}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Return", "[", 
+              RowBox[{"-", "1"}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+         "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], 
+     ";"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.482767848362338*^9, 3.4827678636430197`*^9}, {
+  3.4827678986210003`*^9, 3.482767899585635*^9}, {3.482768104166898*^9, 
+  3.482768146988183*^9}, {3.482768282481723*^9, 3.482768283072852*^9}, {
+  3.4827683131002502`*^9, 3.482768362455764*^9}, {3.48276839519805*^9, 
+  3.482768543301667*^9}, {3.482768578456091*^9, 3.482768608887742*^9}, {
+  3.482768681723288*^9, 3.482768715386607*^9}, {3.482768757161478*^9, 
+  3.4827688076416616`*^9}, {3.482768863928444*^9, 3.482768947928426*^9}, {
+  3.4827692520703487`*^9, 3.482769316952862*^9}, {3.4827693547321873`*^9, 
+  3.4827694275916557`*^9}, {3.4830185314081287`*^9, 3.483018534109352*^9}, {
+  3.483018732727849*^9, 3.483018736494935*^9}, {3.4830197481476707`*^9, 
+  3.4830197602747726`*^9}, {3.487600667371488*^9, 3.487600675203206*^9}, {
+  3.4876007073636513`*^9, 3.487600759527376*^9}, {3.487601174338805*^9, 
+  3.4876012461920767`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SolveAllSolvableEquations", "[", 
+   RowBox[{"eq0_", ",", "Z_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"eq", "=", "eq0"}], ",", 
+      RowBox[{"r", "=", "0"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"SimplifyingEquations", "=", "False"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"!", 
+          RowBox[{"MemberQ", "[", 
+           RowBox[{"eq", ",", "False"}], "]"}]}], ")"}], "\[And]", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"r", "=", 
+           RowBox[{"SolveSomeSolvableEquations", "[", 
+            RowBox[{"eq", ",", "Z"}], "]"}]}], ")"}], ">", "0"}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{"SimplifyingEquations", ",", 
+          RowBox[{"eq", "=", 
+           RowBox[{"Collect", "[", 
+            RowBox[{"eq", ",", "_Z", ",", "Together"}], "]"}]}]}], "]"}], ";",
+         "\[IndentingNewLine]", 
+        RowBox[{"eq", "=", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{
+           RowBox[{"Union", "[", "eq", "]"}], ",", "True"}], "]"}]}]}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"r", "\[Equal]", 
+        RowBox[{"-", "1"}]}], ",", 
+       RowBox[{"PrependTo", "[", 
+        RowBox[{"eq", ",", "False"}], "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DeleteCases", "[", 
+      RowBox[{
+       RowBox[{"Union", "[", "eq", "]"}], ",", "True"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.482768971673503*^9, 3.48276903283678*^9}, {
+   3.482769619229444*^9, 3.482769626638833*^9}, 3.4827699187536697`*^9, {
+   3.482925564953972*^9, 3.482925571152652*^9}, {3.482925834655361*^9, 
+   3.482925866663073*^9}, {3.4829454429540586`*^9, 3.4829454594322777`*^9}, {
+   3.483019869729802*^9, 3.483019874013981*^9}, {3.4830199388389893`*^9, 
+   3.4830199524950953`*^9}, {3.487601277320664*^9, 3.487601307208774*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EvenPartFusionRules", "[", 
+   RowBox[{"FusionRules", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"g0_", ",", "g1_"}], "}"}], ",", "multiplicities_"}], "]"}], 
+   "]"}], ":=", 
+  RowBox[{"FusionRules", "[", 
+   RowBox[{
+    RowBox[{"EvenPart", "[", 
+     RowBox[{"g0", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+     "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], "/.", "multiplicities"}], 
+       ")"}]}], "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483108411230007*^9, 3.483108619631496*^9}, {
+   3.483121238843576*^9, 3.4831212400241823`*^9}, 3.5260574089670753`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FlipFusionRules", "[", 
+   RowBox[{"FusionRules", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"g0_", ",", "g1_"}], "}"}], ",", "multiplicities_"}], "]"}], 
+   "]"}], ":=", 
+  RowBox[{"FusionRules", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g1", ",", "g0"}], "}"}], ",", 
+    RowBox[{"multiplicities", "/.", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"a_", ",", "b_", ",", "c_"}], "}"}], "\[Rule]", "T_"}], 
+       ")"}], "\[RuleDelayed]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"1", "-", 
+          RowBox[{"{", 
+           RowBox[{"a", ",", "b", ",", "c"}], "}"}]}], ")"}], "\[Rule]", 
+        "T"}], ")"}]}]}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.483183991123352*^9, 3.4831840649496727`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1869, 992},
+WindowMargins->{{0, Automatic}, {Automatic, 31}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 232, 4, 46, "Subtitle",
+ InitializationCell->True],
+Cell[802, 28, 363, 7, 41, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1190, 39, 58, 1, 67, "Section",
+ InitializationCell->True],
+Cell[1251, 42, 207, 3, 26, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1495, 50, 60, 1, 67, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1580, 55, 133, 2, 34, "Subsection",
+ InitializationCell->True],
+Cell[1716, 59, 72, 1, 26, "Text",
+ InitializationCell->True],
+Cell[1791, 62, 859, 16, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2687, 83, 63, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[2753, 86, 319, 8, 27, "Input",
+ InitializationCell->True],
+Cell[3075, 96, 249, 7, 27, "Input",
+ InitializationCell->True],
+Cell[3327, 105, 261, 7, 27, "Input",
+ InitializationCell->True],
+Cell[3591, 114, 383, 9, 27, "Input",
+ InitializationCell->True],
+Cell[3977, 125, 343, 8, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4357, 138, 58, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[4418, 141, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[4540, 146, 167, 3, 27, "Input",
+ InitializationCell->True],
+Cell[4710, 151, 816, 21, 73, "Input",
+ InitializationCell->True],
+Cell[5529, 174, 8283, 200, 254, "Input",
+ InitializationCell->True],
+Cell[13815, 376, 3138, 80, 118, "Input",
+ InitializationCell->True],
+Cell[16956, 458, 5292, 132, 164, "Input",
+ InitializationCell->True],
+Cell[22251, 592, 757, 19, 43, "Input",
+ InitializationCell->True],
+Cell[23011, 613, 5756, 136, 208, "Input",
+ InitializationCell->True],
+Cell[28770, 751, 8571, 204, 405, "Input",
+ InitializationCell->True],
+Cell[37344, 957, 238, 5, 27, "Input",
+ InitializationCell->True],
+Cell[37585, 964, 876, 22, 27, "Input",
+ InitializationCell->True],
+Cell[38464, 988, 349, 9, 27, "Input",
+ InitializationCell->True],
+Cell[38816, 999, 958, 24, 43, "Input",
+ InitializationCell->True],
+Cell[39777, 1025, 3143, 80, 103, "Input",
+ InitializationCell->True],
+Cell[42923, 1107, 4139, 106, 133, "Input",
+ InitializationCell->True],
+Cell[47065, 1215, 5792, 143, 163, "Input",
+ InitializationCell->True],
+Cell[52860, 1360, 5256, 123, 358, "Input",
+ InitializationCell->True],
+Cell[58119, 1485, 6035, 143, 344, "Input",
+ InitializationCell->True],
+Cell[64157, 1630, 5460, 142, 223, "Input",
+ InitializationCell->True],
+Cell[69620, 1774, 2833, 69, 58, "Input",
+ InitializationCell->True],
+Cell[72456, 1845, 2468, 55, 208, "Input",
+ InitializationCell->True],
+Cell[74927, 1902, 670, 16, 27, "Input",
+ InitializationCell->True],
+Cell[75600, 1920, 4009, 88, 268, "Input",
+ InitializationCell->True],
+Cell[79612, 2010, 2208, 55, 163, "Input",
+ InitializationCell->True],
+Cell[81823, 2067, 848, 24, 27, "Input",
+ InitializationCell->True],
+Cell[82674, 2093, 863, 27, 27, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[83562, 2124, 123, 2, 24, "Subsubsection",
+ InitializationCell->True],
+Cell[83688, 2128, 96, 3, 31, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[83833, 2137, 63, 1, 34, "Subsection",
+ InitializationCell->True],
+Cell[83899, 2140, 103, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

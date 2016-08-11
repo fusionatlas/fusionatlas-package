@@ -1,0 +1,1849 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     76779,       1840]
+NotebookOptionsPosition[     70604,       1644]
+NotebookOutlinePosition[     71174,       1669]
+CellTagsIndexPosition[     71105,       1664]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FusionAtlas package", "Subtitle",
+ CellChangeTimes->{{3.4202909924834576`*^9, 3.4202909948668847`*^9}}],
+
+Cell["\<\
+Version 0, May 20 2008, Scott Morrison, Emily Peters, Noah Snyder, David \
+Penneys, Narjess Afzaly, James Tener\
+\>", "Text",
+ CellChangeTimes->{{3.420290997931291*^9, 3.420291017779832*^9}, {
+  3.629142014417637*^9, 3.629142027784988*^9}}],
+
+Cell["Introduction", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Declaring subpackages", "Subsubsection",
+ CellChangeTimes->{{3.420291037988891*^9, 3.420291045960354*^9}, {
+  3.4202953396844254`*^9, 3.4202953402652607`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<GradedGraph\>\"", ",", "\"\<GradedBigraph\>\"", ",", 
+      "\"\<GraphRank\>\"", ",", "\"\<GraphEvenRank\>\"", ",", 
+      "\"\<GraphOddRank\>\"", ",", "\"\<GraphDepth\>\"", ",", 
+      "\"\<RankAtDepth\>\"", ",", "\"\<GraphAdjacencyMatrix\>\"", ",", 
+      "\"\<EvenPart\>\"", ",", "\"\<GraphIndex\>\"", ",", 
+      "\"\<DimensionOfGenerator\>\"", ",", 
+      "\"\<ReducedDimensionOfGenerator\>\"", ",", 
+      "\"\<NumericDimensionOfGenerator\>\"", ",", "\"\<DimensionsByDepth\>\"",
+       ",", "\"\<NumericDimensionsByDepth\>\"", ",", 
+      "\"\<ReducedDimensionsByDepth\>\"", ",", "\"\<GlobalEvenDimension\>\"", 
+      ",", "\"\<GlobalDimension\>\"", ",", "\"\<DimensionAtMostQ\>\"", ",", 
+      "\"\<DimensionOfLowWeightSpace\>\"", ",", 
+      "\"\<StableLowWeightSpaceDimensions\>\"", ",", 
+      "\"\<AnnularTanglesSubgraphTest\>\"", ",", "\"\<AnnularTanglesTest\>\"",
+       ",", "\"\<FindBigraphExtensions\>\"", ",", 
+      "\"\<FindBigraphExtensionsUpToRank\>\"", ",", 
+      "\"\<FindBigraphExtensionsUpToRankAndDepth\>\"", ",", 
+      "\"\<CanonicalizeBigraph\>\"", ",", "\"\<AnBigraph\>\"", ",", 
+      "\"\<DnBigraph\>\"", ",", "\"\<EnBigraph\>\"", ",", 
+      "\"\<trivalentBigraph\>\"", ",", "\"\<haagerupFamilyBigraph\>\"", ",", 
+      "\"\<dualHaagerupFamilyBigraph\>\"", ",", "\"\<HaagerupBigraph\>\"", 
+      ",", "\"\<DualHaagerupBigraph\>\"", ",", "\"\<IzumiStarBigraph\>\"", 
+      ",", "\"\<ExtendedDnBigraph\>\"", ",", "\"\<HexagonBigraph\>\"", ",", 
+      "\"\<DualHexagonBigraph\>\"", ",", "\"\<HaagerupAsaedaBigraph\>\"", 
+      ",", "\"\<DualHaagerupAsaedaBigraph\>\"", ",", 
+      "\"\<ExtendedEnBigraph\>\"", ",", "\"\<S4S5Bigraph\>\"", ",", " ", 
+      "\"\<A4A5Bigraph\>\"", ",", "\"\<A5A6Bigraph\>\"", ",", " ", 
+      "\"\<GraphToString\>\"", ",", "\"\<GraphFromString\>\"", ",", 
+      "\"\<ClearCachedGraphFromString\>\"", ",", 
+      "\"\<CachedGraphFromString\>\"", ",", "\"\<DepthOfBranchPoint\>\"", 
+      ",", "\"\<HasSimpleBranchQ\>\"", ",", "\"\<Truncate\>\"", ",", 
+      "\"\<BranchFactor\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291117603371*^9, 3.420291118895229*^9}, {
+   3.4202913849377794`*^9, 3.420291388132373*^9}, {3.4202920292742896`*^9, 
+   3.4202920418123183`*^9}, {3.4202927560893984`*^9, 
+   3.4202927623383837`*^9}, {3.42045421068404*^9, 3.4204542737647457`*^9}, {
+   3.422309142772846*^9, 3.422309143143379*^9}, {3.4223200548937054`*^9, 
+   3.4223200573272047`*^9}, {3.422375248668456*^9, 3.422375252814418*^9}, {
+   3.4223758021242867`*^9, 3.422375814021394*^9}, {3.4325166524374104`*^9, 
+   3.432516656923388*^9}, {3.432761815099677*^9, 3.4327618166418943`*^9}, {
+   3.432764768646669*^9, 3.43276477939212*^9}, {3.4330380029733086`*^9, 
+   3.4330380035441294`*^9}, {3.433967209088317*^9, 3.4339672122328386`*^9}, {
+   3.434302768103797*^9, 3.4343027688749056`*^9}, {3.4343096082895007`*^9, 
+   3.4343096097015314`*^9}, {3.4343930690519533`*^9, 3.434393073788765*^9}, {
+   3.4345639820139456`*^9, 3.4345639841069555`*^9}, {3.434744344966757*^9, 
+   3.4347443466792192`*^9}, {3.4354440045850115`*^9, 
+   3.4354440057466817`*^9}, {3.4457949428591948`*^9, 3.445794945712213*^9}, {
+   3.4459128520720263`*^9, 3.445912852970158*^9}, 3.446846035638986*^9, {
+   3.4475529354378366`*^9, 3.447552946262328*^9}, {3.452449185709619*^9, 
+   3.452449190202622*^9}, {3.46284809518544*^9, 3.4628481036430807`*^9}, {
+   3.463943116119879*^9, 3.463943117779564*^9}, {3.466796765560052*^9, 
+   3.466796768949822*^9}, {3.469391560478197*^9, 3.469391563293811*^9}, {
+   3.469391731593257*^9, 3.469391736056587*^9}, {3.5076580159586897`*^9, 
+   3.5076580178103113`*^9}, {3.594943240217538*^9, 3.594943241490148*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`DisplayGraphs`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<DisplayFusionGraph\>\"", ",", "\"\<DisplayBigraph\>\"", ",", 
+      "\"\<DisplayGraph\>\"", ",", "\"\<GraphHash\>\"", ",", 
+      "\"\<DeleteGraph\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291117603371*^9, 3.420291118895229*^9}, {
+   3.4202913849377794`*^9, 3.420291388132373*^9}, {3.4202920292742896`*^9, 
+   3.4202920418123183`*^9}, {3.4202927560893984`*^9, 
+   3.4202927623383837`*^9}, {3.42045421068404*^9, 3.4204542737647457`*^9}, {
+   3.422309142772846*^9, 3.422309143143379*^9}, {3.4223200548937054`*^9, 
+   3.4223200573272047`*^9}, {3.422375248668456*^9, 3.422375252814418*^9}, {
+   3.4223758021242867`*^9, 3.422375814021394*^9}, {3.4325166524374104`*^9, 
+   3.432516656923388*^9}, {3.432761815099677*^9, 3.4327618166418943`*^9}, {
+   3.432764768646669*^9, 3.43276477939212*^9}, {3.4330380029733086`*^9, 
+   3.4330380035441294`*^9}, {3.433967209088317*^9, 3.4339672122328386`*^9}, {
+   3.434302768103797*^9, 3.4343027688749056`*^9}, {3.4343096082895007`*^9, 
+   3.4343096097015314`*^9}, {3.4343930690519533`*^9, 3.434393073788765*^9}, {
+   3.4345639820139456`*^9, 3.4345639841069555`*^9}, {3.434744344966757*^9, 
+   3.4347443466792192`*^9}, {3.4354440045850115`*^9, 
+   3.4354440057466817`*^9}, {3.4457949428591948`*^9, 3.445794945712213*^9}, {
+   3.4459128520720263`*^9, 3.445912852970158*^9}, 3.446846035638986*^9, {
+   3.4475529354378366`*^9, 3.447552946262328*^9}, {3.452449185709619*^9, 
+   3.452449190202622*^9}, {3.46284809518544*^9, 3.4628481036430807`*^9}, {
+   3.463943116119879*^9, 3.463943117779564*^9}, {3.466796765560052*^9, 
+   3.466796768949822*^9}, {3.469391560478197*^9, 3.469391563293811*^9}, {
+   3.469391731593257*^9, 3.469391736056587*^9}, {3.5051674459215717`*^9, 
+   3.505167456745779*^9}, {3.5076477232837677`*^9, 3.5076477303145933`*^9}, {
+   3.5076478847287807`*^9, 3.507647890237199*^9}, {3.507648686591679*^9, 
+   3.5076486978197193`*^9}, {3.50764874130751*^9, 3.507648749426468*^9}, {
+   3.507649333244062*^9, 3.50764933450422*^9}, {3.507658025605069*^9, 
+   3.507658028202899*^9}, {3.508974008774234*^9, 3.508974009636495*^9}, 
+   3.5105873235048733`*^9, {3.512409743072537*^9, 3.5124097484748907`*^9}, {
+   3.604435878221767*^9, 3.604435879870409*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`CyclotomicityBound`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<CyclotomicityBound\>\"", ",", "\"\<CyclotomicTranslates\>\"", ",", 
+      "\"\<CyclotomicTranslatesWithWitnesses\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291117603371*^9, 3.420291118895229*^9}, {
+   3.4202913849377794`*^9, 3.420291388132373*^9}, {3.4202920292742896`*^9, 
+   3.4202920418123183`*^9}, {3.4202927560893984`*^9, 
+   3.4202927623383837`*^9}, {3.42045421068404*^9, 3.4204542737647457`*^9}, {
+   3.422309142772846*^9, 3.422309143143379*^9}, {3.4223200548937054`*^9, 
+   3.4223200573272047`*^9}, {3.422375248668456*^9, 3.422375252814418*^9}, {
+   3.4223758021242867`*^9, 3.422375814021394*^9}, {3.4325166524374104`*^9, 
+   3.432516656923388*^9}, {3.432761815099677*^9, 3.4327618166418943`*^9}, {
+   3.432764768646669*^9, 3.43276477939212*^9}, {3.4330380029733086`*^9, 
+   3.4330380035441294`*^9}, {3.433967209088317*^9, 3.4339672122328386`*^9}, {
+   3.434302768103797*^9, 3.4343027688749056`*^9}, {3.4343096082895007`*^9, 
+   3.4343096097015314`*^9}, {3.4343930690519533`*^9, 3.434393073788765*^9}, {
+   3.4345639820139456`*^9, 3.4345639841069555`*^9}, {3.434744344966757*^9, 
+   3.4347443466792192`*^9}, {3.4354440045850115`*^9, 
+   3.4354440057466817`*^9}, {3.4457949428591948`*^9, 3.445794945712213*^9}, {
+   3.4459128520720263`*^9, 3.445912852970158*^9}, 3.446846035638986*^9, {
+   3.4475529354378366`*^9, 3.447552946262328*^9}, {3.452449185709619*^9, 
+   3.452449190202622*^9}, {3.46284809518544*^9, 3.4628481036430807`*^9}, {
+   3.463943116119879*^9, 3.463943117779564*^9}, {3.466796765560052*^9, 
+   3.466796768949822*^9}, {3.469391560478197*^9, 3.469391563293811*^9}, {
+   3.469391731593257*^9, 3.469391736056587*^9}, {3.5051674459215717`*^9, 
+   3.505167456745779*^9}, {3.5076477232837677`*^9, 3.5076477303145933`*^9}, {
+   3.5076478847287807`*^9, 3.507647890237199*^9}, {3.507648686591679*^9, 
+   3.5076486978197193`*^9}, {3.50764874130751*^9, 3.507648749426468*^9}, {
+   3.507649333244062*^9, 3.50764933450422*^9}, {3.507658025605069*^9, 
+   3.507658028202899*^9}, {3.508974008774234*^9, 3.508974009636495*^9}, 
+   3.5105873235048733`*^9, {3.512409743072537*^9, 3.5124097484748907`*^9}, {
+   3.526606849296961*^9, 3.526606869581925*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Java`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlasJavaDirectory\>\"", ",", 
+      "\"\<FusionAtlasScalaDirectory\>\"", ",", "\"\<RestartJava\>\"", ",", 
+      "\"\<AsScalaSet\>\"", ",", "\"\<AsScalaList\>\"", ",", 
+      "\"\<AsScalaOption\>\"", ",", "\"\<AsScalaObject\>\"", ",", 
+      "\"\<FromScalaObject\>\"", ",", "\"\<UnpackJavaLists\>\"", ",", 
+      "\"\<BuildScalaLibraries\>\"", ",", "\"\<CleanScalaLibraries\>\"", ",", 
+      "\"\<RebuildScalaLibraries\>\"", ",", "\"\<UnpackJavaObjects\>\"", ",", 
+      "\"\<GraphToScalaObject\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.494961336398065*^9, 3.49496135265196*^9}, {
+  3.494981177301717*^9, 3.494981179238475*^9}, {3.523807728480701*^9, 
+  3.523807743958721*^9}, {3.540645423394535*^9, 3.540645426884515*^9}, {
+  3.5677966266787558`*^9, 3.5677966395003223`*^9}, {3.5677967071375313`*^9, 
+  3.56779671074551*^9}, {3.5684977266359663`*^9, 3.5684977340985413`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`JavaOdometer`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FindBigraphExtensionsUpToRankJava\>\"", ",", 
+      "\"\<FindBigraphExtensionsUpToRankAndDepthJava\>\"", ",", 
+      "\"\<FindBigraphExtensionsUpToRankAndDepthJavaIterator\>\"", ",", 
+      "\"\<FindBigraphExtensionsMatching\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4327784707593393`*^9, 3.432778495064288*^9}, {
+  3.434392594850085*^9, 3.4343925958415103`*^9}, {3.4347609467483344`*^9, 
+  3.434760949822755*^9}, {3.4420723723011217`*^9, 3.4420723735068293`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DeclarePackage", "[", 
+  RowBox[{"\"\<FusionAtlas`FindAllBigraphs`\>\"", ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<AlgebraicIntegerTest\>\"", ",", "\"\<PositivityTest\>\"", ",", 
+     "\"\<GHJTest\>\"", ",", "\"\<BigraphConditions\>\"", ",", 
+     "\"\<AllBigraphs\>\"", ",", "\"\<FindAllBigraphs\>\"", ",", 
+     "\"\<RequestAllBigraphs\>\"", ",", "\"\<KnownObstructions\>\"", ",", 
+     "\"\<FindAllObstructions\>\"", ",", "\"\<RequestMoreBigraphs\>\""}], 
+    "}"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.43242799348228*^9, 3.432428026930376*^9}, {
+   3.4329521780855713`*^9, 3.432952183433261*^9}, {3.4337973756456947`*^9, 
+   3.4337973767372637`*^9}, {3.434046998429755*^9, 3.434047003957704*^9}, {
+   3.434047069071333*^9, 3.4340470698724847`*^9}, {3.4340485038744783`*^9, 
+   3.434048504685645*^9}, {3.4340489688130274`*^9, 3.4340489709460945`*^9}, {
+   3.4347614220818305`*^9, 3.4347614231633854`*^9}, 3.435618442494402*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`PackageData`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<ValuesAsString\>\"", ",", "\"\<DefiniteValuesAsString\>\"", ",", 
+      "\"\<PackageData\>\"", ",", "\"\<MatchingValues\>\"", ",", 
+      "\"\<DefiniteValues\>\"", ",", "\"\<PackageEverything\>\"", ",", 
+      "\"\<PackageCachedRootReduce\>\"", ",", "\"\<PackageDimensions\>\"", 
+      ",", "\"\<PackageBigraphExtensions\>\"", ",", 
+      "\"\<PackageBifusionAlgebras\>\"", ",", 
+      "\"\<PackageLowWeightSpaces\>\"", ",", 
+      "\"\<PackageAlgebraicIntegerTest\>\"", ",", 
+      "\"\<PackageObstructions\>\"", ",", "\"\<PackageKnapsackTest\>\"", ",", 
+      "\"\<PackageFindGraphPartners\>\"", ",", 
+      "\"\<PackageLowestWeightEigenspaces\>\"", ",", 
+      "\"\<PackageIdempotents\>\"", ",", "\"\<PackagePairExtensions\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4211987025850735`*^9, 3.421198732668331*^9}, {
+   3.4217687607767344`*^9, 3.4217687621286783`*^9}, {3.422313404661141*^9, 
+   3.422313406173315*^9}, {3.4223144034873824`*^9, 3.4223144048393264`*^9}, {
+   3.4223172035937376`*^9, 3.4223172095723343`*^9}, {3.4316570849647026`*^9, 
+   3.431657093346755*^9}, {3.432252673775091*^9, 3.432252674696416*^9}, {
+   3.432252868835574*^9, 3.432252869626712*^9}, {3.4324314057288494`*^9, 
+   3.432431406670203*^9}, 3.432433620623712*^9, {3.432532945756606*^9, 
+   3.432532946517701*^9}, {3.4329526458581953`*^9, 3.432952660569349*^9}, {
+   3.4468455105303917`*^9, 3.4468455211718063`*^9}, 3.446846676394143*^9, {
+   3.44700322268544*^9, 3.447003223523093*^9}, {3.447532126164963*^9, 
+   3.4475321368589067`*^9}, {3.508980321492098*^9, 3.508980322777392*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`TensorSolver`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FindFusionRules\>\"", ",", "\"\<FindFusionRulesTimeLimit\>\"", ",", 
+      "\"\<FlipFusionRules\>\"", ",", "\"\<EvenPartFusionRules\>\"", ",", 
+      "\"\<FusionRules\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.422317812329056*^9, 3.4223178208813534`*^9}, {3.432863444351768*^9, 
+   3.4328634617668095`*^9}, {3.4338737890491314`*^9, 3.4338737898803263`*^9}, 
+   3.433874479241579*^9, {3.4339653953502893`*^9, 3.4339653965520177`*^9}, {
+   3.4339662905074625`*^9, 3.4339662914488163`*^9}, {3.4342173889185743`*^9, 
+   3.434217390651066*^9}, {3.4342196931919565`*^9, 3.434219696867242*^9}, {
+   3.434404383180872*^9, 3.4344043839519806`*^9}, {3.509135021607332*^9, 
+   3.5091350359583197`*^9}, 3.526057424185207*^9, {3.532899508235854*^9, 
+   3.532899510082222*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`ExtractGraphs`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<ExtractFusionGraphLabels\>\"", ",", "\"\<ExtractFusionGraph\>\"", 
+      ",", "\"\<ExtractPairOfBigraphsWithDuals\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.422317812329056*^9, 3.4223178208813534`*^9}, {3.432863444351768*^9, 
+   3.4328634617668095`*^9}, {3.4338737890491314`*^9, 3.4338737898803263`*^9}, 
+   3.433874479241579*^9, {3.4339653953502893`*^9, 3.4339653965520177`*^9}, {
+   3.4339662905074625`*^9, 3.4339662914488163`*^9}, {3.4342173889185743`*^9, 
+   3.434217390651066*^9}, {3.4342196931919565`*^9, 3.434219696867242*^9}, {
+   3.434404383180872*^9, 3.4344043839519806`*^9}, {3.509135021607332*^9, 
+   3.5091350359583197`*^9}, 3.526057424185207*^9, {3.532899508235854*^9, 
+   3.532899510082222*^9}, {3.571079577269053*^9, 3.571079598331748*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`FormalCodegrees`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FormalCodegreesInDimensionFieldTest\>\"", ",", 
+      "\"\<FormalCodegrees\>\"", ",", "\"\<FindDimensionFunctions\>\"", ",", 
+      "\"\<FormalCodegreesInequalityTest\>\"", ",", "\"\<FPDimensions\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.422317812329056*^9, 3.4223178208813534`*^9}, {3.432863444351768*^9, 
+   3.4328634617668095`*^9}, {3.4338737890491314`*^9, 3.4338737898803263`*^9}, 
+   3.433874479241579*^9, {3.4339653953502893`*^9, 3.4339653965520177`*^9}, {
+   3.4339662905074625`*^9, 3.4339662914488163`*^9}, {3.4342173889185743`*^9, 
+   3.434217390651066*^9}, {3.4342196931919565`*^9, 3.434219696867242*^9}, {
+   3.434404383180872*^9, 3.4344043839519806`*^9}, {3.509135021607332*^9, 
+   3.5091350359583197`*^9}, 3.526057424185207*^9, {3.532899508235854*^9, 
+   3.532899510082222*^9}, {3.5535520757124853`*^9, 3.553552092792026*^9}, {
+   3.594940677652519*^9, 3.5949406783540087`*^9}, {3.634842139631034*^9, 
+   3.634842140611519*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Iterators`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<Iterator\>\"", "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.422317812329056*^9, 3.4223178208813534`*^9}, {3.432863444351768*^9, 
+   3.4328634617668095`*^9}, {3.4338737890491314`*^9, 3.4338737898803263`*^9}, 
+   3.433874479241579*^9, {3.4339653953502893`*^9, 3.4339653965520177`*^9}, {
+   3.4339662905074625`*^9, 3.4339662914488163`*^9}, {3.4342173889185743`*^9, 
+   3.434217390651066*^9}, {3.4342196931919565`*^9, 3.434219696867242*^9}, {
+   3.434404383180872*^9, 3.4344043839519806`*^9}, {3.509135021607332*^9, 
+   3.5091350359583197`*^9}, 3.526057424185207*^9, {3.532899508235854*^9, 
+   3.532899510082222*^9}, {3.5535520757124853`*^9, 3.553552092792026*^9}, {
+   3.594940677652519*^9, 3.5949406783540087`*^9}, {3.634842139631034*^9, 
+   3.634842140611519*^9}, {3.635017948353787*^9, 3.635017971199644*^9}, {
+   3.6737960967049227`*^9, 3.673796099881585*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`InductionMatrix`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<InductionMatrices\>\"", ",", "\"\<AllDecompositions\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.422317812329056*^9, 3.4223178208813534`*^9}, {3.432863444351768*^9, 
+   3.4328634617668095`*^9}, {3.4338737890491314`*^9, 3.4338737898803263`*^9}, 
+   3.433874479241579*^9, {3.4339653953502893`*^9, 3.4339653965520177`*^9}, {
+   3.4339662905074625`*^9, 3.4339662914488163`*^9}, {3.4342173889185743`*^9, 
+   3.434217390651066*^9}, {3.4342196931919565`*^9, 3.434219696867242*^9}, {
+   3.434404383180872*^9, 3.4344043839519806`*^9}, {3.509135021607332*^9, 
+   3.5091350359583197`*^9}, 3.526057424185207*^9, {3.532899508235854*^9, 
+   3.532899510082222*^9}, {3.5535520757124853`*^9, 3.553552092792026*^9}, {
+   3.594940677652519*^9, 3.5949406783540087`*^9}, {3.634842139631034*^9, 
+   3.634842140611519*^9}, {3.635017948353787*^9, 3.635017971199644*^9}, {
+   3.675494991585391*^9, 3.675494992549485*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{
+   "\"\<FusionAtlas`FindGraphPartners`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<FindGraphPartners\>\"", ",", "\"\<FindWeedPartners\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.422317812329056*^9, 3.4223178208813534`*^9}, {3.432863444351768*^9, 
+   3.4328634617668095`*^9}, {3.4328641733099585`*^9, 
+   3.4328641818221984`*^9}, {3.4339726736860223`*^9, 
+   3.4339726744371023`*^9}, {3.4340472883065777`*^9, 
+   3.4340472891377726`*^9}, {3.4340473475918255`*^9, 
+   3.4340473490038557`*^9}, {3.4354298293319983`*^9, 3.4354298302633376`*^9}, 
+   3.509134629207945*^9, {3.53289518461758*^9, 3.532895189072219*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{
+   "\"\<FusionAtlas`CyclotomicTest`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<CyclotomicTest\>\"", "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+  3.422317812329056*^9, 3.4223178208813534`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`KnapsackTest`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<KnapsackTest\>\"", "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4326058911572943`*^9, 3.4326058967353153`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{
+   "\"\<FusionAtlas`QuadraticTanglesTest`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<ParityTest\>\"", ",", "\"\<HaagerupTypeBranchTest\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.422317812329056*^9, 3.4223178208813534`*^9}, 3.4325190046011143`*^9, {
+   3.442870008289198*^9, 3.442870013943906*^9}, 3.44684603131995*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`dTest`\>\"", ",", 
+    RowBox[{"{", "\"\<DTest\>\"", "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4336943604918747`*^9, 3.433694387078576*^9}, {
+  3.433695220719633*^9, 3.43369522089264*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Debugging`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<DebugEcho\>\"", ",", "\"\<DebugPrint\>\"", ",", 
+      "\"\<DebugEvaluate\>\"", ",", "\"\<SetDebugMode\>\"", ",", 
+      "\"\<SetDebugQueueInterval\>\"", ",", "\"\<SetDebugFile\>\"", ",", 
+      "\"\<DebugPrintHeld\>\"", ",", "\"\<ToStringHeld\>\""}], "}"}]}], "]"}],
+   ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421268743427096*^9, 3.4212687695746946`*^9}, {
+   3.433201472620451*^9, 3.433201475434498*^9}, 3.433201618620389*^9, {
+   3.4343084187289968`*^9, 3.4343084198706384`*^9}, {3.4458128612783012`*^9, 
+   3.4458128623303967`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`RemoteInterface`\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<RecordObstructions\>\"", ",", "\"\<RequestObstructions\>\"", ",", 
+      "\"\<LookupObstructions\>\"", ",", "\"\<LoadObstructions\>\"", ",", 
+      "\"\<LookupCanonicalForms\>\"", ",", "\"\<ProcessObstructionsQueue\>\"",
+       ",", "\"\<WorkOnObstructionsQueue\>\"", ",", 
+      "\"\<ClearObstructionsQueue\>\"", ",", 
+      "\"\<ObstructionsQueueLength\>\"", ",", 
+      "\"\<EstimateQueueCompletionTime\>\"", ",", "\"\<RetrieveGraphs\>\"", 
+      ",", "\"\<LookupGraphs\>\"", ",", "\"\<TakeGraphs\>\"", ",", 
+      "\"\<RecordCanonicalForms\>\"", ",", "\"\<RecordFindGraphPartners\>\"", 
+      ",", "\"\<GraphsNeedingPartners\>\"", ",", 
+      "\"\<ReapplyTestToDatabase\>\"", ",", 
+      "\"\<RecordRequestAllBigraphs\>\"", ",", "\"\<BigraphRequests\>\"", 
+      ",", "\"\<MaximalBigraphRequests\>\"", ",", 
+      "\"\<MaximalIncompleteBigraphRequests\>\"", ",", 
+      "\"\<DisplayBigraphRequests\>\"", ",", "\"\<QueueExpression\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434310388541448*^9, 3.4343104010995054`*^9}, {
+   3.4343113325288353`*^9, 3.4343113388879795`*^9}, {3.434315474344474*^9, 
+   3.434315477458952*^9}, {3.4343993407802563`*^9, 3.4343993415012927`*^9}, {
+   3.43440255525244*^9, 3.4344025565442977`*^9}, {3.4345616588233614`*^9, 
+   3.434561659734672*^9}, {3.434562994834451*^9, 3.4345629958258767`*^9}, {
+   3.434564956455123*^9, 3.4345649584079313`*^9}, {3.4345718103405266`*^9, 
+   3.434571811682456*^9}, {3.4345912761610017`*^9, 3.4345912778133774`*^9}, {
+   3.4346550182436466`*^9, 3.434655025734418*^9}, {3.434655213664648*^9, 
+   3.4346552144658003`*^9}, 3.4346821631975794`*^9, {3.435433552625832*^9, 
+   3.435433553637286*^9}, {3.4354393239646096`*^9, 3.435439324575488*^9}, {
+   3.435508322319064*^9, 3.4355083250129375`*^9}, {3.4356134448281107`*^9, 
+   3.4356134480527472`*^9}, {3.435613768092942*^9, 3.4356137805708847`*^9}, {
+   3.43561567221093*^9, 3.4356156767474527`*^9}, {3.4356165723753023`*^9, 
+   3.435616573797347*^9}, {3.4358825131991296`*^9, 3.4358825140002813`*^9}, {
+   3.509137273040024*^9, 3.50913728126782*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<BigraphWithDuals\>\"", ",", "\"\<GraphWithDuals\>\"", ",", 
+      "\"\<DualData\>\"", ",", "\"\<OcneanuDisplay\>\"", ",", 
+      "\"\<HaagerupWithDuals\>\"", ",", "\"\<DualHaagerupWithDuals\>\"", ",", 
+      "\"\<HaagerupAsaedaWithDuals\>\"", ",", 
+      "\"\<DualHaagerupAsaedaWithDuals\>\"", ",", "\"\<TwistBigraph\>\"", 
+      ",", "\"\<FullOcneanuTest\>\"", ",", "\"\<PartialOcneanuTest\>\"", ",", 
+      "\"\<DualDataList\>\"", ",", "\"\<CompatibleDualDataList\>\"", ",", 
+      "\"\<CheckDualDimensions\>\"", ",", "\"\<GraphPairsIsomorphicQ\>\"", 
+      ",", "\"\<ClearGraphPairsCachedValues\>\"", ",", 
+      "\"\<PermuteToReduceCrossings\>\"", ",", "\"\<GraphVertices\>\"", ",", 
+      "\"\<DirectionsFromVertices\>\"", ",", "\"\<EdgesAdjacentTo\>\"", ",", 
+      "\"\<GraphPathsFrom\>\"", ",", "\"\<GraphPathsTo\>\"", ",", 
+      "\"\<GraphPathsBetween\>\"", ",", "\"\<GraphPaths\>\"", ",", 
+      "\"\<GraphLoops\>\"", ",", "\"\<ConcatenatePaths\>\"", ",", 
+      "\"\<PathLength\>\"", ",", "\"\<ReverseLoop\>\"", ",", "\"\<Vertex\>\"",
+       ",", "\"\<SplitPathAt\>\"", ",", "\"\<PathToLoop\>\"", ",", 
+      "\"\<TruncatesToOneOfQ\>\"", ",", "\"\<RemoveDuplicates\>\"", ",", 
+      "\"\<ScalaTriplePointObstruction\>\"", ",", "\"\<StabilitySequence\>\"",
+       ",", "\"\<CylinderQ\>\"", ",", "\"\<CylinderObstruction\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4434668365282307`*^9, 3.443466892940999*^9}, {
+  3.443467181474247*^9, 3.443467197704023*^9}, {3.4434675965538397`*^9, 
+  3.443467607917555*^9}, {3.447606347932467*^9, 3.447606352737217*^9}, {
+  3.497328027375166*^9, 3.4973280281671867`*^9}, {3.524156613043841*^9, 
+  3.5241566418785343`*^9}, {3.5241581953076887`*^9, 3.524158196066617*^9}, {
+  3.5425509469484*^9, 3.542550955848754*^9}, {3.568447712702812*^9, 
+  3.5684477143883057`*^9}, {3.595187415368935*^9, 3.595187428678334*^9}, {
+  3.59518774594409*^9, 3.59518779821139*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`PairOdometer`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FindBigraphPairExtensionsUpToDepth\>\"", ",", 
+      "\"\<FamiliesOfBigraphPairs\>\"", ",", 
+      "\"\<DisplayFamiliesOfBigraphPairs\>\"", ",", 
+      "\"\<ChooseIsomorphismRepresentatives\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4327784707593393`*^9, 3.432778495064288*^9}, {
+  3.434392594850085*^9, 3.4343925958415103`*^9}, {3.4347609467483344`*^9, 
+  3.434760949822755*^9}, {3.4420723723011217`*^9, 3.4420723735068293`*^9}, {
+  3.447362492494246*^9, 3.447362516146487*^9}, {3.48447538940093*^9, 
+  3.4844753906293287`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`AfzalyEnumerator`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FilteredEnumerate\>\"", ",", "\"\<FilteredEnumerateToRank\>\"", 
+      ",", "\"\<FilteredEnumerateToDepth\>\"", ",", "\"\<IgnoredWeeds\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4327784707593393`*^9, 3.432778495064288*^9}, {
+  3.434392594850085*^9, 3.4343925958415103`*^9}, {3.4347609467483344`*^9, 
+  3.434760949822755*^9}, {3.4420723723011217`*^9, 3.4420723735068293`*^9}, {
+  3.447362492494246*^9, 3.447362516146487*^9}, {3.48447538940093*^9, 
+  3.4844753906293287`*^9}, {3.595187261349527*^9, 3.595187274751436*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Enumerator2014`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{"\"\<DescendantsTree\>\"", ",", "\"\<FindGraphPartners2\>\""}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4327784707593393`*^9, 3.432778495064288*^9}, {
+  3.434392594850085*^9, 3.4343925958415103`*^9}, {3.4347609467483344`*^9, 
+  3.434760949822755*^9}, {3.4420723723011217`*^9, 3.4420723735068293`*^9}, {
+  3.447362492494246*^9, 3.447362516146487*^9}, {3.48447538940093*^9, 
+  3.4844753906293287`*^9}, {3.595187261349527*^9, 3.595187274751436*^9}, {
+  3.629141955396106*^9, 3.629141974059492*^9}, {3.629142295926409*^9, 
+  3.629142298797369*^9}}],
+
+Cell["We've deprecated the original GraphPlanarAlgebra package.", "Text",
+ CellChangeTimes->{{3.543326321341317*^9, 3.543326333712825*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", "\[IndentingNewLine]", 
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`GraphPlanarAlgebra`\>\"", ",", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+     "\"\<GPAElement\>\"", ",", "\"\<GPAMatrix\>\"", ",", "\n", 
+      "\"\<NumberFieldGenerator\>\"", ",", "\"\<EnlargeNumberField\>\"", ",", 
+      "\n", "\"\<LopsidedDimension\>\"", ",", "\"\<EmptyGPAElement\>\"", ",", 
+      "\"\<GPACoefficients\>\"", ",", "\"\<GPAMultiply\>\"", ",", "\n", 
+      "\"\<RotateOneClick\>\"", ",", "\"\<RotateTwoClicks\>\"", ",", 
+      "\"\<CapTopLeft\>\"", ",", "\"\<CapAt\>\"", ",", 
+      "\"\<AddStrandOnRight\>\"", ",", " ", "\"\<AddCupOnTop\>\"", ",", 
+      "\"\<JonesWenzlIdempotent\>\"", ",", "\n", 
+      "\"\<LowestWeightEigenvectorConditions\>\"", ",", "\n", 
+      "\"\<LowestWeightEigenspace\>\""}], "\[IndentingNewLine]", "}"}]}], 
+   "]"}], "\[IndentingNewLine]", "*)"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446845641507465*^9, 3.4468456434488688`*^9}, {
+  3.446845803228867*^9, 3.446845833163484*^9}, {3.4468463123606853`*^9, 
+  3.4468463178259287`*^9}, {3.446849955796545*^9, 3.446849961808324*^9}, {
+  3.446850089214408*^9, 3.4468500939946737`*^9}, {3.4468505694305267`*^9, 
+  3.446850618370099*^9}, {3.446856990391223*^9, 3.446856991403557*^9}, {
+  3.446912818498979*^9, 3.44691282042977*^9}, {3.483034922782889*^9, 
+  3.4830349355462112`*^9}, {3.524158337770055*^9, 3.524158338447763*^9}, {
+  3.543326312321391*^9, 3.5433263204044123`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DeclarePackage", "[", 
+  RowBox[{"\"\<FusionAtlas`GraphPlanarAlgebra4`\>\"", ",", 
+   RowBox[{"{", "\[IndentingNewLine]", 
+    RowBox[{
+    "\"\<NumberFieldGenerator\>\"", ",", "\"\<EnlargeNumberField\>\"", ",", 
+     "\"\<RedefineLopsidedDimension\>\"", ",", "\"\<LopsidedDimension\>\"", 
+     ",", "\"\<SphericalDimension\>\"", ",", 
+     "\"\<CriticalPointCoefficient\>\"", ",", "\"\<GPA4Element\>\"", ",", 
+     "\"\<EmptyGPA4Element\>\"", ",", "\"\<CapTopLeft\>\"", ",", 
+     "\"\<PartialTrace\>\"", ",", "\"\<GPA4Trace\>\"", ",", 
+     "\"\<GPA4TraceEvaluation\>\"", ",", "\"\<TurnUpBottomRightCorner\>\"", 
+     ",", "\"\<TurnDownTopRightCorner\>\"", ",", 
+     "\"\<TurnUpBottomLeftCorner\>\"", ",", "\"\<TurnDownTopLeftCorner\>\"", 
+     ",", "\"\<RotateOneClick\>\"", ",", "\"\<RotateTwoClicks\>\"", ",", 
+     "\"\<GPAFourierTransform\>\"", ",", "\"\<GPAFourierTransformTwice\>\"", 
+     ",", "\"\<AddStrandOnRight\>\"", ",", "\"\<AddStrandOnLeft\>\"", ",", 
+     "\"\<AddStrandsOnLeft\>\"", ",", "\"\<GPAMultiply\>\"", ",", 
+     "\"\<GPAConjugate\>\"", ",", "\"\<GPACoefficients\>\"", ",", 
+     "\"\<GPACoefficientsAtStar\>\"", ",", "\"\<VariableGPA4Element\>\"", 
+     ",", "\"\<GPA4Matrix\>\"", ",", "\"\<GPATensor\>\"", ",", 
+     "\"\<GPAInverse\>\"", ",", "\"\<Rotate\[Pi]Clockwise\>\"", ",", 
+     "\"\<Rotate\[Pi]Counterclockwise\>\"", ",", 
+     "\"\<GPAMultiplyWithOffset\>\"", ",", "\"\<PivotalStructure\>\"", ",", 
+     "\"\<ConnectionGrid\>\"", ",", "\"\<StrandCrossingAbove\>\"", ",", 
+     "\"\<StrandCrossingBelow\>\"", ",", "\"\<TwoStrandFlatness\>\"", ",", 
+     "\"\<OneStrandFlatness\>\"", ",", "\"\<FusionRulesFromConnection\>\"", 
+     ",", "\"\<LowestWeightEigenvectorConditions\>\"", ",", 
+     "\"\<LowestWeightConditions\>\"", ",", "\"\<CollectGPA4Matrix\>\"", ",", 
+     "\"\<CollectGPA4Element\>\"", ",", "\"\<LowestWeightEigenspace\>\"", 
+     ",", "\"\<LowestWeightSpace\>\"", ",", 
+     "\"\<LoadLowestWeightEigenspaces\>\"", ",", 
+     "\"\<ChangePivotalStructure\>\"", ",", "\"\<NumberFieldGauge\>\"", ",", 
+     "\"\<FindEquationsForFlatGenerators\>\"", ",", 
+     "\"\<FindFlatGenerators\>\"", ",", "\"\<FindFlatLowestWeightVectors\>\"",
+      ",", "\"\<qInteger\[Delta]\>\"", ",", "\"\<JonesWenzlIdempotent\>\"", 
+     ",", "\"\<LoadIdempotents\>\"", ",", "\"\<S2Equation\>\"", ",", 
+     "\"\<RowReducedS2Equation\>\"", ",", "\"\<S2Solutions\>\"", ",", 
+     "\"\<IdentityTL\>\"", ",", "\"\<OneCupTL\>\"", ",", 
+     "\"\<OneCupJonesWenzl\>\"", ",", "\"\<SomeOneCupJonesWenzl\>\"", ",", 
+     "\"\<AnnularConsequences\>\"", ",", "\"\<GPACirc\>\"", ",", 
+     "\"\<GPAStar\>\"", ",", "\"\<GaugeTransform\>\"", ",", " ", 
+     "\"\<GaugeAction\>\"", ",", " ", "\"\<VariableGaugeElement\>\"", ",", 
+     " ", "\"\<FindGaugeElementRelating\>\"", ",", "\"\<WenzlRecursion\>\""}],
+     "\[IndentingNewLine]", "}"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.446845641507465*^9, 3.4468456434488688`*^9}, {
+  3.446845803228867*^9, 3.446845833163484*^9}, {3.4468463123606853`*^9, 
+  3.4468463178259287`*^9}, {3.446849955796545*^9, 3.446849961808324*^9}, {
+  3.446850089214408*^9, 3.4468500939946737`*^9}, {3.4468505694305267`*^9, 
+  3.446850618370099*^9}, {3.446856990391223*^9, 3.446856991403557*^9}, {
+  3.446912818498979*^9, 3.44691282042977*^9}, {3.483034922782889*^9, 
+  3.4830349355462112`*^9}, {3.524158337770055*^9, 3.524158338447763*^9}, {
+  3.543325574816039*^9, 3.5433255915791273`*^9}, {3.5433289009799423`*^9, 
+  3.5433289046033287`*^9}, {3.5557933865555487`*^9, 3.555793386713482*^9}, {
+  3.556222127468833*^9, 3.556222156168264*^9}, {3.556487269054522*^9, 
+  3.556487272335801*^9}, {3.5683487734859*^9, 3.568348777867752*^9}, {
+  3.569006195324494*^9, 3.5690061962868557`*^9}, {3.569020507136526*^9, 
+  3.569020508123192*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Connections`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<ClearConnection\>\"", ",", "\"\<ConnectionEquations\>\"", ",", 
+      "\"\<SimplifyConnectionEquations\>\"", ",", "\"\<BranchMatrix\>\"", 
+      ",", "\"\<UUt\>\"", ",", "\"\<ConnectionNormEquations\>\"", ",", 
+      "\"\<ConnectionPhaseEquations\>\"", ",", 
+      "\"\<SolveConnectionNormEquations\>\"", ",", 
+      "\"\<SolveConnectionNormEquationsForExtraDimensions\>\"", ",", 
+      "\"\<SolveConnectionPhaseEquations\>\"", ",", 
+      "\"\<ConnectionNormConditions\>\"", ",", 
+      "\"\<ReducedConnectionNormConditions\>\"", ",", 
+      "\"\<ConnectionTriangleInequalities\>\"", ",", 
+      "\"\<ConnectionPolygonInequalities\>\"", ",", 
+      "\"\<IndexRangeFromConnectionNorms\>\"", ",", 
+      "\"\<IndexRangeFromTriangleInequalities\>\"", ",", 
+      "\"\<ConnectionTrianglesNormsAndArgs\>\"", ",", 
+      "\"\<complicatedOnes\>\"", ",", "\"\<newComplicatedOne\>\"", ",", 
+      "\"\<PhaseSolver\>\"", ",", "\"\<LawOfCosinesAlternatives\>\"", ",", 
+      "\"\<norm\>\"", ",", "\"\<arg\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.469391597841446*^9, 3.469391698539899*^9}, {
+   3.543326001946559*^9, 3.543326010786479*^9}, 3.543326978220591*^9, {
+   3.543519288964776*^9, 3.543519291767612*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`RelativeDimensions`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<RelativeDimensionsByDepthEquations\>\"", ",", 
+      "\"\<SolveRelativeDimensionsByDepthEquations\>\"", ",", 
+      "\"\<RelativeBranchFactor\>\"", ",", 
+      "\"\<RelativeDimensionsByDepth\>\"", ",", 
+      "\"\<RelativeDimensionsConditions\>\"", ",", 
+      "\"\<PositiveOmegaInequality\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.469391597841446*^9, 3.469391698539899*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`TriplePointTest`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<TriplePointObstruction\>\"", ",", 
+      "\"\<EvenTriplePointObstruction\>\"", ",", 
+      "\"\<OddTriplePointObstruction\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.469391597841446*^9, 3.469391698539899*^9}, {
+  3.4783066414764223`*^9, 3.4783066671764927`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DeclarePackage", "[", 
+   RowBox[{"\"\<FusionAtlas`Utilities`IntersectSubspaces`\>\"", ",", 
+    RowBox[{"{", "\"\<IntersectSubspaces\>\"", "}"}]}], "]"}], ";"}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.469391597841446*^9, 3.469391698539899*^9}, {
+  3.4783066414764223`*^9, 3.4783066671764927`*^9}, {3.483185632800359*^9, 
+  3.483185650453915*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Print loading statement", "Subsubsection",
+ CellChangeTimes->{{3.4202910743011055`*^9, 3.4202910795386367`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Print", "[", "\[IndentingNewLine]", 
+  RowBox[{
+  "\"\<Loading FusionAtlas` version 0\\n\>\"", ",", "\[IndentingNewLine]", 
+   "\"\<Read more at http://tqft.net/wiki/Atlas_of_subfactors\>\""}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291094860669*^9, 3.4202911096118803`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The core package", "Subsubsection",
+ CellChangeTimes->{{3.420291084395621*^9, 3.4202910873398542`*^9}, {
+  3.420291344749992*^9, 3.420291345451*^9}, {3.420291407660453*^9, 
+  3.420291409573203*^9}}],
+
+Cell["\<\
+This doesn' t actually contain much; just some common functions. Everything \
+interesting is in a subpackage.\
+\>", "Text",
+ CellChangeTimes->{{3.420291411676227*^9, 3.420291435810931*^9}}],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"$VersionNumber", "<", "6"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"BeginPackage", "[", 
+    RowBox[{"\"\<FusionAtlas`\>\"", ",", 
+     RowBox[{"{", "\"\<LinearAlgebra`MatrixManipulation`\>\"", "}"}]}], "]"}],
+    ",", "\[IndentingNewLine]", 
+   RowBox[{"BeginPackage", "[", "\"\<FusionAtlas`\>\"", "]"}]}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202911560186095`*^9, 3.4202911587124834`*^9}, {
+  3.420295014256483*^9, 3.4202950158788157`*^9}, {3.4202954024747133`*^9, 
+  3.42029543357944*^9}, {3.4202954793853054`*^9, 3.4202955565763006`*^9}, {
+  3.4202956106340322`*^9, 3.420295640847477*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"FusionAtlasDirectory", "::", "usage"}], "=", 
+   "\"\<FusionAtlasDirectory[] should hopefully return the location the \
+FusionAtlas` package was loaded from.\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FusionAtlasDataDirectory", "::", "usage"}], "=", 
+   "\"\<FusionAtlasDataDirectory[] specifies were the FusionAtlas` package \
+should look for, and save, precomputed data.\>\""}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4211987935558834`*^9, 3.4211988124230127`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FusionAtlas", "::", "loading"}], "=", 
+   "\"\<Loading precomputed data in `1`.\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421200368931162*^9, 3.4212003847038417`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"cachedRootReduce", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420454668872883*^9, 3.4204546717370014`*^9}, {
+  3.4223130452443247`*^9, 3.4223130471670895`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"UnsortedUnion", "::", "usage"}], "=", 
+   "\"\<UnsortedUnion[list] a list of all the unique elements in list, in the \
+order that they first appear.\>\""}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"FindFirst", "::", "usage"}], "=", "\"\<\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202930097040787`*^9, 3.4202930126683407`*^9}, {
+  3.4202947327316704`*^9, 3.420294733723096*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"RealMax", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RealMaxPosition", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202947266929874`*^9, 3.420294741023594*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"NaturalQ", "::", "usage"}], "=", 
+   "\"\<NaturalNumberQ[n] tests if n is a non-negative integer.\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"qInteger", "::", "usage"}], "=", 
+   "\"\<qInteger[n][q] computes the quantum integer n with the variable q; in \
+our conventions qInteger[2][q]==q+\!\(\*SuperscriptBox[\(q\), \
+\(-1\)]\)\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"qFactorial", ",", "qBinomial"}], "}"}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202912687707396`*^9, 3.420291287768056*^9}}],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"$VersionNumber", "<", "7"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"SplitBy", "[", 
+     RowBox[{"x_", ",", "f_"}], "]"}], ":=", 
+    RowBox[{"Split", "[", 
+     RowBox[{"x", ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"f", "[", "#1", "]"}], "===", 
+        RowBox[{"f", "[", "#2", "]"}]}], "&"}]}], "]"}]}]}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.443479169922008*^9, 3.4434791770836267`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"$VersionNumber", "<", "6"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"UnitVector", "::", "usage"}], "=", 
+     "\"\<UnitVector[n,i] returns the i-th n-dimensional unit vector, if i is \
+an integer between 1 and n, and the n-dimensional zero vector \
+otherwise.\>\""}], ";"}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4094369769829683`*^9, 3.4094369851747475`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"$VersionNumber", "\[GreaterEqual]", "6"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"BlockMatrix", "=", "ArrayFlatten"}], ";", "\[IndentingNewLine]", 
+    
+    RowBox[{
+     RowBox[{"ZeroMatrix", "[", "n_", "]"}], ":=", 
+     RowBox[{"ZeroMatrix", "[", 
+      RowBox[{"n", ",", "n"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"ZeroMatrix", "[", 
+      RowBox[{"n_", ",", "m_"}], "]"}], ":=", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{"0", ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "m"}], "}"}]}], "]"}]}]}]}], "\[IndentingNewLine]", 
+  "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4094369769829683`*^9, 3.4094369851747475`*^9}, {
+  3.42029346825344*^9, 3.4202934790289345`*^9}, {3.4202935339979763`*^9, 
+  3.4202935487091293`*^9}, {3.4202943339883056`*^9, 3.420294351593621*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ZeroVector", "::", "usage"}], "=", 
+   "\"\<ZeroVector[n] returns the n-dimensional 0 vector.\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"UnitVectorQ", "::", "usage"}], "=", 
+   "\"\<UnitVectorQ[v] tests if v is a unit coordinate vector.\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ZeroVectorQ", "::", "usage"}], "=", 
+   "\"\<ZeroVectorQ[v] tests if v is the zero vector.\>\""}], ";"}]], "Input",\
+
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ZeroMatrixQ", "::", "usage"}], "=", "\"\<\>\""}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202941778337665`*^9, 3.4202941799367905`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"qFromd", "::", "usage"}], "=", 
+   "\"\<Computes q given d=q+q^(-1)\>\""}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.466791516339015*^9, 3.4667915397614098`*^9}, {
+  3.546974507518573*^9, 3.546974508038375*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"$parallelMode", "::", "usage"}], "=", 
+   "\"\<'$parallelMode = True' allows the FusionAtlas to use multiple \
+kernels.\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"parallelRootReduce", ";"}], "\[IndentingNewLine]", 
+ RowBox[{"progressiveRootReduce", ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5469745045834827`*^9, 3.546974574932825*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FusionAtlasDirectory", "[", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"FusionAtlasDirectory", "[", "]"}], "=", 
+   RowBox[{"StringDrop", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"File", "/.", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"FileInformation", "[", 
+           RowBox[{"ToFileName", "[", 
+            RowBox[{"#", ",", "\"\<FusionAtlas\>\""}], "]"}], "]"}], "&"}], "/@", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"Reverse", "[", "$Path", "]"}], "/.", 
+           RowBox[{"\"\<.\>\"", "\[Rule]", 
+            RowBox[{"Directory", "[", "]"}]}]}], ")"}]}], "]"}]}], ")"}], ",", 
+     RowBox[{"-", "12"}]}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421198815136915*^9, 3.4211988188322287`*^9}, {
+   3.4211993678116226`*^9, 3.421199367971853*^9}, 3.494103885026681*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"might", " ", "be", " ", "dangerous", " ", "if", " ", 
+    RowBox[{"FusionAtlasDirectory", "[", "]"}], " ", "is", " ", "somehow", 
+    " ", 
+    RowBox[{"incorrect", "!"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"!", 
+     RowBox[{"MemberQ", "[", 
+      RowBox[{"$Path", ",", 
+       RowBox[{"FusionAtlasDirectory", "[", "]"}]}], "]"}]}], ",", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"$Path", ",", 
+      RowBox[{"FusionAtlasDirectory", "[", "]"}]}], "]"}]}], "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.4211988253315744`*^9, 3.421198831550517*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"StringTake", "[", 
+      RowBox[{
+       RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", 
+       RowBox[{"-", "7"}]}], "]"}], "==", "\"\<package\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"FusionAtlasDataDirectory", "[", "]"}], ":=", 
+      RowBox[{
+       RowBox[{"StringDrop", "[", 
+        RowBox[{
+         RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", 
+         RowBox[{"-", "7"}]}], "]"}], "<>", "\"\<data\>\""}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<Found precomputed data in \>\"", ",", 
+       RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"MemberQ", "[", 
+         RowBox[{"$Path", ",", 
+          RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}]}], ",", 
+       RowBox[{"AppendTo", "[", 
+        RowBox[{"$Path", ",", 
+         RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}]}], "]"}]}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+    "Print", "[", 
+     "\"\<Remember to set FusionAtlasDataDirectory[] to the appropriate path, \
+if you've downloaded precomputed data.\>\"", "]"}]}], "\[IndentingNewLine]", 
+   "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4211988348152113`*^9, 3.4211988575078416`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"UnsortedUnion", "[", "x_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "f", "}"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"f", "[", "y_", "]"}], ":=", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"f", "[", "y", "]"}], "=", 
+         RowBox[{"Sequence", "[", "]"}]}], ";", "y"}], ")"}]}], ";", 
+     RowBox[{"f", "/@", "x"}]}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellTags->"Union"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"cachedRootReduceCount", "=", "0"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5481867154181004`*^9, 3.548186722022575*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"cachedRootReduce", "[", "x_Root", "]"}], ":=", 
+  "x"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cachedRootReduce", "[", "x_Integer", "]"}], ":=", 
+  "x"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cachedRootReduce", "[", "x_Complex", "]"}], ":=", 
+  "x"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cachedRootReduce", "[", "x_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"++", "cachedRootReduceCount"}], ";", 
+    RowBox[{
+     RowBox[{"cachedRootReduce", "[", "x", "]"}], "=", 
+     RowBox[{"RootReduce", "[", "x", "]"}]}]}], 
+   ")"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cachedRootReduce", "[", "x_List", "]"}], ":=", 
+  RowBox[{"cachedRootReduce", "/@", "x"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4204574886323776`*^9, 3.4204574984364753`*^9}, {
+  3.422313055348854*^9, 3.4223130594547586`*^9}, {3.5469739074776487`*^9, 
+  3.54697390781783*^9}, {3.548185767864258*^9, 3.548185788280343*^9}, {
+  3.5481867322026033`*^9, 3.548186734927107*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"progressiveRootReduce", "[", "x_Plus", "]"}], ":=", 
+  RowBox[{"cachedRootReduce", "[", 
+   RowBox[{"progressiveRootReduce", "/@", "x"}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"progressiveRootReduce", "[", "x_Times", "]"}], ":=", 
+  RowBox[{"cachedRootReduce", "[", 
+   RowBox[{"progressiveRootReduce", "/@", "x"}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"progressiveRootReduce", "[", "x_Root", "]"}], ":=", 
+  "x"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"progressiveRootReduce", "[", "x_", "]"}], ":=", 
+  RowBox[{"cachedRootReduce", "[", "x", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"progressiveRootReduce", "[", "x_List", "]"}], " ", ":=", 
+  RowBox[{"progressiveRootReduce", "/@", "x"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"progressiveRootReduce", "[", 
+   RowBox[{"x_", "\[Rule]", "y_"}], "]"}], ":=", 
+  RowBox[{"x", "\[Rule]", 
+   RowBox[{"progressiveRootReduce", "[", "y", "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.536604735902535*^9, 3.536604855929729*^9}, {
+   3.536604939201002*^9, 3.536604944873888*^9}, {3.536611153675827*^9, 
+   3.53661117594525*^9}, 3.546974170822763*^9, {3.54697422841253*^9, 
+   3.546974229715208*^9}, 3.546974474016876*^9, {3.5481857622276707`*^9, 
+   3.548185765553787*^9}, {3.548185848020314*^9, 3.54818584822499*^9}, {
+   3.5481861741058817`*^9, 3.5481861807458773`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"parallelModeHook", ":=", "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{"$parallelMode", "/:", 
+    RowBox[{"Set", "[", 
+     RowBox[{"$parallelMode", ",", "x_"}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"UpValues", "[", "$parallelMode", "]"}], "=", 
+       RowBox[{"{", "}"}]}], ";", 
+      RowBox[{"$parallelMode", "=", "x"}], ";", "setupParallelMode", ";", 
+      "parallelModeHook", ";", "x"}], ")"}]}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5469742669446917`*^9, 3.546974329045404*^9}, {
+  3.5469743621901073`*^9, 3.5469744324185534`*^9}, {3.546974616990984*^9, 
+  3.5469746412747383`*^9}, {3.5469746787323027`*^9, 3.5469746803466673`*^9}}],
+
+Cell[BoxData["parallelModeHook"], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"setupParallelMode", ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"If", "[", 
+     RowBox[{"$parallelMode", ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"CloseKernels", "[", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"LaunchKernels", "[", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"With", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"path", "=", 
+           RowBox[{"FusionAtlasDirectory", "[", "]"}]}], "}"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"ParallelEvaluate", "[", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"$Path", "=", 
+            RowBox[{"$Path", "~", "Join", "~", 
+             RowBox[{"{", "path", "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+          "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ParallelNeeds", "[", "\"\<FusionAtlas`\>\"", "]"}], ";"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.539021768779731*^9, 3.539021781688773*^9}, {
+  3.539021842275865*^9, 3.539021883316483*^9}, {3.539031679782899*^9, 
+  3.5390316800714083`*^9}, {3.539033157117466*^9, 3.539033160684581*^9}, {
+  3.539033264083543*^9, 3.5390332679560957`*^9}, {3.544296648440185*^9, 
+  3.544296649647317*^9}, {3.546974018522006*^9, 3.546974078101952*^9}, {
+  3.5469741288382196`*^9, 3.546974146116864*^9}, {3.54697470761172*^9, 
+  3.546974718112764*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$parallelMode", "=", "False"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.546973930390739*^9, 3.546973935330121*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"conditionalParallelMap", "[", "X___", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"$parallelMode", "===", "True"}], ",", 
+    RowBox[{"ParallelMap", "[", "X", "]"}], ",", 
+    RowBox[{"Map", "[", "X", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.53902201929677*^9, 3.539022032173674*^9}, {
+  3.5390327685878696`*^9, 3.5390327779157743`*^9}, {3.546973921518324*^9, 
+  3.546973924107645*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "parallelRootReduce", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parallelRootReduce", "[", "x_Plus", "]"}], ":=", 
+  RowBox[{"progressiveRootReduce", "[", 
+   RowBox[{"conditionalParallelMap", "[", 
+    RowBox[{"progressiveRootReduce", ",", "x"}], "]"}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"parallelRootReduce", "[", "x_Times", "]"}], ":=", 
+  RowBox[{"progressiveRootReduce", "[", 
+   RowBox[{"conditionalParallelMap", "[", 
+    RowBox[{"progressiveRootReduce", ",", "x"}], "]"}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"parallelRootReduce", "[", "x_", "]"}], ":=", 
+  RowBox[{"progressiveRootReduce", "[", "x", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"unflatten", "[", 
+   RowBox[{"e_", ",", 
+    RowBox[{"{", 
+     RowBox[{"d__", "?", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"IntegerQ", "[", "#", "]"}], "&&", 
+          RowBox[{"Positive", "[", "#", "]"}]}], ")"}], "&"}], ")"}]}], 
+     "}"}]}], "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{"Fold", "[", 
+    RowBox[{"Partition", ",", "e", ",", 
+     RowBox[{"Take", "[", 
+      RowBox[{
+       RowBox[{"{", "d", "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "1"}], ",", "2", ",", 
+         RowBox[{"-", "1"}]}], "}"}]}], "]"}]}], "]"}], " ", "/;", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Length", "[", "e", "]"}], "===", 
+     RowBox[{"Times", "[", "d", "]"}]}], ")"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parallelRootReduce", "[", 
+   RowBox[{"x_", "?", "ArrayQ"}], "]"}], ":=", 
+  RowBox[{"unflatten", "[", 
+   RowBox[{
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"flat", "=", 
+        RowBox[{"Flatten", "[", "x", "]"}]}], "}"}], ",", 
+      RowBox[{"FusionAtlas`Private`conditionalParallelMap", "[", 
+       RowBox[{"progressiveRootReduce", ",", "flat"}], "]"}]}], "]"}], ",", 
+    RowBox[{"Dimensions", "[", "x", "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parallelRootReduce", "[", "x_List", "]"}], " ", ":=", 
+  RowBox[{"conditionalParallelMap", "[", 
+   RowBox[{"progressiveRootReduce", ",", "x"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parallelRootReduce", "[", 
+   RowBox[{"x_", "\[Rule]", "y_"}], "]"}], ":=", 
+  RowBox[{"x", "->", 
+   RowBox[{"parallelRootReduce", "[", "y", "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.536604735902535*^9, 3.536604855929729*^9}, {
+   3.536604939201002*^9, 3.536604944873888*^9}, {3.536611153675827*^9, 
+   3.53661117594525*^9}, {3.536611532175744*^9, 3.5366115571836863`*^9}, {
+   3.536611606340927*^9, 3.5366116564847307`*^9}, {3.536611918595429*^9, 
+   3.536611936661118*^9}, {3.539022007201127*^9, 3.539022041290441*^9}, {
+   3.539614856833386*^9, 3.539614879298777*^9}, {3.539614921441102*^9, 
+   3.539614936497694*^9}, 3.539614986542232*^9, {3.5469741725936747`*^9, 
+   3.5469741758432293`*^9}, {3.546974778438797*^9, 3.546974781003693*^9}, {
+   3.548185834536387*^9, 3.54818583809851*^9}, {3.548185883969829*^9, 
+   3.5481859216125402`*^9}, {3.5481861578292923`*^9, 3.548186158563232*^9}, {
+   3.548186423451001*^9, 3.548186443389147*^9}, {3.548186691244825*^9, 
+   3.548186700108058*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NaturalQ", "[", "n_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"NonNegative", "[", "n", "]"}], "&&", 
+   RowBox[{"IntegerQ", "[", "n", "]"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FindFirst", "[", 
+   RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"p", "=", 
+      RowBox[{"Position", "[", 
+       RowBox[{"a", ",", "b", ",", 
+        RowBox[{"{", "1", "}"}], ",", "1", ",", 
+        RowBox[{"Heads", "\[Rule]", "False"}]}], "]"}]}], "}"}], ",", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Length", "[", "p", "]"}], "\[Equal]", "0"}], ",", 
+      RowBox[{"-", "1"}], ",", 
+      RowBox[{"p", "\[LeftDoubleBracket]", 
+       RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}]}], "]"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202928575352707`*^9, 3.420292858706955*^9}, {
+   3.432527304477088*^9, 3.432527341153398*^9}, 3.466790210028186*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RealMax", "[", "a_", "]"}], " ", ":=", " ", 
+  RowBox[{"Max", "[", 
+   RowBox[{"Cases", "[", 
+    RowBox[{"a", ",", 
+     RowBox[{"x_", "/;", 
+      RowBox[{
+       RowBox[{"Im", "[", "x", "]"}], "\[Equal]", "0"}]}]}], "]"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420292889351019*^9, 3.4202928908431644`*^9}, {
+  3.420293030824448*^9, 3.420293043372491*^9}, {3.4202931758529887`*^9, 
+  3.4202931829331694`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RealMaxPosition", "[", "a_", "]"}], " ", ":=", " ", 
+  RowBox[{"FindFirst", "[", 
+   RowBox[{"a", ",", 
+    RowBox[{"RealMax", "[", "a", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202928605896626`*^9, 3.42029286538656*^9}, {
+  3.4202947072450223`*^9, 3.420294708216419*^9}}],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"$VersionNumber", "\[GreaterEqual]", "6."}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Unprotect", "[", "IdentityMatrix", "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"IdentityMatrix", "[", "0", "]"}], "=", 
+     RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Protect", "[", "IdentityMatrix", "]"}], ";"}]}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4094379343596077`*^9, 3.4094379584642687`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ZeroVector", "[", "n_", "]"}], ":=", 
+  RowBox[{"Table", "[", 
+   RowBox[{"0", ",", 
+    RowBox[{"{", "n", "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"$VersionNumber", "<", "6"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"UnitVector", "[", 
+        RowBox[{"n_", ",", "i_Integer"}], "]"}], "/;", 
+       RowBox[{"(", 
+        RowBox[{"1", "\[LessEqual]", "i", "\[LessEqual]", "n"}], ")"}]}], ":=", 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"z", "=", 
+          RowBox[{"Table", "[", 
+           RowBox[{"0", ",", 
+            RowBox[{"{", "n", "}"}]}], "]"}]}], "}"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"z", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}],
+           "=", "1"}], ";", "z"}]}], "]"}]}], ")"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"UnitVector", "[", 
+       RowBox[{"n_", ",", "i_Integer"}], "]"}], ":=", 
+      RowBox[{"Table", "[", 
+       RowBox[{"0", ",", 
+        RowBox[{"{", "n", "}"}]}], "]"}]}], ")"}]}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Unprotect", "[", "UnitVector", "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"UnitVector", "[", 
+        RowBox[{"n_", ",", "i_Integer"}], "]"}], "/;", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"i", "<", "1"}], "\[Or]", 
+         RowBox[{"i", ">", "n"}]}], ")"}]}], ":=", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Message", "[", 
+         RowBox[{
+          RowBox[{"UnitVector", "::", "nokun"}], ",", "n", ",", "i"}], "]"}], 
+        ";", 
+        RowBox[{"ZeroVector", "[", "n", "]"}]}], ")"}]}], ")"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Protect", "[", "UnitVector", "]"}], ";"}]}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.409437049016547*^9, 3.409437188376938*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"UnitVectorQ", "[", 
+   RowBox[{"v_", "?", "VectorQ"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Complement", "[", 
+     RowBox[{"v", ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}], "]"}], "\[Equal]", 
+    RowBox[{"{", "}"}]}], "\[And]", 
+   RowBox[{
+    RowBox[{"Count", "[", 
+     RowBox[{"v", ",", "1"}], "]"}], "\[Equal]", "1"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ZeroVectorQ", "[", 
+   RowBox[{"v_", "?", "VectorQ"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Union", "[", "v", "]"}], "===", 
+    RowBox[{"{", "0", "}"}]}], "\[Or]", 
+   RowBox[{"v", "\[Equal]", 
+    RowBox[{"{", "}"}]}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ZeroMatrixQ", "[", "m_", "]"}], " ", ":=", " ", 
+  RowBox[{"(", 
+   RowBox[{"m", "\[Equal]", 
+    RowBox[{"ZeroMatrix", "@@", 
+     RowBox[{"Dimensions", "[", "m", "]"}]}]}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"This", " ", "is", " ", "horribly", " ", 
+    RowBox[{"broken", ":", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"e", ".", "g", ".", " ", 
+        RowBox[{"MinimalPolynomial", "[", 
+         RowBox[{
+          SqrtBox[
+           RowBox[{"Root", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"-", "2"}], "+", 
+               RowBox[{"12", " ", "#1"}], "-", 
+               RowBox[{"7", " ", 
+                SuperscriptBox["#1", "2"]}], "+", 
+               SuperscriptBox["#1", "3"]}], "&"}], ",", "3"}], "]"}]], ",", 
+          "x"}], "]"}]}], " ", "gives"}], " ", "-", 
+      RowBox[{"x", "^", 
+       RowBox[{
+        RowBox[{"3", "!!"}], "!"}]}]}]}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Unfortunately", " ", "I", " ", 
+    RowBox[{"can", "'"}], "t", " ", "remember", " ", "why", " ", "we", " ", 
+    "wrote", " ", 
+    RowBox[{"this", ":", " ", 
+     RowBox[{
+     "it", " ", "must", " ", "have", " ", "been", " ", "to", " ", "speed", 
+      " ", "something", " ", 
+      RowBox[{"up", ".", " ", "Hopefully"}], " ", 
+      RowBox[{"it", "'"}], "s", " ", "just", " ", "not", " ", "a", " ", 
+      "problem", " ", "anymore", " ", "to", " ", "use", " ", "the", " ", 
+      "default", " ", "implementation", " ", "in", " ", "Mathematica"}]}]}], 
+   " ", "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Unprotect", "[", "MinimalPolynomial", "]"}], ";", "\n", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"MinimalPolynomial", "[", 
+       RowBox[{"\[Mu]_", ",", "z_"}], "]"}], "/;", 
+      RowBox[{
+       RowBox[{"Length", "[", 
+        RowBox[{"Union", "[", 
+         RowBox[{"Cases", "[", 
+          RowBox[{"\[Mu]", ",", "_Root", ",", "\[Infinity]"}], "]"}], "]"}], 
+        "]"}], "\[Equal]", "1"}]}], ":=", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "roots", ",", "z0", ",", "\[Lambda]", ",", "p", ",", "q", ",", "x", 
+          ",", "n", ",", "rule", ",", "matrix"}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"roots", "=", 
+          RowBox[{"Cases", "[", 
+           RowBox[{"\[Mu]", ",", "_Root", ",", "\[Infinity]", ",", "1"}], 
+           "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"p", "=", 
+          RowBox[{
+           RowBox[{"roots", "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "[", 
+           "\[Lambda]", "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"n", "=", 
+          RowBox[{"Exponent", "[", 
+           RowBox[{"p", ",", "\[Lambda]"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"rule", "=", 
+          RowBox[{
+           SuperscriptBox["\[Lambda]", 
+            RowBox[{"m_", "/;", 
+             RowBox[{"m", "\[GreaterEqual]", "n"}]}]], "\[RuleDelayed]", 
+           RowBox[{"Evaluate", "[", 
+            RowBox[{
+             SuperscriptBox["\[Lambda]", 
+              RowBox[{"m", "-", "n"}]], 
+             RowBox[{"(", 
+              RowBox[{"-", 
+               RowBox[{"(", 
+                RowBox[{"p", "-", 
+                 RowBox[{
+                  RowBox[{"Coefficient", "[", 
+                   RowBox[{"p", ",", "\[Lambda]", ",", "n"}], "]"}], 
+                  SuperscriptBox["\[Lambda]", "n"]}]}], ")"}]}], ")"}]}], 
+            "]"}]}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"q", "=", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            SuperscriptBox["\[Lambda]", "i"], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "0", ",", 
+              RowBox[{"n", "-", "1"}]}], "}"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"x", "=", 
+          RowBox[{"\[Mu]", "/.", 
+           RowBox[{
+            RowBox[{
+            "roots", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+            "\[Rule]", "\[Lambda]"}]}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"matrix", "=", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"Coefficient", "[", 
+               RowBox[{"#", ",", "\[Lambda]", ",", "k"}], "]"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"k", ",", "0", ",", 
+                RowBox[{"n", "-", "1"}]}], "}"}]}], "]"}], "&"}], "/@", 
+           RowBox[{"FixedPoint", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Expand", "[", 
+               RowBox[{"#", "//.", "rule"}], "]"}], "&"}], ",", 
+             RowBox[{"q", " ", "x"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"CharacteristicPolynomial", "[", 
+           RowBox[{"matrix", ",", "z0"}], "]"}], "/.", 
+          RowBox[{"z0", "\[Rule]", "z"}]}]}]}], "\[IndentingNewLine]", "]"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"Protect", "[", "MinimalPolynomial", "]"}]}]}], ";"}], 
+   "*)"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4359540111090126`*^9, 3.435954021884507*^9}, 
+   3.4359541158095646`*^9, {3.495995737530705*^9, 3.4959958161145477`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"qFromd", "[", "d_", "]"}], ":=", " ", 
+  RowBox[{"cachedRootReduce", "[", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"d", "+", 
+      RowBox[{"Sqrt", "[", 
+       RowBox[{
+        RowBox[{"d", "^", "2"}], "-", "4"}], "]"}]}], ")"}], "/", "2"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.466790488757832*^9, 3.466790500732782*^9}, {
+  3.466790782668639*^9, 3.466790810587059*^9}, {3.466790844035144*^9, 
+  3.4667908521631937`*^9}, {3.4667971973237543`*^9, 3.466797201954014*^9}, {
+  3.524173139698163*^9, 3.5241731424875*^9}, {3.524173402086763*^9, 
+  3.524173403869637*^9}, {3.6236114363602247`*^9, 3.6236114371452*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"qInteger", "[", "n_", "]"}], "[", "q_", "]"}], ":=", 
+  RowBox[{"RootReduce", "[", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{"q", "^", "i"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{
+        RowBox[{"-", "n"}], "+", "1"}], ",", 
+       RowBox[{"n", "-", "1"}], ",", "2"}], "}"}]}], "]"}], "]"}]}]], "Input",\
+
+ InitializationCell->True,
+ CellChangeTimes->{{3.466798284808736*^9, 3.4667983105035467`*^9}, {
+  3.466798345426547*^9, 3.4667983748570004`*^9}, {3.46679840595364*^9, 
+  3.4667984061296673`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1440, 852},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+TaggingRules->{"SearchTextTranslated" -> ""},
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Union"->{
+  Cell[48947, 1053, 488, 16, 28, "Input",
+   InitializationCell->True,
+   CellTags->"Union"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Union", 70987, 1657}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 109, 1, 51, "Subtitle"],
+Cell[679, 25, 250, 5, 30, "Text"],
+Cell[932, 32, 31, 0, 64, "Section"],
+Cell[CellGroupData[{
+Cell[988, 36, 33, 0, 50, "Section"],
+Cell[CellGroupData[{
+Cell[1046, 40, 165, 2, 35, "Subsubsection"],
+Cell[1214, 44, 3860, 60, 165, "Input",
+ InitializationCell->True],
+Cell[5077, 106, 2398, 37, 28, "Input",
+ InitializationCell->True],
+Cell[7478, 145, 2372, 37, 28, "Input",
+ InitializationCell->True],
+Cell[9853, 184, 1077, 19, 63, "Input",
+ InitializationCell->True],
+Cell[10933, 205, 669, 14, 46, "Input",
+ InitializationCell->True],
+Cell[11605, 221, 989, 17, 46, "Input",
+ InitializationCell->True],
+Cell[12597, 240, 1794, 30, 80, "Input",
+ InitializationCell->True],
+Cell[14394, 272, 1039, 18, 46, "Input",
+ InitializationCell->True],
+Cell[15436, 292, 1036, 18, 46, "Input",
+ InitializationCell->True],
+Cell[16475, 312, 1227, 21, 46, "Input",
+ InitializationCell->True],
+Cell[17705, 335, 1104, 17, 46, "Input",
+ InitializationCell->True],
+Cell[18812, 354, 1173, 19, 46, "Input",
+ InitializationCell->True],
+Cell[19988, 375, 813, 16, 46, "Input",
+ InitializationCell->True],
+Cell[20804, 393, 362, 8, 46, "Input",
+ InitializationCell->True],
+Cell[21169, 403, 305, 6, 46, "Input",
+ InitializationCell->True],
+Cell[21477, 411, 521, 11, 46, "Input",
+ InitializationCell->True],
+Cell[22001, 424, 314, 7, 28, "Input",
+ InitializationCell->True],
+Cell[22318, 433, 736, 15, 46, "Input",
+ InitializationCell->True],
+Cell[23057, 450, 2296, 37, 97, "Input",
+ InitializationCell->True],
+Cell[25356, 489, 2111, 34, 114, "Input",
+ InitializationCell->True],
+Cell[27470, 525, 733, 16, 46, "Input",
+ InitializationCell->True],
+Cell[28206, 543, 731, 14, 28, "Input",
+ InitializationCell->True],
+Cell[28940, 559, 737, 14, 28, "Input",
+ InitializationCell->True],
+Cell[29680, 575, 139, 1, 30, "Text"],
+Cell[29822, 578, 1522, 25, 182, "Input",
+ InitializationCell->True],
+Cell[31347, 605, 3833, 58, 233, "Input",
+ InitializationCell->True],
+Cell[35183, 665, 1403, 26, 73, "Input",
+ InitializationCell->True],
+Cell[36589, 693, 583, 13, 43, "Input",
+ InitializationCell->True],
+Cell[37175, 708, 465, 11, 28, "Input",
+ InitializationCell->True],
+Cell[37643, 721, 404, 9, 28, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38084, 735, 118, 1, 35, "Subsubsection"],
+Cell[38205, 738, 355, 7, 80, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38597, 750, 204, 3, 35, "Subsubsection"],
+Cell[38804, 755, 199, 4, 30, "Text"],
+Cell[39006, 761, 709, 14, 80, "Input",
+ InitializationCell->True],
+Cell[39718, 777, 572, 12, 46, "Input",
+ InitializationCell->True],
+Cell[40293, 791, 246, 6, 28, "Input",
+ InitializationCell->True],
+Cell[40542, 799, 269, 7, 28, "Input",
+ InitializationCell->True],
+Cell[40814, 808, 247, 6, 28, "Input",
+ InitializationCell->True],
+Cell[41064, 816, 259, 6, 28, "Input",
+ InitializationCell->True],
+Cell[41326, 824, 330, 10, 46, "Input",
+ InitializationCell->True],
+Cell[41659, 836, 199, 6, 28, "Input",
+ InitializationCell->True],
+Cell[41861, 844, 465, 11, 50, "Input",
+ InitializationCell->True],
+Cell[42329, 857, 530, 15, 63, "Input",
+ InitializationCell->True],
+Cell[42862, 874, 499, 11, 63, "Input",
+ InitializationCell->True],
+Cell[43364, 887, 917, 23, 97, "Input",
+ InitializationCell->True],
+Cell[44284, 912, 195, 6, 28, "Input",
+ InitializationCell->True],
+Cell[44482, 920, 201, 6, 28, "Input",
+ InitializationCell->True],
+Cell[44686, 928, 191, 6, 28, "Input",
+ InitializationCell->True],
+Cell[44880, 936, 191, 4, 28, "Input",
+ InitializationCell->True],
+Cell[45074, 942, 283, 7, 28, "Input",
+ InitializationCell->True],
+Cell[45360, 951, 415, 9, 63, "Input",
+ InitializationCell->True],
+Cell[45778, 962, 119, 3, 28, "Input",
+ InitializationCell->True],
+Cell[45900, 967, 906, 23, 46, "Input",
+ InitializationCell->True],
+Cell[46809, 992, 672, 18, 46, "Input",
+ InitializationCell->True],
+Cell[47484, 1012, 1460, 39, 114, "Input",
+ InitializationCell->True],
+Cell[48947, 1053, 488, 16, 28, "Input",
+ InitializationCell->True,
+ CellTags->"Union"],
+Cell[49438, 1071, 182, 4, 28, "Input",
+ InitializationCell->True],
+Cell[49623, 1077, 1044, 26, 97, "Input",
+ InitializationCell->True],
+Cell[50670, 1105, 1400, 29, 114, "Input",
+ InitializationCell->True],
+Cell[52073, 1136, 739, 16, 46, "Input",
+ InitializationCell->True],
+Cell[52815, 1154, 69, 1, 28, "Input",
+ InitializationCell->True],
+Cell[52887, 1157, 1529, 32, 199, "Input",
+ InitializationCell->True],
+Cell[54419, 1191, 176, 4, 28, "Input",
+ InitializationCell->True],
+Cell[54598, 1197, 473, 11, 28, "Input",
+ InitializationCell->True],
+Cell[55074, 1210, 3247, 76, 148, "Input",
+ InitializationCell->True],
+Cell[58324, 1288, 212, 6, 28, "Input",
+ InitializationCell->True],
+Cell[58539, 1296, 818, 22, 28, "Input",
+ InitializationCell->True],
+Cell[59360, 1320, 480, 13, 28, "Input",
+ InitializationCell->True],
+Cell[59843, 1335, 344, 8, 28, "Input",
+ InitializationCell->True],
+Cell[60190, 1345, 560, 14, 97, "Input",
+ InitializationCell->True],
+Cell[60753, 1361, 196, 6, 28, "Input",
+ InitializationCell->True],
+Cell[60952, 1369, 1887, 54, 131, "Input",
+ InitializationCell->True],
+Cell[62842, 1425, 436, 14, 28, "Input",
+ InitializationCell->True],
+Cell[63281, 1441, 309, 10, 28, "Input",
+ InitializationCell->True],
+Cell[63593, 1453, 255, 7, 28, "Input",
+ InitializationCell->True],
+Cell[63851, 1462, 5230, 130, 330, "Input",
+ InitializationCell->True],
+Cell[69084, 1594, 686, 16, 28, "Input",
+ InitializationCell->True],
+Cell[69773, 1612, 586, 17, 28, "Input",
+ InitializationCell->True],
+Cell[70362, 1631, 96, 3, 28, "Input",
+ InitializationCell->True],
+Cell[70461, 1636, 103, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

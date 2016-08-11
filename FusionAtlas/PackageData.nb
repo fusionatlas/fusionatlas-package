@@ -1,0 +1,1254 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     50337,       1245]
+NotebookOptionsPosition[     47989,       1169]
+NotebookOutlinePosition[     48382,       1186]
+CellTagsIndexPosition[     48339,       1183]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`PackageData`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`FindAllBigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`KnapsackTest`\>\"", ",", 
+      "\"\<FusionAtlas`TensorSolver`\>\"", ",", 
+      "\"\<FusionAtlas`FindGraphPartners`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPlanarAlgebra4`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`PairOdometer`\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.411791124354661*^9, 3.411791125936936*^9}, {
+   3.421197918237237*^9, 3.4211979460372114`*^9}, {3.432428044175173*^9, 
+   3.432428050664504*^9}, {3.432608057742691*^9, 3.4326080604165363`*^9}, {
+   3.4328634732132688`*^9, 3.432863479131779*^9}, {3.4328641929682255`*^9, 
+   3.432864198966851*^9}, {3.446845853677356*^9, 3.446845853939967*^9}, {
+   3.447363134882859*^9, 3.4473631454406137`*^9}, 3.5433268135070677`*^9}],
+
+Cell[BoxData[
+ RowBox[{"ValuesAsString", ";", "PackageData", ";", "MatchingValues", ";", 
+  "DefiniteValues", ";", "DefiniteValuesAsString", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5089803082244577`*^9, 3.508980309767847*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{
+   "PackageEverything", ",", "PackageCachedRootReduce", ",", 
+    "PackageDimensions", ",", "PackageBigraphExtensions", ",", 
+    "PackageBifusionAlgebras", ",", "PackageLowWeightSpaces", ",", 
+    "PackageAlgebraicIntegerTest", ",", "PackageKnapsackTest", ",", 
+    "PackageFindGraphPartners", ",", "PackageObstructions", ",", 
+    "PackageLowestWeightEigenspaces", ",", "PackageIdempotents", ",", 
+    "PackagePairExtensions"}], "}"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4211979530272627`*^9, 3.42119796392293*^9}, {
+   3.4211981001688414`*^9, 3.4211981028727293`*^9}, {3.421768737663499*^9, 
+   3.4217687378938303`*^9}, {3.422317177215808*^9, 3.422317191276026*^9}, {
+   3.4223805884166365`*^9, 3.4223805886069107`*^9}, {3.432252661347221*^9, 
+   3.4322526617377825`*^9}, {3.4322528579899793`*^9, 
+   3.4322528582102957`*^9}, {3.432431393791685*^9, 3.4324313945427647`*^9}, 
+   3.432433612532077*^9, {3.432532935131328*^9, 3.4325329352815437`*^9}, {
+   3.432605948269418*^9, 3.4326059511135073`*^9}, {3.432952200017107*^9, 
+   3.432952202330434*^9}, {3.446845420848341*^9, 3.4468454261704483`*^9}, {
+   3.446845536826418*^9, 3.4468455370702553`*^9}, 3.4468466591839333`*^9, {
+   3.447003203244194*^9, 3.4470032095537577`*^9}, {3.447361839761221*^9, 
+   3.447361844724412*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefiniteValues", "[", "s_Symbol", "]"}], ":=", 
+  RowBox[{"Cases", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"DownValues", "[", "s", "]"}], "~", "Join", "~", 
+     RowBox[{"SubValues", "[", "s", "]"}]}], ",", 
+    RowBox[{
+     RowBox[{"rule", ":", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"pattern_", "/;", 
+         RowBox[{"FreeQ", "[", 
+          RowBox[{"pattern", ",", "Blank"}], "]"}]}], "\[RuleDelayed]", "_"}],
+        ")"}]}], "\[RuleDelayed]", "rule"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MatchingValues", "[", 
+   RowBox[{"s_Symbol", ",", "p_"}], "]"}], ":=", 
+  RowBox[{"Cases", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"DownValues", "[", "s", "]"}], "~", "Join", "~", 
+     RowBox[{"SubValues", "[", "s", "]"}]}], ",", 
+    RowBox[{
+     RowBox[{"rule", ":", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"pattern_", "/;", 
+         RowBox[{"MatchQ", "[", 
+          RowBox[{
+           RowBox[{"pattern", "/.", 
+            RowBox[{"HoldPattern", "\[Rule]", "Hold"}]}], ",", 
+           RowBox[{"Hold", "[", "p", "]"}]}], "]"}]}], "\[RuleDelayed]", 
+        "_"}], ")"}]}], "\[RuleDelayed]", "rule"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MatchingValues", "[", 
+   RowBox[{"s_Symbol", ",", "p_", ",", "vp_"}], "]"}], ":=", 
+  RowBox[{"Cases", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"DownValues", "[", "s", "]"}], "~", "Join", "~", 
+     RowBox[{"SubValues", "[", "s", "]"}]}], ",", 
+    RowBox[{
+     RowBox[{"rule", ":", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"pattern_", "/;", 
+         RowBox[{"MatchQ", "[", 
+          RowBox[{
+           RowBox[{"pattern", "/.", 
+            RowBox[{"HoldPattern", "\[Rule]", "Hold"}]}], ",", 
+           RowBox[{"Hold", "[", "p", "]"}]}], "]"}]}], "\[RuleDelayed]", 
+        RowBox[{"value_", "/;", 
+         RowBox[{"MatchQ", "[", 
+          RowBox[{"value", ",", "vp"}], "]"}]}]}], ")"}]}], "\[RuleDelayed]", 
+     "rule"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343170674852977`*^9, 3.4343170895370064`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ConvertRuleToAssignmentString", "[", 
+   RowBox[{"a_HoldPattern", "\[RuleDelayed]", "b_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"StringTake", "[", 
+    RowBox[{
+     RowBox[{"ToString", "[", 
+      RowBox[{"a", ",", "InputForm", ",", 
+       RowBox[{"CharacterEncoding", "\[Rule]", "\"\<PrintableASCII\>\""}]}], 
+      "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"13", ",", 
+       RowBox[{"-", "2"}]}], "}"}]}], "]"}], "<>", "\"\<:=\>\"", "<>", 
+   RowBox[{"ToString", "[", 
+    RowBox[{"b", ",", "InputForm", ",", 
+     RowBox[{"CharacterEncoding", "\[Rule]", "\"\<PrintableASCII\>\""}]}], 
+    "]"}], "<>", "\"\<\\n\>\""}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ValuesAsString", "[", 
+   RowBox[{"s_Symbol", ",", "p_"}], "]"}], ":=", 
+  RowBox[{"StringJoin", "@@", 
+   RowBox[{"(", 
+    RowBox[{"ConvertRuleToAssignmentString", "/@", 
+     RowBox[{"MatchingValues", "[", 
+      RowBox[{"s", ",", "p"}], "]"}]}], ")"}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefiniteValuesAsString", "[", "s_Symbol", "]"}], ":=", 
+  RowBox[{"StringJoin", "@@", 
+   RowBox[{"(", 
+    RowBox[{"ConvertRuleToAssignmentString", "/@", 
+     RowBox[{"DefiniteValues", "[", "s", "]"}]}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5089802983372993`*^9, 3.508980298986999*^9}, {
+  3.508980345033359*^9, 3.508980350060457*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"WriteRule", "[", 
+   RowBox[{"filename_", ",", 
+    RowBox[{"a_HoldPattern", "\[RuleDelayed]", "b_"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"WriteString", "[", 
+     RowBox[{"filename", ",", 
+      RowBox[{
+       RowBox[{"StringTake", "[", 
+        RowBox[{
+         RowBox[{"ToString", "[", 
+          RowBox[{"a", ",", "InputForm", ",", 
+           RowBox[{
+           "CharacterEncoding", "\[Rule]", "\"\<PrintableASCII\>\""}]}], 
+          "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"13", ",", 
+           RowBox[{"-", "2"}]}], "}"}]}], "]"}], "<>", "\"\<:=\>\""}]}], 
+     "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"CautiousWriteString", "[", 
+     RowBox[{"filename", ",", "b", ",", "InputForm", ",", 
+      RowBox[{"CharacterEncoding", "\[Rule]", "\"\<PrintableASCII\>\""}]}], 
+     "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"WriteString", "[", 
+     RowBox[{"filename", ",", "\"\<\\n\>\""}], "]"}], ";"}], ")"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "s_Symbol", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"s", ",", "options"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "s_String", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"\"\<\\\"\>\"", "<>", "s", "<>", "\"\<\\\"\>\""}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "s_Integer", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"s", ",", "options"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "s_Real", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"s", ",", "options"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "x_Plus", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"x", ",", "options"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "x_Times", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"x", ",", "options"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "x_TensorProduct", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"x", ",", "options"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", "x_CircleTimes", ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"x", ",", "options"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", 
+    RowBox[{"{", "}"}], ",", "options___"}], "]"}], ":=", 
+  RowBox[{"WriteString", "[", 
+   RowBox[{"filename", ",", "\"\<{}\>\""}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", 
+    RowBox[{"{", "x__", "}"}], ",", "options___"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"WriteString", "[", 
+     RowBox[{"filename", ",", "\"\<{\>\""}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"CautiousWriteString", "[", 
+         RowBox[{"filename", ",", "#", ",", "options"}], "]"}], ";", 
+        RowBox[{"WriteString", "[", 
+         RowBox[{"filename", ",", "\"\<, \>\""}], "]"}]}], ")"}], "&"}], "/@", 
+     RowBox[{"Most", "[", 
+      RowBox[{"{", "x", "}"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"CautiousWriteString", "[", 
+     RowBox[{"filename", ",", 
+      RowBox[{"Last", "[", 
+       RowBox[{"{", "x", "}"}], "]"}], ",", "options"}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"WriteString", "[", 
+     RowBox[{"filename", ",", "\"\<}\>\""}], "]"}], ";"}], 
+   ")"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CautiousWriteString", "[", 
+   RowBox[{"filename_", ",", 
+    RowBox[{"f_", "[", "x___", "]"}], ",", "options___"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"WriteString", "[", 
+     RowBox[{"filename", ",", 
+      RowBox[{"ToString", "[", 
+       RowBox[{"f", ",", "options"}], "]"}]}], "]"}], ";", 
+    RowBox[{"WriteString", "[", 
+     RowBox[{"filename", ",", "\"\<[\>\""}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"CautiousWriteString", "[", 
+         RowBox[{"filename", ",", "#", ",", "options"}], "]"}], ";", 
+        RowBox[{"WriteString", "[", 
+         RowBox[{"filename", ",", "\"\<, \>\""}], "]"}]}], ")"}], "&"}], "/@", 
+     RowBox[{"Most", "[", 
+      RowBox[{"{", "x", "}"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"CautiousWriteString", "[", 
+     RowBox[{"filename", ",", 
+      RowBox[{"Last", "[", 
+       RowBox[{"{", "x", "}"}], "]"}], ",", "options"}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"WriteString", "[", 
+     RowBox[{"filename", ",", "\"\<]\>\""}], "]"}], ";"}], ")"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4329531171458735`*^9, 3.432953124115896*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SafeCreateDirectory", "[", "dir_String", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Length", "[", 
+      RowBox[{"FileNames", "[", "dir", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+    RowBox[{"CreateDirectory", "[", "dir", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432955886257661*^9, 3.432955912845893*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "PackageData", "]"}], "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"\"\<ExtraPackageCode\>\"", "\[Rule]", "\"\<\>\""}], ",", 
+     RowBox[{"\"\<ExtraPrivateCode\>\"", "\[Rule]", "\"\<\>\""}], ",", 
+     RowBox[{"\"\<LoadPreexistingPackage\>\"", "\[Rule]", "True"}], ",", 
+     RowBox[{"\"\<Message\>\"", "\[Rule]", "\"\<FusionAtlas::loading\>\""}], 
+     ",", 
+     RowBox[{"\"\<UseGzip\>\"", "\[Rule]", "False"}], ",", 
+     RowBox[{"\"\<ByteCountLimit\>\"", "\[Rule]", "\[Infinity]"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PackageData", "[", 
+   RowBox[{"s_Symbol", ",", "p_", ",", 
+    RowBox[{"packagePath", ":", 
+     RowBox[{"{", "__String", "}"}]}], ",", "opts___"}], "]"}], ":=", 
+  RowBox[{"PackageData", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", "p"}], "}"}], "}"}], ",", 
+    RowBox[{"FusionAtlasDataDirectory", "[", "]"}], ",", "packagePath", ",", 
+    "opts"}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"PackageData", "[", 
+   RowBox[{"s_Symbol", ",", "p_", ",", "baseDirectory_String", ",", 
+    RowBox[{"packagePath", ":", 
+     RowBox[{"{", "__String", "}"}]}], ",", "opts___"}], "]"}], ":=", 
+  RowBox[{"PackageData", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", "p"}], "}"}], "}"}], ",", "baseDirectory", ",", 
+    "packagePath", ",", "opts"}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"PackageData", "[", 
+   RowBox[{
+    RowBox[{"patterns", ":", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_Symbol", ",", "___"}], "}"}], ".."}], "}"}]}], ",", 
+    RowBox[{"packagePath", ":", 
+     RowBox[{"{", "__String", "}"}]}], ",", "opts___"}], "]"}], ":=", 
+  RowBox[{"PackageData", "[", 
+   RowBox[{"patterns", ",", 
+    RowBox[{"FusionAtlasDataDirectory", "[", "]"}], ",", "packagePath", ",", 
+    "opts"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PackageData", "[", 
+   RowBox[{
+    RowBox[{"patterns", ":", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_Symbol", ",", "___"}], "}"}], ".."}], "}"}]}], ",", 
+    "baseDirectory_String", ",", 
+    RowBox[{"packagePath", ":", 
+     RowBox[{"{", "__String", "}"}]}], ",", "opts___"}], "]"}], ":=", 
+  RowBox[{"AbortProtect", "[", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "fullPackagePath", ",", "package", ",", "directory", ",", "filename", 
+       ",", "contentsTop", ",", " ", "contentsBottom", ",", "needs", ",", 
+       "extraPackageCode", ",", "extraPrivateCode", ",", 
+       "loadPreexistingPackage", ",", "message", ",", "useGzip", ",", 
+       "byteCountLimit"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"needs", "=", 
+       RowBox[{
+        RowBox[{"\"\<Needs\>\"", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "PackageData", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"extraPackageCode", "=", 
+       RowBox[{
+        RowBox[{"\"\<ExtraPackageCode\>\"", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "PackageData", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"extraPrivateCode", "=", 
+       RowBox[{
+        RowBox[{"\"\<ExtraPrivateCode\>\"", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "PackageData", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"loadPreexistingPackage", "=", 
+       RowBox[{
+        RowBox[{"\"\<LoadPreexistingPackage\>\"", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "PackageData", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"message", "=", 
+       RowBox[{
+        RowBox[{"\"\<Message\>\"", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "PackageData", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"useGzip", "=", 
+       RowBox[{
+        RowBox[{"\"\<UseGzip\>\"", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "PackageData", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"byteCountLimit", "=", 
+       RowBox[{
+        RowBox[{"\"\<ByteCountLimit\>\"", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Options", "[", "PackageData", "]"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SafeCreateDirectory", "[", "baseDirectory", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SetDirectory", "[", "baseDirectory", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"fullPackagePath", "=", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\"\<FusionAtlas\>\"", ",", "\"\<Data\>\""}], "}"}], "~", 
+        "Join", "~", "packagePath"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"directory", "=", 
+       RowBox[{"ToFileName", "[", 
+        RowBox[{"Most", "[", "fullPackagePath", "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Length", "[", 
+          RowBox[{"FileNames", "[", 
+           RowBox[{
+            RowBox[{"fullPackagePath", "\[LeftDoubleBracket]", 
+             RowBox[{"-", "2"}], "\[RightDoubleBracket]"}], ",", 
+            RowBox[{"ToFileName", "[", 
+             RowBox[{"Drop", "[", 
+              RowBox[{"fullPackagePath", ",", 
+               RowBox[{"-", "2"}]}], "]"}], "]"}]}], "]"}], "]"}], "\[Equal]",
+          "0"}], ",", 
+        RowBox[{"SafeCreateDirectory", "[", "directory", "]"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"package", "=", 
+       RowBox[{"StringJoin", "@@", 
+        RowBox[{"(", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{
+           RowBox[{"Transpose", "[", 
+            RowBox[{"{", 
+             RowBox[{"fullPackagePath", ",", 
+              RowBox[{"Table", "[", 
+               RowBox[{"\"\<`\>\"", ",", 
+                RowBox[{"{", 
+                 RowBox[{"Length", "[", "fullPackagePath", "]"}], "}"}]}], 
+               "]"}]}], "}"}], "]"}], ",", "1"}], "]"}], ")"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"filename", "=", 
+       RowBox[{"ToFileName", "[", 
+        RowBox[{
+         RowBox[{"Most", "[", "fullPackagePath", "]"}], ",", 
+         RowBox[{
+          RowBox[{"Last", "[", "fullPackagePath", "]"}], "<>", 
+          "\"\<.m\>\""}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"loadPreexistingPackage", "\[And]", 
+         RowBox[{"!", 
+          RowBox[{"MemberQ", "[", 
+           RowBox[{"$ContextPath", ",", "package"}], "]"}]}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"useGzip", "\[And]", 
+            RowBox[{
+             RowBox[{"Length", "[", 
+              RowBox[{"FileNames", "[", "filename", "]"}], "]"}], "\[Equal]", 
+             "0"}], "\[And]", 
+            RowBox[{
+             RowBox[{"Length", "[", 
+              RowBox[{"FileNames", "[", 
+               RowBox[{"filename", "<>", "\"\<.gz\>\""}], "]"}], "]"}], 
+             "\[NotEqual]", "0"}]}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"SetDirectory", "[", "directory", "]"}], ";", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Run", "[", 
+             RowBox[{"\"\<gzip -d \>\"", "<>", 
+              RowBox[{"Last", "[", "fullPackagePath", "]"}], "<>", 
+              "\"\<.m.gz\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"ResetDirectory", "[", "]"}]}]}], "\[IndentingNewLine]", 
+          "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Length", "[", 
+             RowBox[{"FileNames", "[", "filename", "]"}], "]"}], 
+            "\[NotEqual]", "0"}], ",", 
+           RowBox[{"Get", "[", "package", "]"}]}], "]"}]}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"contentsTop", "=", 
+       RowBox[{
+       "\"\<BeginPackage[\\\"\>\"", "<>", "package", "<>", "\"\<\\\"\>\"", "<>", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"MatchQ", "[", 
+           RowBox[{"needs", ",", 
+            RowBox[{"{", "__String", "}"}]}], "]"}], ",", 
+          RowBox[{"\"\<, \>\"", "<>", 
+           RowBox[{"ToString", "[", 
+            RowBox[{"needs", ",", "InputForm"}], "]"}]}], ",", "\"\<\>\""}], 
+         "]"}], "<>", "\"\<]\>\"", "<>", "\"\<\\n\>\"", "\[IndentingNewLine]",
+         "<>", "\"\<Message[\>\"", "<>", "message", "<>", "\"\<,\\\"\>\"", "<>",
+         "package", "<>", "\"\<\\\"]\>\"", "<>", "\"\<\\n\>\"", 
+        "\[IndentingNewLine]", "<>", "extraPackageCode", "<>", "\"\<\\n\>\"", 
+        "\[IndentingNewLine]", "<>", "\"\<Begin[\\\"`Private`\\\"]\>\"", 
+        "<>", "\"\<\\n\>\"", "\[IndentingNewLine]", "<>", "extraPrivateCode", 
+        "<>", "\"\<\\n\>\""}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"contentsBottom", "=", 
+       RowBox[{"\"\<End[]\\n\>\"", "<>", "\"\<EndPackage[]\>\""}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Length", "[", 
+          RowBox[{"FileNames", "[", "filename", "]"}], "]"}], "\[NotEqual]", 
+         "0"}], ",", 
+        RowBox[{"DeleteFile", "[", "filename", "]"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"useGzip", "\[And]", 
+         RowBox[{
+          RowBox[{"Length", "[", 
+           RowBox[{"FileNames", "[", 
+            RowBox[{"filename", "<>", "\"\<.gz\>\""}], "]"}], "]"}], 
+          "\[NotEqual]", "0"}]}], ",", 
+        RowBox[{"DeleteFile", "[", 
+         RowBox[{"filename", "<>", "\"\<.gz\>\""}], "]"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"WriteString", "[", 
+       RowBox[{"filename", ",", "contentsTop"}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Function", "[", 
+           RowBox[{
+            RowBox[{"{", "rule", "}"}], ",", 
+            RowBox[{"WriteRule", "[", 
+             RowBox[{"filename", ",", "rule"}], "]"}]}], "]"}], "/@", 
+          RowBox[{"Cases", "[", 
+           RowBox[{
+            RowBox[{"MatchingValues", "@@", "#"}], ",", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"p_", "\[RuleDelayed]", "v_"}], ")"}], "/;", 
+              RowBox[{
+               RowBox[{"ByteCount", "[", "v", "]"}], "\[LessEqual]", 
+               "byteCountLimit"}]}], ")"}]}], "]"}]}], ")"}], "&"}], "/@", 
+       "patterns"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"WriteString", "[", 
+       RowBox[{"filename", ",", "contentsBottom"}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Close", "[", "filename", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{"useGzip", ",", 
+        RowBox[{
+         RowBox[{"SetDirectory", "[", "directory", "]"}], ";", 
+         RowBox[{"Run", "[", 
+          RowBox[{"\"\<gzip --rsync \>\"", "<>", 
+           RowBox[{"Last", "[", "fullPackagePath", "]"}], "<>", 
+           "\"\<.m\>\""}], "]"}], ";", 
+         RowBox[{"ResetDirectory", "[", "]"}]}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"ResetDirectory", "[", "]"}], ";"}]}], "]"}], "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.411236426618926*^9, 3.411236536837413*^9}, {
+  3.4112369196578817`*^9, 3.4112369213002434`*^9}, {3.4112369837500415`*^9, 
+  3.411236987465384*^9}, {3.421197971994536*^9, 3.4211980044411917`*^9}, {
+  3.4325229434540014`*^9, 3.4325229509247437`*^9}, {3.432955919255109*^9, 
+  3.4329559224497023`*^9}, {3.434045670760661*^9, 3.4340456798437214`*^9}, {
+  3.434317175320357*^9, 3.434317176702344*^9}, {3.4343172201047535`*^9, 
+  3.434317221446683*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageEverything", "[", "index_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"PackageCachedRootReduce", "[", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"PackageDimensions", "[", "]"}], ";"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"PackageAlgebraicIntegerTest", "[", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PackageFindGraphPartners", "[", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PackageObstructions", "[", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"PackageBifusionAlgebras", "[", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PackageBigraphExtensions", "[", "index", "]"}], ";"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432431337520771*^9, 3.432431377548328*^9}, 
+   3.432433607254488*^9, {3.432532923684869*^9, 3.432532928822256*^9}, {
+   3.4326059830093713`*^9, 3.432605987555909*^9}, {3.4328652696864705`*^9, 
+   3.4328652747437425`*^9}, {3.432952668360552*^9, 3.4329526723763266`*^9}, {
+   3.4330463573563213`*^9, 3.433046357907113*^9}, 3.4338002161801825`*^9, {
+   3.4338685967730045`*^9, 3.4338685978445454`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageCachedRootReduce", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{"cachedRootReduce", ",", 
+    RowBox[{"HoldPattern", "[", 
+     RowBox[{"cachedRootReduce", "[", 
+      RowBox[{"n_", "/;", 
+       RowBox[{"FreeQ", "[", 
+        RowBox[{"n", ",", "Blank"}], "]"}]}], "]"}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<RootReduce\>\"", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", "\"\<FusionAtlas`\>\"", "}"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.422313350132733*^9, 3.4223133914020753`*^9}, {
+  3.4223135300614576`*^9, 3.4223135347081394`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageDimensions", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"DimensionsByDepth", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"DimensionsByDepth", "[", 
+          RowBox[{"_GradedBigraph", "|", "_GradedGraph"}], "]"}], "]"}]}], 
+       "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"ReducedDimensionsByDepth", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"ReducedDimensionsByDepth", "[", 
+          RowBox[{"_GradedBigraph", "|", "_GradedGraph"}], "]"}], "]"}]}], 
+       "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"DimensionOfGenerator", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"DimensionOfGenerator", "[", 
+          RowBox[{"_GradedBigraph", "|", "_GradedGraph"}], "]"}], "]"}]}], 
+       "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"ReducedDimensionOfGenerator", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"ReducedDimensionOfGenerator", "[", 
+          RowBox[{"_GradedBigraph", "|", "_GradedGraph"}], "]"}], "]"}]}], 
+       "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<Dimensions\>\"", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\""}], 
+      "}"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.422313350132733*^9, 3.4223133914020753`*^9}, {
+   3.4223135300614576`*^9, 3.4223135347081394`*^9}, {3.422314356630005*^9, 
+   3.422314389036603*^9}, {3.4324335525157776`*^9, 3.4324335995333853`*^9}, {
+   3.4327808930223827`*^9, 3.4327809319283266`*^9}, 3.4329320490058413`*^9, {
+   3.433968256614586*^9, 3.433968292406051*^9}, {3.4339687135816717`*^9, 
+   3.433968729224165*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageLowWeightSpaces", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{"DimensionOfLowWeightSpace", ",", 
+    RowBox[{
+     RowBox[{"DimensionOfLowWeightSpace", "[", "_GradedBigraph", "]"}], "[", 
+     "_Integer", "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<DimensionOfLowWeightSpace\>\"", "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\""}], 
+      "}"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.422313350132733*^9, 3.4223133914020753`*^9}, {
+  3.4223135300614576`*^9, 3.4223135347081394`*^9}, {3.422314356630005*^9, 
+  3.422314389036603*^9}, {3.432252619537101*^9, 3.4322526526547213`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageAlgebraicIntegerTest", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{"AlgebraicIntegerTest", ",", 
+    RowBox[{"AlgebraicIntegerTest", "[", "_GradedBigraph", "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<AlgebraicIntegerTest\>\"", "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`FindAllBigraphs`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.422313350132733*^9, 3.4223133914020753`*^9}, {
+  3.4223135300614576`*^9, 3.4223135347081394`*^9}, {3.422314356630005*^9, 
+  3.422314389036603*^9}, {3.432252619537101*^9, 3.4322526526547213`*^9}, {
+  3.4322528356077952`*^9, 3.432252847825363*^9}, {3.4324318746331005`*^9, 
+  3.432431883686118*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageKnapsackTest", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{"KnapsackTest", ",", 
+    RowBox[{"KnapsackTest", "[", "_GradedBigraph", "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<KnapsackTest\>\"", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`KnapsackTest`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432605966856144*^9, 3.43260597877328*^9}, {
+  3.432608075688496*^9, 3.4326080796141405`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageObstructions", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"KnownObstructions", ",", 
+        RowBox[{"KnownObstructions", "[", "_GradedBigraph", "]"}], ",", 
+        RowBox[{"{", "}"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"FindAllObstructions", ",", 
+        RowBox[{"FindAllObstructions", "[", "_GradedBigraph", "]"}]}], 
+       "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<Obstructions\>\"", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`FindAllBigraphs`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432605966856144*^9, 3.43260597877328*^9}, {
+  3.432608075688496*^9, 3.4326080796141405`*^9}, {3.432952215379197*^9, 
+  3.4329522526728225`*^9}, {3.434317109886267*^9, 3.434317110637347*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageFindGraphPartners", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"FindGraphPartners", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"FindGraphPartners", "[", "_GradedBigraph", "]"}], "]"}]}], 
+       "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"FindGraphPartnersTimeConstraint", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{
+         "FindGraphPartnersTimeConstraint", "[", "_GradedBigraph", "]"}], 
+         "]"}]}], "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<FindGraphPartners\>\"", "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`FindGraphPartners`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.432605966856144*^9, 3.43260597877328*^9}, {
+  3.432608075688496*^9, 3.4326080796141405`*^9}, {3.4328678480339518`*^9, 
+  3.4328678607822833`*^9}, {3.434055679752885*^9, 3.4340557225243874`*^9}, {
+  3.435429804135768*^9, 3.4354298084619884`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageBigraphExtensions", "[", "norm_", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"FindBigraphExtensions", ",", 
+         RowBox[{"HoldPattern", "[", 
+          RowBox[{
+           RowBox[{"FindBigraphExtensions", "[", 
+            RowBox[{"norm0_", "/;", 
+             RowBox[{"norm0", "\[LessEqual]", 
+              RowBox[{"norm", "+", "0.0001"}]}]}], "]"}], "[", 
+           RowBox[{"_", ",", "_"}], "]"}], "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"FindBigraphExtensionsUpToRank", ",", 
+         RowBox[{"HoldPattern", "[", 
+          RowBox[{
+           RowBox[{"FindBigraphExtensionsUpToRank", "[", 
+            RowBox[{"norm0_", "/;", 
+             RowBox[{"norm0", "\[LessEqual]", 
+              RowBox[{"norm", "+", "0.0001"}]}]}], "]"}], "[", 
+           RowBox[{"_", ",", "_"}], "]"}], "]"}]}], "}"}], ","}], "*)"}], 
+     RowBox[{"{", 
+      RowBox[{"FindAllBigraphs", ",", 
+       RowBox[{"HoldPattern", "[", 
+        RowBox[{"FindAllBigraphs", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"_", ",", 
+            RowBox[{"norm0_", "/;", 
+             RowBox[{"norm0", "\[LessEqual]", 
+              RowBox[{"norm", "+", "0.0001"}]}]}]}], "}"}], ",", "_Integer", 
+          ",", "_GradedBigraph"}], "]"}], "]"}]}], "}"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<BigraphExtensions\>\"", ",", 
+      RowBox[{"\"\<index\>\"", "<>", 
+       RowBox[{"StringReplace", "[", 
+        RowBox[{
+         RowBox[{"ToString", "[", 
+          RowBox[{"N", "[", "norm", "]"}], "]"}], ",", 
+         RowBox[{"\"\<.\>\"", "\[Rule]", "\"\<p\>\""}]}], "]"}]}]}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`FindAllBigraphs`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223168994063377`*^9, 3.422316938893117*^9}, {
+   3.422316986862093*^9, 3.422317076130454*^9}, {3.4223172765185986`*^9, 
+   3.4223172846002192`*^9}, {3.4223180286300817`*^9, 3.4223180324055104`*^9}, 
+   3.422318131217595*^9, {3.422318406503437*^9, 3.4223184103089085`*^9}, {
+   3.4223185735236*^9, 3.4223185766681213`*^9}, 3.422320523998245*^9, {
+   3.4223207087238674`*^9, 3.422320709024299*^9}, {3.422411151153694*^9, 
+   3.422411151223795*^9}, {3.4325328570790944`*^9, 3.4325328778790035`*^9}, {
+   3.43286672912504*^9, 3.432866753810536*^9}, {3.432955094078563*^9, 
+   3.4329551018497376`*^9}, {3.432955138752802*^9, 3.432955205689051*^9}, {
+   3.433046960563691*^9, 3.4330469706081343`*^9}, {3.4330481349724073`*^9, 
+   3.4330481400196652`*^9}, 3.433793760056733*^9, 3.4337992692986336`*^9, {
+   3.4337999073961725`*^9, 3.433799911582192*^9}, {3.4338686130564194`*^9, 
+   3.433868619736024*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageBifusionAlgebras", "[", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"FindBifusionAlgebras", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"FindBifusionAlgebras", "[", 
+          RowBox[{"_GradedBigraph", ",", "_GradedBigraph"}], "]"}], "]"}]}], 
+       "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+       "FusionAtlas`TensorSolver`Private`FindBifusionAlgebrasTimeConstraint", 
+        ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{
+         "FusionAtlas`TensorSolver`Private`\
+FindBifusionAlgebrasTimeConstraint", "[", 
+          RowBox[{"_GradedBigraph", ",", "_GradedBigraph"}], "]"}], "]"}]}], 
+       "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"FindFusionAlgebras", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"FindFusionAlgebras", "[", "_GradedGraph", "]"}], "]"}]}], 
+       "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+       "FusionAtlas`TensorSolver`Private`FindFusionAlgebrasTimeConstraint", 
+        ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{
+         "FusionAtlas`TensorSolver`Private`FindFusionAlgebrasTimeConstraint", 
+          "[", "_GradedGraph", "]"}], "]"}]}], "}"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", "\"\<BifusionAlgebras\>\"", "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`TensorSolver`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223168994063377`*^9, 3.422316938893117*^9}, {
+   3.422316986862093*^9, 3.422317076130454*^9}, {3.4223172765185986`*^9, 
+   3.4223172846002192`*^9}, {3.4223180286300817`*^9, 3.4223180324055104`*^9}, 
+   3.422318131217595*^9, {3.422318406503437*^9, 3.4223184103089085`*^9}, {
+   3.4223185735236*^9, 3.4223185766681213`*^9}, 3.422320523998245*^9, {
+   3.4223207087238674`*^9, 3.422320709024299*^9}, {3.4223805206391773`*^9, 
+   3.4223805767298317`*^9}, 3.422383937372198*^9, {3.432863487363616*^9, 
+   3.4328634999917746`*^9}, {3.433873801697318*^9, 3.43387383989224*^9}, {
+   3.433874760516032*^9, 3.4338747645918927`*^9}, {3.4338748115394*^9, 
+   3.433874811739688*^9}, {3.433967009761699*^9, 3.4339670397648416`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageLowestWeightEigenspaces", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{"LowestWeightEigenspace", ",", 
+    RowBox[{"HoldPattern", "[", 
+     RowBox[{"LowestWeightEigenspace", "[", 
+      RowBox[{"g", ",", "__"}], "]"}], "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"GraphToString", "[", "g", "]"}], ",", 
+      "\"\<LowestWeightEigenspace\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`GraphPlanarAlgebra4`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421198047623285*^9, 3.4211981915502415`*^9}, 
+   3.42119826576696*^9, {3.421199158851152*^9, 3.4211991643891153`*^9}, {
+   3.421199767145837*^9, 3.4211997677567153`*^9}, {3.421199814924539*^9, 
+   3.421199818069061*^9}, {3.421200528921216*^9, 3.42120053286689*^9}, {
+   3.4212006989056416`*^9, 3.421200701449299*^9}, {3.421768674292376*^9, 
+   3.421768731244269*^9}, {3.446845454597384*^9, 3.446845488361397*^9}, {
+   3.446845860371744*^9, 3.446845863795096*^9}, 3.44684666252558*^9, {
+   3.446846924722932*^9, 3.446846931183215*^9}, 3.526307231082395*^9, 
+   3.5433442766619864`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageLowestWeightEigenspaces", "[", 
+   RowBox[{"G", ":", 
+    RowBox[{"{", 
+     RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], "]"}], 
+  ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"LowestWeightEigenspace", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"LowestWeightEigenspace", "[", 
+          RowBox[{"G", ",", "__"}], "]"}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"LowWeightSpace", ",", 
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"LowWeightSpace", "[", 
+          RowBox[{"G", ",", "__"}], "]"}], "]"}]}], "}"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"StringJoin", "@@", 
+       RowBox[{"(", 
+        RowBox[{"GraphToString", "/@", "G"}], ")"}]}], ",", 
+      "\"\<LowestWeightEigenspace\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`GraphPlanarAlgebra4`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421198047623285*^9, 3.4211981915502415`*^9}, 
+   3.42119826576696*^9, {3.421199158851152*^9, 3.4211991643891153`*^9}, {
+   3.421199767145837*^9, 3.4211997677567153`*^9}, {3.421199814924539*^9, 
+   3.421199818069061*^9}, {3.421200528921216*^9, 3.42120053286689*^9}, {
+   3.4212006989056416`*^9, 3.421200701449299*^9}, {3.421768674292376*^9, 
+   3.421768731244269*^9}, {3.446845454597384*^9, 3.446845488361397*^9}, {
+   3.446845860371744*^9, 3.446845863795096*^9}, 3.44684666252558*^9, {
+   3.446846924722932*^9, 3.446846931183215*^9}, {3.526068177477577*^9, 
+   3.526068193542736*^9}, 3.5263072256205063`*^9, {3.528727892123534*^9, 
+   3.5287279225630083`*^9}, 3.543344274718861*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageIdempotents", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"JonesWenzlIdempotent", ",", 
+       RowBox[{"HoldPattern", "[", 
+        RowBox[{"JonesWenzlIdempotent", "[", 
+         RowBox[{"g", ",", "___"}], "]"}], "]"}]}], "}"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"GraphToString", "[", "g", "]"}], ",", "\"\<Idempotents\>\""}], 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`GraphPlanarAlgebra4`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.447003243664343*^9, 3.4470032582479963`*^9}, {
+   3.447003306775773*^9, 3.447003318653118*^9}, {3.526913210119051*^9, 
+   3.526913210821343*^9}, 3.543344268288061*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackageIdempotents", "[", 
+   RowBox[{"G", ":", 
+    RowBox[{"{", 
+     RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}]}], "]"}], 
+  ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"JonesWenzlIdempotent", ",", 
+       RowBox[{"HoldPattern", "[", 
+        RowBox[{"JonesWenzlIdempotent", "[", 
+         RowBox[{"G", ",", "___"}], "]"}], "]"}]}], "}"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"StringJoin", "@@", 
+       RowBox[{"(", 
+        RowBox[{"GraphToString", "/@", "G"}], ")"}]}], ",", 
+      "\"\<Idempotents\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`GraphPlanarAlgebra4`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.421198047623285*^9, 3.4211981915502415`*^9}, 
+   3.42119826576696*^9, {3.421199158851152*^9, 3.4211991643891153`*^9}, {
+   3.421199767145837*^9, 3.4211997677567153`*^9}, {3.421199814924539*^9, 
+   3.421199818069061*^9}, {3.421200528921216*^9, 3.42120053286689*^9}, {
+   3.4212006989056416`*^9, 3.421200701449299*^9}, {3.421768674292376*^9, 
+   3.421768731244269*^9}, {3.446845454597384*^9, 3.446845488361397*^9}, {
+   3.446845860371744*^9, 3.446845863795096*^9}, 3.44684666252558*^9, {
+   3.446846924722932*^9, 3.446846931183215*^9}, {3.526068177477577*^9, 
+   3.526068193542736*^9}, 3.5263072256205063`*^9, {3.5275250340499487`*^9, 
+   3.527525055609469*^9}, {3.53971149094571*^9, 3.539711491224167*^9}, 
+   3.5433442709825077`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PackagePairExtensions", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"PackageData", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"FindBigraphPairExtensionsUpToDepth", ",", 
+       RowBox[{"HoldPattern", "[", 
+        RowBox[{
+         RowBox[{"FindBigraphPairExtensionsUpToDepth", "[", "_", "]"}], "[", 
+         RowBox[{
+          RowBox[{"BigraphWithDuals", "[", 
+           RowBox[{"g", ",", "_"}], "]"}], ",", 
+          RowBox[{"BigraphWithDuals", "[", 
+           RowBox[{"_", ",", "_"}], "]"}], ",", "__"}], "]"}], "]"}]}], "}"}],
+      "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"GraphToString", "[", "g", "]"}], ",", 
+      "\"\<PairExtensions\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Needs\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+       "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+       "\"\<FusionAtlas`PairOdometer`\>\""}], "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.447003243664343*^9, 3.4470032582479963`*^9}, {
+   3.447003306775773*^9, 3.447003318653118*^9}, {3.447361857431849*^9, 
+   3.44736185932443*^9}, {3.447361892927106*^9, 3.447361911947111*^9}, {
+   3.447361945131796*^9, 3.447362012099121*^9}, {3.447362048833686*^9, 
+   3.4473620509135637`*^9}, {3.447362761278277*^9, 3.447362781146353*^9}, {
+   3.447362916862071*^9, 3.447362935765142*^9}, {3.447363067921521*^9, 
+   3.447363086156097*^9}, 3.463944827478074*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1272, 679},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 1067, 20, 43, "Input",
+ InitializationCell->True],
+Cell[1615, 42, 252, 4, 27, "Input",
+ InitializationCell->True],
+Cell[1870, 48, 1362, 23, 58, "Input",
+ InitializationCell->True],
+Cell[3235, 73, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[3357, 78, 561, 16, 27, "Input",
+ InitializationCell->True],
+Cell[3921, 96, 709, 20, 27, "Input",
+ InitializationCell->True],
+Cell[4633, 118, 899, 24, 43, "Input",
+ InitializationCell->True],
+Cell[5535, 144, 702, 18, 43, "Input",
+ InitializationCell->True],
+Cell[6240, 164, 332, 9, 27, "Input",
+ InitializationCell->True],
+Cell[6575, 175, 405, 9, 27, "Input",
+ InitializationCell->True],
+Cell[6983, 186, 1063, 28, 73, "Input",
+ InitializationCell->True],
+Cell[8049, 216, 4919, 123, 298, "Input",
+ InitializationCell->True],
+Cell[12971, 341, 407, 10, 27, "Input",
+ InitializationCell->True],
+Cell[13381, 353, 12027, 288, 673, "Input",
+ InitializationCell->True],
+Cell[25411, 643, 1311, 28, 148, "Input",
+ InitializationCell->True],
+Cell[26725, 673, 756, 17, 88, "Input",
+ InitializationCell->True],
+Cell[27484, 692, 1970, 42, 138, "Input",
+ InitializationCell->True],
+Cell[29457, 736, 860, 17, 88, "Input",
+ InitializationCell->True],
+Cell[30320, 755, 970, 20, 88, "Input",
+ InitializationCell->True],
+Cell[31293, 777, 726, 16, 88, "Input",
+ InitializationCell->True],
+Cell[32022, 795, 1111, 25, 88, "Input",
+ InitializationCell->True],
+Cell[33136, 822, 1283, 30, 103, "Input",
+ InitializationCell->True],
+Cell[34422, 854, 3043, 66, 118, "Input",
+ InitializationCell->True],
+Cell[37468, 922, 2455, 55, 163, "Input",
+ InitializationCell->True],
+Cell[39926, 979, 1412, 27, 88, "Input",
+ InitializationCell->True],
+Cell[41341, 1008, 1974, 44, 88, "Input",
+ InitializationCell->True],
+Cell[43318, 1054, 1050, 25, 88, "Input",
+ InitializationCell->True],
+Cell[44371, 1081, 1776, 39, 88, "Input",
+ InitializationCell->True],
+Cell[46150, 1122, 1630, 35, 88, "Input",
+ InitializationCell->True],
+Cell[47783, 1159, 96, 3, 27, "Input",
+ InitializationCell->True],
+Cell[47882, 1164, 103, 3, 27, "Input",
+ InitializationCell->True]
+}
+]
+*)
+
+(* End of internal cache information *)

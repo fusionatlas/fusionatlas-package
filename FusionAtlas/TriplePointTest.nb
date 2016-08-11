@@ -1,0 +1,2132 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     79342,       2123]
+NotebookOptionsPosition[     75677,       2002]
+NotebookOutlinePosition[     76049,       2018]
+CellTagsIndexPosition[     76006,       2015]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["TriplePointTest package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}, {3.478306474360262*^9, 
+  3.478306475475143*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas v0.
+February, 2010, Scott Morrison\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}, {
+  3.478306478915522*^9, 3.4783064889387903`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`TriplePointTest`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`RelativeDimensions`\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+  3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+  3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+  3.478306491950732*^9, 3.478306504486902*^9}, {3.478306602046698*^9, 
+  3.478306604913982*^9}, {3.485629669415824*^9, 3.485629673797494*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"TriplePointObstruction", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, {
+  3.478306516845941*^9, 3.478306519942227*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"EvenTriplePointObstruction", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, {
+  3.478306516845941*^9, 3.4783065269636507`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"OddTriplePointObstruction", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, {
+  3.478306516845941*^9, 3.478306528883025*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePoints", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"m", "=", 
+      RowBox[{"GraphAdjacencyMatrix", "[", "g", "]"}]}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"n", ",", "k"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"n", ",", "0", ",", 
+           RowBox[{"GraphDepth", "[", "g", "]"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"k", ",", "1", ",", 
+           RowBox[{"RankAtDepth", "[", 
+            RowBox[{"g", ",", "n"}], "]"}]}], "}"}]}], "]"}], ",", "1"}], 
+      "]"}], "\[LeftDoubleBracket]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Position", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"m", ".", "m"}], ")"}], "\[LeftDoubleBracket]", 
+           RowBox[{"i", ",", "i"}], "\[RightDoubleBracket]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"Length", "[", "m", "]"}]}], "}"}]}], "]"}], ",", "3", 
+        ",", "1"}], "]"}], "]"}], "\[RightDoubleBracket]"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4688640529673862`*^9, 3.4688640805593777`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"VertexNeighbours", "[", 
+   RowBox[{"g_GradedBigraph", ",", 
+    RowBox[{"{", 
+     RowBox[{"n_", ",", "k_"}], "}"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"n", ">", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"n", "-", "1"}], ",", "#"}], "}"}], "&"}], "/@", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{
+         RowBox[{"g", "\[LeftDoubleBracket]", 
+          RowBox[{"n", ",", "k"}], "\[RightDoubleBracket]"}], ",", "1", ",", 
+         "1"}], "]"}], "]"}]}], ",", 
+     RowBox[{"{", "}"}]}], "]"}], "~", "Join", "~", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"n", "<", 
+      RowBox[{"GraphDepth", "[", "g", "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"n", "+", "1"}], ",", "#"}], "}"}], "&"}], "/@", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{
+         RowBox[{"g", "\[LeftDoubleBracket]", 
+          RowBox[{
+           RowBox[{"n", "+", "1"}], ",", "All", ",", "k"}], 
+          "\[RightDoubleBracket]"}], ",", "1", ",", "1"}], "]"}], "]"}]}], 
+     ",", 
+     RowBox[{"{", "}"}]}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468864128330493*^9, 3.468864218025015*^9}, {
+  3.46886425183384*^9, 3.468864288063334*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"VertexLeftNeighbours", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", 
+    RowBox[{"{", 
+     RowBox[{"m_", ",", "n_", ",", "k_"}], "}"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "g", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"g", "[", "1", "]"}], "=", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+     ";", 
+     RowBox[{
+      RowBox[{"g", "[", "2", "]"}], "=", 
+      RowBox[{"g2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"n", ">", "0"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"m", ",", 
+            RowBox[{"n", "-", "1"}], ",", "#"}], "}"}], "&"}], "/@", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"Position", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"g", "[", "m", "]"}], "\[LeftDoubleBracket]", 
+             RowBox[{"n", ",", "k"}], "\[RightDoubleBracket]"}], ",", "1", 
+            ",", "1"}], "]"}], "]"}]}], ",", 
+        RowBox[{"{", "}"}]}], "]"}], "~", "Join", "~", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"n", "<", 
+         RowBox[{"GraphDepth", "[", 
+          RowBox[{"g", "[", "m", "]"}], "]"}]}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"m", ",", 
+            RowBox[{"n", "+", "1"}], ",", "#"}], "}"}], "&"}], "/@", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"Position", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"g", "[", "m", "]"}], "\[LeftDoubleBracket]", 
+             RowBox[{
+              RowBox[{"n", "+", "1"}], ",", "All", ",", "k"}], 
+             "\[RightDoubleBracket]"}], ",", "1", ",", "1"}], "]"}], "]"}]}], 
+        ",", 
+        RowBox[{"{", "}"}]}], "]"}]}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468864128330493*^9, 3.468864218025015*^9}, {
+  3.46886425183384*^9, 3.468864288063334*^9}, {3.477012827510873*^9, 
+  3.477012905137808*^9}, {3.4770130006137247`*^9, 3.477013017890539*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DualVertex", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", 
+    RowBox[{"{", 
+     RowBox[{"m_", ",", 
+      RowBox[{"n_", "/;", 
+       RowBox[{"OddQ", "[", "n", "]"}]}], ",", "k_"}], "}"}]}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"3", "-", "m"}], ",", "n", ",", "k"}], 
+   "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DualVertex", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", 
+    RowBox[{"{", 
+     RowBox[{"m_", ",", 
+      RowBox[{"n_", "/;", 
+       RowBox[{"EvenQ", "[", "n", "]"}]}], ",", "k_"}], "}"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "d", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"d", "[", "1", "]"}], "=", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+     ";", 
+     RowBox[{
+      RowBox[{"d", "[", "2", "]"}], "=", 
+      RowBox[{"g2", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"m", ",", "n", ",", 
+       RowBox[{
+        RowBox[{"d", "[", "m", "]"}], "\[LeftDoubleBracket]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"n", "/", "2"}], "+", "1"}], ",", "k"}], 
+        "\[RightDoubleBracket]"}]}], "}"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4770131765856943`*^9, 3.47701320692173*^9}, {
+  3.4770132414795094`*^9, 3.477013323347459*^9}, {3.4770137977879057`*^9, 
+  3.477013818417983*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"VertexRightNeighbours", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", 
+    RowBox[{"{", 
+     RowBox[{"m0_", ",", "n0_", ",", "k0_"}], "}"}]}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g", ",", "d", ",", "m", ",", "n", ",", "k"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"g", "[", "1", "]"}], "=", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+     ";", 
+     RowBox[{
+      RowBox[{"g", "[", "2", "]"}], "=", 
+      RowBox[{"g2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d", "[", "1", "]"}], "=", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+     ";", 
+     RowBox[{
+      RowBox[{"d", "[", "2", "]"}], "=", 
+      RowBox[{"g2", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"m", ",", "n", ",", "k"}], "}"}], "=", 
+      RowBox[{"DualVertex", "[", 
+       RowBox[{"g1", ",", "g2", ",", 
+        RowBox[{"{", 
+         RowBox[{"m0", ",", "n0", ",", "k0"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"DualVertex", "[", 
+        RowBox[{"g1", ",", "g2", ",", "#"}], "]"}], "&"}], "/@", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"n", ">", "0"}], ",", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"m", ",", 
+              RowBox[{"n", "-", "1"}], ",", "#"}], "}"}], "&"}], "/@", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"Position", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"g", "[", "m", "]"}], "\[LeftDoubleBracket]", 
+               RowBox[{"n", ",", "k"}], "\[RightDoubleBracket]"}], ",", "1", 
+              ",", "1"}], "]"}], "]"}]}], ",", 
+          RowBox[{"{", "}"}]}], "]"}], "~", "Join", "~", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"n", "<", 
+           RowBox[{"GraphDepth", "[", 
+            RowBox[{"g", "[", "m", "]"}], "]"}]}], ",", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"m", ",", 
+              RowBox[{"n", "+", "1"}], ",", "#"}], "}"}], "&"}], "/@", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"Position", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"g", "[", "m", "]"}], "\[LeftDoubleBracket]", 
+               RowBox[{
+                RowBox[{"n", "+", "1"}], ",", "All", ",", "k"}], 
+               "\[RightDoubleBracket]"}], ",", "1", ",", "1"}], "]"}], 
+            "]"}]}], ",", 
+          RowBox[{"{", "}"}]}], "]"}]}], ")"}]}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468864128330493*^9, 3.468864218025015*^9}, {
+  3.46886425183384*^9, 3.468864288063334*^9}, {3.477012827510873*^9, 
+  3.477012905137808*^9}, {3.4770130006137247`*^9, 3.477013062735828*^9}, {
+  3.477013093382051*^9, 3.477013107503067*^9}, {3.477013150706275*^9, 
+  3.47701317146414*^9}, {3.477013334952071*^9, 3.477013387860312*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePointsWithDimensions", "[", "g_GradedBigraph", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"TriplePoints", "[", "g", "]"}], "/.", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"d_Integer", ",", "k_Integer"}], "}"}], "\[RuleDelayed]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"d", ",", "k"}], "}"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"DimensionsByDepth", "[", "g", "]"}], "\[LeftDoubleBracket]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "+", 
+           "1"}], ",", 
+          RowBox[{
+          "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+         "\[RightDoubleBracket]"}], "&"}], "/@", 
+       RowBox[{"VertexNeighbours", "[", 
+        RowBox[{"g", ",", 
+         RowBox[{"{", 
+          RowBox[{"d", ",", "k"}], "}"}]}], "]"}]}]}], "}"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4688643045453167`*^9, 3.4688644055810413`*^9}, {
+  3.4688646451996403`*^9, 3.46886465694118*^9}, {3.468864722160448*^9, 
+  3.468864728008411*^9}, {3.468865509775835*^9, 3.468865513086323*^9}, {
+  3.4688676254213047`*^9, 3.468867627465646*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePointsWithRelativeDimensions", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Function", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"d", ",", "n", ",", "q"}], "}"}], ",", 
+    RowBox[{"Evaluate", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Flatten", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"TriplePoints", "[", 
+           RowBox[{
+           "g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+           "]"}], "/.", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"depth_Integer", ",", "k_Integer"}], "}"}], 
+           "\[RuleDelayed]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"depth", ",", "k"}], "}"}], "\[Rule]", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"RelativeDimensionsByDepth", "[", 
+                   RowBox[{"g1", ",", "g2", ",", "1"}], "]"}], "[", 
+                  RowBox[{"d", ",", "n", ",", "q"}], "]"}], 
+                 "\[LeftDoubleBracket]", 
+                 RowBox[{"1", ",", 
+                  RowBox[{
+                   RowBox[{
+                   "#", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], "+", "1"}], ",", 
+                  RowBox[{
+                  "#", "\[LeftDoubleBracket]", "2", 
+                   "\[RightDoubleBracket]"}]}], "\[RightDoubleBracket]"}], 
+                "&"}], "/@", 
+               RowBox[{"VertexNeighbours", "[", 
+                RowBox[{
+                 RowBox[{
+                 "g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+                  ",", 
+                 RowBox[{"{", 
+                  RowBox[{"depth", ",", "k"}], "}"}]}], "]"}]}], ")"}]}], 
+            "}"}]}]}], ",", "1"}], "]"}], ",", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"TriplePoints", "[", 
+           RowBox[{
+           "g2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+           "]"}], "/.", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"depth_Integer", ",", "k_Integer"}], "}"}], 
+           "\[RuleDelayed]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"depth", ",", "k"}], "}"}], "\[Rule]", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"RelativeDimensionsByDepth", "[", 
+                   RowBox[{"g1", ",", "g2", ",", "1"}], "]"}], "[", 
+                  RowBox[{"d", ",", "n", ",", "q"}], "]"}], 
+                 "\[LeftDoubleBracket]", 
+                 RowBox[{"2", ",", 
+                  RowBox[{
+                   RowBox[{
+                   "#", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], "+", "1"}], ",", 
+                  RowBox[{
+                  "#", "\[LeftDoubleBracket]", "2", 
+                   "\[RightDoubleBracket]"}]}], "\[RightDoubleBracket]"}], 
+                "&"}], "/@", 
+               RowBox[{"VertexNeighbours", "[", 
+                RowBox[{
+                 RowBox[{
+                 "g2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+                  ",", 
+                 RowBox[{"{", 
+                  RowBox[{"depth", ",", "k"}], "}"}]}], "]"}]}], ")"}]}], 
+            "}"}]}]}], ",", "1"}], "]"}]}], "}"}], "\[IndentingNewLine]", 
+     "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4688643045453167`*^9, 3.4688644055810413`*^9}, {
+  3.4688646451996403`*^9, 3.468864781080071*^9}, {3.4688648614923563`*^9, 
+  3.468864866997229*^9}, {3.468864944407546*^9, 3.4688650014101562`*^9}, {
+  3.4688655420164022`*^9, 3.4688655590133*^9}, {3.468866023235383*^9, 
+  3.468866026055573*^9}, {3.468866195878254*^9, 3.468866209444296*^9}, {
+  3.4688675177770853`*^9, 3.468867544519405*^9}, {3.4688676303599787`*^9, 
+  3.468867666997311*^9}, {3.468867872401875*^9, 3.468867909264701*^9}, {
+  3.4769839343790493`*^9, 3.4769839359927263`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"broken", "?"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+   "TriplePointsWithRelativeDimensions", "=", "TriplePointsWithClumps"}], 
+   ";"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4939874642903233`*^9, 3.4939874715065327`*^9}, {
+   3.495515008453416*^9, 3.495515015222269*^9}, {3.4955150732463837`*^9, 
+   3.49551507628414*^9}, {3.495546867255887*^9, 3.495546868303238*^9}, 
+   3.495973432583037*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DimensionCoincidences", "[", 
+   RowBox[{"g1_", ",", "g2_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "g", ",", "vertices", ",", "mostVertices", ",", "clumps", ",", 
+      "deepestClumps", ",", "clump", ",", "neighbouringClumps", ",", 
+      "updateClumps"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "1", "]"}], ",", 
+        RowBox[{"g", "[", "2", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g1", ",", "g2"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"vertices", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"i", ",", "n", ",", "k"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"n", ",", "0", ",", 
+            RowBox[{"GraphDepth", "[", 
+             RowBox[{"g", "[", "i", "]"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "i", "]"}], ",", "n"}], "]"}]}], "}"}]}], 
+         "]"}], ",", "2"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"mostVertices", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"i", ",", "n", ",", "k"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", "2"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"n", ",", "0", ",", 
+            RowBox[{
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "i", "]"}], "]"}], "-", "1"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "i", "]"}], ",", "n"}], "]"}]}], "}"}]}], 
+         "]"}], ",", "2"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"clumps", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "n", ",", "k"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "n", ",", "k"}], "}"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"n", ",", "1", ",", 
+            RowBox[{
+             RowBox[{"GraphDepth", "[", 
+              RowBox[{"g", "[", "1", "]"}], "]"}], "-", "1"}], ",", "2"}], 
+           "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k", ",", "1", ",", 
+            RowBox[{"RankAtDepth", "[", 
+             RowBox[{
+              RowBox[{"g", "[", "1", "]"}], ",", "n"}], "]"}]}], "}"}]}], 
+         "]"}], ",", "1"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"clumps", "=", 
+      RowBox[{"clumps", "~", "Join", "~", 
+       RowBox[{"Union", "[", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"Union", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"i", ",", "n", ",", "k"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"i", ",", "n", ",", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"g", "[", "i", "]"}], "\[LeftDoubleBracket]", "2",
+                     "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", 
+                   RowBox[{
+                    RowBox[{"n", "/", "2"}], "+", "1"}], 
+                   "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "k", 
+                  "\[RightDoubleBracket]"}]}], "}"}]}], "}"}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "1", ",", "2"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"n", ",", "0", ",", 
+              RowBox[{
+               RowBox[{"GraphDepth", "[", 
+                RowBox[{"g", "[", "i", "]"}], "]"}], "-", "1"}], ",", "2"}], 
+             "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"k", ",", "1", ",", 
+              RowBox[{"RankAtDepth", "[", 
+               RowBox[{
+                RowBox[{"g", "[", "i", "]"}], ",", "n"}], "]"}]}], "}"}]}], 
+           "]"}], ",", "2"}], "]"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"deepestClumps", "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"EvenQ", "[", 
+          RowBox[{"GraphDepth", "[", "g1", "]"}], "]"}], "\[Or]", 
+         RowBox[{"EvenQ", "[", 
+          RowBox[{"GraphDepth", "[", "g2", "]"}], "]"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"With", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"n", "=", 
+            RowBox[{"Max", "[", 
+             RowBox[{
+              RowBox[{"GraphDepth", "[", "g1", "]"}], ",", 
+              RowBox[{"GraphDepth", "[", "g2", "]"}]}], "]"}]}], "}"}], ",", 
+          RowBox[{"Flatten", "[", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"Union", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"i", ",", "n", ",", "k"}], "}"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"i", ",", "n", ",", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"g", "[", "i", "]"}], "\[LeftDoubleBracket]", "2",
+                     "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", 
+                    RowBox[{
+                    RowBox[{"n", "/", "2"}], "+", "1"}], 
+                    "\[RightDoubleBracket]"}], "\[LeftDoubleBracket]", "k", 
+                    "\[RightDoubleBracket]"}]}], "}"}]}], "}"}], "]"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"i", ",", "1", ",", "2"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"k", ",", "1", ",", 
+                RowBox[{"RankAtDepth", "[", 
+                 RowBox[{
+                  RowBox[{"g", "[", "i", "]"}], ",", "n"}], "]"}]}], "}"}]}], 
+             "]"}], ",", "1"}], "]"}]}], "]"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"With", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"n", "=", 
+            RowBox[{"GraphDepth", "[", "g1", "]"}]}], "}"}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"1", ",", "n", ",", "k"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"2", ",", "n", ",", "k"}], "}"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"k", ",", "1", ",", 
+              RowBox[{"RankAtDepth", "[", 
+               RowBox[{
+                RowBox[{"g", "[", "1", "]"}], ",", "n"}], "]"}]}], "}"}]}], 
+           "]"}]}], "]"}]}], "\[IndentingNewLine]", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"clumps", "=", 
+      RowBox[{"clumps", "~", "Join", "~", "deepestClumps"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"clump", "[", "x_", "]"}], ":=", 
+      RowBox[{
+       RowBox[{"Select", "[", 
+        RowBox[{"clumps", ",", 
+         RowBox[{
+          RowBox[{"MemberQ", "[", 
+           RowBox[{"#", ",", "x"}], "]"}], "&"}], ",", "1"}], "]"}], 
+       "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"neighbouringClumps", "[", "x_", "]"}], ":=", 
+      RowBox[{"Sort", "[", 
+       RowBox[{"clump", "/@", 
+        RowBox[{
+        "FusionAtlas`TriplePointTest`Private`VertexLeftNeighbours", "[", 
+         RowBox[{"g1", ",", "g2", ",", "x"}], "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"updateClumps", "[", "_", "]"}], ":=", 
+      RowBox[{"Union", "[", 
+       RowBox[{
+        RowBox[{"Function", "[", 
+         RowBox[{"p", ",", 
+          RowBox[{"Union", "[", 
+           RowBox[{"Join", "@@", 
+            RowBox[{"(", 
+             RowBox[{"clump", "/@", "p"}], ")"}]}], "]"}]}], "]"}], "/@", 
+        RowBox[{"SplitBy", "[", 
+         RowBox[{
+          RowBox[{"SortBy", "[", 
+           RowBox[{"mostVertices", ",", "neighbouringClumps"}], "]"}], ",", 
+          "neighbouringClumps"}], "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"FixedPoint", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"clumps", "=", 
+           RowBox[{
+            RowBox[{"updateClumps", "[", "#", "]"}], "~", "Join", "~", 
+            "deepestClumps"}]}], ";", "clumps"}], ")"}], "&"}], ",", 
+       "clumps"}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4939830450224867`*^9, 3.49398307826649*^9}, {
+   3.4939831545655107`*^9, 3.493983199221138*^9}, {3.4939845303906183`*^9, 
+   3.493984568080415*^9}, {3.4939846164661827`*^9, 3.493984797138567*^9}, {
+   3.493984941391322*^9, 3.493984965900329*^9}, {3.493985036168516*^9, 
+   3.493985038099555*^9}, {3.493985334411789*^9, 3.4939853345085287`*^9}, {
+   3.493985729681118*^9, 3.49398579957679*^9}, {3.49398583933705*^9, 
+   3.493985869225616*^9}, {3.4939859271131783`*^9, 3.493986088425872*^9}, {
+   3.493986162056883*^9, 3.493986261343202*^9}, {3.493986298513383*^9, 
+   3.493986406110284*^9}, {3.493986802069371*^9, 3.493986814242152*^9}, {
+   3.493987261020567*^9, 3.493987262558249*^9}, {3.493987561879043*^9, 
+   3.493987580419827*^9}, {3.49398773301077*^9, 3.493987739547687*^9}, {
+   3.493988008027388*^9, 3.4939880242694683`*^9}, {3.493988098135734*^9, 
+   3.493988130691862*^9}, {3.4939881622709103`*^9, 3.4939882776754303`*^9}, {
+   3.493988314813204*^9, 3.4939883265915813`*^9}, {3.493988386656509*^9, 
+   3.493988489853723*^9}, {3.493988601698893*^9, 3.493988655596633*^9}, {
+   3.493988696149357*^9, 3.493988771199091*^9}, {3.4939891060834227`*^9, 
+   3.493989108763844*^9}, 3.493989149878847*^9, {3.49398932281889*^9, 
+   3.493989335463838*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePointsWithClumps", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Function", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"d0", ",", "n0", ",", "q0"}], "}"}], ",", 
+    RowBox[{"Evaluate", "[", "\[IndentingNewLine]", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"clumps", "=", 
+          RowBox[{"DimensionCoincidences", "[", 
+           RowBox[{"g1", ",", "g2"}], "]"}]}], ",", "clump"}], "}"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"clump", "[", "x_", "]"}], ":=", 
+         RowBox[{
+          RowBox[{"Select", "[", 
+           RowBox[{"clumps", ",", 
+            RowBox[{
+             RowBox[{"MemberQ", "[", 
+              RowBox[{"#", ",", "x"}], "]"}], "&"}], ",", "1"}], "]"}], 
+          "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Flatten", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"TriplePoints", "[", 
+              RowBox[{
+              "g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              "]"}], "/.", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"depth_Integer", ",", "k_Integer"}], "}"}], 
+              "\[RuleDelayed]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"depth", ",", "k"}], "}"}], "\[Rule]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"clump", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", 
+                    RowBox[{
+                    "#", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{
+                    "#", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}]}], "}"}], "]"}], "&"}], "/@", 
+                  RowBox[{"VertexNeighbours", "[", 
+                   RowBox[{
+                    RowBox[{
+                    "g1", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"depth", ",", "k"}], "}"}]}], "]"}]}], ")"}]}], 
+               "}"}]}]}], ",", "1"}], "]"}], ",", 
+          RowBox[{"Flatten", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"TriplePoints", "[", 
+              RowBox[{
+              "g2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+              "]"}], "/.", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"depth_Integer", ",", "k_Integer"}], "}"}], 
+              "\[RuleDelayed]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"depth", ",", "k"}], "}"}], "\[Rule]", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"clump", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"2", ",", 
+                    RowBox[{
+                    "#", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{
+                    "#", "\[LeftDoubleBracket]", "2", 
+                    "\[RightDoubleBracket]"}]}], "}"}], "]"}], "&"}], "/@", 
+                  RowBox[{"VertexNeighbours", "[", 
+                   RowBox[{
+                    RowBox[{
+                    "g2", "\[LeftDoubleBracket]", "1", 
+                    "\[RightDoubleBracket]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"depth", ",", "k"}], "}"}]}], "]"}]}], ")"}]}], 
+               "}"}]}]}], ",", "1"}], "]"}]}], "}"}]}]}], 
+      "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", "]"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4688643045453167`*^9, 3.4688644055810413`*^9}, {
+  3.4688646451996403`*^9, 3.468864781080071*^9}, {3.4688648614923563`*^9, 
+  3.468864866997229*^9}, {3.468864944407546*^9, 3.4688650014101562`*^9}, {
+  3.4688655420164022`*^9, 3.4688655590133*^9}, {3.468866023235383*^9, 
+  3.468866026055573*^9}, {3.468866195878254*^9, 3.468866209444296*^9}, {
+  3.4688675177770853`*^9, 3.468867544519405*^9}, {3.4688676303599787`*^9, 
+  3.468867666997311*^9}, {3.468867872401875*^9, 3.468867909264701*^9}, {
+  3.4769839343790493`*^9, 3.4769839359927263`*^9}, {3.493987046902053*^9, 
+  3.493987188850705*^9}, {3.4939872697029877`*^9, 3.4939872720188837`*^9}, {
+  3.493987735801525*^9, 3.493987742123803*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MatchingOddTriplePoints", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"d", ",", "n", ",", "q"}], "}"}], ",", 
+    RowBox[{"Cases", "[", 
+     RowBox[{
+      RowBox[{"Cases", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"#", ",", 
+            RowBox[{"Sort", "/@", 
+             RowBox[{"(", 
+              RowBox[{"#", "/.", 
+               RowBox[{
+                RowBox[{"TriplePointsWithRelativeDimensions", "[", 
+                 RowBox[{"g1", ",", "g2"}], "]"}], "[", 
+                RowBox[{"d", ",", "n", ",", "q"}], "]"}]}], ")"}]}]}], "}"}], 
+          "&"}], "/@", 
+         RowBox[{"(", 
+          RowBox[{"Intersection", "@@", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Cases", "[", 
+               RowBox[{"#", ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"_", "?", "OddQ"}], ",", "_"}], "}"}]}], "]"}], 
+              "&"}], "/@", 
+             RowBox[{"(", 
+              RowBox[{"TriplePoints", "/@", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{
+                 "g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+                  ",", 
+                 RowBox[{
+                 "g2", "\[LeftDoubleBracket]", "1", 
+                  "\[RightDoubleBracket]"}]}], "}"}]}], ")"}]}], ")"}]}], 
+          ")"}]}], ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"v_", ",", 
+           RowBox[{"{", 
+            RowBox[{"D_", ",", "D_"}], "}"}]}], "}"}], "\[RuleDelayed]", 
+         "v"}]}], "]"}], ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"a_", ",", "b_"}], "}"}], "/;", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Sort", "[", 
+           RowBox[{"VertexRightNeighbours", "[", 
+            RowBox[{"g1", ",", "g1", ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "a", ",", "b"}], "}"}]}], "]"}], "]"}], "==", 
+          RowBox[{"Sort", "[", 
+           RowBox[{"VertexLeftNeighbours", "[", 
+            RowBox[{"g1", ",", "g1", ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "a", ",", "b"}], "}"}]}], "]"}], "]"}]}], 
+         ")"}], "\[And]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Sort", "[", 
+           RowBox[{"VertexRightNeighbours", "[", 
+            RowBox[{"g1", ",", "g1", ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "a", ",", "b"}], "}"}]}], "]"}], "]"}], "==", 
+          RowBox[{"Sort", "[", 
+           RowBox[{"VertexLeftNeighbours", "[", 
+            RowBox[{"g1", ",", "g1", ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "a", ",", "b"}], "}"}]}], "]"}], "]"}]}], 
+         ")"}]}]}]}], "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468866048576181*^9, 3.468866078561571*^9}, {
+  3.4688662716922398`*^9, 3.4688663456467733`*^9}, {3.468866458241061*^9, 
+  3.468866461167573*^9}, {3.4688665176931467`*^9, 3.46886656898601*^9}, {
+  3.468867557513275*^9, 3.468867572256042*^9}, {3.468867686745307*^9, 
+  3.468867692487402*^9}, {3.468868004606099*^9, 3.468868009018718*^9}, {
+  3.4955467474507837`*^9, 3.495546832485187*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EvenTriplePoints", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Flatten", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Cases", "[", 
+         RowBox[{
+          RowBox[{"TriplePoints", "[", 
+           RowBox[{
+           "g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+           "]"}], ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"d_", "?", "EvenQ"}], ",", "k_"}], "}"}], 
+           "\[RuleDelayed]", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "d", ",", "k"}], "}"}]}]}], "]"}], ",", 
+        RowBox[{"Cases", "[", 
+         RowBox[{
+          RowBox[{"TriplePoints", "[", 
+           RowBox[{
+           "g2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+           "]"}], ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"d_", "?", "EvenQ"}], ",", "k_"}], "}"}], 
+           "\[RuleDelayed]", 
+           RowBox[{"{", 
+            RowBox[{"2", ",", "d", ",", "k"}], "}"}]}]}], "]"}]}], "}"}], ",",
+       "1"}], "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468866048576181*^9, 3.468866078561571*^9}, {
+  3.4688662716922398`*^9, 3.4688663456467733`*^9}, {3.468866458241061*^9, 
+  3.468866461167573*^9}, {3.4688665176931467`*^9, 3.46886656898601*^9}, {
+  3.468867557513275*^9, 3.468867572256042*^9}, {3.468867686745307*^9, 
+  3.468867692487402*^9}, {3.468868004606099*^9, 3.468868009018718*^9}, {
+  3.469034623960431*^9, 3.46903462430282*^9}, {3.469034670750155*^9, 
+  3.4690347604107733`*^9}, {3.4690348040982847`*^9, 3.469034858116417*^9}, {
+  3.469035292342939*^9, 3.469035344145637*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", 
+  RowBox[{
+  "TriplePointObstruction", ",", "OddTriplePointObstruction", ",", 
+   "EvenTriplePointObstruction"}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4690369016304607`*^9, 3.469036905017935*^9}, {
+  3.469038068132181*^9, 3.4690380771697903`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"OddTriplePointObstruction", "[", 
+   RowBox[{"g1_", ",", "g2_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"OddTriplePointObstruction", "[", 
+    RowBox[{"g1", ",", "g2"}], "]"}], "=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"pathLengths", ",", "extraPaths"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"pathLengths", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"LengthTwoPathsNearTriplePoints", "[", 
+          RowBox[{"g1", ",", "g2", ",", "#"}], "]"}], "&"}], "/@", 
+        RowBox[{"MatchingOddTriplePoints", "[", 
+         RowBox[{"g1", ",", "g2"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"extraPaths", "=", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", 
+            RowBox[{"Complement", "[", 
+             RowBox[{"#", ",", 
+              RowBox[{"{", "1", "}"}]}], "]"}], "]"}], ">", "0"}], "&"}], ",",
+          "pathLengths", ",", 
+         RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"And", "@@", 
+       RowBox[{"(", 
+        RowBox[{"Flatten", "[", "extraPaths", "]"}], ")"}]}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468898846890059*^9, 3.468898904488021*^9}, {
+  3.468944209644331*^9, 3.46894424771096*^9}, {3.46894431179703*^9, 
+  3.468944492449277*^9}, {3.468974869504094*^9, 3.468974875782844*^9}, {
+  3.4690368094625177`*^9, 3.469036839147422*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"OddTriplePointObstruction", "[", 
+   RowBox[{"{", 
+    RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "}"}], "]"}],
+   ":=", 
+  RowBox[{"OddTriplePointObstruction", "[", 
+   RowBox[{"g1", ",", "g2"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.476983772621078*^9, 3.476983789794653*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EvenTriplePointObstruction", "[", 
+   RowBox[{"g1_", ",", "g2_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"EvenTriplePointObstruction", "[", 
+    RowBox[{"g1", ",", "g2"}], "]"}], "=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"pathLengths", ",", "extraPaths"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"pathLengths", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"LengthTwoPathsNearTriplePoints", "[", 
+          RowBox[{"g1", ",", "g2", ",", "#"}], "]"}], "&"}], "/@", 
+        RowBox[{"NeighbourlyEvenTriplePoints", "[", 
+         RowBox[{"g1", ",", "g2"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"extraPaths", "=", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", 
+            RowBox[{"Complement", "[", 
+             RowBox[{"#", ",", 
+              RowBox[{"{", "1", "}"}]}], "]"}], "]"}], ">", "0"}], "&"}], ",",
+          "pathLengths", ",", 
+         RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"And", "@@", 
+       RowBox[{"(", 
+        RowBox[{"Flatten", "[", "extraPaths", "]"}], ")"}]}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468898846890059*^9, 3.468898904488021*^9}, {
+  3.468944209644331*^9, 3.46894424771096*^9}, {3.46894431179703*^9, 
+  3.468944492449277*^9}, {3.468974869504094*^9, 3.468974875782844*^9}, {
+  3.4690368094625177`*^9, 3.4690368566083384`*^9}, {3.477015200045158*^9, 
+  3.477015211898342*^9}, {3.478306564713457*^9, 3.478306566127891*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EvenTriplePointObstruction", "[", 
+   RowBox[{"{", 
+    RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "}"}], "]"}],
+   ":=", 
+  RowBox[{"EvenTriplePointObstruction", "[", 
+   RowBox[{"g1", ",", "g2"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.477015315529525*^9, 3.4770153163615217`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePointObstruction", "[", 
+   RowBox[{"g1_", ",", "g2_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"EvenTriplePointObstruction", "[", 
+    RowBox[{"g1", ",", "g2"}], "]"}], "\[And]", 
+   RowBox[{"OddTriplePointObstruction", "[", 
+    RowBox[{"g1", ",", "g2"}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.469036874829627*^9, 3.469036896618875*^9}, {
+  3.469038582106719*^9, 3.469038585031474*^9}, {3.477015386965227*^9, 
+  3.477015388730832*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePointObstruction", "[", 
+   RowBox[{"{", 
+    RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "}"}], "]"}],
+   ":=", 
+  RowBox[{"TriplePointObstruction", "[", 
+   RowBox[{"g1", ",", "g2"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.477015401674808*^9, 3.47701540259556*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePointBijections", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"depth_", ",", "k_"}], "}"}], "/;", 
+     RowBox[{"OddQ", "[", "depth", "]"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"d", ",", "n", ",", "q", ",", "dimensions"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"dimensions", "=", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"depth", ",", "k"}], "}"}], "/.", 
+       RowBox[{
+        RowBox[{"TriplePointsWithRelativeDimensions", "[", 
+         RowBox[{"g1", ",", "g2"}], "]"}], "[", 
+        RowBox[{"d", ",", "n", ",", "q"}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"Thread", "[", 
+         RowBox[{
+          RowBox[{"VertexNeighbours", "[", 
+           RowBox[{
+            RowBox[{
+            "g1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"depth", ",", "k"}], "}"}]}], "]"}], "\[Rule]", 
+          RowBox[{
+           RowBox[{"VertexNeighbours", "[", 
+            RowBox[{
+             RowBox[{
+             "g2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+             ",", 
+             RowBox[{"{", 
+              RowBox[{"depth", ",", "k"}], "}"}]}], "]"}], 
+           "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}]}], "]"}], 
+        "&"}], "/@", 
+       RowBox[{"Cases", "[", 
+        RowBox[{
+         RowBox[{"Permutations", "[", "3", "]"}], ",", 
+         RowBox[{"p_", "/;", 
+          RowBox[{
+           RowBox[{
+           "dimensions", "\[LeftDoubleBracket]", "1", 
+            "\[RightDoubleBracket]"}], "\[Equal]", 
+           RowBox[{"dimensions", "\[LeftDoubleBracket]", 
+            RowBox[{"2", ",", "p"}], "\[RightDoubleBracket]"}]}]}]}], "]"}]}],
+       "/.", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"a_", ",", "b_"}], "}"}], "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"c_", ",", "d_"}], "}"}]}], ")"}], "\[RuleDelayed]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "a", ",", "b"}], "}"}], "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "c", ",", "d"}], "}"}]}], ")"}]}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468868083652028*^9, 3.46886816014214*^9}, {
+   3.468868195982856*^9, 3.468868326655569*^9}, {3.4688692802375917`*^9, 
+   3.4688693228098307`*^9}, 3.469035064706574*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TriplePointBijections", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"m_", ",", "depth_", ",", "k_"}], "}"}], "/;", 
+     RowBox[{"EvenQ", "[", "depth", "]"}]}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g", ",", "d", ",", "n", ",", "q", ",", "dimensions"}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "1", "]"}], ",", 
+        RowBox[{"g", "[", "2", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g1", ",", "g2"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dimensions", "=", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"depth", ",", "k"}], "}"}], "/.", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"TriplePointsWithRelativeDimensions", "[", 
+          RowBox[{"g1", ",", "g2"}], "]"}], "[", 
+         RowBox[{"d", ",", "n", ",", "q"}], "]"}], "\[LeftDoubleBracket]", 
+        "m", "\[RightDoubleBracket]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"Thread", "[", 
+         RowBox[{
+          RowBox[{"VertexNeighbours", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"g", "[", "m", "]"}], "\[LeftDoubleBracket]", "1", 
+             "\[RightDoubleBracket]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"depth", ",", "k"}], "}"}]}], "]"}], "\[Rule]", 
+          RowBox[{
+           RowBox[{"VertexNeighbours", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"g", "[", "m", "]"}], "\[LeftDoubleBracket]", "1", 
+              "\[RightDoubleBracket]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"depth", ",", "k"}], "}"}]}], "]"}], 
+           "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}]}], "]"}], 
+        "&"}], "/@", "\[IndentingNewLine]", 
+       RowBox[{"Cases", "[", 
+        RowBox[{
+         RowBox[{"Permutations", "[", "3", "]"}], ",", 
+         RowBox[{"p_", "/;", 
+          RowBox[{"dimensions", "\[Equal]", 
+           RowBox[{
+           "dimensions", "\[LeftDoubleBracket]", "p", 
+            "\[RightDoubleBracket]"}]}]}]}], "]"}]}], "/.", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"a_", ",", "b_"}], "}"}], "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"c_", ",", "d_"}], "}"}]}], ")"}], "\[RuleDelayed]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"m", ",", "a", ",", "b"}], "}"}], "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"m", ",", "c", ",", "d"}], "}"}]}], ")"}]}]}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468868083652028*^9, 3.46886816014214*^9}, {
+  3.468868195982856*^9, 3.468868326655569*^9}, {3.4688692802375917`*^9, 
+  3.4688693228098307`*^9}, {3.469035064706574*^9, 3.469035233470614*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "a_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{"EvenQ", "[", "a", "]"}]}], ":=", 
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"a", "<", 
+      RowBox[{"GraphDepth", "[", "g1", "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"g2", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", 
+           RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}], "]"}], ".", 
+        RowBox[{"g1", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", 
+          RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}]}], ")"}], 
+      "\[LeftDoubleBracket]", 
+      RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}], ",", "U"}], "]"}], 
+   "+", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"a", ">", "0"}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"g2", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], ".", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"g1", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], "]"}]}], ")"}], 
+      "\[LeftDoubleBracket]", 
+      RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}], ",", "0"}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468869365958449*^9, 3.4688694209100437`*^9}, {
+   3.468869761511094*^9, 3.4688697962386436`*^9}, {3.468897756151478*^9, 
+   3.4688977901542463`*^9}, {3.468897838671694*^9, 3.468897892701585*^9}, {
+   3.4688980016632957`*^9, 3.468898059365604*^9}, {3.468898169917058*^9, 
+   3.468898204108444*^9}, {3.468898326639563*^9, 3.468898357385338*^9}, {
+   3.4764760540133743`*^9, 3.476476055883101*^9}, 3.476984207781302*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "c_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"EvenQ", "[", "a", "]"}], "\[And]", 
+    RowBox[{"c", "\[Equal]", 
+     RowBox[{"a", "+", "2"}]}]}]}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"g2", "\[LeftDoubleBracket]", 
+      RowBox[{"1", ",", 
+       RowBox[{"a", "+", "2"}]}], "\[RightDoubleBracket]"}], ".", 
+     RowBox[{"g1", "\[LeftDoubleBracket]", 
+      RowBox[{"1", ",", 
+       RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}]}], ")"}], 
+   "\[LeftDoubleBracket]", 
+   RowBox[{"d", ",", "b"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "c_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"EvenQ", "[", "a", "]"}], "\[And]", 
+    RowBox[{"c", "\[Equal]", 
+     RowBox[{"a", "-", "2"}]}]}]}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Transpose", "[", 
+      RowBox[{"g2", "\[LeftDoubleBracket]", 
+       RowBox[{"1", ",", 
+        RowBox[{"a", "-", "1"}]}], "\[RightDoubleBracket]"}], "]"}], ".", 
+     RowBox[{"Transpose", "[", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", 
+       RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], "]"}]}], ")"}], 
+   "\[LeftDoubleBracket]", 
+   RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468869365958449*^9, 3.4688694209100437`*^9}, {
+  3.468869761511094*^9, 3.4688697962386436`*^9}, {3.468897756151478*^9, 
+  3.4688977901542463`*^9}, {3.468897838671694*^9, 3.468897892701585*^9}, {
+  3.4688980016632957`*^9, 3.468898059365604*^9}, {3.468898169917058*^9, 
+  3.468898204108444*^9}, {3.468898326639563*^9, 3.468898418648625*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PermutationMatrix", "[", "v_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"IdentityMatrix", "[", 
+    RowBox[{"Length", "[", "v", "]"}], "]"}], "\[LeftDoubleBracket]", "v", 
+   "\[RightDoubleBracket]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.477017576371731*^9, 3.477017588236367*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "a_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{"OddQ", "[", "a", "]"}]}], ":=", 
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"a", "<", 
+      RowBox[{"GraphDepth", "[", "g1", "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"g1", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", 
+           RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}], "]"}], ".", 
+        RowBox[{"PermutationMatrix", "[", 
+         RowBox[{"g1", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"a", "+", "1"}], ")"}], "/", "2"}], "+", "1"}]}], 
+          "\[RightDoubleBracket]"}], "]"}], ".", 
+        RowBox[{"g1", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", 
+          RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}]}], ")"}], 
+      "\[LeftDoubleBracket]", 
+      RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}], ",", "U"}], "]"}], 
+   "+", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"a", ">", "0"}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"g1", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], ".", 
+        RowBox[{"PermutationMatrix", "[", 
+         RowBox[{"g1", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"a", "-", "1"}], ")"}], "/", "2"}], "+", "1"}]}], 
+          "\[RightDoubleBracket]"}], "]"}], ".", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"g1", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], "]"}]}], ")"}], 
+      "\[LeftDoubleBracket]", 
+      RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}], ",", "0"}], 
+    "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468869365958449*^9, 3.4688694209100437`*^9}, {
+   3.468869761511094*^9, 3.4688697962386436`*^9}, {3.468897756151478*^9, 
+   3.4688977901542463`*^9}, {3.468897838671694*^9, 3.468897892701585*^9}, {
+   3.4688980016632957`*^9, 3.468898059365604*^9}, {3.468898169917058*^9, 
+   3.468898204108444*^9}, {3.468898326639563*^9, 3.468898357385338*^9}, {
+   3.4764760540133743`*^9, 3.476476055883101*^9}, 3.476984207781302*^9, {
+   3.477014792176921*^9, 3.477014792759322*^9}, {3.477015082539909*^9, 
+   3.477015103460568*^9}, {3.477015140619073*^9, 3.4770151667191153`*^9}, {
+   3.4770175622931967`*^9, 3.477017563285246*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "c_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"OddQ", "[", "a", "]"}], "\[And]", 
+    RowBox[{"c", "\[Equal]", 
+     RowBox[{"a", "+", "2"}]}]}]}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"g1", "\[LeftDoubleBracket]", 
+      RowBox[{"1", ",", 
+       RowBox[{"a", "+", "2"}]}], "\[RightDoubleBracket]"}], ".", 
+     RowBox[{"PermutationMatrix", "[", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", 
+       RowBox[{"2", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"a", "+", "1"}], ")"}], "/", "2"}], "+", "1"}]}], 
+       "\[RightDoubleBracket]"}], "]"}], ".", 
+     RowBox[{"g1", "\[LeftDoubleBracket]", 
+      RowBox[{"1", ",", 
+       RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}]}], ")"}], 
+   "\[LeftDoubleBracket]", 
+   RowBox[{"d", ",", "b"}], 
+   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "c_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"OddQ", "[", "a", "]"}], "\[And]", 
+    RowBox[{"c", "\[Equal]", 
+     RowBox[{"a", "-", "2"}]}]}]}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Transpose", "[", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", 
+       RowBox[{"1", ",", 
+        RowBox[{"a", "-", "1"}]}], "\[RightDoubleBracket]"}], "]"}], ".", 
+     RowBox[{"PermutationMatrix", "[", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", 
+       RowBox[{"2", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"a", "-", "1"}], ")"}], "/", "2"}], "+", "1"}]}], 
+       "\[RightDoubleBracket]"}], "]"}], ".", 
+     RowBox[{"Transpose", "[", 
+      RowBox[{"g1", "\[LeftDoubleBracket]", 
+       RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], "]"}]}], ")"}], 
+   "\[LeftDoubleBracket]", 
+   RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468869365958449*^9, 3.4688694209100437`*^9}, {
+  3.468869761511094*^9, 3.4688697962386436`*^9}, {3.468897756151478*^9, 
+  3.4688977901542463`*^9}, {3.468897838671694*^9, 3.468897892701585*^9}, {
+  3.4688980016632957`*^9, 3.468898059365604*^9}, {3.468898169917058*^9, 
+  3.468898204108444*^9}, {3.468898326639563*^9, 3.468898418648625*^9}, {
+  3.47701479556177*^9, 3.477014796353582*^9}, {3.4770149548948097`*^9, 
+  3.477015075200289*^9}, {3.477015116733089*^9, 3.477015149432976*^9}, {
+  3.4770175552406282`*^9, 3.477017564902622*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"m_", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"m_", ",", "a_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{"OddQ", "[", "a", "]"}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g", "=", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g1", ",", "g2"}], "}"}], "\[LeftDoubleBracket]", "m", 
+       "\[RightDoubleBracket]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"a", "<", 
+        RowBox[{"GraphDepth", "[", "g", "]"}]}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Transpose", "[", 
+           RowBox[{"g", "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", 
+             RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}], "]"}], ".", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"IdentityMatrix", "[", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{"g", ",", 
+               RowBox[{"a", "+", "1"}]}], "]"}], "]"}], 
+            "\[LeftDoubleBracket]", 
+            RowBox[{"g", "\[LeftDoubleBracket]", 
+             RowBox[{"2", ",", 
+              RowBox[{
+               FractionBox[
+                RowBox[{"a", "+", "1"}], "2"], "+", "1"}]}], 
+             "\[RightDoubleBracket]"}], "\[RightDoubleBracket]"}], ")"}], ".", 
+          RowBox[{"g", "\[LeftDoubleBracket]", 
+           RowBox[{"1", ",", 
+            RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}]}], ")"}], 
+        "\[LeftDoubleBracket]", 
+        RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}], ",", "U"}], "]"}],
+      "+", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"a", ">", "0"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"g", "\[LeftDoubleBracket]", 
+           RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], ".", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"IdentityMatrix", "[", 
+             RowBox[{"RankAtDepth", "[", 
+              RowBox[{"g", ",", 
+               RowBox[{"a", "-", "1"}]}], "]"}], "]"}], 
+            "\[LeftDoubleBracket]", 
+            RowBox[{"g", "\[LeftDoubleBracket]", 
+             RowBox[{"2", ",", 
+              RowBox[{
+               FractionBox[
+                RowBox[{"a", "-", "1"}], "2"], "+", "1"}]}], 
+             "\[RightDoubleBracket]"}], "\[RightDoubleBracket]"}], ")"}], ".", 
+          RowBox[{"Transpose", "[", 
+           RowBox[{"g", "\[LeftDoubleBracket]", 
+            RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], "]"}]}], 
+         ")"}], "\[LeftDoubleBracket]", 
+        RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}], ",", "0"}], 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468869365958449*^9, 3.4688694209100437`*^9}, {
+   3.468869761511094*^9, 3.4688697962386436`*^9}, {3.468897756151478*^9, 
+   3.4688977901542463`*^9}, {3.468897838671694*^9, 3.468897892701585*^9}, {
+   3.4688980016632957`*^9, 3.468898059365604*^9}, {3.468898169917058*^9, 
+   3.468898204108444*^9}, {3.468898326639563*^9, 3.468898357385338*^9}, {
+   3.469036378741824*^9, 3.469036444504776*^9}, {3.4690364891975*^9, 
+   3.469036504355822*^9}, {3.4690365996705303`*^9, 3.469036656293478*^9}, 
+   3.4690378732128897`*^9, 3.476984244471621*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"m_", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"m_", ",", "c_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"OddQ", "[", "a", "]"}], "\[And]", 
+    RowBox[{"c", "\[Equal]", 
+     RowBox[{"a", "+", "2"}]}]}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g", "=", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g1", ",", "g2"}], "}"}], "\[LeftDoubleBracket]", "m", 
+       "\[RightDoubleBracket]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"g", "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", 
+         RowBox[{"a", "+", "2"}]}], "\[RightDoubleBracket]"}], ".", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"IdentityMatrix", "[", 
+          RowBox[{"RankAtDepth", "[", 
+           RowBox[{"g", ",", 
+            RowBox[{"a", "+", "1"}]}], "]"}], "]"}], "\[LeftDoubleBracket]", 
+         RowBox[{"g", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", 
+           RowBox[{
+            FractionBox[
+             RowBox[{"a", "+", "1"}], "2"], "+", "1"}]}], 
+          "\[RightDoubleBracket]"}], "\[RightDoubleBracket]"}], ")"}], ".", 
+       RowBox[{"g", "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", 
+         RowBox[{"a", "+", "1"}]}], "\[RightDoubleBracket]"}]}], ")"}], 
+     "\[LeftDoubleBracket]", 
+     RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}]}], 
+   "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LengthTwoPaths", "[", 
+    RowBox[{"g1_", ",", "g2_", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"m_", ",", "a_", ",", "b_"}], "}"}], "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"m_", ",", "c_", ",", "d_"}], "}"}]}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"OddQ", "[", "a", "]"}], "\[And]", 
+    RowBox[{"c", "\[Equal]", 
+     RowBox[{"a", "-", "2"}]}]}]}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g", "=", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g1", ",", "g2"}], "}"}], "\[LeftDoubleBracket]", "m", 
+       "\[RightDoubleBracket]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"g", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", 
+          RowBox[{"a", "-", "1"}]}], "\[RightDoubleBracket]"}], "]"}], ".", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"IdentityMatrix", "[", 
+          RowBox[{"RankAtDepth", "[", 
+           RowBox[{"g", ",", 
+            RowBox[{"a", "-", "1"}]}], "]"}], "]"}], "\[LeftDoubleBracket]", 
+         RowBox[{"g", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", 
+           RowBox[{
+            FractionBox[
+             RowBox[{"a", "-", "1"}], "2"], "+", "1"}]}], 
+          "\[RightDoubleBracket]"}], "\[RightDoubleBracket]"}], ")"}], ".", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"g", "\[LeftDoubleBracket]", 
+         RowBox[{"1", ",", "a"}], "\[RightDoubleBracket]"}], "]"}]}], ")"}], 
+     "\[LeftDoubleBracket]", 
+     RowBox[{"d", ",", "b"}], "\[RightDoubleBracket]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468869365958449*^9, 3.4688694209100437`*^9}, {
+  3.468869761511094*^9, 3.4688697962386436`*^9}, {3.468897756151478*^9, 
+  3.4688977901542463`*^9}, {3.468897838671694*^9, 3.468897892701585*^9}, {
+  3.4688980016632957`*^9, 3.468898059365604*^9}, {3.468898169917058*^9, 
+  3.468898204108444*^9}, {3.468898326639563*^9, 3.468898418648625*^9}, {
+  3.469036694455014*^9, 3.469036778411623*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LengthTwoPathsNearTriplePoints", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", "v_"}], 
+   "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Map", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"LengthTwoPaths", "[", 
+      RowBox[{"g1", ",", "g2", ",", "#"}], "]"}], "&"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", "2"}], "\[RightDoubleBracket]"}]}], ",", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"3", ",", "2"}], "\[RightDoubleBracket]"}]}], ",", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}], ",", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"3", ",", "2"}], "\[RightDoubleBracket]"}]}], ",", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"3", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}]}], ",", 
+        RowBox[{
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"3", ",", "1"}], "\[RightDoubleBracket]"}], "\[Rule]", 
+         RowBox[{"#", "\[LeftDoubleBracket]", 
+          RowBox[{"2", ",", "2"}], "\[RightDoubleBracket]"}]}]}], "}"}], 
+      "&"}], "/@", 
+     RowBox[{"TriplePointBijections", "[", 
+      RowBox[{"g1", ",", "g2", ",", "v"}], "]"}]}], ",", 
+    RowBox[{"{", "2", "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.468869806826853*^9, 3.4688699264062023`*^9}, 
+   3.468870011865807*^9, {3.468896632079808*^9, 3.4688966850066233`*^9}, 
+   3.468898427627351*^9, {3.469034956599834*^9, 3.469034959470151*^9}, {
+   3.469036291525613*^9, 3.469036297441877*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NeighbourlyEvenTriplePoints", "[", 
+   RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"e", "=", 
+      RowBox[{"EvenTriplePoints", "[", 
+       RowBox[{"g1", ",", "g2"}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Cases", "[", 
+     RowBox[{
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"Outer", "[", 
+         RowBox[{"List", ",", 
+          RowBox[{"Cases", "[", 
+           RowBox[{"e", ",", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "_", ",", "_"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Cases", "[", 
+           RowBox[{"e", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "_", ",", "_"}], "}"}]}], "]"}], ",", "1"}], 
+         "]"}], ",", "1"}], "]"}], ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"v1_", ",", "v2_"}], "}"}], "/;", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"VertexLeftNeighbours", "[", 
+           RowBox[{"g1", ",", "g2", ",", "v1"}], "]"}], "\[Equal]", 
+          RowBox[{"VertexRightNeighbours", "[", 
+           RowBox[{"g1", ",", "g2", ",", "v2"}], "]"}]}], ")"}], "\[And]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"VertexLeftNeighbours", "[", 
+           RowBox[{"g1", ",", "g2", ",", "v2"}], "]"}], "\[Equal]", 
+          RowBox[{"VertexRightNeighbours", "[", 
+           RowBox[{"g1", ",", "g2", ",", "v1"}], "]"}]}], ")"}]}]}]}], 
+     "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4770134128799143`*^9, 3.4770135031411037`*^9}, {
+  3.477013573546301*^9, 3.4770136599179163`*^9}, {3.477013875192442*^9, 
+  3.477013892055677*^9}, {3.477013980137888*^9, 3.477013981143332*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"TriplePointBijections", "[", 
+    RowBox[{"g1_BigraphWithDuals", ",", "g2_BigraphWithDuals", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"1", "_"}], ",", "depth_", ",", "k1_"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", "depth_", ",", "k2_"}], "}"}]}], "}"}]}], "]"}], "/;", 
+   RowBox[{"EvenQ", "[", "depth", "]"}]}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "g", ",", "d", ",", "n", ",", "q", ",", "dimensions1", ",", 
+      "dimensions2", ",", "permutations"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g", "[", "1", "]"}], ",", 
+        RowBox[{"g", "[", "2", "]"}]}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{"g1", ",", "g2"}], "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dimensions1", "=", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"depth", ",", "k1"}], "}"}], "/.", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"TriplePointsWithRelativeDimensions", "[", 
+          RowBox[{"g1", ",", "g2"}], "]"}], "[", 
+         RowBox[{"d", ",", "n", ",", "q"}], "]"}], "\[LeftDoubleBracket]", 
+        "1", "\[RightDoubleBracket]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dimensions2", "=", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"depth", ",", "k2"}], "}"}], "/.", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"TriplePointsWithRelativeDimensions", "[", 
+          RowBox[{"g1", ",", "g2"}], "]"}], "[", 
+         RowBox[{"d", ",", "n", ",", "q"}], "]"}], "\[LeftDoubleBracket]", 
+        "2", "\[RightDoubleBracket]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"permutations", "=", 
+      RowBox[{"Cases", "[", 
+       RowBox[{
+        RowBox[{"Permutations", "[", "3", "]"}], ",", 
+        RowBox[{"p_", "/;", 
+         RowBox[{"dimensions1", "\[Equal]", 
+          RowBox[{
+          "dimensions2", "\[LeftDoubleBracket]", "p", 
+           "\[RightDoubleBracket]"}]}]}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Thread", "[", 
+        RowBox[{
+         RowBox[{"VertexLeftNeighbours", "[", 
+          RowBox[{"g1", ",", "g2", ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "depth", ",", "k1"}], "}"}]}], "]"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"VertexLeftNeighbours", "[", 
+           RowBox[{"g1", ",", "g2", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "depth", ",", "k2"}], "}"}]}], "]"}], 
+          "\[LeftDoubleBracket]", "#", "\[RightDoubleBracket]"}]}], "]"}], 
+       "&"}], "/@", "permutations"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4770140801881113`*^9, 3.4770142133055983`*^9}, {
+  3.4770142486679077`*^9, 3.477014265750647*^9}, {3.477014298455038*^9, 
+  3.4770143326898823`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{790, 694},
+WindowMargins->{{Automatic, 40}, {Automatic, 0}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 236, 4, 46, "Subtitle",
+ InitializationCell->True],
+Cell[806, 28, 233, 6, 41, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1064, 38, 58, 1, 67, "Section",
+ InitializationCell->True],
+Cell[1125, 41, 129, 2, 26, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1291, 48, 60, 1, 67, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1376, 53, 106, 1, 34, "Subsection"],
+Cell[1485, 56, 45, 0, 26, "Text"],
+Cell[1533, 58, 738, 15, 58, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2308, 78, 36, 0, 34, "Subsection"],
+Cell[2347, 80, 273, 7, 27, "Input",
+ InitializationCell->True],
+Cell[2623, 89, 279, 7, 27, "Input",
+ InitializationCell->True],
+Cell[2905, 98, 276, 7, 27, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3218, 110, 31, 0, 34, "Subsection"],
+Cell[3252, 112, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[3374, 117, 1385, 38, 73, "Input",
+ InitializationCell->True],
+Cell[4762, 157, 1413, 42, 58, "Input",
+ InitializationCell->True],
+Cell[6178, 201, 2281, 60, 103, "Input",
+ InitializationCell->True],
+Cell[8462, 263, 1586, 43, 88, "Input",
+ InitializationCell->True],
+Cell[10051, 308, 3322, 85, 148, "Input",
+ InitializationCell->True],
+Cell[13376, 395, 1254, 32, 58, "Input",
+ InitializationCell->True],
+Cell[14633, 429, 4253, 103, 178, "Input",
+ InitializationCell->True],
+Cell[18889, 534, 500, 12, 43, "Input",
+ InitializationCell->True],
+Cell[19392, 548, 10259, 248, 463, "Input",
+ InitializationCell->True],
+Cell[29654, 798, 4737, 113, 163, "Input",
+ InitializationCell->True],
+Cell[34394, 913, 3430, 89, 178, "Input",
+ InitializationCell->True],
+Cell[37827, 1004, 1912, 47, 88, "Input",
+ InitializationCell->True],
+Cell[39742, 1053, 314, 7, 27, "Input",
+ InitializationCell->True],
+Cell[40059, 1062, 1578, 39, 118, "Input",
+ InitializationCell->True],
+Cell[41640, 1103, 361, 9, 43, "Input",
+ InitializationCell->True],
+Cell[42004, 1114, 1681, 40, 118, "Input",
+ InitializationCell->True],
+Cell[43688, 1156, 365, 9, 43, "Input",
+ InitializationCell->True],
+Cell[44056, 1167, 507, 12, 43, "Input",
+ InitializationCell->True],
+Cell[44566, 1181, 354, 9, 43, "Input",
+ InitializationCell->True],
+Cell[44923, 1192, 2660, 72, 118, "Input",
+ InitializationCell->True],
+Cell[47586, 1266, 2994, 78, 133, "Input",
+ InitializationCell->True],
+Cell[50583, 1346, 1962, 49, 58, "Input",
+ InitializationCell->True],
+Cell[52548, 1397, 2127, 56, 73, "Input",
+ InitializationCell->True],
+Cell[54678, 1455, 336, 8, 27, "Input",
+ InitializationCell->True],
+Cell[55017, 1465, 2783, 68, 73, "Input",
+ InitializationCell->True],
+Cell[57803, 1535, 2895, 75, 73, "Input",
+ InitializationCell->True],
+Cell[60701, 1612, 3524, 85, 229, "Input",
+ InitializationCell->True],
+Cell[64228, 1699, 3820, 98, 251, "Input",
+ InitializationCell->True],
+Cell[68051, 1799, 2397, 52, 73, "Input",
+ InitializationCell->True],
+Cell[70451, 1853, 1825, 45, 103, "Input",
+ InitializationCell->True],
+Cell[72279, 1900, 2947, 76, 163, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[75251, 1980, 96, 1, 24, "Subsubsection"],
+Cell[75350, 1983, 96, 3, 31, "Input",
+ InitializationCell->True]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[75495, 1992, 36, 0, 34, "Subsection"],
+Cell[75534, 1994, 103, 3, 27, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

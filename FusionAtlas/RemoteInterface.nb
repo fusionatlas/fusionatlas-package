@@ -1,0 +1,2391 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     92467,       2382]
+NotebookOptionsPosition[     86694,       2198]
+NotebookOutlinePosition[     87084,       2215]
+CellTagsIndexPosition[     87041,       2212]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["RemoteInterface package", "Subtitle",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291647194886*^9, 3.420291647915923*^9}, {
+  3.422317712155013*^9, 3.4223177168517666`*^9}, {3.4327775537006736`*^9, 
+  3.4327775569353247`*^9}, {3.4343102675775104`*^9, 3.4343102702813983`*^9}, {
+  3.4343112982896013`*^9, 3.4343112986100626`*^9}}],
+
+Cell["\<\
+A subpackage for FusionAtlas v0.
+October 12, 2008, Scott Morrison\
+\>", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291651250718*^9, 3.4202916677744784`*^9}, {
+  3.432777559849515*^9, 3.432777570454765*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ InitializationCell->True],
+
+Cell["---text goes here---", "Text",
+ InitializationCell->True,
+ CellChangeTimes->{{3.420291674724472*^9, 3.420291680042118*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implementation", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell["Start of package", "Subsection",
+ CellChangeTimes->{{3.420295317242155*^9, 3.4202953180032496`*^9}}],
+
+Cell["Specify package dependencies:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BeginPackage", "[", 
+   RowBox[{"\"\<FusionAtlas`RemoteInterface`\>\"", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<FusionAtlas`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`DisplayGraphs`\>\"", ",", 
+      "\"\<FusionAtlas`FindAllBigraphs`\>\"", ",", 
+      "\"\<FusionAtlas`FindGraphPartners`\>\"", ",", 
+      "\"\<FusionAtlas`Debugging`\>\"", ",", "\"\<DatabaseLink`\>\"", ",", 
+      "\"\<FusionAtlas`Java`\>\"", ",", "\"\<JLink`\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4202916841079645`*^9, 3.420291695754712*^9}, {
+   3.420293246855085*^9, 3.420293279181568*^9}, {3.4223177805233216`*^9, 
+   3.422317795274533*^9}, {3.422318235116995*^9, 3.4223182432486877`*^9}, {
+   3.432777576673707*^9, 3.4327775869484816`*^9}, {3.4327796677505283`*^9, 
+   3.432779670003768*^9}, {3.4343102757993326`*^9, 3.434310287896728*^9}, 
+   3.434311301874757*^9, {3.4343162020909214`*^9, 3.4343162049149823`*^9}, {
+   3.4354338450262833`*^9, 3.43543385141547*^9}, 3.4419945772961817`*^9, {
+   3.51058733552915*^9, 3.5105873386945057`*^9}, {3.62343746568752*^9, 
+   3.623437469079309*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Usage messages", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"LookupObstructions", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LoadObstructions", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343103634754047`*^9, 3.4343103666199265`*^9}, {
+  3.509137250583275*^9, 3.509137254014539*^9}}],
+
+Cell[BoxData[
+ RowBox[{"LookupCanonicalForms", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.434564948063056*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"RecordObstructions", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4223177665031614`*^9, 3.4223177692871647`*^9}, 
+   3.4327778032294784`*^9, {3.432777920347886*^9, 3.432777920688376*^9}, 
+   3.4343103598201485`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"RequestObstructions", "::", "usage"}], "=", "\"\<\>\""}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434311403240514*^9, 3.4343114074766045`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ProcessObstructionsQueue", ";", "WorkOnObstructionsQueue", ";", 
+  "ClearObstructionsQueue", ";", "ObstructionsQueueLength", ";", 
+  "EstimateQueueCompletionTime", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434315459192686*^9, 3.4343154614659553`*^9}, {
+  3.4344023222473955`*^9, 3.434402326142997*^9}, {3.4345717983933473`*^9, 
+  3.4345717988239665`*^9}, {3.4345912628418493`*^9, 3.4345912639534483`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RetrieveGraphs", ";", "LookupGraphs", ";", "TakeGraphs", 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4343993272007294`*^9, {3.434562989356574*^9, 3.4345629896469917`*^9}, {
+   3.4346552000550785`*^9, 3.4346552004055824`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"RecordCanonicalForms", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4345616467259665`*^9}],
+
+Cell[BoxData[
+ RowBox[{"RecordFindGraphPartners", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4354335424712305`*^9}],
+
+Cell[BoxData[
+ RowBox[{"GraphsNeedingPartners", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4354393157728305`*^9}],
+
+Cell[BoxData[
+ RowBox[{"ReapplyTestToDatabase", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4355083080585585`*^9}],
+
+Cell[BoxData[
+ RowBox[{"RecordRequestAllBigraphs", ";", "BigraphRequests", ";", 
+  "MaximalBigraphRequests", ";", "MaximalIncompleteBigraphRequests", ";", 
+  "DisplayBigraphRequests", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4356134231869917`*^9, {3.435613746181435*^9, 3.4356137466020403`*^9}, 
+   3.435613787761224*^9, {3.4356156571993437`*^9, 3.4356156591221085`*^9}, {
+   3.4356165626112623`*^9, 3.4356165636327314`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"QueueExpression", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.4358825049372497`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internals", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{"SQLExecute", "[", 
+   RowBox[{
+    RowBox[{"getConnection", "[", "]"}], ",", " ", "\[IndentingNewLine]", 
+    "\"\<DROP TABLE graphs\>\""}], "]"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.434681982287443*^9, 3.4346819874048014`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{"SQLExecute", "[", 
+   RowBox[{
+    RowBox[{"getConnection", "[", "]"}], ",", " ", "\[IndentingNewLine]", 
+    "\"\<DROP TABLE canonical\>\""}], "]"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.43468199202144*^9, 3.4346819931630816`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{"SQLExecute", "[", 
+   RowBox[{
+    RowBox[{"getConnection", "[", "]"}], ",", " ", "\[IndentingNewLine]", 
+    "\"\<CREATE TABLE graphs (graph CHAR(255) UNIQUE NOT NULL, rank INT, \
+depth INT, dimension FLOAT, obstruction CHAR(255))\>\""}], "]"}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.434302505776589*^9, 3.434302589196541*^9}, {
+  3.434302677032843*^9, 3.4343026881087694`*^9}, {3.43430278499809*^9, 
+  3.43430279692524*^9}, {3.4343038251036882`*^9, 3.4343038258647823`*^9}, {
+  3.434310325791218*^9, 3.4343103280044003`*^9}, {3.4346549083756638`*^9, 
+  3.434654950936864*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{"SQLExecute", "[", 
+   RowBox[{
+    RowBox[{"getConnection", "[", "]"}], ",", " ", "\[IndentingNewLine]", 
+    "\"\<CREATE TABLE canonical (graph CHAR(255) UNIQUE NOT NULL, \
+canonicalForm CHAR(255))\>\""}], "]"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.4343026966710815`*^9, 3.4343026995652432`*^9}, {
+  3.4343103299772367`*^9, 3.4343103318098717`*^9}, {3.4346549547823935`*^9, 
+  3.434654979177472*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Off", "[", 
+  RowBox[{"JDBC", "::", "\"\<error\>\""}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.442592890303226*^9, 3.442592895502758*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createConnection", "[", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"conn", "=", 
+     RowBox[{"OpenSQLConnection", "[", 
+      RowBox[{
+       RowBox[{"JDBC", "[", 
+        RowBox[{"\"\<mysql\>\"", ",", "\"\<mysql.tqft.net/fusionatlas\>\""}], 
+        "]"}], ",", 
+       RowBox[{"\"\<Username\>\"", "\[Rule]", "\"\<fusionatlas\>\""}], ",", 
+       RowBox[{"\"\<Password\>\"", "\[Rule]", "\"\<fusion\>\""}], ",", " ", 
+       RowBox[{"\"\<UseConnectionPool\>\"", " ", "\[Rule]", " ", "True"}]}], 
+      "]"}]}], ";"}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343008312086782`*^9, 3.4343008524191775`*^9}, {
+   3.4343008868186417`*^9, 3.434300898996152*^9}, {3.4343009514916368`*^9, 
+   3.434301014642443*^9}, {3.434302247835688*^9, 3.4343022561876974`*^9}, 
+   3.434316758270669*^9, {3.4343892639905443`*^9, 3.434389269858982*^9}, {
+   3.4343983651473646`*^9, 3.4343983714864798`*^9}, 3.495824251800815*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getConnection", "[", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"MatchQ", "[", 
+         RowBox[{"conn", ",", "_SQLConnection"}], "]"}]}], "\[Or]", 
+       RowBox[{"!", 
+        RowBox[{"JavaObjectQ", "[", 
+         RowBox[{
+         "conn", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+         "]"}]}], "\[Or]", 
+       RowBox[{
+        RowBox[{
+        "conn", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "@", 
+        RowBox[{"isClosed", "[", "]"}]}]}], ",", 
+      RowBox[{"createConnection", "[", "]"}]}], "]"}], ";", "conn"}], 
+   ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434398379868533*^9, 3.4343984426287775`*^9}, {
+   3.434398497988381*^9, 3.4343985099255457`*^9}, 3.43439856442391*^9, {
+   3.4343985997446995`*^9, 3.4343986052426047`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"LoadObstructions", "[", 
+    RowBox[{"L", ":", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}], 
+       ".."}], "}"}]}], "]"}], ":=", 
+   RowBox[{"LoadObstructions", "[", 
+    RowBox[{"Union", "[", 
+     RowBox[{"Cases", "[", 
+      RowBox[{"L", ",", "_GradedBigraph", ",", "\[Infinity]"}], "]"}], "]"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RecordObstructions", "[", 
+    RowBox[{"L", ":", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_BigraphWithDuals", ",", "_BigraphWithDuals"}], "}"}], 
+       ".."}], "}"}]}], "]"}], ":=", 
+   RowBox[{"RecordObstructions", "[", 
+    RowBox[{"Union", "[", 
+     RowBox[{"Cases", "[", 
+      RowBox[{"L", ",", "_GradedBigraph", ",", "\[Infinity]"}], "]"}], "]"}], 
+    "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.542737855651731*^9, 3.542737898762899*^9}, {
+  3.5427383134328136`*^9, 3.542738327791524*^9}, {3.54273844524864*^9, 
+  3.542738446405489*^9}, {3.623437611940277*^9, 3.623437629668524*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"LookupObstructions", "[", 
+   RowBox[{"{", "}"}], "]"}], ":=", 
+  RowBox[{"{", "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LookupObstructions", "[", 
+    RowBox[{"graphs", ":", 
+     RowBox[{"{", "__String", "}"}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs", "]"}], "\[LessEqual]", "2500"}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"getConnection", "[", "]"}], "===", "$Failed"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "existingValues", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"DebugPrint", "[", 
+        RowBox[{"\"\<Looking up obstructions for \>\"", ",", 
+         RowBox[{"Length", "[", "graphs", "]"}], ",", " ", 
+         "\"\< graphs in the remote database.\>\""}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"existingValues", "=", 
+        RowBox[{"SQLSelect", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", "\"\<graphs\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<graph\>\"", ",", "\"\<obstruction\>\""}], "}"}], ",", 
+          RowBox[{"SQLMemberQ", "[", 
+           RowBox[{"graphs", ",", 
+            RowBox[{"SQLColumn", "[", "\"\<graph\>\"", "]"}]}], "]"}]}], 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"DebugPrint", "[", 
+        RowBox[{"\"\<Found \>\"", ",", 
+         RowBox[{"Length", "[", "existingValues", "]"}], ",", 
+         "\"\< obstructions.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"FromCharacterCode", "[", 
+            RowBox[{"#", "\[LeftDoubleBracket]", 
+             RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "]"}], ",", 
+           RowBox[{"DeleteCases", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+              "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+              "}"}], ",", "Null"}], "]"}]}], "}"}], "&"}], "/@", 
+        "existingValues"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LookupObstructions", "[", 
+    RowBox[{"graphs", ":", 
+     RowBox[{"{", "__GradedBigraph", "}"}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs", "]"}], "\[LessEqual]", "2500"}]}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"GraphFromString", "[", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       "]"}], ",", 
+      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+     "}"}], "&"}], "/@", 
+   RowBox[{"LookupObstructions", "[", 
+    RowBox[{"GraphToString", "/@", "graphs"}], "]"}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343096323941617`*^9, 3.43430971487276*^9}, {
+   3.4343160837808*^9, 3.4343161026579437`*^9}, {3.434316144768496*^9, 
+   3.434316157236424*^9}, {3.434316290307771*^9, 3.43431630209472*^9}, {
+   3.4343165674863343`*^9, 3.4343165771302013`*^9}, {3.434389484467574*^9, 
+   3.4343894954934287`*^9}, 3.4343986356763663`*^9, 3.434399743389179*^9, {
+   3.434400492115795*^9, 3.434400498424867*^9}, {3.4345534711200223`*^9, 
+   3.4345535014636545`*^9}, {3.434553710073621*^9, 3.4345537664246497`*^9}, {
+   3.434568600745355*^9, 3.4345686013962913`*^9}, {3.4347625527176046`*^9, 
+   3.4347625536789875`*^9}, {3.435883255256155*^9, 3.4358832599729376`*^9}, {
+   3.4359465566500273`*^9, 3.435946560555643*^9}, {3.5105877532880077`*^9, 
+   3.5105877591209307`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LookupObstructions", "[", "graphs_List", "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs", "]"}], ">", "2500"}]}], ":=", 
+  RowBox[{"Join", "@@", 
+   RowBox[{"(", 
+    RowBox[{"LookupObstructions", "/@", 
+     RowBox[{"Partition", "[", 
+      RowBox[{"graphs", ",", "2500", ",", "2500", ",", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "1"}], "}"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}]}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434309746518264*^9, 3.4343097559117713`*^9}, {
+  3.4345534564489264`*^9, 3.434553457059805*^9}, {3.4347625545402255`*^9, 
+  3.4347625553614063`*^9}, {3.4358832626968546`*^9, 3.435883266802758*^9}, {
+  3.435946561537054*^9, 3.4359465626186094`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LoadObstructions", "[", 
+   RowBox[{"list", ":", 
+    RowBox[{"{", "___GradedBigraph", "}"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"LookupObstructions", "[", 
+    RowBox[{"Complement", "[", 
+     RowBox[{"list", ",", 
+      RowBox[{"Cases", "[", 
+       RowBox[{
+        RowBox[{"DownValues", "[", "KnownObstructions", "]"}], ",", 
+        "_GradedBigraph", ",", "\[Infinity]"}], "]"}]}], "]"}], "]"}], "/.", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"g_GradedBigraph", ",", "obstructions_List"}], "}"}], 
+    "\[RuleDelayed]", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"KnownObstructions", "[", "g", "]"}], "=", "obstructions"}], 
+     ")"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.495825213704838*^9, 3.4958252246921577`*^9}, {
+  3.495825279656825*^9, 3.4958253290558863`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"RecordObstructions", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", 
+    RowBox[{"force_:", "False"}]}], "]"}], ":=", 
+  "Null"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RecordObstructions", "[", 
+    RowBox[{
+     RowBox[{"graphs0", ":", 
+      RowBox[{"{", "__GradedBigraph", "}"}]}], ",", 
+     RowBox[{"force_:", "False"}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs0", "]"}], "\[LessEqual]", "1000"}]}], ":=",
+   "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"getConnection", "[", "]"}], "===", "$Failed"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"DebugPrint", "[", "\"\<SQL connection failed.\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", "Null"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "graphs", ",", "existingGraphs", ",", "toInsert", ",", "dataToInsert", 
+        ",", "result"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"graphs", "=", 
+         RowBox[{"RecordCanonicalForms", "[", "graphs0", "]"}]}], ";"}], 
+       "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"graphs", "=", "graphs0"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"existingGraphs", ":=", 
+        RowBox[{"If", "[", 
+         RowBox[{"force", ",", "\[IndentingNewLine]", 
+          RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"GraphFromString", "[", 
+             RowBox[{"FromCharacterCode", "[", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "]"}], 
+             "]"}], "&"}], "/@", 
+           RowBox[{"SQLSelect", "[", 
+            RowBox[{
+             RowBox[{"getConnection", "[", "]"}], ",", "\"\<graphs\>\"", ",", 
+             RowBox[{"{", "\"\<graph\>\"", "}"}], ",", 
+             RowBox[{"SQLMemberQ", "[", 
+              RowBox[{
+               RowBox[{"GraphHash", "/@", "graphs"}], ",", 
+               RowBox[{"SQLColumn", "[", "\"\<hash\>\"", "]"}]}], "]"}]}], 
+            "]"}]}]}], "\[IndentingNewLine]", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"toInsert", ":=", 
+        RowBox[{"Complement", "[", 
+         RowBox[{"graphs", ",", "existingGraphs"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{"calculate", " ", "obstructions"}], " ", "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"KnownObstructions", "/@", "toInsert"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"dataToInsert", "=", 
+        RowBox[{"toInsert", "/.", 
+         RowBox[{"g_GradedBigraph", "\[RuleDelayed]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"GraphHash", "[", "g", "]"}], ",", 
+            RowBox[{"GraphToString", "[", "g", "]"}], ",", 
+            RowBox[{"GraphRank", "[", "g", "]"}], ",", 
+            RowBox[{"GraphDepth", "[", "g", "]"}], ",", 
+            RowBox[{"NumericDimensionOfGenerator", "[", "g", "]"}], ",", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Length", "[", 
+                RowBox[{"KnownObstructions", "[", "g", "]"}], "]"}], ">", 
+               "0"}], ",", 
+              RowBox[{
+               RowBox[{"KnownObstructions", "[", "g", "]"}], 
+               "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ",", 
+              "Null"}], "]"}]}], "}"}]}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"DebugPrint", "[", 
+        RowBox[{"\"\<Recording obstructions for \>\"", ",", 
+         RowBox[{"Length", "[", "dataToInsert", "]"}], ",", " ", 
+         "\"\< graphs in the remote database.\>\""}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "dataToInsert", "]"}], ">", "0"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"If", "[", 
+           RowBox[{"force", ",", 
+            RowBox[{
+             RowBox[{"SQLDelete", "[", 
+              RowBox[{
+               RowBox[{"getConnection", "[", "]"}], ",", "\"\<graphs\>\"", 
+               ",", 
+               RowBox[{"SQLMemberQ", "[", 
+                RowBox[{
+                 RowBox[{"GraphHash", "/@", "graphs"}], ",", 
+                 RowBox[{"SQLColumn", "[", "\"\<hash\>\"", "]"}]}], "]"}]}], 
+              "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{
+            RowBox[{"DebugPrint", "[", "dataToInsert", "]"}], ";"}], "*)"}], 
+          "\[IndentingNewLine]", 
+          RowBox[{"result", "=", 
+           RowBox[{"SQLInsert", "[", " ", 
+            RowBox[{
+             RowBox[{"getConnection", "[", "]"}], ",", "\"\<graphs\>\"", ",", 
+             " ", 
+             RowBox[{"{", 
+              RowBox[{
+              "\"\<hash\>\"", ",", "\"\<graph\>\"", ",", "\"\<rank\>\"", ",", 
+               "\"\<depth\>\"", ",", "\"\<dimension\>\"", ",", 
+               "\"\<obstruction\>\""}], "}"}], ",", "dataToInsert"}], "]"}]}],
+           ";"}]}], "\[IndentingNewLine]", "]"}], ";"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RecordObstructions", "[", 
+    RowBox[{
+     RowBox[{"graphs", ":", 
+      RowBox[{"{", "__String", "}"}]}], ",", 
+     RowBox[{"force_:", "False"}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs", "]"}], "\[LessEqual]", "1000"}]}], ":=", 
+  RowBox[{"RecordObstructions", "[", 
+   RowBox[{
+    RowBox[{"GraphFromString", "/@", "graphs"}], ",", "force"}], 
+   "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434304397757123*^9, 3.4343045164077344`*^9}, {
+   3.4343052926939793`*^9, 3.4343053753728657`*^9}, {3.434305415710869*^9, 
+   3.434305633774429*^9}, {3.4343059159902353`*^9, 3.4343059169516177`*^9}, {
+   3.4343161151559153`*^9, 3.434316124819811*^9}, {3.434316316395283*^9, 
+   3.4343163268703456`*^9}, {3.4343165868241405`*^9, 3.434316593373558*^9}, {
+   3.434389519708248*^9, 3.434389578272459*^9}, {3.4343986368280225`*^9, 
+   3.4343986408538113`*^9}, {3.4343997046134224`*^9, 
+   3.4343997111728544`*^9}, {3.4343998074813395`*^9, 3.434399828882112*^9}, {
+   3.434400302312872*^9, 3.434400303053938*^9}, {3.4344003856426945`*^9, 
+   3.434400390339448*^9}, {3.4344004230665073`*^9, 3.4344004253497906`*^9}, {
+   3.4345535263093805`*^9, 3.4345535337901373`*^9}, {3.4345611968891325`*^9, 
+   3.434561211560229*^9}, {3.4345686043605537`*^9, 3.4345686049814463`*^9}, {
+   3.4347396883146353`*^9, 3.434739801847888*^9}, {3.4347625606990814`*^9, 
+   3.4347625614802046`*^9}, {3.4354444492944717`*^9, 3.435444479688176*^9}, {
+   3.4354445142779136`*^9, 3.4354445667032976`*^9}, 3.435444736207032*^9, {
+   3.4354448602954626`*^9, 3.4354448748363714`*^9}, {3.435457177866954*^9, 
+   3.4354571800500927`*^9}, {3.4356905357972946`*^9, 
+   3.4356906380543327`*^9}, {3.4358833119276447`*^9, 
+   3.4358833160035057`*^9}, {3.4958246367977667`*^9, 3.495824647740645*^9}, {
+   3.510516525353696*^9, 3.510516533988353*^9}, {3.510518005002996*^9, 
+   3.5105180122156343`*^9}, {3.510587346982667*^9, 3.510587353736987*^9}, {
+   3.51058802539425*^9, 3.510588026814266*^9}, {3.51058806256135*^9, 
+   3.510588143678914*^9}, {3.5105937950492163`*^9, 3.510593815616496*^9}, {
+   3.510593846054604*^9, 3.510593886643635*^9}, {3.510593937804151*^9, 
+   3.510593964687047*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RecordObstructions", "[", 
+     RowBox[{
+      RowBox[{"graphs", ":", 
+       RowBox[{"{", "___GradedBigraph", "}"}]}], ",", 
+      RowBox[{"force_:", "False"}]}], "]"}], "/;", 
+    RowBox[{
+     RowBox[{"Length", "[", "graphs", "]"}], ">", "1000"}]}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RecordObstructions", "[", 
+      RowBox[{"#", ",", "force"}], "]"}], "&"}], "/@", 
+    RowBox[{"Partition", "[", 
+     RowBox[{"graphs", ",", "1000", ",", "1000", ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "1"}], "}"}], ",", 
+      RowBox[{"{", "}"}]}], "]"}]}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343056901354723`*^9, 3.4343057066291885`*^9}, {
+  3.4343058079248447`*^9, 3.4343058197418365`*^9}, {3.4345535199001646`*^9, 
+  3.43455352089159*^9}, {3.43476256206104*^9, 3.4347625626819324`*^9}, {
+  3.4354444843649006`*^9, 3.4354444938986096`*^9}, {3.4358833176859245`*^9, 
+  3.4358833210808067`*^9}, {3.542738521609623*^9, 3.54273852555691*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<JLink`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4356253807324924`*^9, 3.4356253846080656`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"getQueueService", "[", "]"}], ":=", "$Failed", 
+  RowBox[{"(*", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"!", 
+      RowBox[{"JavaObjectQ", "[", "queueService", "]"}]}], ",", 
+     RowBox[{"queueService", "=", 
+      RowBox[{"JavaNew", "[", 
+       RowBox[{
+       "\"\<com.xerox.amazonws.sqs2.QueueService\>\"", ",", "\"\<\>\"", ",", 
+        "\"\<\>\""}], "]"}]}], ",", "queueService"}], "]"}], 
+   "*)"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435624532312525*^9, 3.435624577587627*^9}, {
+  3.566856464853383*^9, 3.56685648508464*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"numberOfQueues", "=", "2"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435617878012717*^9, 3.4356178820084624`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createQueue", "[", "k_", "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"$JavaExceptionHandler", "=", 
+      RowBox[{"#", "&"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"queue", "[", "k", "]"}], "=", 
+      RowBox[{
+       RowBox[{"getQueueService", "[", "]"}], "@", 
+       RowBox[{"getOrCreateMessageQueue", "[", 
+        RowBox[{"\"\<Obstructions-\>\"", "<>", 
+         RowBox[{"ToString", "[", "k", "]"}]}], "]"}]}]}], ";", 
+     RowBox[{
+      RowBox[{"queue", "[", "k", "]"}], "=", 
+      RowBox[{
+       RowBox[{"getQueueService", "[", "]"}], "@", 
+       RowBox[{"getOrCreateMessageQueue", "[", 
+        RowBox[{"\"\<https://queue.amazonaws.com:443/Obstructions-\>\"", "<>", 
+         RowBox[{"ToString", "[", "k", "]"}]}], "]"}]}]}], ";", 
+     RowBox[{
+      RowBox[{"queue", "[", "k", "]"}], "@", 
+      RowBox[{"setQueueAttribute", "[", 
+       RowBox[{"\"\<VisibilityTimeout\>\"", ",", "\"\<3600\>\""}], "]"}]}], 
+     ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434402382103464*^9, 3.434402388542723*^9}, {
+   3.4344035482302723`*^9, 3.434403556492152*^9}, 3.434403775837555*^9, {
+   3.4354473046302433`*^9, 3.4354473446177425`*^9}, 3.435454086501789*^9, {
+   3.4354541264892883`*^9, 3.435454131816949*^9}, {3.4354542495862927`*^9, 
+   3.435454255504803*^9}, 3.4354543337272816`*^9, {3.435454367996558*^9, 
+   3.4354543689479265`*^9}, {3.4354545416262255`*^9, 3.435454553182843*^9}, {
+   3.435617850352944*^9, 3.435617902297637*^9}, {3.43562458537883*^9, 
+   3.435624631014451*^9}, {3.436033503240997*^9, 3.43603351362593*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createQueue", "/@", 
+   RowBox[{"Range", "[", "numberOfQueues", "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435617909738336*^9, 3.4356179359360065`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ObstructionsQueueLength", "[", "]"}], ":=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"queue", "[", "#", "]"}], "@", 
+       RowBox[{"getApproximateNumberOfMessages", "[", "]"}]}], ")"}], "&"}], "/@", 
+    RowBox[{"Range", "[", "numberOfQueues", "]"}]}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434571695495387*^9, 3.4345717250578957`*^9}, {
+  3.434571788799552*^9, 3.4345717919440737`*^9}, {3.435611665048914*^9, 
+  3.435611668183421*^9}, {3.4356179202434416`*^9, 3.4356179288057537`*^9}, {
+  3.435618578279651*^9, 3.435618581103712*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EstimateQueueCompletionTime", "[", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"starttime", "=", 
+       RowBox[{"AbsoluteTime", "[", "]"}]}], ",", 
+      RowBox[{"startsize", "=", 
+       RowBox[{"Plus", "@@", 
+        RowBox[{"ObstructionsQueueLength", "[", "]"}]}]}], ",", "time", ",", 
+      "size"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Print", "[", 
+      RowBox[{
+      "startsize", ",", "\"\< queue items remain. \>\"", ",", " ", 
+       "\"\<There are \>\"", ",", 
+       RowBox[{
+        RowBox[{"SQLExecute", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", 
+          "\"\<SELECT COUNT(graph) FROM graphs\>\""}], "]"}], 
+        "\[LeftDoubleBracket]", 
+        RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+       "\"\< rows in the graphs table. \>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{"True", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"size", "=", 
+         RowBox[{"Plus", "@@", 
+          RowBox[{"ObstructionsQueueLength", "[", "]"}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Print", "[", 
+         RowBox[{
+         "size", ",", "\"\< queue items remain. \>\"", ",", " ", 
+          "\"\<There are \>\"", ",", 
+          RowBox[{
+           RowBox[{"SQLExecute", "[", 
+            RowBox[{
+             RowBox[{"getConnection", "[", "]"}], ",", 
+             "\"\<SELECT COUNT(graph) FROM graphs\>\""}], "]"}], 
+           "\[LeftDoubleBracket]", 
+           RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+          "\"\< rows in the graphs table. \>\"", ",", 
+          "\"\<Completion expected in \>\"", ",", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"startsize", "\[Equal]", "size"}], ",", "\[Infinity]", 
+            ",", 
+            RowBox[{
+             FractionBox[
+              RowBox[{
+               RowBox[{"AbsoluteTime", "[", "]"}], "-", "starttime"}], 
+              RowBox[{"startsize", "-", "size"}]], "size"}]}], "]"}], ",", 
+          " ", "\"\< seconds.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Pause", "[", "10", "]"}]}]}], "\[IndentingNewLine]", "]"}], 
+     ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.43459125499056*^9, {3.4346422469834447`*^9, 3.4346422733313313`*^9}, {
+   3.4347327855189023`*^9, 3.434732832766842*^9}, {3.434732882017661*^9, 
+   3.434732924779149*^9}, 3.4347329745206738`*^9, {3.4347331381759987`*^9, 
+   3.4347331790447645`*^9}, {3.4347332426362047`*^9, 3.434733263275883*^9}, {
+   3.435617946721515*^9, 3.4356179534311633`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RequestObstructions", "[", 
+   RowBox[{"{", "}"}], "]"}], ":=", "Null"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343114317815533`*^9, 3.4343114347858734`*^9}, {
+  3.43431432425072*^9, 3.434314450832736*^9}, {3.4343163335499506`*^9, 
+  3.4343163418118305`*^9}, {3.43431661270135*^9, 3.4343166206728125`*^9}, {
+  3.434403778190939*^9, 3.434403780544323*^9}, {3.4344049615325007`*^9, 
+  3.434404997974902*^9}, {3.4344050472457504`*^9, 3.4344050909185486`*^9}, {
+  3.4344051547102766`*^9, 3.43440515824536*^9}, {3.434408141835552*^9, 
+  3.4344081578485775`*^9}, {3.4344083363051853`*^9, 3.434408336365272*^9}, {
+  3.434409898261168*^9, 3.4344098995930834`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RequestObstructions", "[", 
+   RowBox[{"graphs", ":", 
+    RowBox[{"{", "__GradedBigraph", "}"}]}], "]"}], ":=", 
+  RowBox[{"RequestObstructions", "[", 
+   RowBox[{"GraphToString", "/@", "graphs"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4345535796060176`*^9, 3.434553610139923*^9}, 
+   3.4345686056123533`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RequestObstructions", "[", 
+   RowBox[{
+    RowBox[{"graphStrings0", ":", 
+     RowBox[{"{", "__String", "}"}]}], ",", 
+    RowBox[{"queueNumber_:", "1"}]}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"messageBody", ",", "result", ",", "length", ",", "set", ",", 
+      RowBox[{"graphStrings", "=", "graphStrings0"}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"MatchQ", "[", 
+        RowBox[{
+         RowBox[{"queue", "[", "queueNumber", "]"}], ",", " ", 
+         RowBox[{"$Failed", " ", "|", " ", "_$Failed"}]}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"createQueue", "[", "queueNumber", "]"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<Putting \>\"", ",", 
+       RowBox[{"Length", "[", "graphStrings", "]"}], ",", " ", 
+       "\"\< graphs on the obstruction queue.\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "graphStrings", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"length", "=", "2"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"set", "=", 
+         RowBox[{"TakeWhile", "[", 
+          RowBox[{"graphStrings", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"length", "+=", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"StringLength", "[", "#", "]"}], "+", "2"}], ")"}]}],
+               ")"}], "<", "3500"}], "&"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"graphStrings", "=", 
+         RowBox[{"Drop", "[", 
+          RowBox[{"graphStrings", ",", 
+           RowBox[{"Length", "[", "set", "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"messageBody", "=", 
+         RowBox[{"ToString", "[", "set", "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"DebugPrint", "[", 
+         RowBox[{"\"\<Sending message containing \>\"", ",", 
+          RowBox[{"Length", "[", "set", "]"}], ",", " ", "\"\< graphs.\>\""}],
+          "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Block", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"$JavaExceptionHandler", "=", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"createQueue", "[", "queueNumber", "]"}], ";", 
+               RowBox[{"DebugPrint", "[", 
+                RowBox[{"\"\<Java exception: \>\"", ",", "#3"}], "]"}]}], 
+              ")"}], "&"}]}], "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"result", "=", 
+            RowBox[{
+             RowBox[{"queue", "[", "queueNumber", "]"}], "@", 
+             RowBox[{"sendMessage", "[", "messageBody", "]"}]}]}], ";"}]}], 
+         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"DebugPrint", "[", "result", "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"MatchQ", "[", 
+           RowBox[{"result", ",", 
+            RowBox[{"$Failed", "|", "_$Failed"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+           "DebugPrint", "[", 
+            "\"\<Failed to send message to the queue...\>\"", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"createQueue", "[", "queueNumber", "]"}], ";"}]}], 
+         "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], 
+     ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434409658416288*^9, 3.4344097195141425`*^9}, {
+   3.4344097849482317`*^9, 3.434409880085032*^9}, {3.434409947762347*^9, 
+   3.434409949164363*^9}, {3.434553562891984*^9, 3.43455357706236*^9}, {
+   3.4345545044859295`*^9, 3.4345545161026335`*^9}, {3.434563665198387*^9, 
+   3.4345636702857027`*^9}, {3.434565618106531*^9, 3.4345656220221615`*^9}, 
+   3.4345686073148017`*^9, 3.4345702652788367`*^9, {3.4356110830620575`*^9, 
+   3.435611097072203*^9}, {3.4356112924831905`*^9, 3.435611298561931*^9}, {
+   3.435611428068152*^9, 3.435611444822243*^9}, {3.4356179806402884`*^9, 
+   3.435618011404525*^9}, 3.4356199099745345`*^9}],
+
+Cell[BoxData[
+ RowBox[{"SetAttributes", "[", 
+  RowBox[{"QueueExpression", ",", "HoldFirst"}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435882479440587*^9, 3.435882485889861*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"QueueExpression", "[", 
+   RowBox[{"x_", ",", 
+    RowBox[{"queueNumber_Integer:", "1"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "messageBody", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"messageBody", "=", 
+      RowBox[{"ToStringHeld", "[", "x", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Block", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"$JavaExceptionHandler", "=", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"createQueue", "[", "queueNumber", "]"}], ";", 
+            RowBox[{"DebugPrint", "[", 
+             RowBox[{"\"\<Java exception: \>\"", ",", "#3"}], "]"}]}], ")"}], 
+          "&"}]}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"queue", "[", "queueNumber", "]"}], "@", 
+        RowBox[{"sendMessage", "[", "messageBody", "]"}]}]}], 
+      "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4358824132053456`*^9, 3.435882471028491*^9}, 
+   3.4358825571222878`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MatrixStringPattern", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"DigitCharacter", ".."}], ")"}], "~~", "\"\<x\>\""}], 
+           ")"}], "..."}], "~~", 
+         RowBox[{"(", 
+          RowBox[{"DigitCharacter", ".."}], ")"}]}], ")"}], "~~", 
+       "\"\<p\>\""}], ")"}], "..."}], "~~", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"DigitCharacter", ".."}], ")"}], "~~", "\"\<x\>\""}], ")"}],
+        "..."}], "~~", 
+      RowBox[{"(", 
+       RowBox[{"DigitCharacter", ".."}], ")"}]}], ")"}]}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4358807815591536`*^9, 3.435880884587301*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphStringPattern", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"\"\<gbg\>\"", "|", "\"\<gg\>\""}], ")"}], "~~", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"MatrixStringPattern", ".."}], "~~", "\"\<v\>\""}], ")"}], 
+     "..."}], "~~", "MatrixStringPattern"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435880719379744*^9, 3.435880780167152*^9}}],
+
+Cell[BoxData[
+ RowBox[{"SetAttributes", "[", 
+  RowBox[{"ToStringHeld", ",", "HoldFirst"}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ToStringHeld", "[", "e_", "]"}], ":=", 
+  RowBox[{"StringTake", "[", 
+   RowBox[{
+    RowBox[{"ToString", "[", 
+     RowBox[{
+      RowBox[{"HoldForm", "[", "e", "]"}], ",", "InputForm"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"10", ",", 
+      RowBox[{"-", "2"}]}], "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4358819923201427`*^9, 3.4358819926806607`*^9}, {
+  3.4358820780434065`*^9, 3.4358820904913054`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GlobalToExpression", "[", "S_String", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"oldContext", "=", "$Context"}], ",", "result"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"$Context", "=", "\"\<Global`\>\""}], ";", "\[IndentingNewLine]", 
+     RowBox[{"result", "=", 
+      RowBox[{"ToExpression", "[", "S", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"$Context", "=", "oldContext"}], ";", "\[IndentingNewLine]", 
+     "result"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435881299043259*^9, 3.435881344408491*^9}, {
+  3.435972078108082*^9, 3.435972088763403*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ProcessObstructionsQueue", "[", 
+   RowBox[{"queueNumber_:", "1"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"message", ",", "messageBody", ",", 
+      RowBox[{"graphs", "=", 
+       RowBox[{"{", "}"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"MatchQ", "[", 
+        RowBox[{
+         RowBox[{"queue", "[", "queueNumber", "]"}], ",", " ", 
+         RowBox[{"$Failed", " ", "|", " ", "_$Failed"}]}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"createQueue", "[", "queueNumber", "]"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Block", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"$JavaExceptionHandler", "=", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"createQueue", "[", "queueNumber", "]"}], ";", 
+            RowBox[{"DebugPrint", "[", 
+             RowBox[{"\"\<Java exception: \>\"", ",", "#3"}], "]"}]}], ")"}], 
+          "&"}]}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"message", "=", 
+         RowBox[{
+          RowBox[{"queue", "[", "queueNumber", "]"}], "@", 
+          RowBox[{"receiveMessage", "[", "]"}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"MatchQ", "[", 
+           RowBox[{"message", ",", 
+            RowBox[{"$Failed", "|", "_$Failed"}]}], "]"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+           "DebugPrint", "[", "\"\<Failed to receive message.\>\"", "]"}], 
+           ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"message", "=!=", "Null"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"DebugPrint", "[", 
+            RowBox[{
+            "\"\<Received a message from queue \>\"", ",", "queueNumber"}], 
+            "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"messageBody", "=", 
+            RowBox[{"message", "@", 
+             RowBox[{"getMessageBody", "[", "]"}]}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"DebugPrint", "[", "messageBody", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Switch", "[", 
+            RowBox[{"messageBody", ",", "\[IndentingNewLine]", 
+             RowBox[{"S_", "/;", 
+              RowBox[{"StringMatchQ", "[", 
+               RowBox[{"S", ",", "\[IndentingNewLine]", 
+                RowBox[{"\"\<{\>\"", "~~", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{"GraphStringPattern", "~~", "\"\<, \>\""}], ")"}], 
+                  "..."}], "~~", "GraphStringPattern", "~~", "\"\<}\>\""}]}], 
+               "]"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+              "DebugPrint", "[", 
+               "\"\<Just contains a list of graphs; recording obstructions...\
+\>\"", "]"}], ";", "\[IndentingNewLine]", 
+              RowBox[{"graphs", "=", 
+               RowBox[{"StringSplit", "[", 
+                RowBox[{
+                 RowBox[{"StringTake", "[", 
+                  RowBox[{"messageBody", ",", 
+                   RowBox[{"{", 
+                    RowBox[{"2", ",", 
+                    RowBox[{"-", "2"}]}], "}"}]}], "]"}], ",", "\"\<, \>\""}],
+                 "]"}]}], ";", "\[IndentingNewLine]", 
+              RowBox[{"DebugPrint", "[", 
+               RowBox[{"\"\<Beginning work on \>\"", ",", 
+                RowBox[{"Length", "[", "graphs", "]"}], ",", " ", 
+                "\"\< graphs\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+              RowBox[{"RecordObstructions", "[", "graphs", "]"}], ";"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"S_", "/;", 
+              RowBox[{"StringMatchQ", "[", 
+               RowBox[{"S", ",", "\[IndentingNewLine]", 
+                RowBox[{"\"\<RecordObstructions[{\>\"", "~~", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                   "\"\<\\\"\>\"", "~~", "GraphStringPattern", "~~", 
+                    "\"\<\\\"\>\"", "~~", "\"\<, \>\""}], ")"}], "..."}], 
+                 "~~", "\"\<\\\"\>\"", "~~", "GraphStringPattern", "~~", 
+                 "\"\<\\\"\>\"", "~~", "\"\<}\>\""}]}], "]"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+              "DebugPrint", "[", 
+               "\"\<Looks like a request to record obstructions; \
+starting...\>\"", "]"}], ";", "\[IndentingNewLine]", 
+              RowBox[{"GlobalToExpression", "[", "messageBody", "]"}], ";"}], 
+             ",", "\[IndentingNewLine]", 
+             RowBox[{"S_", "/;", 
+              RowBox[{"StringMatchQ", "[", 
+               RowBox[{"S", ",", 
+                RowBox[{
+                "\"\<RequestAllBigraphs[\>\"", "~~", "___", "~~", 
+                 "\"\<]\>\""}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"GlobalToExpression", "[", "messageBody", "]"}], ";"}], 
+             ",", "\[IndentingNewLine]", "_", ",", 
+             RowBox[{
+              RowBox[{
+              "Print", "[", 
+               "\"\<Warning! Unexpected message arrived on the queue; \
+ignoring.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+           "DebugPrint", "[", 
+            "\"\<Finished work, deleting message from the queue.\>\"", "]"}], 
+           ";", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"queue", "[", "queueNumber", "]"}], "@", 
+            RowBox[{"deleteMessage", "[", "message", "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+           "DebugPrint", "[", "\"\<Deleted message from queue.\>\"", "]"}], 
+           ";"}]}], "\[IndentingNewLine]", "]"}], ";"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Length", "[", "graphs", "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343144675768127`*^9, 3.4343145414229984`*^9}, {
+   3.434315104973344*^9, 3.4343152836102114`*^9}, {3.4343153179395742`*^9, 
+   3.434315324408877*^9}, {3.4343166298660316`*^9, 3.434316643846134*^9}, 
+   3.434398641745093*^9, {3.434403792331272*^9, 3.434403819149835*^9}, {
+   3.434405115453829*^9, 3.4344051459176335`*^9}, {3.43456452596611*^9, 
+   3.4345645349890847`*^9}, 3.4345645874645405`*^9, {3.434568499850275*^9, 
+   3.4345685290021935`*^9}, {3.4356110812794943`*^9, 3.435611105704616*^9}, {
+   3.4356114703890066`*^9, 3.4356114780299935`*^9}, {3.43561801965639*^9, 
+   3.4356180567196846`*^9}, {3.435618489692269*^9, 3.435618497193054*^9}, 
+   3.4356193980584354`*^9, {3.435880560431187*^9, 3.435880563325349*^9}, {
+   3.4358806199467664`*^9, 3.4358807113982673`*^9}, {3.4358809487295327`*^9, 
+   3.435880968608117*^9}, {3.435881006732938*^9, 3.4358811968262787`*^9}, {
+   3.435881227129853*^9, 3.435881294937355*^9}, {3.435881349165331*^9, 
+   3.4358814603952723`*^9}, {3.4358822084208803`*^9, 3.435882241338213*^9}, {
+   3.4358846321259966`*^9, 3.435884632506544*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"WorkOnObstructionsQueue", "[", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"While", "[", 
+     RowBox[{"True", ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"ProcessObstructionsQueue", "[", "1", "]"}], ">", "0"}], 
+         ",", 
+         RowBox[{"{", "}"}]}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"ObstructionsQueueLength", "[", "]"}], 
+           "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "<", 
+          "1000"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"RandomReal", "[", "]"}], "<", "0.01"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"RandomReal", "[", "]"}], "<", "0.4"}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{"RequestMoreBigraphs", "[", "2", "]"}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{"RerequestSomeBigraphs", "[", "2", "]"}]}], 
+              "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", 
+           "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"ProcessObstructionsQueue", "[", "2", "]"}], "\[Equal]", 
+          "0"}], ",", 
+         RowBox[{"Pause", "[", "10", "]"}]}], "]"}], ";"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343153781261187`*^9, 3.4343154415272846`*^9}, {
+   3.4356180921806755`*^9, 3.4356181632328434`*^9}, {3.4356185955945487`*^9, 
+   3.4356185957147217`*^9}, {3.43561956797276*^9, 3.435619569955611*^9}, 
+   3.435619976179733*^9, 3.4356204377534432`*^9, 3.4356210139119186`*^9, 
+   3.4356224122139726`*^9, 3.435622522833035*^9, {3.4356229574780235`*^9, 
+   3.4356230829884987`*^9}, {3.435623711992963*^9, 3.435623732121907*^9}, 
+   3.43562383689256*^9, {3.435626204617181*^9, 3.4356262333484945`*^9}, {
+   3.4356379501335955`*^9, 3.43563795105492*^9}, {3.435683133313045*^9, 
+   3.4356831372286754`*^9}, 3.4356833546312847`*^9, {3.4356835166242194`*^9, 
+   3.435683554318421*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RerequestSomeBigraphs", "[", 
+   RowBox[{"k_Integer:", "1"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"requests", ",", "norm", ",", "rank", ",", "seed"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"requests", "=", 
+      RowBox[{"MaximalIncompleteBigraphRequests", "[", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"requests", "=", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{"requests", ",", 
+        RowBox[{"{", 
+         RowBox[{"___", ",", "0"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "requests", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"norm", ",", "rank", ",", "seed"}], "}"}], "=", 
+         RowBox[{"Take", "[", 
+          RowBox[{
+           RowBox[{"RandomChoice", "[", 
+            RowBox[{"SortBy", "[", 
+             RowBox[{"requests", ",", 
+              RowBox[{
+               RowBox[{
+               "#", "\[LeftDoubleBracket]", "6", "\[RightDoubleBracket]"}], 
+               "&"}]}], "]"}], "]"}], ",", "3"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"DebugPrint", "[", 
+         RowBox[{
+         "\"\<About to run RequestAllBigraphs[\>\"", ",", "norm", ",", 
+          "\"\<, \>\"", ",", "rank", ",", "\"\<, \>\"", ",", 
+          RowBox[{"DisplayBigraph", "[", "seed", "]"}], ",", "\"\<]\>\""}], 
+         "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"RequestAllBigraphs", "[", 
+         RowBox[{"norm", ",", "rank", ",", "seed", ",", "k"}], "]"}]}]}], 
+      "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435623767432681*^9, 3.4356238111255083`*^9}, {
+  3.435624119699216*^9, 3.435624151534993*^9}, {3.4356243202776337`*^9, 
+  3.4356243285395136`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ClearObstructionsQueue", "[", 
+   RowBox[{"k_:", "1"}], "]"}], ":=", 
+  RowBox[{"Block", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"$JavaExceptionHandler", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"DebugPrint", "[", 
+         RowBox[{"\"\<Java exception: \>\"", ",", "#3"}], "]"}], ")"}], 
+       "&"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"queue", "[", "k", "]"}], "@", 
+      RowBox[{"deleteQueue", "[", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"createQueue", "[", "k", "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434402336017195*^9, 3.434402351068838*^9}, {
+   3.4344024464760275`*^9, 3.4344024516434574`*^9}, {3.434402524097642*^9, 
+   3.4344025333509474`*^9}, {3.434403570231909*^9, 3.4344035707025857`*^9}, {
+   3.4344051730666723`*^9, 3.434405193866581*^9}, {3.435618174869576*^9, 
+   3.4356181833718014`*^9}, 3.435623868888568*^9, {3.4356239148446493`*^9, 
+   3.4356239241580415`*^9}, 3.435624759799635*^9}],
+
+Cell[BoxData[
+ RowBox[{"SetAttributes", "[", 
+  RowBox[{"RetrieveGraphs", ",", 
+   RowBox[{"{", "HoldAll", "}"}]}], "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343911437935677`*^9, 3.434391164012642*^9}, {
+   3.4343993212221327`*^9, 3.4343993217629104`*^9}, 3.4345629727627134`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RetrieveGraphs", "[", "condition_", "]"}], ":=", 
+  RowBox[{"GraphFromString", "/@", 
+   RowBox[{"First", "/@", 
+    RowBox[{"SortBy", "[", 
+     RowBox[{
+      RowBox[{"SQLSelect", "[", 
+       RowBox[{
+        RowBox[{"getConnection", "[", "]"}], ",", "\"\<graphs\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<graph\>\"", ",", "\"\<dimension\>\""}], "}"}], ",", 
+        RowBox[{"ReleaseHold", "[", 
+         RowBox[{
+          RowBox[{"Hold", "[", "condition", "]"}], "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"\"\<seed\>\"", "\[Equal]", "g_GradedBigraph"}], 
+             "\[RuleDelayed]", 
+             RowBox[{"SQLStringMatchQ", "[", 
+              RowBox[{
+               RowBox[{"SQLColumn", "[", "\"\<graph\>\"", "]"}], ",", 
+               RowBox[{
+                RowBox[{"GraphToString", "[", "g", "]"}], "<>", 
+                "\"\<v%\>\""}]}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"\"\<obstruction\>\"", "\[Equal]", "S_String"}], ":>", 
+             RowBox[{"SQLStringMatchQ", "[", 
+              RowBox[{
+               RowBox[{"SQLColumn", "[", "\"\<obstruction\>\"", "]"}], ",", 
+               "S"}], "]"}]}], ",", 
+            RowBox[{"S_String", "\[RuleDelayed]", 
+             RowBox[{"SQLColumn", "[", "S", "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"\[Alpha]_", "?", "NumericQ"}], "\[RuleDelayed]", 
+             RowBox[{"N", "[", "\[Alpha]", "]"}]}]}], "}"}]}], "]"}]}], "]"}],
+       ",", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+       "&"}]}], "]"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434390953219536*^9, 3.4343910521117363`*^9}, {
+   3.4343911782030463`*^9, 3.4343911858840914`*^9}, {3.434391266590141*^9, 
+   3.434391335939861*^9}, 3.4343913705796704`*^9, {3.4343914039276223`*^9, 
+   3.4343914249178047`*^9}, {3.4343914556920557`*^9, 3.434391457624835*^9}, {
+   3.4343914915335937`*^9, 3.4343914983433857`*^9}, {3.43439946405752*^9, 
+   3.4343994657699823`*^9}, {3.434400030562114*^9, 3.4344000318038993`*^9}, {
+   3.434401490992109*^9, 3.4344015096489363`*^9}, {3.434562929069886*^9, 
+   3.434562968937213*^9}, {3.435437637078987*^9, 3.4354376802510653`*^9}, {
+   3.435777279009797*^9, 3.4357773184364896`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LookupGraphs", "[", 
+   RowBox[{"{", "}"}], "]"}], ":=", 
+  RowBox[{"{", "}"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4345681882021475`*^9, 3.4345681918574033`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LookupGraphs", "[", 
+    RowBox[{"graphs", ":", 
+     RowBox[{"{", "__GradedBigraph", "}"}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs", "]"}], "\[LessEqual]", "2500"}]}], ":=", 
+  RowBox[{
+   RowBox[{"LookupGraphs", "[", 
+    RowBox[{"GraphToString", "/@", "graphs"}], "]"}], "/.", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "g_String", ",", "rank_Integer", ",", "depth_Integer", ",", "dimension_",
+       ",", 
+      RowBox[{"obstruction", ":", 
+       RowBox[{"(", 
+        RowBox[{"_String", "|", "Null"}], ")"}]}]}], "}"}], "\[RuleDelayed]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"GraphFromString", "[", "g", "]"}], ",", "rank", ",", "depth", 
+      ",", "dimension", ",", "obstruction"}], "}"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4345626196950274`*^9, 3.4345627069504943`*^9}, 
+   3.434568012860018*^9, 3.4345685949670467`*^9, 3.434762564584669*^9, {
+   3.4358833242754*^9, 3.435883324655947*^9}, 3.4359465685070767`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LookupGraphs", "[", 
+    RowBox[{"graphs", ":", 
+     RowBox[{"{", "__String", "}"}]}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs", "]"}], "\[LessEqual]", "2500"}]}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"getConnection", "[", "]"}], "===", "$Failed"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "existingValues", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"DebugPrint", "[", 
+        RowBox[{"\"\<Looking up \>\"", ",", 
+         RowBox[{"Length", "[", "graphs", "]"}], ",", " ", 
+         "\"\< graphs in the remote database.\>\""}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"existingValues", "=", 
+        RowBox[{"SQLSelect", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", "\"\<graphs\>\"", ",", 
+          RowBox[{"SQLMemberQ", "[", 
+           RowBox[{"graphs", ",", 
+            RowBox[{"SQLColumn", "[", "\"\<graph\>\"", "]"}]}], "]"}]}], 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"DebugPrint", "[", 
+        RowBox[{"\"\<Found \>\"", ",", 
+         RowBox[{"Length", "[", "existingValues", "]"}], ",", 
+         "\"\< graphs.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+       "existingValues"}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434562708422611*^9, 3.4345627587850285`*^9}, {
+   3.4345630312768526`*^9, 3.4345630353326845`*^9}, {3.434568003977245*^9, 
+   3.434568008864272*^9}, 3.4345685965192785`*^9, 3.43476256531572*^9, {
+   3.435883327159547*^9, 3.43588332753008*^9}, 3.4359465690278254`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"LookupGraphs", "[", "graphs_List", "]"}], "/;", 
+   RowBox[{
+    RowBox[{"Length", "[", "graphs", "]"}], ">", "2500"}]}], ":=", 
+  RowBox[{"Join", "@@", 
+   RowBox[{"(", 
+    RowBox[{"LookupGraphs", "/@", 
+     RowBox[{"Partition", "[", 
+      RowBox[{"graphs", ",", "2500", ",", "2500", ",", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "1"}], "}"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}]}], ")"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4345625944286957`*^9, 3.4345626176520896`*^9}, {
+  3.434566335808536*^9, 3.43456633832215*^9}, {3.434762565896555*^9, 
+  3.4347625663772464`*^9}, {3.435883329552989*^9, 3.4358833338191233`*^9}, {
+  3.4359465702395678`*^9, 3.4359465712710514`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TakeGraphs", "[", "k_Integer", "]"}], ":=", 
+  RowBox[{"TakeGraphs", "[", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "k"}], "}"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434643421582435*^9, 3.434643467268128*^9}, {
+   3.4346435618941936`*^9, 3.4346435997486258`*^9}, {3.434643655408661*^9, 
+   3.434643659925155*^9}, {3.4346448763843374`*^9, 3.4346448766547265`*^9}, {
+   3.434674453309477*^9, 3.434674453369563*^9}, 3.4347192013858786`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"TakeGraphs", "[", 
+    RowBox[{"{", 
+     RowBox[{"k_Integer", ",", "l_Integer"}], "}"}], "]"}], "/;", 
+   RowBox[{"l", "\[GreaterEqual]", "k"}]}], ":=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{"SQLExecute", "[", 
+    RowBox[{
+     RowBox[{"getConnection", "[", "]"}], ",", 
+     RowBox[{"\"\<SELECT graph from graphs LIMIT \>\"", "<>", 
+      RowBox[{"ToString", "[", "k", "]"}], "<>", "\"\<,\>\"", "<>", 
+      RowBox[{"ToString", "[", 
+       RowBox[{"l", "-", "k", "+", "1"}], "]"}]}]}], "]"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4346436089017873`*^9, 3.434643640417104*^9}, 
+   3.4346448792885137`*^9, {3.434674446699973*^9, 3.434674450355229*^9}, 
+   3.4346802873101854`*^9, {3.4346808109130898`*^9, 3.434680814047597*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RecordFindGraphPartners", "[", 
+   RowBox[{"graphs0", ":", 
+    RowBox[{"{", "__GradedBigraph", "}"}]}], "]"}], ":=", 
+  RowBox[{"RecordFindGraphPartners", "[", 
+   RowBox[{"GraphToString", "/@", "graphs0"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4354299062726336`*^9, 3.435430447871414*^9}, {
+   3.43543049693196*^9, 3.4354307125520067`*^9}, {3.4354308140279217`*^9, 
+   3.4354308618466816`*^9}, {3.4354313770675325`*^9, 
+   3.4354313792606864`*^9}, {3.43543155361139*^9, 3.435431572859067*^9}, 
+   3.4354318831652656`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RecordFindGraphPartners", "[", 
+   RowBox[{"graphs0", ":", 
+    RowBox[{"{", "__String", "}"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "graphs", ",", "data", ",", "existingData", ",", "dataToUpload", ",", 
+      "graphsToDelete"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"graphs", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{"CanonicalizeBigraph", "/@", "graphs0"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<Recording graph partners for \>\"", ",", 
+       RowBox[{"Length", "[", "graphs", "]"}], ",", "\"\< graphs.\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"data", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+           ",", 
+          RowBox[{"FindGraphPartnersTimeConstraint", "[", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "]"}],
+           ",", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"GraphToString", "/@", 
+            RowBox[{"LazyFindGraphPartners", "[", 
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+             "]"}]}], "]"}]}], "}"}], "&"}], "/@", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"#", ",", 
+            RowBox[{"GraphFromString", "[", "#", "]"}]}], "}"}], "&"}], "/@", 
+         "graphs"}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"existingData", "=", 
+      RowBox[{"SQLSelect", "[", 
+       RowBox[{
+        RowBox[{"getConnection", "[", "]"}], ",", "\"\<partners\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<graph\>\"", ",", "\"\<timeconstraint\>\"", ",", 
+          "\"\<partners\>\""}], "}"}], ",", 
+        RowBox[{"SQLMemberQ", "[", 
+         RowBox[{"graphs", ",", 
+          RowBox[{"SQLColumn", "[", "\"\<graph\>\"", "]"}]}], "]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dataToUpload", "=", 
+      RowBox[{"Complement", "[", 
+       RowBox[{"data", ",", "existingData"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<... new information for \>\"", ",", 
+       RowBox[{"Length", "[", "dataToUpload", "]"}], ",", " ", 
+       "\"\< graphs.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"graphsToDelete", "=", 
+      RowBox[{"Intersection", "[", 
+       RowBox[{
+        RowBox[{"First", "/@", "existingData"}], ",", 
+        RowBox[{"First", "/@", "dataToUpload"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<... replacing data for \>\"", ",", 
+       RowBox[{"Length", "[", "graphsToDelete", "]"}], ",", 
+       "\"\< graphs.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "graphsToDelete", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"SQLDelete", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", "\"\<partners\>\"", ",", 
+          RowBox[{"SQLMemberQ", "[", 
+           RowBox[{"graphsToDelete", ",", 
+            RowBox[{"SQLColumn", "[", "\"\<graph\>\"", "]"}]}], "]"}]}], 
+         "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "dataToUpload", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"SQLInsert", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", "\"\<partners\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<graph\>\"", ",", "\"\<timeconstraint\>\"", ",", 
+            "\"\<partners\>\""}], "}"}], ",", "dataToUpload"}], "]"}], 
+        ";"}]}], "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]",
+    "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4354299062726336`*^9, 3.435430447871414*^9}, {
+   3.43543049693196*^9, 3.4354307125520067`*^9}, {3.4354308140279217`*^9, 
+   3.4354308618466816`*^9}, {3.4354313770675325`*^9, 
+   3.4354313792606864`*^9}, {3.43543155361139*^9, 3.435431572859067*^9}, 
+   3.4354318831652656`*^9, {3.435432295077566*^9, 3.435432379819419*^9}, {
+   3.4358856346275234`*^9, 3.4358856393443055`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RecordFindFusionAlgebras", "[", 
+   RowBox[{"graphs0", ":", 
+    RowBox[{"{", "__GradedBigraph", "}"}]}], "]"}], ":=", 
+  RowBox[{"RecordFindGraphPartners", "[", 
+   RowBox[{"GraphToString", "/@", "graphs0"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4354299062726336`*^9, 3.435430447871414*^9}, {
+   3.43543049693196*^9, 3.4354307125520067`*^9}, {3.4354308140279217`*^9, 
+   3.4354308618466816`*^9}, {3.4354313770675325`*^9, 
+   3.4354313792606864`*^9}, {3.43543155361139*^9, 3.435431572859067*^9}, 
+   3.4354318831652656`*^9, {3.4358856575805283`*^9, 3.435885659453221*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RecordFindFusionAlgebras", "[", 
+   RowBox[{"graphs0", ":", 
+    RowBox[{"{", "__String", "}"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "graphs", ",", "data", ",", "existingData", ",", "dataToUpload", ",", 
+      "graphsToDelete"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"graphs", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{"CanonicalizeBigraph", "/@", "graphs0"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<Recording fusion algebras for \>\"", ",", 
+       RowBox[{"Length", "[", "graphs", "]"}], ",", "\"\< graphs.\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"data", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+           ",", 
+          RowBox[{"FindFusionAlgebrasTimeConstraint", "[", 
+           RowBox[{
+           "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], "]"}],
+           ",", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"LazyFindFusionAlgebras", "[", 
+            RowBox[{
+            "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+            "]"}], "]"}]}], "}"}], "&"}], "/@", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"#", ",", 
+            RowBox[{"GraphFromString", "[", "#", "]"}]}], "}"}], "&"}], "/@", 
+         "graphs"}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"existingData", "=", 
+      RowBox[{"SQLSelect", "[", 
+       RowBox[{
+        RowBox[{"getConnection", "[", "]"}], ",", "\"\<fusionalgebras\>\"", 
+        ",", 
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<graph\>\"", ",", "\"\<timeconstraint\>\"", ",", 
+          "\"\<partners\>\""}], "}"}], ",", 
+        RowBox[{"SQLMemberQ", "[", 
+         RowBox[{"graphs", ",", 
+          RowBox[{"SQLColumn", "[", "\"\<graph\>\"", "]"}]}], "]"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"dataToUpload", "=", 
+      RowBox[{"Complement", "[", 
+       RowBox[{"data", ",", "existingData"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<... new information for \>\"", ",", 
+       RowBox[{"Length", "[", "dataToUpload", "]"}], ",", " ", 
+       "\"\< graphs.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"graphsToDelete", "=", 
+      RowBox[{"Intersection", "[", 
+       RowBox[{
+        RowBox[{"First", "/@", "existingData"}], ",", 
+        RowBox[{"First", "/@", "dataToUpload"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"DebugPrint", "[", 
+      RowBox[{"\"\<... replacing data for \>\"", ",", 
+       RowBox[{"Length", "[", "graphsToDelete", "]"}], ",", 
+       "\"\< graphs.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "graphsToDelete", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"SQLDelete", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", "\"\<partners\>\"", ",", 
+          RowBox[{"SQLMemberQ", "[", 
+           RowBox[{"graphsToDelete", ",", 
+            RowBox[{"SQLColumn", "[", "\"\<graph\>\"", "]"}]}], "]"}]}], 
+         "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "dataToUpload", "]"}], ">", "0"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"SQLInsert", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", "\"\<partners\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<graph\>\"", ",", "\"\<timeconstraint\>\"", ",", 
+            "\"\<partners\>\""}], "}"}], ",", "dataToUpload"}], "]"}], 
+        ";"}]}], "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]",
+    "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4354299062726336`*^9, 3.435430447871414*^9}, {
+   3.43543049693196*^9, 3.4354307125520067`*^9}, {3.4354308140279217`*^9, 
+   3.4354308618466816`*^9}, {3.4354313770675325`*^9, 
+   3.4354313792606864`*^9}, {3.43543155361139*^9, 3.435431572859067*^9}, 
+   3.4354318831652656`*^9, {3.435432295077566*^9, 3.435432379819419*^9}, {
+   3.4358856346275234`*^9, 3.4358857240060434`*^9}, {3.435885858449363*^9, 
+   3.435885860872848*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GraphsNeedingPartners", "[", 
+   RowBox[{"t_:", "0"}], "]"}], ":=", 
+  RowBox[{"First", "/@", 
+   RowBox[{"SortBy", "[", 
+    RowBox[{
+     RowBox[{"SQLSelect", "[", 
+      RowBox[{
+       RowBox[{"getConnection", "[", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<graphs\>\"", ",", "\"\<partners\>\""}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"\"\<graphs\>\"", ",", "\"\<graph\>\""}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"\"\<graphs\>\"", ",", "\"\<dimension\>\""}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"\"\<graphs\>\"", ",", "\"\<obstruction\>\""}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"\"\<partners\>\"", ",", "\"\<timeconstraint\>\""}], "}"}], 
+         ",", 
+         RowBox[{"{", 
+          RowBox[{"\"\<partners\>\"", ",", "\"\<partners\>\""}], "}"}]}], 
+        "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"SQLColumn", "[", 
+          RowBox[{"{", 
+           RowBox[{"\"\<graphs\>\"", ",", "\"\<obstruction\>\""}], "}"}], 
+          "]"}], "==", "Null"}], "\[And]", 
+        RowBox[{
+         RowBox[{"SQLColumn", "[", 
+          RowBox[{"{", 
+           RowBox[{"\"\<partners\>\"", ",", "\"\<partners\>\""}], "}"}], 
+          "]"}], "\[Equal]", "\"\<$Failed\>\""}], "\[And]", 
+        RowBox[{
+         RowBox[{"SQLColumn", "[", 
+          RowBox[{"{", 
+           RowBox[{"\"\<partners\>\"", ",", "\"\<timeconstraint\>\""}], "}"}],
+           "]"}], "\[GreaterEqual]", "t"}], "\[And]", 
+        RowBox[{
+         RowBox[{"SQLColumn", "[", 
+          RowBox[{"{", 
+           RowBox[{"\"\<graphs\>\"", ",", "\"\<graph\>\""}], "}"}], "]"}], 
+         "\[Equal]", 
+         RowBox[{"SQLColumn", "[", 
+          RowBox[{"{", 
+           RowBox[{"\"\<partners\>\"", ",", "\"\<graph\>\""}], "}"}], 
+          "]"}]}]}]}], "]"}], ",", 
+     RowBox[{
+      RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], 
+      "&"}]}], "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435439112650755*^9, 3.4354392688753953`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ReapplyTestToDatabase", "[", "test_", "]"}], ":=", 
+  RowBox[{"RecordObstructions", "[", 
+   RowBox[{
+    RowBox[{"Cases", "[", 
+     RowBox[{
+      RowBox[{"RetrieveGraphs", "[", 
+       RowBox[{"\"\<obstruction\>\"", "\[Equal]", "Null"}], "]"}], ",", 
+      RowBox[{"g_", "/;", 
+       RowBox[{"!", 
+        RowBox[{"test", "[", "g", "]"}]}]}]}], "]"}], ",", "True"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435507215457475*^9, 3.435507249866954*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RecordRequestAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"dimension_", "?", "NumericQ"}], ",", "rank_Integer", ",", 
+    "seed_GradedBigraph", ",", "allowed_Integer", ",", "disallowed_Integer", 
+    ",", "unknown_Integer"}], "]"}], ":=", 
+  RowBox[{"RecordRequestAllBigraphs", "[", 
+   RowBox[{
+    RowBox[{"ToString", "[", "dimension", "]"}], ",", "rank", ",", 
+    RowBox[{"GraphToString", "[", "seed", "]"}], ",", "allowed", ",", 
+    "disallowed", ",", "unknown"}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4356135195054913`*^9, 3.4356135432396193`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RecordRequestAllBigraphs", "[", 
+   RowBox[{
+   "dimension_String", ",", "rank_Integer", ",", "seed_String", ",", 
+    "allowed_Integer", ",", "disallowed_Integer", ",", "unknown_Integer"}], 
+   "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Length", "[", 
+        RowBox[{"SQLSelect", "[", 
+         RowBox[{
+          RowBox[{"getConnection", "[", "]"}], ",", "\"\<classification\>\"", 
+          ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<dimension\>\"", ",", "\"\<rank\>\"", ",", "\"\<seed\>\""}], 
+           "}"}], ",", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"SQLColumn", "[", "\"\<dimension\>\"", "]"}], "\[Equal]", 
+            "dimension"}], "\[And]", 
+           RowBox[{
+            RowBox[{"SQLColumn", "[", "\"\<rank\>\"", "]"}], "\[Equal]", 
+            "rank"}], "\[And]", 
+           RowBox[{
+            RowBox[{"SQLColumn", "[", "\"\<seed\>\"", "]"}], "\[Equal]", 
+            "seed"}]}]}], "]"}], "]"}], "\[Equal]", "0"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"SQLInsert", "[", 
+        RowBox[{
+         RowBox[{"getConnection", "[", "]"}], ",", "\"\<classification\>\"", 
+         ",", 
+         RowBox[{"{", 
+          RowBox[{
+          "\"\<dimension\>\"", ",", "\"\<rank\>\"", ",", "\"\<seed\>\"", ",", 
+           "\"\<allowed\>\"", ",", "\"\<disallowed\>\"", ",", 
+           "\"\<unknown\>\""}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+          "dimension", ",", "rank", ",", "seed", ",", "allowed", ",", 
+           "disallowed", ",", "unknown"}], "}"}]}], "]"}], ";"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"SQLUpdate", "[", 
+        RowBox[{
+         RowBox[{"getConnection", "[", "]"}], ",", "\"\<classification\>\"", 
+         ",", 
+         RowBox[{"{", 
+          RowBox[{
+          "\"\<allowed\>\"", ",", "\"\<disallowed\>\"", ",", 
+           "\"\<unknown\>\""}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"allowed", ",", "disallowed", ",", "unknown"}], "}"}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"SQLColumn", "[", "\"\<dimension\>\"", "]"}], "\[Equal]", 
+           "dimension"}], "\[And]", 
+          RowBox[{
+           RowBox[{"SQLColumn", "[", "\"\<rank\>\"", "]"}], "\[Equal]", 
+           "rank"}], "\[And]", 
+          RowBox[{
+           RowBox[{"SQLColumn", "[", "\"\<seed\>\"", "]"}], "\[Equal]", 
+           "seed"}]}]}], "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4356130070486145`*^9, 3.4356133141502047`*^9}, {
+  3.4356135008386497`*^9, 3.4356135054653025`*^9}, {3.435613547035077*^9, 
+  3.435613556869218*^9}, {3.4356161684544926`*^9, 3.4356161743129168`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BigraphRequests", "[", "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"SortBy", "[", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"SQLSelect", "[", 
+       RowBox[{
+        RowBox[{"getConnection", "[", "]"}], ",", "\"\<classification\>\""}], 
+       "]"}], "/.", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "dimension_String", ",", "rank_", ",", "seed_", ",", "allowed_", ",", 
+         "disallowed_", ",", "unknown_"}], "}"}], "\[RuleDelayed]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"ToExpression", "[", "dimension", "]"}], ",", "rank", ",", 
+         RowBox[{"GraphFromString", "[", "seed", "]"}], ",", "allowed", ",", 
+         "disallowed", ",", "unknown"}], "}"}]}]}], ")"}], ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NumericDimensionOfGenerator", "[", 
+        RowBox[{"#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], 
+        "]"}], ",", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       ",", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+      "}"}], "&"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435613675049152*^9, 3.435613739371643*^9}, 
+   3.435613791967272*^9, 3.435615637691293*^9, {3.4358802884801407`*^9, 
+   3.4358803049638433`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{"list_List", ",", "f_"}], "]"}], ":=", 
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "list", ",", "f"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{"maxima_List", ",", 
+    RowBox[{"{", "}"}], ",", "f_"}], "]"}], ":=", 
+  "maxima"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MaximaOfPartialOrdering", "[", 
+   RowBox[{"maxima_List", ",", 
+    RowBox[{"{", 
+     RowBox[{"first_", ",", "rest___"}], "}"}], ",", "f_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"Or", "@@", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"f", "[", 
+           RowBox[{"first", ",", "#"}], "]"}], "&"}], "/@", "maxima"}], 
+        ")"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"MaximaOfPartialOrdering", "[", 
+       RowBox[{"maxima", ",", 
+        RowBox[{"{", "rest", "}"}], ",", "f"}], "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"MaximaOfPartialOrdering", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", "first", "}"}], "~", "Join", "~", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{"maxima", ",", 
+           RowBox[{"c_", "/;", 
+            RowBox[{"f", "[", 
+             RowBox[{"c", ",", "first"}], "]"}]}]}], "]"}]}], ",", 
+        RowBox[{"{", "rest", "}"}], ",", "f"}], "]"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4337945193184977`*^9, 3.4337945987827616`*^9}, {
+  3.433794732615203*^9, 3.4337948302155457`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MaximalIncompleteBigraphRequests", "[", "]"}], ":=", 
+  RowBox[{"SortBy", "[", 
+   RowBox[{
+    RowBox[{"MaximaOfPartialOrdering", "[", 
+     RowBox[{
+      RowBox[{"BigraphRequests", "[", "]"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+          "\[LessEqual]", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+        "\[And]", 
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}],
+          "\[LessEqual]", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+        "\[And]", 
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}],
+          "===", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}]}], 
+       "&"}]}], "]"}], ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NumericDimensionOfGenerator", "[", 
+        RowBox[{"#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], 
+        "]"}], ",", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       ",", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+      "}"}], "&"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435615611333392*^9, 3.4356156221789875`*^9}, 
+   3.4356157312157745`*^9, {3.4356163651072655`*^9, 3.435616371396309*^9}, {
+   3.435637869006941*^9, 3.435637869087056*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MaximalBigraphRequests", "[", "]"}], ":=", 
+  RowBox[{"SortBy", "[", 
+   RowBox[{
+    RowBox[{"MaximaOfPartialOrdering", "[", 
+     RowBox[{
+      RowBox[{"BigraphRequests", "[", "]"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}],
+          "\[LessEqual]", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+        "\[And]", 
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}],
+          "\[LessEqual]", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+        "\[And]", 
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}],
+          "===", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+        "\[And]", 
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "6", "\[RightDoubleBracket]"}],
+          "\[GreaterEqual]", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "6", "\[RightDoubleBracket]"}]}]}], 
+       "&"}]}], "]"}], ",", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NumericDimensionOfGenerator", "[", 
+        RowBox[{"#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], 
+        "]"}], ",", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       ",", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+      "}"}], "&"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.435615611333392*^9, 3.4356156221789875`*^9}, 
+   3.4356157312157745`*^9, {3.4356174207952704`*^9, 3.4356174521203136`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DisplayBigraphRequests", "[", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"Split", "[", 
+      RowBox[{
+       RowBox[{"BigraphRequests", "[", "]"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#1", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}],
+          "===", 
+         RowBox[{
+         "#2", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+        "&"}]}], "]"}], "/.", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"values", ":", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+           "_", ",", "_", ",", "seed_GradedBigraph", ",", "_", ",", "_", ",", 
+            "_"}], "}"}], ".."}], "}"}]}], "\[RuleDelayed]", 
+       RowBox[{"{", 
+        RowBox[{"seed", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Drop", "[", 
+            RowBox[{"#", ",", 
+             RowBox[{"{", "3", "}"}]}], "]"}], "&"}], "/@", "values"}]}], 
+        "}"}]}], "}"}]}], "/.", 
+    RowBox[{"g_GradedBigraph", "\[RuleDelayed]", 
+     RowBox[{"DisplayBigraph", "[", "g", "]"}]}]}], "//", 
+   "TableForm"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4356153298185935`*^9, {3.4356153735214353`*^9, 3.435615390145339*^9}, {
+   3.4356154267479715`*^9, 3.4356155268519135`*^9}, {3.4356155573357472`*^9, 
+   3.435615563184157*^9}, {3.4356156053047233`*^9, 3.4356156267355394`*^9}, 
+   3.435880314217149*^9}],
+
+Cell[CellGroupData[{
+
+Cell["End", "Subsubsection",
+ CellChangeTimes->{{3.4204538756122303`*^9, 3.420453875812518*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["End of package", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1272, 679},
+WindowMargins->{{Automatic, 72}, {Automatic, 28}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 343, 5, 51, "Subtitle",
+ InitializationCell->True],
+Cell[913, 29, 233, 6, 49, "Text",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1171, 39, 58, 1, 80, "Section",
+ InitializationCell->True],
+Cell[1232, 42, 129, 2, 30, "Text",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1398, 49, 60, 1, 80, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1483, 54, 106, 1, 44, "Subsection"],
+Cell[1592, 57, 45, 0, 30, "Text"],
+Cell[1640, 59, 1240, 23, 63, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2917, 87, 36, 0, 44, "Subsection"],
+Cell[2956, 89, 393, 11, 46, "Input",
+ InitializationCell->True],
+Cell[3352, 102, 132, 3, 28, "Input",
+ InitializationCell->True],
+Cell[3487, 107, 322, 8, 28, "Input",
+ InitializationCell->True],
+Cell[3812, 117, 219, 6, 28, "Input",
+ InitializationCell->True],
+Cell[4034, 125, 453, 7, 46, "Input",
+ InitializationCell->True],
+Cell[4490, 134, 276, 6, 28, "Input",
+ InitializationCell->True],
+Cell[4769, 142, 134, 3, 28, "Input",
+ InitializationCell->True],
+Cell[4906, 147, 137, 3, 28, "Input",
+ InitializationCell->True],
+Cell[5046, 152, 135, 3, 28, "Input",
+ InitializationCell->True],
+Cell[5184, 157, 135, 3, 28, "Input",
+ InitializationCell->True],
+Cell[5322, 162, 452, 8, 28, "Input",
+ InitializationCell->True],
+Cell[5777, 172, 129, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5943, 180, 31, 0, 44, "Subsection"],
+Cell[5977, 182, 119, 3, 28, "Input",
+ InitializationCell->True],
+Cell[6099, 187, 274, 6, 46, "Input"],
+Cell[6376, 195, 276, 6, 46, "Input"],
+Cell[6655, 203, 624, 12, 46, "Input"],
+Cell[7282, 217, 446, 9, 46, "Input"],
+Cell[7731, 228, 188, 4, 28, "Input",
+ InitializationCell->True],
+Cell[7922, 234, 982, 20, 63, "Input",
+ InitializationCell->True],
+Cell[8907, 256, 926, 25, 28, "Input",
+ InitializationCell->True],
+Cell[9836, 283, 1167, 32, 46, "Input",
+ InitializationCell->True],
+Cell[11006, 317, 3733, 86, 216, "Input",
+ InitializationCell->True],
+Cell[14742, 405, 776, 18, 28, "Input",
+ InitializationCell->True],
+Cell[15521, 425, 848, 23, 63, "Input",
+ InitializationCell->True],
+Cell[16372, 450, 7592, 167, 505, "Input",
+ InitializationCell->True],
+Cell[23967, 619, 1046, 25, 46, "Input",
+ InitializationCell->True],
+Cell[25016, 646, 186, 4, 28, "Input",
+ InitializationCell->True],
+Cell[25205, 652, 605, 16, 28, "Input",
+ InitializationCell->True],
+Cell[25813, 670, 175, 4, 28, "Input",
+ InitializationCell->True],
+Cell[25991, 676, 1729, 36, 114, "Input",
+ InitializationCell->True],
+Cell[27723, 714, 219, 5, 28, "Input",
+ InitializationCell->True],
+Cell[27945, 721, 647, 15, 28, "Input",
+ InitializationCell->True],
+Cell[28595, 738, 2756, 65, 258, "Input",
+ InitializationCell->True],
+Cell[31354, 805, 713, 12, 28, "Input",
+ InitializationCell->True],
+Cell[32070, 819, 375, 9, 28, "Input",
+ InitializationCell->True],
+Cell[32448, 830, 4408, 100, 388, "Input",
+ InitializationCell->True],
+Cell[36859, 932, 204, 4, 28, "Input",
+ InitializationCell->True],
+Cell[37066, 938, 1132, 29, 114, "Input",
+ InitializationCell->True],
+Cell[38201, 969, 896, 29, 28, "Input",
+ InitializationCell->True],
+Cell[39100, 1000, 433, 12, 31, "Input",
+ InitializationCell->True],
+Cell[39536, 1014, 135, 3, 28, "Input",
+ InitializationCell->True],
+Cell[39674, 1019, 485, 13, 28, "Input",
+ InitializationCell->True],
+Cell[40162, 1034, 739, 17, 114, "Input",
+ InitializationCell->True],
+Cell[40904, 1053, 7296, 155, 626, "Input",
+ InitializationCell->True],
+Cell[48203, 1210, 2526, 57, 250, "Input",
+ InitializationCell->True],
+Cell[50732, 1269, 2003, 51, 165, "Input",
+ InitializationCell->True],
+Cell[52738, 1322, 1117, 25, 97, "Input",
+ InitializationCell->True],
+Cell[53858, 1349, 305, 6, 28, "Input",
+ InitializationCell->True],
+Cell[54166, 1357, 2355, 50, 97, "Input",
+ InitializationCell->True],
+Cell[56524, 1409, 223, 6, 28, "Input",
+ InitializationCell->True],
+Cell[56750, 1417, 1042, 26, 64, "Input",
+ InitializationCell->True],
+Cell[57795, 1445, 1820, 42, 182, "Input",
+ InitializationCell->True],
+Cell[59618, 1489, 763, 18, 28, "Input",
+ InitializationCell->True],
+Cell[60384, 1509, 502, 10, 28, "Input",
+ InitializationCell->True],
+Cell[60889, 1521, 808, 18, 46, "Input",
+ InitializationCell->True],
+Cell[61700, 1541, 589, 12, 28, "Input",
+ InitializationCell->True],
+Cell[62292, 1555, 4528, 109, 301, "Input",
+ InitializationCell->True],
+Cell[66823, 1666, 638, 12, 28, "Input",
+ InitializationCell->True],
+Cell[67464, 1680, 4548, 110, 284, "Input",
+ InitializationCell->True],
+Cell[72015, 1792, 2131, 55, 114, "Input",
+ InitializationCell->True],
+Cell[74149, 1849, 521, 14, 28, "Input",
+ InitializationCell->True],
+Cell[74673, 1865, 620, 13, 46, "Input",
+ InitializationCell->True],
+Cell[75296, 1880, 2955, 73, 199, "Input",
+ InitializationCell->True],
+Cell[78254, 1955, 1375, 34, 80, "Input",
+ InitializationCell->True],
+Cell[79632, 1991, 1766, 47, 148, "Input",
+ InitializationCell->True],
+Cell[81401, 2040, 1601, 41, 46, "Input",
+ InitializationCell->True],
+Cell[83005, 2083, 1780, 46, 46, "Input",
+ InitializationCell->True],
+Cell[84788, 2131, 1455, 41, 63, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[86268, 2176, 96, 1, 35, "Subsubsection"],
+Cell[86367, 2179, 96, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[86512, 2188, 36, 0, 44, "Subsection"],
+Cell[86551, 2190, 103, 3, 28, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

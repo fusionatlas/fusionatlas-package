@@ -1,0 +1,363 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     12240,        354]
+NotebookOptionsPosition[     10544,        296]
+NotebookOutlinePosition[     10937,        313]
+CellTagsIndexPosition[     10894,        310]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"BeginPackage", "[", "\"\<FusionAtlas`Debugging`\>\"", 
+  "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4212687192823772`*^9, 3.4212687228975763`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DebugEcho", ";", "DebugPrint", ";", "DebugEvaluate", ";", 
+  "SetDebugMode", ";", "SetDebugQueueInterval", ";", "SetDebugFile", ";", 
+  "DebugPrintHeld", ";", "ToStringHeld", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.4212687328518896`*^9, {3.433201420996219*^9, 3.4332014212766223`*^9}, {
+   3.4332016075644913`*^9, 3.4332016079450383`*^9}, {3.434308407923459*^9, 
+   3.434308408293992*^9}, {3.445812848892208*^9, 3.44581284941958*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"lastDebugStatement", "=", 
+   RowBox[{"SessionTime", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"queuedMessages", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"queueInterval", "=", "0."}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"debugFile", "=", "\"\<\>\""}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4330597684296207`*^9, 3.4330598397922354`*^9}, {
+   3.433059963880666*^9, 3.433059965162509*^9}, {3.4330604398951406`*^9, 
+   3.433060441697733*^9}, 3.433060603931013*^9, {3.4330690117909217`*^9, 
+   3.433069011881051*^9}, {3.434308324493493*^9, 3.4343083273375826`*^9}, {
+   3.445285506527316*^9, 3.445285507556282*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDebugFile", "[", "f_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"debugFile", "=", "f"}], ";"}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343083006892643`*^9, 3.4343083190857167`*^9}, {
+  3.4343084682401905`*^9, 3.4343084913834686`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDebugQueueInterval", "[", "x_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"queueInterval", "=", "x"}], ";"}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4332014011476784`*^9, 3.4332014123938494`*^9}, 
+   3.4332016108892717`*^9, 3.4332138194342976`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDebugMode", "[", 
+   RowBox[{"x", ":", 
+    RowBox[{"(", 
+     RowBox[{"True", "|", "False"}], ")"}]}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"$debugMode", "=", "x"}], ";"}], ")"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4212687274240847`*^9, 3.4212687302781887`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$debugMode", "=", "False"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"SetAttributes", "[", 
+  RowBox[{"DebugEvaluate", ",", 
+   RowBox[{"{", "HoldAll", "}"}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DebugEvaluate", "[", "x___", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{"$debugMode", ",", 
+    RowBox[{"Evaluate", "[", "x", "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.443377882095521*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DebugPrint", "[", "x___", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{"$debugMode", ",", "\[IndentingNewLine]", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"debugFile", "===", "\"\<\>\""}], ",", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"queueInterval", "\[Equal]", "0"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Print", "[", 
+          RowBox[{
+           RowBox[{"debugPrefix", "[", "]"}], ",", "x"}], "]"}], ";"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"appendToQueue", "[", "x", "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"SessionTime", "[", "]"}], "-", "lastDebugStatement"}], 
+            ">", "queueInterval"}], ",", 
+           RowBox[{
+            RowBox[{"Print", "@@", "queuedMessages"}], ";", 
+            RowBox[{"lastDebugStatement", "=", 
+             RowBox[{"SessionTime", "[", "]"}]}], ";", 
+            RowBox[{"queuedMessages", "=", 
+             RowBox[{"{", "}"}]}]}]}], "]"}], ";"}]}], "\[IndentingNewLine]", 
+       "]"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"WriteString", "[", 
+        RowBox[{"debugFile", ",", 
+         RowBox[{"debugPrefix", "[", "]"}], ",", "x", ",", "\"\<\\n\>\""}], 
+        "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]",
+    "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4330598461113214`*^9, 3.433059954957835*^9}, {
+   3.4330601862504177`*^9, 3.4330601980674095`*^9}, 3.433060445032528*^9, 
+   3.43306050041216*^9, {3.4330684953883715`*^9, 3.433068503700323*^9}, {
+   3.43306910744847*^9, 3.4330691374015408`*^9}, {3.433069173863971*^9, 
+   3.4330691743947344`*^9}, {3.433069770021203*^9, 3.4330697741571503`*^9}, {
+   3.4337050134453726`*^9, 3.43370501908348*^9}, 3.434308182899891*^9, {
+   3.434308222697117*^9, 3.4343082758936095`*^9}, {3.4343083313032846`*^9, 
+   3.434308349879997*^9}, {3.4343083943639617`*^9, 3.43430839948132*^9}, {
+   3.434308513094688*^9, 3.434308513325019*^9}, {3.434308587621853*^9, 
+   3.4343085883028316`*^9}, {3.4343086620188303`*^9, 3.434308678312259*^9}, {
+   3.434308710097965*^9, 3.4343087244786434`*^9}, {3.434308769773774*^9, 
+   3.43430878027888*^9}, 3.443377880002108*^9, {3.445285542880323*^9, 
+   3.445285553992175*^9}, 3.445625428356394*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"appendToQueue", "[", "x___", "]"}], ":=", 
+  RowBox[{"queuedMessages", "=", 
+   RowBox[{"queuedMessages", "~", "Join", "~", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Length", "[", "queuedMessages", "]"}], ">", "0"}], ",", 
+      RowBox[{"{", "\"\<\\n\>\"", "}"}], ",", 
+      RowBox[{"{", "}"}]}], "]"}], "~", "Join", "~", 
+    RowBox[{"{", 
+     RowBox[{"debugPrefix", "[", "]"}], "}"}], "~", "Join", "~", 
+    RowBox[{"{", "x", "}"}]}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.445285573960034*^9, 3.445285655288851*^9}, {
+  3.445285732274852*^9, 3.445285735582324*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"appendToQueue", "[", "x___", "]"}], ":=", 
+    RowBox[{"queuedMessages", "=", 
+     RowBox[{"queuedMessages", "<>", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"StringLength", "[", "queuedMessages", "]"}], ">", "0"}], 
+        ",", "\"\<\\n\>\"", ",", "\"\<\>\""}], "]"}], "<>", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"debugPrefix", "[", "]"}], "<>", 
+        RowBox[{"StringJoin", "@@", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"#", "/.", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"S_String", "\[RuleDelayed]", "S"}], ",", 
+               RowBox[{"S_", "\[RuleDelayed]", 
+                RowBox[{"ToString", "[", 
+                 RowBox[{"S", ",", "InputForm"}], "]"}]}]}], "}"}]}], "&"}], "/@", 
+           RowBox[{"{", "x", "}"}]}], ")"}]}]}], ")"}]}]}]}], ";"}], 
+  "*)"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.434308164413309*^9, 3.4343082114209023`*^9}, {
+   3.434308253972088*^9, 3.434308254032174*^9}, 3.4343087848754897`*^9, 
+   3.4343179836526814`*^9, {3.4343185308394976`*^9, 3.4343185368381233`*^9}, {
+   3.4428138160012608`*^9, 3.4428138358588963`*^9}, 3.443377887528125*^9, {
+   3.445285668705036*^9, 3.445285671279961*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"debugPrefix", "[", "]"}], ":=", 
+  RowBox[{"\"\<mem: \>\"", "<>", 
+   RowBox[{"ToString", "[", 
+    RowBox[{"MemoryInUse", "[", "]"}], "]"}], "<>", "\"\< time: \>\"", "<>", 
+   RowBox[{"DateString", "[", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<Year\>\"", ",", "\"\<Month\>\"", ",", "\"\<Day\>\"", ",", 
+      "\"\< \>\"", ",", "\"\<Hour\>\"", ",", "\"\<:\>\"", ",", 
+      "\"\<Minute\>\"", ",", "\"\<:\>\"", ",", "\"\<Second\>\""}], "}"}], 
+    "]"}], "<>", "\"\< \>\""}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4343082131333647`*^9, 3.434308215506778*^9}, 
+   3.4343087869584846`*^9, {3.4433745666415243`*^9, 3.4433745683027573`*^9}, {
+   3.44337776750285*^9, 3.44337777754217*^9}, {3.4433778709069357`*^9, 
+   3.443377872512209*^9}}],
+
+Cell[BoxData[
+ RowBox[{"SetAttributes", "[", 
+  RowBox[{"ToStringHeld", ",", "HoldFirst"}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ToStringHeld", "[", "e_", "]"}], ":=", 
+  RowBox[{"ToString", "[", 
+   RowBox[{
+    RowBox[{"HoldForm", "[", "e", "]"}], ",", "StandardForm"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"SetAttributes", "[", 
+  RowBox[{"DebugPrintHeld", ",", 
+   RowBox[{"{", "HoldAll", "}"}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DebugPrintHeld", "[", "x___", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{"$debugMode", ",", 
+    RowBox[{"DebugPrint", "[", 
+     RowBox[{"ReleaseHold", "[", 
+      RowBox[{"ToStringHeld", "/@", 
+       RowBox[{"Hold", "[", "x", "]"}]}], "]"}], "]"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4330597472892227`*^9, 3.433059748961627*^9}, 
+   3.443377895175063*^9}],
+
+Cell[BoxData[
+ RowBox[{"SetAttributes", "[", 
+  RowBox[{"DebugEcho", ",", 
+   RowBox[{"{", "HoldAll", "}"}]}], "]"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DebugEcho", "[", "x_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "r", "}"}], ",", 
+    RowBox[{
+     RowBox[{"r", "=", "x"}], ";", 
+     RowBox[{"DebugPrint", "[", "r", "]"}], ";", "r"}]}], "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"End", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"EndPackage", "[", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1272, 679},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+ShowSelection->True,
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 194, 4, 27, "Input",
+ InitializationCell->True],
+Cell[742, 26, 486, 8, 27, "Input",
+ InitializationCell->True],
+Cell[1231, 36, 119, 3, 27, "Input",
+ InitializationCell->True],
+Cell[1353, 41, 755, 16, 73, "Input",
+ InitializationCell->True],
+Cell[2111, 59, 315, 8, 27, "Input",
+ InitializationCell->True],
+Cell[2429, 69, 327, 8, 27, "Input",
+ InitializationCell->True],
+Cell[2759, 79, 344, 10, 29, "Input",
+ InitializationCell->True],
+Cell[3106, 91, 107, 3, 27, "Input",
+ InitializationCell->True],
+Cell[3216, 96, 158, 4, 27, "Input",
+ InitializationCell->True],
+Cell[3377, 102, 261, 7, 27, "Input",
+ InitializationCell->True],
+Cell[3641, 111, 2461, 51, 163, "Input",
+ InitializationCell->True],
+Cell[6105, 164, 657, 16, 27, "Input",
+ InitializationCell->True],
+Cell[6765, 182, 1348, 33, 43, "Input",
+ InitializationCell->True],
+Cell[8116, 217, 796, 17, 27, "Input",
+ InitializationCell->True],
+Cell[8915, 236, 135, 3, 27, "Input",
+ InitializationCell->True],
+Cell[9053, 241, 228, 7, 27, "Input",
+ InitializationCell->True],
+Cell[9284, 250, 159, 4, 27, "Input",
+ InitializationCell->True],
+Cell[9446, 256, 432, 11, 27, "Input",
+ InitializationCell->True],
+Cell[9881, 269, 154, 4, 27, "Input",
+ InitializationCell->True],
+Cell[10038, 275, 297, 9, 27, "Input",
+ InitializationCell->True],
+Cell[10338, 286, 96, 3, 27, "Input",
+ InitializationCell->True],
+Cell[10437, 291, 103, 3, 27, "Input",
+ InitializationCell->True]
+}
+]
+*)
+
+(* End of internal cache information *)
