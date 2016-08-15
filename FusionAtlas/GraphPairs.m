@@ -19,7 +19,7 @@
 
 
 
-BeginPackage["FusionAtlas`GraphPairs`",{"Combinatorica`","FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`Debugging`","FusionAtlas`Java`","FusionAtlas`JavaOdometer`","FusionAtlas`DisplayGraphs`"}];
+BeginPackage["FusionAtlas`GraphPairs`",{"FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`Debugging`","FusionAtlas`Java`","FusionAtlas`JavaOdometer`","FusionAtlas`DisplayGraphs`"}];
 
 
 BigraphWithDuals::usage="A wrapper for things of the form BigraphWithDuals[GradedBigraph[blah],DualData[blah]]";

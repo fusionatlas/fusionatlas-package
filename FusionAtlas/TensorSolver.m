@@ -19,7 +19,7 @@
 
 
 
-BeginPackage["FusionAtlas`TensorSolver`",{"FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`Debugging`"}];
+BeginPackage["FusionAtlas`TensorSolver`",{"FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`FindGraphPartners`","FusionAtlas`Debugging`"}];
 
 
 FindFusionRules::usage="";
@@ -58,11 +58,20 @@ BigraphWithDuals[Append[Append[#[[1]],{Table[1,{RankAtDepth[#[[1]],GraphDepth[#]
 ]&/@{h0,h1},
 {h0,h1}];
 ApplyDepthEquations[g[0][[1]],g[1][[1]],Z];
-equations=DeleteCases[(PrepareAssociativityEquations[g[0][[1]],g[1][[1]],Z]~Join~PreparePrincipalGraphEquations[g[0][[1]],0,Z]~Join~PreparePrincipalGraphEquations[g[1][[1]],1,Z]~Join~PrepareDualityEquations[g[0],g[1],Z])(*/.{Z[{_,_,d1_,_},{_,_,d2_,_},{_,_,d3_,_}]/;(d3<Abs[d1-d2])\[Or](d3>d1+d2)->0}*),True](*~Join~PrepareDepthEquations[g[0][[1]],g[1][[1]],Z]*);
+equations=DeleteCases[(PrepareAssociativityEquations[g[0][[1]],g[1][[1]],Z]~Join~PreparePrincipalGraphEquations[g[0][[1]],0,Z]~Join~PreparePrincipalGraphEquations[g[1][[1]],1,Z]~Join~PrepareDualityEquations[g[0],g[1],Z])(*/.{Z[{_,_,d1_,_},{_,_,d2_,_},{_,_,d3_,_}]/;(d3<Abs[d1-d2])\[Or](d3>d1+d2)\[Rule]0}*),True](*~Join~PrepareDepthEquations[g[0]\[LeftDoubleBracket]1\[RightDoubleBracket],g[1]\[LeftDoubleBracket]1\[RightDoubleBracket],Z]*);
 If[extensions,
 DeleteCases[equations,eq_/;!FreeQ[eq,{L_,_,d_,1}/;d>GraphDepth[h[L]]]],
 equations
 ]
+]
+
+
+FindPartialFusionRules[m_?MatrixQ,Z_]/;RankAtDepth[g,1]==1:=
+Module[{multiplicities,equations,d1,d2,d3,k1,k2,k3},
+equations=SolveAllSolvableEquations[PrepareAssociativityEquations[m,Z]~Join~PrepareFusionEquations[m,Z],Z];
+multiplicities=Table[Z[d1,d2,d3],
+{d1,1,Length[m]},{d2,1,Length[m]},{d3,1,Length[m]}];
+PartialFusionRules[g,{{0,0,0}->multiplicities},equations]
 ]
 
 
@@ -87,6 +96,27 @@ PartialFusionRules[{g0,g1},multiplicities,equations]
 
 SolvePartialFusionRules[PartialFusionRules[g_,multiplicities_,equations_],Z_]:=
 FusionRules[g,multiplicities]/.Solve[equations,Union[Cases[equations,_Z,\[Infinity]]]]
+
+
+FindFusionRules[m_?MatrixQ,Z_]:=
+Module[{partialFusionRules=FindPartialFusionRules[m,Z],possibleDimensionList,FPEigenvector,possibleValues,vars,dim,solutions,numberCases},
+DebugPrint["Completed partial fusion rules."];
+If[MemberQ[Flatten[MatrixPower[m,Length[m]]],0],
+Print["FindFusionRules requires a tensor generator, this won't do: ",m];
+Abort[]
+];
+FPEigenvector=Eigenvectors[m][[1]];
+FPEigenvector=FPEigenvector/Min[FPEigenvector];
+dim[k_]:=FPEigenvector[[k]];
+vars=Union[Cases[partialFusionRules,_Z,\[Infinity]]];
+possibleDimensionList=(vars/.(a_Z:>{a,Range[0,Floor[(dim[a[[1]]])*(dim[a[[2]]])/(dim[a[[3]]])]]}));
+numberCases=Times@@(1+Length/@(Last/@possibleDimensionList));
+DebugPrint["Trying ",numberCases," solutions."];
+If[numberCases>10000,Print["FindFusionRules is aborting, ",numberCases," is too many cases to bash."];Return[$Aborted]];
+possibleValues=Flatten[Outer[List,Sequence @@(Last/@possibleDimensionList)],Length[possibleDimensionList]-1];
+solutions=Select[possibleValues,(And@@partialFusionRules[[3]]/.Thread[vars->#])&];
+FusionRules[m,#]&/@(partialFusionRules[[2]]/.Thread[vars->#]&/@solutions)
+]
 
 
 FindFusionRules[g_GradedGraph,Z_]:=
@@ -142,6 +172,23 @@ FindFusionRules[{g0_BigraphWithDuals, g1_BigraphWithDuals}]:=FindFusionRules[g0,
 
 
 FindFusionRules[g0_BigraphWithDuals, g1_BigraphWithDuals]:=FindFusionRules[g0, g1]=TimeConstrained[Module[{Z},FindFusionRules[g0,g1,Z]],FindFusionRulesTimeLimit,Print["FindFusionRules exceeded FindFusionRulesTimeLimit=",FindFusionRulesTimeLimit];$Aborted]
+
+
+FindFusionRules[m_?MatrixQ]:=(*FindFusionRules[m]=*)TimeConstrained[Module[{Z},FindFusionRules[m,Z]],FindFusionRulesTimeLimit,Print["FindFusionRules exceeded FindFusionRulesTimeLimit=",FindFusionRulesTimeLimit];$Aborted]
+
+
+PrepareAssociativityEquations[n_Integer,Z_]:=Module[{ZZ,d1,d2,d3,k1,k2,k3},
+ZZ=Table[Z[{d1,k1},{d2,k2},{d3,k3}],
+{d1,1,n},{d2,1,n},{d3,1,n}];
+DeleteCases[Union[#==0&/@Flatten[ZZ.ZZ-Transpose[ZZ.Transpose[ZZ,{2,1,3}],{2,3,1,4}]]],True]
+]
+
+
+PrepareFusionEquations[m:_?MatrixQ,Z_]:=Flatten[{
+Table[Z[1,i,j]-If[i==j,1,0],{i,1,Length[m]},{j,1,Length[m]}],
+Table[Z[i,1,j]-If[i==j,1,0],{i,1,Length[m]},{j,1,Length[m]}],
+Table[Z[2,i,j]-m[[i,j]],{i,1,Length[m]},{j,1,Length[m]}]
+}]
 
 
 PrepareAssociativityEquations[g_GradedGraph,Z_]:=Module[{ZZ,d1,d2,d3,k1,k2,k3},
@@ -291,6 +338,9 @@ EvenPartFusionRules[FusionRules[{g0_,g1_},multiplicities_]]:=FusionRules[EvenPar
 
 
 FlipFusionRules[FusionRules[{g0_,g1_},multiplicities_]]:=FusionRules[{g1,g0},multiplicities/.({a_,b_,c_}->T_):>((1-{a,b,c})->T)]
+
+
+FindFusionRules[g_GradedBigraph]:=Join@@(FindFusionRules/@FindGraphPartners[g])
 
 
 End[];

@@ -19,7 +19,7 @@
 
 
 
-BeginPackage["FusionAtlas`DisplayGraphs`",{"FusionAtlas`","JLink`","FusionAtlas`Java`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`"}];
+BeginPackage["FusionAtlas`DisplayGraphs`",{"FusionAtlas`","JLink`","FusionAtlas`Java`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`TensorSolver`","FusionAtlas`ExtractGraphs`","FusionAtlas`FormalCodegrees`"}];
 
 
 DisplayFusionGraph;DisplayBigraph;DisplayGraph;GraphHash;DeleteGraph;
@@ -232,8 +232,10 @@ DeleteFile[file];
 hash]
 
 
-CreateGraph[g_]:=Module[{TikzFunction},
-SetDirectory[FileNameJoin[{FusionAtlasDirectory[],"../graphs"}]];
+CreateGraph[g_]:=Module[{dir,TikzFunction},
+dir=FileNameJoin[{FusionAtlasDirectory[],"graphs"}];
+If[!FileExistsQ[dir],CreateDirectory[dir]];
+SetDirectory[dir];
 WriteString[OpenAppend["lookup.tex"],"\\hashdef{" <>GraphToString[g]<>"}{" <>GraphHash[GraphToString[g]]<>"}%\n"];
 Close["lookup.tex"];
 ResetDirectory[];
@@ -254,6 +256,24 @@ HeightFactor[g_]:=Module[{h},
 h=Max[RankAtDepth[g,#]&/@Range[GraphDepth[g]]];
 If[h==1,1,1/(h-1)]
 ]
+
+
+FusionRank[FusionRules[_,{{0,0,0}->m_}]]:=Length[m]
+
+
+FusionGraphsTable[fr_FusionRules]:=Table[DisplayGraph[ExtractFusionGraph[fr,k]],{k,2,FusionRank[fr]}]
+
+
+DisplayFusionGraphs[fr_FusionRules]:=Grid[FusionGraphsTable[fr],Frame->True]
+
+
+SubfactorGraphsTable[fr_FusionRules]:=Table[DisplayGraph[ExtractPairOfBigraphsWithDuals[fr,k]],{k,2,FusionRank[fr]}]
+
+
+DisplaySubfactorGraphs[fr_FusionRules]:=Grid[SubfactorGraphsTable[fr],Frame->True]
+
+
+DisplayGraph[fr_FusionRules]:=Grid[Transpose[{Rest[FPDimensions[fr]],FusionGraphsTable[fr],SubfactorGraphsTable[fr]}],Frame->True]
 
 
 End[];
