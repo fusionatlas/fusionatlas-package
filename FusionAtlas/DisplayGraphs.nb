@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     68608,       1717]
-NotebookOptionsPosition[     66109,       1635]
-NotebookOutlinePosition[     66496,       1652]
-CellTagsIndexPosition[     66453,       1649]
+NotebookDataLength[     72815,       1830]
+NotebookOptionsPosition[     69904,       1736]
+NotebookOutlinePosition[     70294,       1753]
+CellTagsIndexPosition[     70251,       1750]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -45,7 +45,11 @@ Cell[BoxData[
      RowBox[{
      "\"\<FusionAtlas`\>\"", ",", "\"\<JLink`\>\"", ",", 
       "\"\<FusionAtlas`Java`\>\"", ",", "\"\<FusionAtlas`Bigraphs`\>\"", ",", 
-      "\"\<FusionAtlas`GraphPairs`\>\""}], "}"}]}], "]"}], ";"}]], "Input",
+      "\"\<FusionAtlas`GraphPairs`\>\"", ",", 
+      "\"\<FusionAtlas`TensorSolver`\>\"", ",", 
+      "\"\<FusionAtlas`ExtractGraphs`\>\"", ",", 
+      "\"\<FusionAtlas`FormalCodegrees`\>\""}], "}"}]}], "]"}], 
+  ";"}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.4202911560186095`*^9, 3.4202911587124834`*^9}, {
    3.420295014256483*^9, 3.4202950158788157`*^9}, {3.4202954024747133`*^9, 
@@ -55,7 +59,9 @@ Cell[BoxData[
    3.441994640939397*^9, 3.441994644400791*^9}, {3.494961549141632*^9, 
    3.494961560171832*^9}, {3.505167220818883*^9, 3.505167241482581*^9}, {
    3.507649417505335*^9, 3.507649428389289*^9}, {3.507650458181695*^9, 
-   3.5076504600984*^9}, 3.508522580936002*^9}],
+   3.5076504600984*^9}, 3.508522580936002*^9, {3.68015394285819*^9, 
+   3.68015394749336*^9}, {3.6801540210608997`*^9, 3.680154024650058*^9}, {
+   3.680154089397011*^9, 3.680154094494512*^9}}],
 
 Cell[BoxData[
  RowBox[{"DisplayFusionGraph", ";", "DisplayBigraph", ";", "DisplayGraph", 
@@ -1492,15 +1498,23 @@ Cell[BoxData[
   RowBox[{"CreateGraph", "[", "g_", "]"}], ":=", 
   RowBox[{"Module", "[", 
    RowBox[{
-    RowBox[{"{", "TikzFunction", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{"dir", ",", "TikzFunction"}], "}"}], ",", "\[IndentingNewLine]", 
+    
     RowBox[{
-     RowBox[{"SetDirectory", "[", 
+     RowBox[{"dir", "=", 
       RowBox[{"FileNameJoin", "[", 
        RowBox[{"{", 
         RowBox[{
-         RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", 
-         "\"\<../graphs\>\""}], "}"}], "]"}], "]"}], ";", 
+         RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", "\"\<graphs\>\""}], 
+        "}"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"FileExistsQ", "[", "dir", "]"}]}], ",", 
+       RowBox[{"CreateDirectory", "[", "dir", "]"}]}], "]"}], ";", 
      "\[IndentingNewLine]", 
+     RowBox[{"SetDirectory", "[", "dir", "]"}], ";", "\[IndentingNewLine]", 
      RowBox[{"WriteString", "[", 
       RowBox[{
        RowBox[{"OpenAppend", "[", "\"\<lookup.tex\>\"", "]"}], ",", 
@@ -1556,7 +1570,8 @@ Cell[BoxData[
    3.507665223682979*^9}, {3.507675990263859*^9, 3.507676005868895*^9}, 
    3.507686116840526*^9, {3.507954324675157*^9, 3.507954329109667*^9}, {
    3.510587278931963*^9, 3.510587305091072*^9}, {3.512409350245914*^9, 
-   3.51240953956171*^9}}],
+   3.51240953956171*^9}, {3.68015067707962*^9, 3.680150677448968*^9}, {
+   3.680150723351129*^9, 3.680150746770947*^9}}],
 
 Cell[BoxData[{
  RowBox[{
@@ -1621,6 +1636,92 @@ Cell[BoxData[
 
 Cell[BoxData[
  RowBox[{
+  RowBox[{"FusionRank", "[", 
+   RowBox[{"FusionRules", "[", 
+    RowBox[{"_", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], "\[Rule]", "m_"}], "}"}]}], 
+    "]"}], "]"}], ":=", 
+  RowBox[{"Length", "[", "m", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.634842372178193*^9, 3.634842398477531*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FusionGraphsTable", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"DisplayGraph", "[", 
+     RowBox[{"ExtractFusionGraph", "[", 
+      RowBox[{"fr", ",", "k"}], "]"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "2", ",", 
+      RowBox[{"FusionRank", "[", "fr", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.635016678071673*^9, 3.635016697274578*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DisplayFusionGraphs", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{"Grid", "[", 
+   RowBox[{
+    RowBox[{"FusionGraphsTable", "[", "fr", "]"}], ",", 
+    RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.634842332160983*^9, 3.634842339329377*^9}, {
+  3.634842402766*^9, 3.6348424477363443`*^9}, {3.63484253831923*^9, 
+  3.634842538745758*^9}, {3.635016642645865*^9, 3.635016647826721*^9}, {
+  3.635016688892696*^9, 3.6350166907335997`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SubfactorGraphsTable", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"DisplayGraph", "[", 
+     RowBox[{"ExtractPairOfBigraphsWithDuals", "[", 
+      RowBox[{"fr", ",", "k"}], "]"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "2", ",", 
+      RowBox[{"FusionRank", "[", "fr", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.635016748397365*^9, 3.635016751365563*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DisplaySubfactorGraphs", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{"Grid", "[", 
+   RowBox[{
+    RowBox[{"SubfactorGraphsTable", "[", "fr", "]"}], ",", 
+    RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.634842455961089*^9, 3.634842466458558*^9}, {
+  3.6348425421845922`*^9, 3.634842542533677*^9}, {3.635016755953712*^9, 
+  3.635016769280265*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DisplayGraph", "[", "fr_FusionRules", "]"}], ":=", 
+  RowBox[{"Grid", "[", 
+   RowBox[{
+    RowBox[{"Transpose", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Rest", "[", 
+        RowBox[{"FPDimensions", "[", "fr", "]"}], "]"}], ",", 
+       RowBox[{"FusionGraphsTable", "[", "fr", "]"}], ",", 
+       RowBox[{"SubfactorGraphsTable", "[", "fr", "]"}]}], "}"}], "]"}], ",", 
+    
+    RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.634842494686603*^9, 3.63484252326976*^9}, {
+  3.6348425647868357`*^9, 3.6348425836025*^9}, {3.635016702522294*^9, 
+  3.63501673208888*^9}, {3.635016785650447*^9, 3.635016788810302*^9}}],
+
+Cell[BoxData[
+ RowBox[{
   RowBox[{"End", "[", "]"}], ";"}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.50516726120844*^9, 3.505167263312408*^9}, 
@@ -1636,8 +1737,8 @@ Cell[BoxData[
 AutoGeneratedPackage->Automatic,
 WindowSize->{1280, 751},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
-FrontEndVersion->"10.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 23, \
-2015)",
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
+2014)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -1652,70 +1753,82 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[567, 22, 297, 4, 47, "Subtitle",
+Cell[567, 22, 297, 4, 51, "Subtitle",
  InitializationCell->True],
-Cell[867, 28, 250, 4, 26, "Text",
+Cell[867, 28, 250, 4, 30, "Text",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[1142, 36, 60, 1, 68, "Section",
+Cell[1142, 36, 60, 1, 64, "Section",
  InitializationCell->True],
-Cell[1205, 39, 1014, 18, 29, "Input",
+Cell[1205, 39, 1314, 24, 46, "Input",
  InitializationCell->True],
-Cell[2222, 59, 617, 9, 29, "Input",
+Cell[2522, 65, 617, 9, 28, "Input",
  InitializationCell->True],
-Cell[2842, 70, 119, 3, 29, "Input",
+Cell[3142, 76, 119, 3, 28, "Input",
  InitializationCell->True],
-Cell[2964, 75, 6807, 163, 317, "Input",
+Cell[3264, 81, 6807, 163, 335, "Input",
  InitializationCell->True],
-Cell[9774, 240, 9894, 252, 317, "Input",
+Cell[10074, 246, 9894, 252, 335, "Input",
  InitializationCell->True],
-Cell[19671, 494, 1850, 47, 93, "Input",
+Cell[19971, 500, 1850, 47, 97, "Input",
  InitializationCell->True],
-Cell[21524, 543, 2729, 66, 125, "Input",
+Cell[21824, 549, 2729, 66, 131, "Input",
  InitializationCell->True],
-Cell[24256, 611, 3155, 70, 246, "Input",
+Cell[24556, 617, 3155, 70, 264, "Input",
  InitializationCell->True],
-Cell[27414, 683, 4633, 116, 173, "Input",
+Cell[27714, 689, 4633, 116, 182, "Input",
  InitializationCell->True],
-Cell[32050, 801, 5894, 148, 205, "Input",
+Cell[32350, 807, 5894, 148, 216, "Input",
  InitializationCell->True],
-Cell[37947, 951, 2967, 69, 93, "Input",
+Cell[38247, 957, 2967, 69, 97, "Input",
  InitializationCell->True],
-Cell[40917, 1022, 1497, 34, 61, "Input",
+Cell[41217, 1028, 1497, 34, 63, "Input",
  InitializationCell->True],
-Cell[42417, 1058, 1722, 41, 77, "Input",
+Cell[42717, 1064, 1722, 41, 80, "Input",
  InitializationCell->True],
-Cell[44142, 1101, 1177, 18, 29, "Input",
+Cell[44442, 1107, 1177, 18, 28, "Input",
  InitializationCell->True],
-Cell[45322, 1121, 212, 5, 29, "Input",
+Cell[45622, 1127, 212, 5, 28, "Input",
  InitializationCell->True],
-Cell[45537, 1128, 163, 3, 29, "Input",
+Cell[45837, 1134, 163, 3, 28, "Input",
  InitializationCell->True],
-Cell[45703, 1133, 1126, 30, 45, "Input",
+Cell[46003, 1139, 1126, 30, 46, "Input",
  InitializationCell->True],
-Cell[46832, 1165, 278, 6, 29, "Input",
+Cell[47132, 1171, 278, 6, 28, "Input",
  InitializationCell->True],
-Cell[47113, 1173, 539, 14, 29, "Input",
+Cell[47413, 1179, 539, 14, 28, "Input",
  InitializationCell->True],
-Cell[47655, 1189, 2592, 55, 188, "Input",
+Cell[47955, 1195, 2592, 55, 199, "Input",
  InitializationCell->True],
-Cell[50250, 1246, 887, 20, 108, "Input",
+Cell[50550, 1252, 887, 20, 114, "Input",
  InitializationCell->True],
-Cell[51140, 1268, 1055, 32, 61, "Input",
+Cell[51440, 1274, 1055, 32, 63, "Input",
  InitializationCell->True],
-Cell[52198, 1302, 4740, 111, 491, "Input",
+Cell[52498, 1308, 4740, 111, 556, "Input",
  InitializationCell->True],
-Cell[56941, 1415, 3093, 72, 220, "Input",
+Cell[57241, 1421, 3093, 72, 250, "Input",
  InitializationCell->True],
-Cell[60037, 1489, 3643, 69, 205, "Input",
+Cell[60337, 1495, 4040, 78, 250, "Input",
  InitializationCell->True],
-Cell[63683, 1560, 1149, 32, 61, "Input",
+Cell[64380, 1575, 1149, 32, 80, "Input",
  InitializationCell->True],
-Cell[64835, 1594, 902, 25, 115, "Input",
+Cell[65532, 1609, 902, 25, 122, "Input",
  InitializationCell->True],
-Cell[65740, 1621, 187, 5, 28, "Input",
+Cell[66437, 1636, 409, 12, 28, "Input",
  InitializationCell->True],
-Cell[65930, 1628, 151, 3, 29, "Input",
+Cell[66849, 1650, 476, 12, 28, "Input",
+ InitializationCell->True],
+Cell[67328, 1664, 535, 11, 28, "Input",
+ InitializationCell->True],
+Cell[67866, 1677, 491, 12, 28, "Input",
+ InitializationCell->True],
+Cell[68360, 1691, 448, 10, 28, "Input",
+ InitializationCell->True],
+Cell[68811, 1703, 721, 17, 28, "Input",
+ InitializationCell->True],
+Cell[69535, 1722, 187, 5, 28, "Input",
+ InitializationCell->True],
+Cell[69725, 1729, 151, 3, 28, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]

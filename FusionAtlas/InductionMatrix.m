@@ -40,6 +40,9 @@ CheckGaloisAction[n,dimensionData]
 ]
 
 
+InductionMatrices[g_GradedBigraph]:={#,InductionMatrices[#]}&/@(EvenPartFusionRules/@FindFusionRules[g])
+
+
 CheckGaloisAction[n_,dimensionData_][inductionMatrix_]:=Module[{\[ScriptCapitalD],dimensions},
 \[ScriptCapitalD]=dimensionData[[1]];
 dimensions=Sort[Transpose[inductionMatrix].(dimensionData[[2,1]])];

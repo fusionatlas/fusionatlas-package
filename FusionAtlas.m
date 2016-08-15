@@ -61,6 +61,10 @@ DeclarePackage["FusionAtlas`InductionMatrix`",
 {"InductionMatrices","AllDecompositions"}];
 
 
+DeclarePackage["FusionAtlas`ModularData`",
+{"FindModularData"}];
+
+
 DeclarePackage["FusionAtlas`FindGraphPartners`",
 {"FindGraphPartners","FindWeedPartners"}];
 
@@ -315,27 +319,6 @@ UnitVectorQ[v_?VectorQ]:=Complement[v,{0,1}]=={}\[And]Count[v,1]==1
 
 
 ZeroVectorQ[v_?VectorQ]:=Union[v]==={0}\[Or]v=={}
-
-
-ZeroMatrixQ[m_] := (m==ZeroMatrix@@Dimensions[m])
-
-
-(* This is horribly broken: e.g. MinimalPolynomial[Sqrt[Root[-2+12 #1-7 #1^2+#1^3&,3]],x] gives -x^3!!! *)
-
-(* Unfortunately I can't remember why we wrote this: it must have been to speed something up. Hopefully it's just not a problem anymore to use the default implementation in Mathematica *)
-
-(*Unprotect[MinimalPolynomial];
-MinimalPolynomial[\[Mu]_,z_]/;Length[Union[Cases[\[Mu],_Root,\[Infinity]]]]\[Equal]1:=Module[{roots,z0,\[Lambda],p,q,x,n,rule,matrix},
-roots=Cases[\[Mu],_Root,\[Infinity],1];
-p=roots\[LeftDoubleBracket]1,1\[RightDoubleBracket][\[Lambda]];
-n=Exponent[p,\[Lambda]];
-rule=\[Lambda]^(m_/;m\[GreaterEqual]n)\[RuleDelayed]Evaluate[\[Lambda]^(m-n)(-(p-Coefficient[p,\[Lambda],n]\[Lambda]^n))];
-q=Table[\[Lambda]^i,{i,0,n-1}];
-x=\[Mu]/.roots\[LeftDoubleBracket]1\[RightDoubleBracket]\[Rule]\[Lambda];
-matrix=Table[Coefficient[#,\[Lambda],k],{k,0,n-1}]&/@FixedPoint[Expand[#//.rule]&,q x];
-CharacteristicPolynomial[matrix,z0]/.z0\[Rule]z
-]
-Protect[MinimalPolynomial];*)
 
 
 qFromd[d_]:= cachedRootReduce[(d+Sqrt[d^2-4])/2]

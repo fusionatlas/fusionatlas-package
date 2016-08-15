@@ -3,6 +3,9 @@ syntax: glob
 
 .DS_Store
 
+modularData
+graphs
+
 scala/target
 scala/lib_managed
 scala/project/target

@@ -78,7 +78,7 @@ weeds=Nest[ExtendOneDepthMatching[d,#,g][[2]]&,{{TrivialDualData[AnBigraph[branc
 vines=ExtendOneDepthMatching[d,weeds,g][[1]];
 finalWeeds=ExtendOneDepthMatching[d,weeds,g][[2]];
 otherVines=ExtendOneDepthMatching[d,finalWeeds,g][[1]];
-vines~Join~otherVines
+Select[vines~Join~otherVines,ScalaTriplePointObstruction]
 ]
 
 
