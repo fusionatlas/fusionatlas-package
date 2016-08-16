@@ -156,11 +156,11 @@ DisplayGraph[list:{__String}]:=Grid[{Magnify[DisplayGraph[#],0.7]&/@list}]
 DisplayGraph[g_GraphWithDuals]:=DisplayGraph[GraphToString[g]]
 
 
-DeleteGraph[g_]:=DeleteFile[FileNameJoin[{FusionAtlasDirectory[],"..","graphs",GraphHash[GraphToString[g]]<>".pdf"}]]
+DeleteGraph[g_]:=DeleteFile[FileNameJoin[{FusionAtlasDirectory[],"graphs",GraphHash[GraphToString[g]]<>".pdf"}]]
 
 
 DisplayGraph[g_]:=DisplayGraph[g]=Module[{file,import},
-file=FileNameJoin[{FusionAtlasDirectory[],"..","graphs",GraphHash[GraphToString[g]]<>".pdf"}];
+file=FileNameJoin[{FusionAtlasDirectory[],"graphs",GraphHash[GraphToString[g]]<>".pdf"}];
 If[FileExistsQ[file],
 import=Import[file];
 If[Length[import]!=1,
@@ -194,7 +194,7 @@ If[FileExistsQ["snippet"],DeleteFile["snippet"]];
 WriteString[OpenWrite["snippet"],tikz];
 Close["snippet"];
 Off[CopyFile::"filex"];
-CopyFile["snippet",FileNameJoin[{FusionAtlasDirectory[],"..","graphs",filename<>".tex"}]];
+CopyFile["snippet",FileNameJoin[{FusionAtlasDirectory[],"graphs",filename<>".tex"}]];
 gs=FileNames[{"/usr/bin/gs","/usr/local/bin/gs"}][[1]];
 Run[
 cmd="
@@ -209,7 +209,7 @@ rm document.*;
 rm snippet;
 "];
 If[!FileExistsQ["finished.pdf"],Print["Generating a diagram failed --- no PDF produced."];Print[cmd];Print[tikz];Abort[]];
-CopyFile["finished.pdf",FileNameJoin[{FusionAtlasDirectory[],"..","graphs",filename<>".pdf"}]];
+CopyFile["finished.pdf",FileNameJoin[{FusionAtlasDirectory[],"graphs",filename<>".pdf"}]];
 result=Import["finished.pdf"][[1]];
 Run["rm *.pdf"];
 ResetDirectory[];

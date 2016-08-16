@@ -170,7 +170,11 @@ Print["Done!"];
 
 
 SaveGenerators[]:=AbortProtect[Put[SubValues[ExplicitGenerators],FileNameJoin[{dataDirectory,"explicitGenerators.m"}]]]
-LoadGenerators[]:=(SubValues[ExplicitGenerators]=Get[FileNameJoin[{dataDirectory,"explicitGenerators.m"}]]~Join~SubValues[ExplicitGenerators];)
+LoadGenerators[]:=Module[{filename=FileNameJoin[{dataDirectory,"explicitGenerators.m"}]},
+If[FileExistsQ[filename],
+(SubValues[ExplicitGenerators]=Get[filename]~Join~SubValues[ExplicitGenerators];)
+]
+]
 
 
 LoadGenerators[]
@@ -237,7 +241,12 @@ result
 
 
 SaveCharacterTables[]:=AbortProtect[Put[DownValues[CharacterTable],FileNameJoin[{dataDirectory,"characterTables.m"}]]]
-LoadCharacterTables[]:=(DownValues[CharacterTable]=Get[FileNameJoin[{dataDirectory,"characterTables.m"}]]~Join~DownValues[CharacterTable];)
+LoadCharacterTables[]:=
+Module[{filename=FileNameJoin[{dataDirectory,"characterTables.m"}]},
+If[FileExistsQ[filename],
+(DownValues[CharacterTable]=Get[filename]~Join~DownValues[CharacterTable];)
+]
+]
 
 
 LoadCharacterTables[];
@@ -257,9 +266,15 @@ AbortProtect[Put[Cases[DownValues[ConjugacyClassesOfPowersOfT],r_/;FreeQ[r,Blank
 AbortProtect[Put[Cases[DownValues[ConjugacyClassesOfGalois],r_/;FreeQ[r,Blank]],FileNameJoin[{dataDirectory,"conjugacyClassesOfGalois.m"}]]];
 ]
 LoadConjugacyClasses[]:=Module[{},
+If[FileExistsQ[FileNameJoin[{dataDirectory,"conjugacyClasses.m"}]],
 SubValues[ConjugacyClassOf]=Get[FileNameJoin[{dataDirectory,"conjugacyClasses.m"}]]~Join~SubValues[ConjugacyClassOf];
+];
+If[FileExistsQ[FileNameJoin[{dataDirectory,"conjugacyClassesOfPowersOfT.m"}]],
 DownValues[ConjugacyClassesOfPowersOfT]=Get[FileNameJoin[{dataDirectory,"conjugacyClassesOfPowersOfT.m"}]]~Join~DownValues[ConjugacyClassesOfPowersOfT];
+];
+If[FileExistsQ[FileNameJoin[{dataDirectory,"conjugacyClassesOfGalois.m"}]],
 DownValues[ConjugacyClassesOfGalois]=Get[FileNameJoin[{dataDirectory,"conjugacyClassesOfGalois.m"}]]~Join~DownValues[ConjugacyClassesOfGalois];
+];
 ]
 
 
@@ -1189,6 +1204,23 @@ Print["Considering fusion rings: "];
 Print[DisplayGraph[#]]&/@(FindFusionRules[m]);
 Join@@(FindModularData/@FindFusionRules[m])
 ]
+ParallelFindModularData[fusion_,inductions:{___?MatrixQ}]:=Module[{},
+DistributeDefinitions[FindModularData,permuteColumns,PossibleConductors];
+Flatten[ParallelTable[FindModularData[n,fusion,permuteColumns[induction],6],{induction,inductions},{n,PossibleConductors[induction]}]]
+]
+ParallelFindModularData[fusion_]:=ParallelFindModularData[fusion,InductionMatrices[fusion]]
+ParallelFindModularData[g_GradedBigraph]:=Module[{},
+Print["Considering fusion rings: "];
+Print[DisplayGraph[#]]&/@(EvenPartFusionRules/@FindFusionRules[g]);
+Join@@(ParallelFindModularData@@#&/@InductionMatrices[g])
+]
+ParallelFindModularData[ m_?MatrixQ]:=Module[{},
+Print["Considering fusion rings: "];
+Print[DisplayGraph[#]]&/@(FindFusionRules[m]);
+Join@@(ParallelFindModularData/@FindFusionRules[m])
+]
+
+
 
 
 End[];
