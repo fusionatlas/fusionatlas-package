@@ -29,15 +29,33 @@ AllDecompositions::usage="AllDecompositions[m] for m a symmetric non-negative in
 Begin["`Private`"];
 
 
+permuteColumns[inductionMatrix_]:=Transpose[SortBy[Transpose[inductionMatrix],{Total[#],Reverse[#]}&]]
+
+
 Clear[InductionMatrices]
 InductionMatrices[fr_FusionRules]:=InductionMatrices[fr]=Module[{n,dimensionData},
 dimensionData=DimensionData[fr];
 n=If[IntegerQ[dimensionData[[1]]],1,identify\[Zeta][dimensionData[[1,1]]]];
-Select[
+permuteColumns/@Select[
 Cases[AlgebraicDecompositions[AnnularHoms[fr],dimensionData],m_/;Count[Transpose[m],UnitVector[Length[m],1]]>=1],
 CheckGaloisAction[n,dimensionData]
 ]
 ]
+
+
+InductionMatrices[FusionRules[{{0,1,0,0,0,0},{1,1,1,0,0,0},{0,1,1,1,0,0},{0,0,1,1,1,1},{0,0,0,1,2,1},{0,0,0,1,1,0}},{{0,0,0}->{{{1,0,0,0,0,0},{0,1,0,0,0,0},{0,0,1,0,0,0},{0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,1}},{{0,1,0,0,0,0},{1,1,1,0,0,0},{0,1,1,1,0,0},{0,0,1,1,1,1},{0,0,0,1,2,1},{0,0,0,1,1,0}},{{0,0,1,0,0,0},{0,1,1,1,0,0},{1,1,1,1,1,1},{0,1,1,2,3,1},{0,0,1,3,3,2},{0,0,1,1,2,1}},{{0,0,0,1,0,0},{0,0,1,1,1,1},{0,1,1,2,3,1},{1,1,2,4,5,3},{0,1,3,5,6,3},{0,1,1,3,3,2}},{{0,0,0,0,1,0},{0,0,0,1,2,1},{0,0,1,3,3,2},{0,1,3,5,6,3},{1,2,3,6,7,4},{0,1,2,3,4,2}},{{0,0,0,0,0,1},{0,0,0,1,1,0},{0,0,1,1,2,1},{0,1,1,3,3,2},{0,1,2,3,4,2},{1,0,1,2,2,1}}}}]]={\!\(\*
+TagBox[
+RowBox[{"(", "", GridBox[{
+{"1", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "1", "1", "1", "0", "0", "0", "0", "1"},
+{"0", "1", "1", "1", "1", "1", "1", "1", "1", "1", "0", "0", "0", "0", "2", "1", "0", "1", "1", "1", "1", "1"},
+{"0", "1", "1", "1", "1", "1", "2", "2", "2", "2", "1", "1", "1", "1", "1", "1", "3", "2", "2", "2", "2", "2"},
+{"0", "1", "1", "1", "1", "1", "3", "3", "3", "3", "3", "3", "3", "3", "2", "4", "2", "4", "4", "4", "4", "4"},
+{"0", "1", "1", "1", "1", "1", "3", "3", "3", "3", "4", "4", "4", "4", "4", "2", "3", "5", "5", "5", "5", "5"},
+{"0", "1", "1", "1", "1", "1", "1", "1", "1", "1", "2", "2", "2", "2", "1", "2", "2", "3", "3", "3", "3", "3"}
+},
+GridBoxAlignment->{"Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.7]}, Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {Offset[0.2], {Offset[0.4]}, Offset[0.2]}, "RowsIndexed" -> {}}], "", ")"}],
+Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]\)};
 
 
 InductionMatrices[g_GradedBigraph]:={#,InductionMatrices[#]}&/@(EvenPartFusionRules/@FindFusionRules[g])
