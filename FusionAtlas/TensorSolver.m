@@ -66,12 +66,12 @@ equations
 ]
 
 
-FindPartialFusionRules[m_?MatrixQ,Z_]/;RankAtDepth[g,1]==1:=
+FindPartialFusionRules[m_?MatrixQ,Z_]:=
 Module[{multiplicities,equations,d1,d2,d3,k1,k2,k3},
-equations=SolveAllSolvableEquations[PrepareAssociativityEquations[m,Z]~Join~PrepareFusionEquations[m,Z],Z];
+equations=SolveAllSolvableEquations[PrepareAssociativityEquations[Length[m],Z]~Join~PrepareFusionEquations[m,Z],Z];
 multiplicities=Table[Z[d1,d2,d3],
 {d1,1,Length[m]},{d2,1,Length[m]},{d3,1,Length[m]}];
-PartialFusionRules[g,{{0,0,0}->multiplicities},equations]
+PartialFusionRules[m,{{0,0,0}->multiplicities},equations]
 ]
 
 
@@ -94,8 +94,11 @@ PartialFusionRules[{g0,g1},multiplicities,equations]
 ]
 
 
-SolvePartialFusionRules[PartialFusionRules[g_,multiplicities_,equations_],Z_]:=
+SolvePartialFusionRules[PartialFusionRules[g_,multiplicities_,equations_],Z_]:=Module[{},
+Quiet[
 FusionRules[g,multiplicities]/.Solve[equations,Union[Cases[equations,_Z,\[Infinity]]]]
+,{Solve::svars}]
+]
 
 
 FindFusionRules[m_?MatrixQ,Z_]:=
@@ -106,16 +109,19 @@ Print["FindFusionRules requires a tensor generator, this won't do: ",m];
 Abort[]
 ];
 FPEigenvector=Eigenvectors[m][[1]];
-FPEigenvector=FPEigenvector/Min[FPEigenvector];
+FPEigenvector=RootReduce[FPEigenvector/Min[FPEigenvector]];
 dim[k_]:=FPEigenvector[[k]];
 vars=Union[Cases[partialFusionRules,_Z,\[Infinity]]];
+If[Length[vars]>0,
 possibleDimensionList=(vars/.(a_Z:>{a,Range[0,Floor[(dim[a[[1]]])*(dim[a[[2]]])/(dim[a[[3]]])]]}));
 numberCases=Times@@(1+Length/@(Last/@possibleDimensionList));
 DebugPrint["Trying ",numberCases," solutions."];
 If[numberCases>10000,Print["FindFusionRules is aborting, ",numberCases," is too many cases to bash."];Return[$Aborted]];
 possibleValues=Flatten[Outer[List,Sequence @@(Last/@possibleDimensionList)],Length[possibleDimensionList]-1];
 solutions=Select[possibleValues,(And@@partialFusionRules[[3]]/.Thread[vars->#])&];
-FusionRules[m,#]&/@(partialFusionRules[[2]]/.Thread[vars->#]&/@solutions)
+FusionRules[m,#]&/@(partialFusionRules[[2]]/.Thread[vars->#]&/@solutions),
+{FusionRules[m,partialFusionRules[[2]]]}
+]
 ]
 
 
@@ -178,16 +184,16 @@ FindFusionRules[m_?MatrixQ]:=(*FindFusionRules[m]=*)TimeConstrained[Module[{Z},F
 
 
 PrepareAssociativityEquations[n_Integer,Z_]:=Module[{ZZ,d1,d2,d3,k1,k2,k3},
-ZZ=Table[Z[{d1,k1},{d2,k2},{d3,k3}],
+ZZ=Table[Z[d1,d2,d3],
 {d1,1,n},{d2,1,n},{d3,1,n}];
 DeleteCases[Union[#==0&/@Flatten[ZZ.ZZ-Transpose[ZZ.Transpose[ZZ,{2,1,3}],{2,3,1,4}]]],True]
 ]
 
 
 PrepareFusionEquations[m:_?MatrixQ,Z_]:=Flatten[{
-Table[Z[1,i,j]-If[i==j,1,0],{i,1,Length[m]},{j,1,Length[m]}],
-Table[Z[i,1,j]-If[i==j,1,0],{i,1,Length[m]},{j,1,Length[m]}],
-Table[Z[2,i,j]-m[[i,j]],{i,1,Length[m]},{j,1,Length[m]}]
+Table[Z[1,i,j]-If[i==j,1,0]==0,{i,1,Length[m]},{j,1,Length[m]}],
+Table[Z[i,1,j]-If[i==j,1,0]==0,{i,1,Length[m]},{j,1,Length[m]}],
+Table[Z[2,i,j]-m[[i,j]]==0,{i,1,Length[m]},{j,1,Length[m]}]
 }]
 
 
@@ -287,7 +293,9 @@ SolvablePatterns[Z_]:=SolvablePatterns[Z]={{1,_Z==0,SolveSolvableEquations[Z]},{
 
 SolveSolvableEquations[Z_][F_]:=
 Module[{solutions},
+Quiet[
 solutions=Solve[F,Union[Cases[F,_Z,\[Infinity]]]];
+,{Solve::svars}];
 Switch[Length[solutions],
 1,
 DebugPrint["solved for ",Length[solutions[[1]]], " variables."];

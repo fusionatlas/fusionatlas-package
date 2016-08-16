@@ -173,6 +173,9 @@ SaveGenerators[]:=AbortProtect[Put[SubValues[ExplicitGenerators],FileNameJoin[{d
 LoadGenerators[]:=(SubValues[ExplicitGenerators]=Get[FileNameJoin[{dataDirectory,"explicitGenerators.m"}]]~Join~SubValues[ExplicitGenerators];)
 
 
+LoadGenerators[]
+
+
 Clear[ReadCharacterTable]
 ReadCharacterTable[gapName_]:=ReadCharacterTable[gapName]=Module[{lines},
 lines=Execute["Display(CharacterTable("<>gapName<>"));"];
@@ -237,6 +240,9 @@ SaveCharacterTables[]:=AbortProtect[Put[DownValues[CharacterTable],FileNameJoin[
 LoadCharacterTables[]:=(DownValues[CharacterTable]=Get[FileNameJoin[{dataDirectory,"characterTables.m"}]]~Join~DownValues[CharacterTable];)
 
 
+LoadCharacterTables[];
+
+
 Clear[ConjugacyClassOf]
 ConjugacyClassOf[q_][m_]:=ConjugacyClassOf[q][m]=Module[{cmd,lines},
 cmd="Position(ConjugacyClasses("<>GAP[SL[2,Subscript[Z, q]]]<>"),ConjugacyClass("<>GAP[SL[2,Subscript[Z, q]]]<>","<>StringReplace[ToString[m],{"{"->"[","}"->"]"}]<>"*One(Integers mod "<>ToString[q]<>")));";
@@ -270,6 +276,9 @@ cmd = "m := "<>ToString[q] <>";; G := Group([[[0,1],[-1,0]],[[1,1],[0,1]]]*One(I
 lines=Execute[cmd];
 ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]
 ]
+
+
+LoadConjugacyClasses[]
 
 
 GaloisMatrix[n_,l_]:=GaloisMatrix[n,l]=With[{c={{-1,0},{0,-1}},s={{0,1},{-1,0}},t={{1,1},{0,1}}},Mod[c.s.{{1,PowerMod[l,-1,n]},{0,1}}.s.{{1,l},{0,1}}.s.{{1,PowerMod[l,-1,n]},{0,1}},n]]
@@ -709,7 +718,7 @@ AllocateEigenvaluesToGaloisOrbitClumps[n_Integer,inductionMatrix_]:=Module[{outp
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToGaloisOrbitClumps"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>SHA1[inductionMatrix]<>".m.gz"}];
-If[False\[And]FileExistsQ[filename],
+If[FileExistsQ[filename],
 ImportGZIP[filename],
 Print["Allocating T-eigenvalues to Galois orbit clumps for ",MatrixForm[inductionMatrix]];
 AllocateEigenvaluesToGaloisOrbitClumpsImpl0[X___]:=AllocateEigenvaluesToGaloisOrbitClumpsImpl0[X]=AllocateEigenvaluesToGaloisOrbitClumpsImpl[X];
@@ -730,7 +739,7 @@ EigenvalueClumps[eigenvalueLists:{{__?NumericQ}..}]:=Join@@(EigenvalueClumps[#]&
 liftsOf1=LiftsOf1[inductionMatrix];
 allocations=RepresentationsForInductionMatrix[n,inductionMatrix];
 result=Join@@Map[Function[representation,representation~Join~{#}&/@AllocateEigenvaluesToGaloisOrbitClumpsImpl0[{#,{}}&/@GaloisOrbitClumps[n,DimensionsFromInductionMatrix[n,inductionMatrix]],Tally[EigenvalueClumps[representation[[2]]]]]],allocations];
-(*GZIP[result,filename];*)
+GZIP[result,filename];
 Print["Found ",Length[result], " ways to allocate T-eigenvalues to the Galois orbit clumps for ",MatrixForm[inductionMatrix]];
 result
 ]
@@ -888,7 +897,7 @@ Clear[RefinePartialGaloisAction]
 RefinePartialGaloisAction[n_,pga_PartialGaloisAction]:=Module[{targets,l,k},
 (* look for a Galois element which isn't determined yet. *)
 targets=Position[pga[[1]],images_/;Length[images]>1,{3}];
-targets=Cases[targets,t_/;MemberQ[GaloisGroupGenerators[n],GaloisGroup[n][[t[[1]]]]]];
+targets=SortBy[targets,!MemberQ[GaloisGroupGenerators[n],GaloisGroup[n][[#[[1]]]]]&];
 If[Length[targets]==0,
 (* we're done! *)
 {GaloisAction[pga[[1]]/.list:{{_Integer}..}:>Flatten[list],pga[[2]]]},
