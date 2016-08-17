@@ -19,6 +19,9 @@
 
 
 
+$RecursionLimit=Max[$RecursionLimit,4096];
+
+
 BeginPackage["FusionAtlas`ModularData`",{"FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`TensorSolver`","FusionAtlas`FormalCodegrees`","FusionAtlas`InductionMatrix`","FusionAtlas`DisplayGraphs`"}];
 
 
