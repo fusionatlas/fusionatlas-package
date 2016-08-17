@@ -219,12 +219,12 @@ FusionAtlasDirectory[]:=FusionAtlasDirectory[]=StringDrop[(File/.Flatten[FileInf
 If[!MemberQ[$Path,FusionAtlasDirectory[]],AppendTo[$Path,FusionAtlasDirectory[]]]
 
 
-If[StringTake[FusionAtlasDirectory[],-7]=="package",
+(*If[StringTake[FusionAtlasDirectory[],-7]=="package",
 FusionAtlasDataDirectory[]:=StringDrop[FusionAtlasDirectory[],-7]<>"data";
 Print["Found precomputed data in ",FusionAtlasDataDirectory[]];
 If[!MemberQ[$Path,FusionAtlasDataDirectory[]],AppendTo[$Path,FusionAtlasDataDirectory[]]],
 Print["Remember to set FusionAtlasDataDirectory[] to the appropriate path, if you've downloaded precomputed data."]
-];
+];*)
 
 
 UnsortedUnion[x_]:=Module[{f},f[y_]:=(f[y]=Sequence[];y);f/@x]
