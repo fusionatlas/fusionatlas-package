@@ -500,6 +500,9 @@ Flatten[Position[dimensions[[2]],#|(-#),1]]&/@images
 PossibleGaloisImages[n_,dimensions_]:=Table[l->PossibleGaloisImages[n,dimensions,l],{l,GaloisGroup[n]}]
 
 
+PossibleGaloisImages[n_,induction_?MatrixQ]:=PossibleGaloisImages[n,DimensionsFromInductionMatrix[n,induction]]
+
+
 PossibleGaloisImagesWithSigns[n_,dimensions_,1]:=Table[{i},{i,1,Length[dimensions[[2]]]}];
 PossibleGaloisImagesWithSigns[n_,dimensions_,l_]:=PossibleGaloisImagesWithSigns[n,dimensions,l]=Module[{images},
 images=GaloisAction[n][l][#/dimensions[[1]]]dimensions[[1]]&/@dimensions[[2]];
@@ -818,7 +821,6 @@ ImportGZIP[filename],
 result=Join@@(Map[Function[A,{A[[1]],#}&/@AllocateEigenvaluesToSimples[n,inductionMatrix,A[[3]]]],AllocateEigenvaluesToGaloisOrbitClumps[n,inductionMatrix]]);
 GZIP[result,filename];
 Print["Found ",Length[result], " candidate T-matrices for ",MatrixForm[inductionMatrix]];
-Print[TableForm[#]]&/@result;
 result]
 ]
 
@@ -885,7 +887,7 @@ Cases[pairs,{x_,v_}/;Union[#.{1,-1}&/@Flatten[v,1]]==={0}:>x]
 ];
 GZIP[result,filename];
 Print["Found ",Length[result], " T-matrices with good Frobenius-Schur indicators for ",DisplayGraph[fusion], " ",MatrixForm[inductionMatrix]];
-Print[TableForm[#]]&/@result;
+(*Print[TableForm[#]]&/@result;*)
 result]
 ]
 
@@ -1197,7 +1199,7 @@ FindModularData[fusion_]:=FindModularData[fusion,InductionMatrices[fusion]]
 FindModularData[g_GradedBigraph]:=Module[{},
 Print["Considering fusion rings: "];
 Print[DisplayGraph[#]]&/@(EvenPartFusionRules/@FindFusionRules[g]);
-Join@@(FindModularData@@#&/@InductionMatrices[g])
+Join@@(FindModularData@@#&/@Select[InductionMatrices[g],CheckGaloisVerlinde])
 ]
 FindModularData[ m_?MatrixQ]:=Module[{},
 Print["Considering fusion rings: "];
@@ -1212,7 +1214,7 @@ ParallelFindModularData[fusion_]:=ParallelFindModularData[fusion,InductionMatric
 ParallelFindModularData[g_GradedBigraph]:=Module[{},
 Print["Considering fusion rings: "];
 Print[DisplayGraph[#]]&/@(EvenPartFusionRules/@FindFusionRules[g]);
-Join@@(ParallelFindModularData@@#&/@InductionMatrices[g])
+Join@@(ParallelFindModularData@@#&/@Select[InductionMatrices[g],CheckGaloisVerlinde])
 ]
 ParallelFindModularData[ m_?MatrixQ]:=Module[{},
 Print["Considering fusion rings: "];

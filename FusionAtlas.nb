@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     72384,       1717]
-NotebookOptionsPosition[     66277,       1523]
-NotebookOutlinePosition[     66847,       1548]
-CellTagsIndexPosition[     66778,       1543]
+NotebookDataLength[     72444,       1718]
+NotebookOptionsPosition[     66337,       1524]
+NotebookOutlinePosition[     66907,       1549]
+CellTagsIndexPosition[     66838,       1544]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1031,43 +1031,44 @@ Cell[BoxData[
  CellChangeTimes->{{3.4211988253315744`*^9, 3.421198831550517*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"If", "[", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"StringTake", "[", 
-      RowBox[{
-       RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", 
-       RowBox[{"-", "7"}]}], "]"}], "==", "\"\<package\>\""}], ",", 
-    "\[IndentingNewLine]", 
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"If", "[", 
     RowBox[{
      RowBox[{
-      RowBox[{"FusionAtlasDataDirectory", "[", "]"}], ":=", 
-      RowBox[{
-       RowBox[{"StringDrop", "[", 
-        RowBox[{
-         RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", 
-         RowBox[{"-", "7"}]}], "]"}], "<>", "\"\<data\>\""}]}], ";", 
+      RowBox[{"StringTake", "[", 
+       RowBox[{
+        RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", 
+        RowBox[{"-", "7"}]}], "]"}], "==", "\"\<package\>\""}], ",", 
      "\[IndentingNewLine]", 
-     RowBox[{"Print", "[", 
-      RowBox[{"\"\<Found precomputed data in \>\"", ",", 
-       RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}], ";", 
-     "\[IndentingNewLine]", 
-     RowBox[{"If", "[", 
+     RowBox[{
       RowBox[{
-       RowBox[{"!", 
-        RowBox[{"MemberQ", "[", 
+       RowBox[{"FusionAtlasDataDirectory", "[", "]"}], ":=", 
+       RowBox[{
+        RowBox[{"StringDrop", "[", 
+         RowBox[{
+          RowBox[{"FusionAtlasDirectory", "[", "]"}], ",", 
+          RowBox[{"-", "7"}]}], "]"}], "<>", "\"\<data\>\""}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Print", "[", 
+       RowBox[{"\"\<Found precomputed data in \>\"", ",", 
+        RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"!", 
+         RowBox[{"MemberQ", "[", 
+          RowBox[{"$Path", ",", 
+           RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}]}], ",", 
+        RowBox[{"AppendTo", "[", 
          RowBox[{"$Path", ",", 
-          RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}]}], ",", 
-       RowBox[{"AppendTo", "[", 
-        RowBox[{"$Path", ",", 
-         RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}]}], "]"}]}], 
-    ",", "\[IndentingNewLine]", 
-    RowBox[{
-    "Print", "[", 
-     "\"\<Remember to set FusionAtlasDataDirectory[] to the appropriate path, \
-if you've downloaded precomputed data.\>\"", "]"}]}], "\[IndentingNewLine]", 
-   "]"}], ";"}]], "Input",
+          RowBox[{"FusionAtlasDataDirectory", "[", "]"}]}], "]"}]}], "]"}]}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<Remember to set FusionAtlasDataDirectory[] to the appropriate \
+path, if you've downloaded precomputed data.\>\"", "]"}]}], 
+    "\[IndentingNewLine]", "]"}], ";"}], "*)"}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.4211988348152113`*^9, 3.4211988575078416`*^9}}],
 
@@ -1535,14 +1536,14 @@ StyleDefinitions->"Default.nb"
 (*CellTagsOutline
 CellTagsIndex->{
  "Union"->{
-  Cell[50111, 1073, 488, 16, 28, "Input",
+  Cell[50171, 1074, 488, 16, 28, "Input",
    InitializationCell->True,
    CellTags->"Union"]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"Union", 66660, 1536}
+ {"Union", 66720, 1537}
  }
 *)
 (*NotebookFileOutline
@@ -1667,54 +1668,54 @@ Cell[47064, 987, 906, 23, 46, "Input",
  InitializationCell->True],
 Cell[47973, 1012, 672, 18, 46, "Input",
  InitializationCell->True],
-Cell[48648, 1032, 1460, 39, 114, "Input",
+Cell[48648, 1032, 1520, 40, 114, "Input",
  InitializationCell->True],
-Cell[50111, 1073, 488, 16, 28, "Input",
+Cell[50171, 1074, 488, 16, 28, "Input",
  InitializationCell->True,
  CellTags->"Union"],
-Cell[50602, 1091, 182, 4, 28, "Input",
+Cell[50662, 1092, 182, 4, 28, "Input",
  InitializationCell->True],
-Cell[50787, 1097, 1044, 26, 97, "Input",
+Cell[50847, 1098, 1044, 26, 97, "Input",
  InitializationCell->True],
-Cell[51834, 1125, 1400, 29, 114, "Input",
+Cell[51894, 1126, 1400, 29, 114, "Input",
  InitializationCell->True],
-Cell[53237, 1156, 739, 16, 114, "Input",
+Cell[53297, 1157, 739, 16, 114, "Input",
  InitializationCell->True],
-Cell[53979, 1174, 69, 1, 28, "Input",
+Cell[54039, 1175, 69, 1, 28, "Input",
  InitializationCell->True],
-Cell[54051, 1177, 1529, 32, 199, "Input",
+Cell[54111, 1178, 1529, 32, 199, "Input",
  InitializationCell->True],
-Cell[55583, 1211, 176, 4, 28, "Input",
+Cell[55643, 1212, 176, 4, 28, "Input",
  InitializationCell->True],
-Cell[55762, 1217, 473, 11, 28, "Input",
+Cell[55822, 1218, 473, 11, 28, "Input",
  InitializationCell->True],
-Cell[56238, 1230, 3247, 76, 148, "Input",
+Cell[56298, 1231, 3247, 76, 148, "Input",
  InitializationCell->True],
-Cell[59488, 1308, 212, 6, 28, "Input",
+Cell[59548, 1309, 212, 6, 28, "Input",
  InitializationCell->True],
-Cell[59703, 1316, 818, 22, 28, "Input",
+Cell[59763, 1317, 818, 22, 28, "Input",
  InitializationCell->True],
-Cell[60524, 1340, 480, 13, 28, "Input",
+Cell[60584, 1341, 480, 13, 28, "Input",
  InitializationCell->True],
-Cell[61007, 1355, 344, 8, 28, "Input",
+Cell[61067, 1356, 344, 8, 28, "Input",
  InitializationCell->True],
-Cell[61354, 1365, 560, 14, 97, "Input",
+Cell[61414, 1366, 560, 14, 97, "Input",
  InitializationCell->True],
-Cell[61917, 1381, 196, 6, 28, "Input",
+Cell[61977, 1382, 196, 6, 28, "Input",
  InitializationCell->True],
-Cell[62116, 1389, 1887, 54, 131, "Input",
+Cell[62176, 1390, 1887, 54, 131, "Input",
  InitializationCell->True],
-Cell[64006, 1445, 436, 14, 28, "Input",
+Cell[64066, 1446, 436, 14, 28, "Input",
  InitializationCell->True],
-Cell[64445, 1461, 309, 10, 28, "Input",
+Cell[64505, 1462, 309, 10, 28, "Input",
  InitializationCell->True],
-Cell[64757, 1473, 686, 16, 28, "Input",
+Cell[64817, 1474, 686, 16, 28, "Input",
  InitializationCell->True],
-Cell[65446, 1491, 586, 17, 28, "Input",
+Cell[65506, 1492, 586, 17, 28, "Input",
  InitializationCell->True],
-Cell[66035, 1510, 96, 3, 28, "Input",
+Cell[66095, 1511, 96, 3, 28, "Input",
  InitializationCell->True],
-Cell[66134, 1515, 103, 3, 28, "Input",
+Cell[66194, 1516, 103, 3, 28, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
