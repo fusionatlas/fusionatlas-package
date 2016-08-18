@@ -1163,7 +1163,7 @@ Factor[Det[m]]=!=0
 ]
 
 
-FindQLinearSolutions[n_,fusion_,k_,inductionMatrix_,useGalois:(True|False):True]:=Module[{filename,outputDirectory,result,pairs,triples},
+FindQLinearSolutions[n_,fusion_,k_,inductionMatrix_,useGalois:(True|False):True]:=Module[{filename,outputDirectory,result,pairs,triples,pMap},
 outputDirectory=FileNameJoin[{dataDirectory,"findQLinearSolutions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>ToString[k]<>","<>SHA1[{fusion,inductionMatrix}]<>If[useGalois,"","-no-galois"]<>".m.gz"}];
@@ -1174,8 +1174,9 @@ allocations=If[useGalois,
 AllocateEigenvaluesToSimplesAndCompleteGaloisActions[n,fusion,k,inductionMatrix],
 {#,Null}&/@AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n,fusion,k,inductionMatrix]
 ];
-pairs=Map[{#,QLinearSolutions[n,inductionMatrix][#]}&,allocations];
-triples=Map[{#,invertibleQ[#[[2]][q]]}&,pairs];
+pMap=If[$KernelID==0,DistributeDefinitions[QLinearSolutions,invertibleQ];ParallelMap,Map];
+pairs=pMap[{#,QLinearSolutions[n,inductionMatrix][#]}&,allocations];
+triples=pMap[{#,invertibleQ[#[[2]][q]]}&,pairs];
 Cases[triples,{r_,True}:>r]
 ];
 GZIP[result,filename];

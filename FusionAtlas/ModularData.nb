@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    344614,       8785]
-NotebookOptionsPosition[    331768,       8387]
-NotebookOutlinePosition[    332160,       8404]
-CellTagsIndexPosition[    332117,       8401]
+NotebookDataLength[    345089,       8795]
+NotebookOptionsPosition[    332243,       8397]
+NotebookOutlinePosition[    332635,       8414]
+CellTagsIndexPosition[    332592,       8411]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -7985,7 +7985,7 @@ Cell[BoxData[
     RowBox[{"{", 
      RowBox[{
      "filename", ",", "outputDirectory", ",", "result", ",", "pairs", ",", 
-      "triples"}], "}"}], ",", "\[IndentingNewLine]", 
+      "triples", ",", "pMap"}], "}"}], ",", "\[IndentingNewLine]", 
     RowBox[{
      RowBox[{"outputDirectory", "=", 
       RowBox[{"FileNameJoin", "[", 
@@ -8045,8 +8045,17 @@ Cell[BoxData[
                  "n", ",", "fusion", ",", "k", ",", "inductionMatrix"}], 
                  "]"}]}]}], "\[IndentingNewLine]", "]"}]}], ";", 
             "\[IndentingNewLine]", 
+            RowBox[{"pMap", "=", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"$KernelID", "\[Equal]", "0"}], ",", 
+               RowBox[{
+                RowBox[{"DistributeDefinitions", "[", 
+                 RowBox[{"QLinearSolutions", ",", "invertibleQ"}], "]"}], ";",
+                 "ParallelMap"}], ",", "Map"}], "]"}]}], ";", 
+            "\[IndentingNewLine]", 
             RowBox[{"pairs", "=", 
-             RowBox[{"Map", "[", 
+             RowBox[{"pMap", "[", 
               RowBox[{
                RowBox[{
                 RowBox[{"{", 
@@ -8057,7 +8066,7 @@ Cell[BoxData[
                    "]"}]}], "}"}], "&"}], ",", "allocations"}], "]"}]}], ";", 
             "\[IndentingNewLine]", 
             RowBox[{"triples", "=", 
-             RowBox[{"Map", "[", 
+             RowBox[{"pMap", "[", 
               RowBox[{
                RowBox[{
                 RowBox[{"{", 
@@ -8093,7 +8102,8 @@ Cell[BoxData[
    3.679612165830312*^9, 3.6796121981045523`*^9}, {3.6796458211584787`*^9, 
    3.679645834287253*^9}, {3.6796459543415737`*^9, 3.679645958997917*^9}, {
    3.680149884166122*^9, 3.6801498865108957`*^9}, 3.680150220917371*^9, {
-   3.680152700631695*^9, 3.6801527262020082`*^9}}]
+   3.680152700631695*^9, 3.6801527262020082`*^9}, {3.680515172634079*^9, 
+   3.6805152128191957`*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -8770,20 +8780,20 @@ Cell[299399, 7576, 14835, 366, 967, "Input",
  InitializationCell->True],
 Cell[314237, 7944, 1073, 29, 131, "Input",
  InitializationCell->True],
-Cell[315313, 7975, 5305, 120, 370, "Input",
+Cell[315313, 7975, 5780, 130, 387, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[320655, 8100, 97, 1, 64, "Section"],
-Cell[320755, 8103, 2547, 58, 81, "Input",
+Cell[321130, 8110, 97, 1, 64, "Section"],
+Cell[321230, 8113, 2547, 58, 81, "Input",
  InitializationCell->True],
-Cell[323305, 8163, 558, 15, 28, "Input",
+Cell[323780, 8173, 558, 15, 28, "Input",
  InitializationCell->True],
-Cell[323866, 8180, 7533, 191, 624, "Input",
+Cell[324341, 8190, 7533, 191, 624, "Input",
  InitializationCell->True],
-Cell[331402, 8373, 164, 4, 28, "Input",
+Cell[331877, 8383, 164, 4, 28, "Input",
  InitializationCell->True],
-Cell[331569, 8379, 171, 4, 28, "Input",
+Cell[332044, 8389, 171, 4, 28, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
