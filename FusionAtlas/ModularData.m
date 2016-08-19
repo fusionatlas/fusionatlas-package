@@ -28,6 +28,9 @@ BeginPackage["FusionAtlas`ModularData`",{"FusionAtlas`","FusionAtlas`Bigraphs`",
 FindModularData::usage="FindModularData[X_] computes all possible modular data for the centre; the argument X may be a fusion ring and induction matrix, a fusion ring, the rank 3 tensor of fusion multiplicities, a matrix of fusion multiplicities for a single object, or a principal graph.";
 
 
+ExplicitGenerators;CharacterTable;GaloisGroup;GaloisAction;GaloisGroupGenerators;PossibleConductors;workOnRepresentations;SInRepresentation;TInRepresentation;DimensionsFromInductionMatrix;GaloisOrbitClumps;PossibleGaloisImages;PossibleGaloisTraces;RepresentationsForRank;RepresentationsForInductionMatrix;SaveRepresentationsForRank;SaveCharacterTables;SaveGenerators;SaveConjugacyClasses;AllocateEigenvaluesToGaloisOrbitClumps;AllocateEigenvaluesToSimples;AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators;AllocateEigenvaluesToSimplesAndCompleteGaloisActions;FindQLinearSolutions
+
+
 Begin["`Private`"];
 
 
@@ -184,8 +187,10 @@ LoadGenerators[]
 
 
 Clear[ReadCharacterTable]
-ReadCharacterTable[gapName_]:=ReadCharacterTable[gapName]=Module[{lines},
-lines=Execute["Display(CharacterTable("<>gapName<>"));"];
+ReadCharacterTable[gapName_List]:=ReadCharacterTable@@gapName
+ReadCharacterTable[gapName_]:=ReadCharacterTable["",gapName]
+ReadCharacterTable[stuff_,gapName_]:=ReadCharacterTable[stuff,gapName]=Module[{lines},
+lines=Execute[stuff<>"Display(CharacterTable("<>gapName<>"));"];
 Print["Calculated the character table for "<>gapName<>":"];
 Print[TableForm[lines]];
 lines=Take[lines,{3,-1}+Flatten[Position[lines,s_/;StringMatchQ[s,"gap>"~~___],{1},Heads->False]]];
@@ -217,7 +222,7 @@ ToExpression[X]/.Global`\[Zeta]->\[Zeta]
 
 
 (*Clear[CharacterTable]*)
-CharacterTable[gapName_]:=CharacterTable[gapName]=Module[{lines,Xpos,conjugacyClasses,representations,values,numberOfConjugacyClasses,parseRepresentation,result},
+CharacterTable[gapName__]:=CharacterTable[gapName]=Module[{lines,Xpos,conjugacyClasses,representations,values,numberOfConjugacyClasses,parseRepresentation,result},
 lines=ReadCharacterTable[gapName];
 Xpos=Flatten[Position[lines,s_String/;StringMatchQ[s,"X."~~___]]];
 conjugacyClasses=lines[[Min[Xpos]-2]];
@@ -523,7 +528,8 @@ Flatten[Position[Transpose[{dimensions[[2]],eigenvalues}],{#[[1]]|(-#[[1]]),#[[2
 Clear[PossibleGaloisTraces]
 
 
-possibleSums[sequence_List]:=Fold[Union[Flatten[Outer[Plus,#1,#2,1]]]&,{0},sequence]
+possibleSums[{x_List}]:=x
+possibleSums[{x_List,y_List,z___List}]:=possibleSums[{Union[Flatten[Outer[Plus,x,y,1]]],z}]
 
 
 PossibleGaloisTraces[n_,dimensions_,l_]:=PossibleGaloisTraces[n,dimensions,l]=Module[{images,contributions},
@@ -1174,7 +1180,7 @@ allocations=If[useGalois,
 AllocateEigenvaluesToSimplesAndCompleteGaloisActions[n,fusion,k,inductionMatrix],
 {#,Null}&/@AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n,fusion,k,inductionMatrix]
 ];
-pMap=If[$KernelID==0,DistributeDefinitions[QLinearSolutions,invertibleQ];ParallelMap,Map];
+pMap=If[False\[And]$KernelID==0,DistributeDefinitions[QLinearSolutions,invertibleQ];ParallelMap,Map];
 pairs=pMap[{#,QLinearSolutions[n,inductionMatrix][#]}&,allocations];
 triples=pMap[{#,invertibleQ[#[[2]][q]]}&,pairs];
 Cases[triples,{r_,True}:>r]

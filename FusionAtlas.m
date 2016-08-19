@@ -62,7 +62,7 @@ DeclarePackage["FusionAtlas`InductionMatrix`",
 
 
 DeclarePackage["FusionAtlas`ModularData`",
-{"FindModularData"}];
+{"FindModularData","ExplicitGenerators","CharacterTable","GaloisGroup","GaloisAction","GaloisGroupGenerators","PossibleConductors","workOnRepresentations","SInRepresentation","TInRepresentation","DimensionsFromInductionMatrix","GaloisOrbitClumps","PossibleGaloisImages","PossibleGaloisTraces","RepresentationsForRank","RepresentationsForInductionMatrix","SaveRepresentationsForRank","SaveCharacterTables","SaveGenerators","SaveConjugacyClasses","AllocateEigenvaluesToGaloisOrbitClumps","AllocateEigenvaluesToSimples","AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators","AllocateEigenvaluesToSimplesAndCompleteGaloisActions","FindQLinearSolutions"}];
 
 
 DeclarePackage["FusionAtlas`FindGraphPartners`",
