@@ -384,6 +384,11 @@ TInRepresentation[q_/;PrimePowerQ[q],k_Integer (* which irrep *)]:=ExplicitGener
 (* Sometimes S will lie in an even larger number field. *)
 
 
+Unprotect[KroneckerProduct];
+KroneckerProduct[X_]:=X
+Protect[KroneckerProduct];
+
+
 SInRepresentation[n_Integer,ks:{__Integer} (* a product of irreps for the prime powers *)]:=
 LiftToCommonCyclotomicField[KroneckerProduct@@Table[SInRepresentation[p[[1]],p[[2]]],{p,Transpose[{PrimePowers[n],ks}]}]]
 SInRepresentation[n_Integer,Vs:{{__Integer}..}]:=LiftToCommonCyclotomicField[BlockDiagonalMatrix[Table[SInRepresentation[n,V],{V,Vs}]]]
@@ -663,8 +668,11 @@ representations
 ]
 
 
-RepresentationsForDimensions[N_,dimensions:{\[ScriptCapitalD]_?NumericQ,{__?NumericQ}}]:=RepresentationsForDimensions[N,dimensions]=Cases[RepresentationsForRank[N,Length[dimensions[[2]]]],{V_,_}/;
+RepresentationsForDimensions[N_,dimensions:{\[ScriptCapitalD]_?NumericQ,{__?NumericQ}}]:=RepresentationsForDimensions[N,dimensions]=Module[{},
+If[!MemberQ[RepresentationsForRankLoaded,N],LoadRepresentationsForRank[N]];
+Cases[RepresentationsForRank[N,Length[dimensions[[2]]]],{V_,_}/;
 And@@Table[MemberQ[PossibleGaloisTraces[N,dimensions,l],TraceOfGalois[N,V[[All,1]],l]],{l,GaloisGroup[N]}]]
+]
 
 
 RepresentationsForInductionMatrix[N_,inductionMatrix:{{__Integer}..}]:=Module[{dimensions,numberOfObjectsInInductionOfOne,result},
@@ -718,6 +726,7 @@ SaveGenerators[];)
 
 
 workOnRepresentations[conductors_,rank_:\[Infinity]]:=Module[{status,min,i,timing,length,counter=0},
+LoadRepresentationsForRank/@conductors;
 status={#,0.0,0,0}&/@conductors;
 While[(Min@@status[[All,3]])<rank,
 min=Min@@(status[[All,2]]+10.^-4 status[[All,4]]);
@@ -853,18 +862,33 @@ a_/;FrobeniusSchurIndicators[n,fusion,inductionMatrix][a[[2]]][1]==UnitVector[Le
 FusionPower[fusion_][i_ (* i-th object *),k_ (* raised to the k-th power *)]:=MatrixPower[fusion[[2,1,2,i]],k].UnitVector[Length[fusion[[2,1,2]]],1]
 
 
-FrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_,l_]/;GCD[k,l]==1:=GaloisAction[k][l]/@ToNumberField[FrobeniusSchurIndicators[n,fusion,inductionMatrix][Ts][k],\[Zeta][k]]
-FrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_,l_]:=Module[{g=GCD[k,l]},
+FrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_,l_]/;GCD[k,l]==1:=
+Quiet[
+Module[{fsind=FrobeniusSchurIndicators[n,fusion,inductionMatrix][Ts][k]},
+Check[
+GaloisAction[k][l][ToNumberField[#,\[Zeta][k]]],
+$Failed,{ToNumberField::nnfel}]&/@fsind
+],ToNumberField::nnfel]
+FrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_,l_]:=Module[{g=GCD[k,l],result},
 Table[
-FusionPower[fusion][m,g].FrobeniusSchurIndicators[n,fusion,inductionMatrix][Ts][k/g,l/g]
+result=FusionPower[fusion][m,g].FrobeniusSchurIndicators[n,fusion,inductionMatrix][Ts][k/g,l/g];
+If[FreeQ[result,$Failed],result,$Failed]
 ,{m,1,Length[inductionMatrix]}]
 ]
 
 
 VerifyFrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_]:=Table[
-{Length[NewtonsIdentity[k,Table[FrobeniusSchurIndicators[n,fusion, inductionMatrix][Ts][k,l][[m]],{l,0,k-1}]]],FusionPower[fusion][m,k][[1]]}
+{Module[{traces=Table[FrobeniusSchurIndicators[Ts][k,l][[m]],{l,0,k-1}]},
+If[FreeQ[traces,$Failed],
+Length[NewtonsIdentity[k,traces]],
+-\[Infinity]]
+],FusionPower[fusion][m,k][[1]]}
 ,
 {m,1,Length[inductionMatrix]}]
+
+
+reportedOnce=False;
+reportFPIndicatorsInBadField[stuff___]:=(If[!reportedOnce,Print["Found a Frobenius-Schur indicator that isn't even in the correct field: ",{stuff}]];reportedOnce=True;)
 
 
 AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n_,fusion_,k0_,inductionMatrix_]:=Module[{outputDirectory,filename,result,allocated},
@@ -879,7 +903,12 @@ Print["... checking Frobenius-Schur indicators"];
 result=Module[{pairs,cachedFrobeniusSchurIndicators,verifyFrobeniusSchurIndicators},
 cachedFrobeniusSchurIndicators[Ts_][X___]:=cachedFrobeniusSchurIndicators[Ts][X]=FrobeniusSchurIndicators[n,fusion,inductionMatrix][Ts][X];
 verifyFrobeniusSchurIndicators[Ts_][k_]:=verifyFrobeniusSchurIndicators[Ts][k]=Table[
-{Length[NewtonsIdentity[k,Table[cachedFrobeniusSchurIndicators[Ts][k,l][[m]],{l,0,k-1}]]],FusionPower[fusion][m,k][[1]]}
+{Module[{traces=Table[cachedFrobeniusSchurIndicators[Ts][k,l][[m]],{l,0,k-1}]},
+If[FreeQ[traces,$Failed],
+Length[NewtonsIdentity[k,traces]],
+reportFPIndicatorsInBadField[n,fusion,inductionMatrix,traces];
+-\[Infinity]]
+],FusionPower[fusion][m,k][[1]]}
 ,
 {m,1,Length[inductionMatrix]}];
 
