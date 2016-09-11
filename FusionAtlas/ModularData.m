@@ -222,6 +222,7 @@ ToExpression[X]/.Global`\[Zeta]->\[Zeta]
 
 
 (*Clear[CharacterTable]*)
+CharacterTable[n_Integer]:=CharacterTable[GAP[SL[2,Subscript[Z, n]]]]
 CharacterTable[gapName__]:=CharacterTable[gapName]=Module[{lines,Xpos,conjugacyClasses,representations,values,numberOfConjugacyClasses,parseRepresentation,result},
 lines=ReadCharacterTable[gapName];
 Xpos=Flatten[Position[lines,s_String/;StringMatchQ[s,"X."~~___]]];
@@ -655,7 +656,7 @@ result=Cases[result,PartialRepresentation[Ts:{{__Integer}...},___]/;Divisible[Re
 ];
 (*Print[Length[result]];*)
 Join@@(addRepresentations[{others}]/@result)
-];
+]; 
 representations=addRepresentations[Most[tuples]][PartialRepresentation[{},r-1,{},{}]][[All,1]];
 trivial=tuples[[-1,2,1]];
 representations=Map[{#,RepresentationDimension[n,#]}&,representations,{2}];
@@ -835,7 +836,7 @@ AllocateEigenvaluesToSimples[n_,inductionMatrix_]:=Module[{outputDirectory,filen
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimples"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>SHA1[inductionMatrix]<>".m.gz"}];
-If[False\[And]FileExistsQ[filename],
+If[(*False\[And]*)False\[And]FileExistsQ[filename],
 ImportGZIP[filename],
 result=Join@@(Map[Function[A,{A[[1]],#}&/@AllocateEigenvaluesToSimples[n,inductionMatrix,A[[3]]]],AllocateEigenvaluesToGaloisOrbitClumps[n,inductionMatrix]]);
 GZIP[result,filename];
