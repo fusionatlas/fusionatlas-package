@@ -834,7 +834,7 @@ AllocateEigenvaluesToSimples[n_,inductionMatrix_]:=Module[{outputDirectory,filen
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimples"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>SHA1[inductionMatrix]<>".m.gz"}];
-If[FileExistsQ[filename],
+If[(*False\[And]*)FileExistsQ[filename],
 ImportGZIP[filename],
 result=Join@@(Map[Function[A,{A[[1]],#}&/@AllocateEigenvaluesToSimples[n,inductionMatrix,A[[3]]]],AllocateEigenvaluesToGaloisOrbitClumps[n,inductionMatrix]]);
 GZIP[result,filename];
@@ -1059,14 +1059,132 @@ result
 CompleteGaloisActions[n_,induction_,eigenvalues_]:=CompleteGaloisActions[n,induction,eigenvalues]=Normal[GroupBy[CompletePartialGaloisAction[n,PartialGaloisAction[n,induction,eigenvalues]],NautyHash]][[All,2,1]]
 
 
+GaloisSubgroups[n_]:=GaloisSubgroups[n]=Module[{oneStepClosure,closure,extensions},
+oneStepClosure[elements_List]:=Union@@Outer[Mod[#1 #2,n]&,elements,elements];
+closure[elements_List]:=FixedPoint[oneStepClosure,elements];
+extensions[elements_List]:=({elements}~Join~(closure/@(elements~Join~{#}&/@Complement[GaloisGroup[n],elements])));
+FixedPoint[Union@@(extensions/@#)&,{{1}}]
+]
+
+
+GaloisSubgroups[n_,subgroup_]:=Cases[GaloisSubgroups[n],G_/;Length[Complement[G,subgroup]]==0]
+
+
+GaloisEigenvalueStabilizer[n_,t_]:=Cases[GaloisGroup[n],l_/;Mod[(l^2-1)t,1]==0]
+
+
+GaloisDimensionStabilizer[n_,d_]:=Cases[GaloisGroup[n],l_/;Abs[GaloisAction[n][l][d]]==d]
+
+
+GaloisStabilizer[n_,{d_,t_}]:=GaloisStabilizer[n,{d,t}]=Cases[GaloisGroup[n],l_/;Mod[(l^2-1)t,1]==0\[And]Abs[GaloisAction[n][l][d]]==d]
+
+
+StabilizerSubgroupMultiplicities[n_,subgroup_,totalSize_]:=StabilizerSubgroupMultiplicities[n,subgroup,totalSize]=Module[{subgroups=GaloisSubgroups[n,subgroup],max},
+Flatten[Table[Table[a[i],{i,1,Length[subgroups]}],
+Evaluate[Sequence@@Table[(max=(totalSize-Sum[a[j]Length[subgroup]/Length[subgroups[[j]]],{j,1,i-1}])Length[subgroups[[i]]]/Length[subgroup];{a[i],If[i==Length[subgroups],Ceiling[max],0],max}),{i,1,Length[subgroups]}]]
+],Length[subgroups]-1]
+]
+
+
+BallsInUrns[urns_,{redBalls_,otherBalls___}]:=Module[{totalUrns,iterators,max,redDistributions,newUrns},
+totalUrns=Total[urns[[All,2]]];
+iterators=Flatten[Table[(max=redBalls-Sum[Sum[r[i0,j0],{j0,1,If[i0==i,j-1,urns[[i0,2]]]}],{i0,1,i}];{r[i,j],If[i==Length[urns]\[And]j==urns[[i,2]],max,0],Min[max,urns[[i,1]],If[j>1,r[i,j-1],\[Infinity]]]}),{i,1,Length[urns]},{j,1,urns[[i,2]]}],1];
+(*Print[iterators];*)
+redDistributions=Flatten[
+Table[Flatten[Table[r[i,j],{i,1,Length[urns]},{j,1,urns[[i,2]]}]],Evaluate[Sequence@@iterators]],
+totalUrns-1
+];
+(*Print[redDistributions];*)
+newUrns[distribution_]:={#[[1,1,2]]-#[[1,2]],Length[#]}&/@Split[Transpose[{Flatten[Table[Table[{i,urns[[i,1]]},{urns[[i,2]]}],{i,1,Length[urns]}],1],distribution}]];
+Flatten[Function[redDistribution,{redDistribution}~Join~#&/@BallsInUrns[newUrns[redDistribution],{otherBalls}]]/@redDistributions,1]
+]
+
+
+BallsInUrns[{{0,_}...},{}]:={{}}
+BallsInUrns[urnSizes_,{}]:={}
+
+
+GaloisOrbitOfInvariant[n_,{d_,t_}]:=Union[Table[{Abs[GaloisAction[n][l][d]],Mod[l^2 t,1]},{l,GaloisGroup[n]}]]
+
+
+Unprotect[Abs];
+Abs[x_AlgebraicNumber]/;RootReduce[Im[x]]===0:=If[Chop[N[x]]>=0,x,-x]
+Protect[Abs];
+
+
+PartitionObjectsByInvariants[n_,induction_,T_]:=Module[{\[ScriptCapitalD],dims,pairs,indices},
+{\[ScriptCapitalD],dims}=DimensionsFromInductionMatrix[n,induction];
+pairs=Transpose[{dims/\[ScriptCapitalD],T}];
+indices[{d_,t_}]:={d,t}->Table[Flatten[Position[Transpose[{pairs,Transpose[induction]}],{{d,t},c}]],{c,Union[Transpose[induction]]}];
+Map[indices,Union[(GaloisOrbitOfInvariant[n,#]&/@pairs)],{2}]
+]
+
+
+StabilizerActions[n_,induction_,orbit:{{d_,t_}->objects1_,others___}]:=Module[{subgroups,cosetSizes,multiplicities,howManyInEachCoset,objectsInCosets},
+subgroups=GaloisSubgroups[n,GaloisStabilizer[n,{d,t}]];
+cosetSizes=Length[GaloisStabilizer[n,{d,t}]]/(Length/@subgroups);
+multiplicities=StabilizerSubgroupMultiplicities[n,GaloisStabilizer[n,{d,t}],Length[Flatten[objects1]]];
+howManyInEachCoset=Flatten[Function[m,{m,#}&/@Flatten[Outer[List,Sequence@@Table[BallsInUrns[Transpose[{cosetSizes,m}],Length/@objects],{objects,orbit[[All,2]]}],1],Length[orbit]-1]]/@multiplicities,1];
+objectsInCosets[{multiplicities_,ballsInUrnsMatrices_}]:={Flatten[Table[Table[subgroups[[i]],{multiplicities[[i]]}],{i,1,Length[multiplicities]}],1],Table[orbit[[l,1]]->Table[Join@@Table[orbit[[l,2,i,(Total[ballsInUrnsMatrices[[l,i,1;;j-1]]]+1);;Total[ballsInUrnsMatrices[[l,i,1;;j]]]]],{i,1,Length[ballsInUrnsMatrices[[l]]]}],{j,1,Length[ballsInUrnsMatrices[[l,1]]]}],{l,1,Length[orbit]}]};
+objectsInCosets/@howManyInEachCoset
+]
+
+
+StabilizerActions[n_,induction_,T_]:=Module[{orbits},
+orbits=PartitionObjectsByInvariants[n,induction,T];
+Flatten[Outer[List,Sequence@@(StabilizerActions[n,induction,#]&/@orbits),1],Length[orbits]-1]
+]
+
+
+GaloisSubgroupSplittings[n_,subgroup_]:=GaloisSubgroupSplittings[n,subgroup]=
+Cases[
+Cases[GaloisSubgroups[n],G_/;Length[G]Length[subgroup]==Length[GaloisGroup[n]]:>{G,Mod[Outer[Times,subgroup,G],n]}],
+({G_,products_}/;(Union[Flatten[products]]==GaloisGroup[n])):>Table[l->Cases[products,p_/;MemberQ[p,l]:>Intersection[p,subgroup][[1]],1,1][[1]],{l,GaloisGroup[n]}]]
+
+
+GaloisSubgroupSplittings[n_]:=GaloisSubgroupSplittings[n,#]&/@GaloisSubgroups[n]
+
+
+(* H a subgroup of K a subgroup of Gal(n) *)
+GaloisCosets[n_,H_,K_]:=GaloisCosets[n,H,K]=Union[Union/@Mod[H #&/@K,n]]
+
+
+GaloisActionFromStabilizerAction[n_,induction_,action_]:=Table[(*Print[l];*)l->Table[(*Print[i];*)
+Module[{orbit,indexInOrbit,coset,indexInCoset,imageIndexInOrbit,imageIndexInCoset,stabilizer,splitting,imageInStabilizer,cosets},
+{orbit,indexInOrbit,coset,indexInCoset}=Position[action,i,{6}][[1,{1,3,5,6}]];
+imageIndexInOrbit=Position[action[[orbit,2,All,1]],{Abs[GaloisAction[n][l][action[[orbit,2,indexInOrbit,1,1]]]],Mod[l^2 action[[orbit,2,indexInOrbit,1,2]],1]}][[1,1]];
+(*Print["{orbit,indexInOrbit,coset,indexInCoset},imageIndexInOrbit=",{orbit,indexInOrbit,coset,indexInCoset},imageIndexInOrbit];*)
+stabilizer=GaloisStabilizer[n,action[[orbit,2,1,1]]];
+If[Length[GaloisSubgroupSplittings[n,stabilizer]]==0,
+Print["Stabilizer subgroup of ",action[[orbit,2,1,1]]," (with conductor ",n,") isn't complemented! Tell Scott about this example, and ask him to write a better algorithm."];
+Abort[];
+];
+splitting=GaloisSubgroupSplittings[n,stabilizer][[1]];
+imageInStabilizer=l/.splitting;
+(*Print["splitting=",splitting];*)
+cosets=GaloisCosets[n,action[[orbit,1,coset]],stabilizer];
+(*Print["imageInStabilizer=",imageInStabilizer];
+Print["stabilizer=",stabilizer];
+Print["cosets=",cosets];
+Print[Sort[Mod[imageInStabilizer cosets\[LeftDoubleBracket]indexInCoset\[RightDoubleBracket],n]]];*)
+imageIndexInCoset=Position[cosets,Sort[Mod[imageInStabilizer cosets[[indexInCoset]],n]],1,1][[1,1]];
+action[[orbit,2,imageIndexInOrbit,2,coset,imageIndexInCoset]]
+]
+,{i,1,Length[induction[[1]]]}]
+,{l,GaloisGroup[n]}]
+
+
+CompleteGaloisActions2[n_,induction_,eigenvalues_]:=GaloisAction[GaloisActionFromStabilizerAction[n,induction,#]]&/@StabilizerActions[n,induction,eigenvalues]
+
+
 AllocateEigenvaluesToSimplesAndCompleteGaloisActions[n_,fusion_,k_,induction_]:=Module[{filename,outputDirectory,result},
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimplesAndCompleteGaloisActions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>ToString[k]<>","<>SHA1[{fusion,induction}]<>".m.gz"}];
-If[FileExistsQ[filename],
+If[(*False\[And]*)FileExistsQ[filename],
 ImportGZIP[filename],
 Print["Computing Galois actions for ",DisplayGraph[fusion]," ",MatrixForm[induction]];
-result=Join@@Map[Function[ga,{#,ga}]/@CompleteGaloisActions[n,induction,#[[2]]]&,AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n,fusion,k,induction]];
+result=Join@@Map[Function[ga,{#,ga}]/@CompleteGaloisActions2[n,induction,#[[2]]]&,AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n,fusion,k,induction]];
 GZIP[result,filename];
 Print[" ... finished computing Galois actions."];
 result]
@@ -1202,7 +1320,7 @@ FindQLinearSolutions[n_,fusion_,k_,inductionMatrix_,useGalois:(True|False):True]
 outputDirectory=FileNameJoin[{dataDirectory,"findQLinearSolutions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>ToString[k]<>","<>SHA1[{fusion,inductionMatrix}]<>If[useGalois,"","-no-galois"]<>".m.gz"}];
-If[FileExistsQ[filename],
+If[(*False\[And]*)FileExistsQ[filename],
 ImportGZIP[filename],
 result=Module[{allocations,q},
 allocations=If[useGalois,
