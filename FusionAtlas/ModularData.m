@@ -248,7 +248,7 @@ result
 ]
 
 
-SaveCharacterTables[]:=AbortProtect[Put[DownValues[CharacterTable],FileNameJoin[{dataDirectory,"characterTables.m"}]]]
+SaveCharacterTables[]:=AbortProtect[Put[Cases[DownValues[CharacterTable],r_/;FreeQ[r,Blank|BlankSequence|BlankNullSequence]],FileNameJoin[{dataDirectory,"characterTables.m"}]]]
 LoadCharacterTables[]:=
 Module[{filename=FileNameJoin[{dataDirectory,"characterTables.m"}]},
 If[FileExistsQ[filename],
@@ -813,6 +813,7 @@ If[(d^2).T-\[ScriptCapitalD]==0,
 
 
 AllocateEigenvaluesToSimples[n_,inductionMatrix_,clumps_,{toAssign_,others___},assigned_,partialSum_,totalRemainingDimension_]:=Module[{i,subsets,dims},
+(*Print[{clumps,{toAssign,others},assigned,partialSum,totalRemainingDimension}];*)
 If[Abs[N[partialSum]]>=totalRemainingDimension+1,
 (*stoppedEarly++;*)
 {},
@@ -834,7 +835,7 @@ AllocateEigenvaluesToSimples[n_,inductionMatrix_]:=Module[{outputDirectory,filen
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimples"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>SHA1[inductionMatrix]<>".m.gz"}];
-If[(*False\[And]*)FileExistsQ[filename],
+If[False\[And]FileExistsQ[filename],
 ImportGZIP[filename],
 result=Join@@(Map[Function[A,{A[[1]],#}&/@AllocateEigenvaluesToSimples[n,inductionMatrix,A[[3]]]],AllocateEigenvaluesToGaloisOrbitClumps[n,inductionMatrix]]);
 GZIP[result,filename];
