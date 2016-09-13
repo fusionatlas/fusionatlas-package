@@ -80,8 +80,6 @@ If[!NumericQ[Global`$JVMHeap],Global`$JVMHeap=512];
 javaPath=FileNameJoin[{RunThrough["echo \\\"$(/usr/libexec/java_home -v 1.7)\\\"",""],"bin","java"}];
 ReinstallJava[CommandLine->javaPath,JVMArguments->"-Xmx"<>ToString[Global`$JVMHeap]<>"m"];
 AllowRaggedArrays[True];
-LoadJavaClass["org.fusionatlas.v1.odometer.GradedBigraph"];
-LoadJavaClass["org.fusionatlas.v1.odometer.Proxy"];
 LoadJavaClass["org.fusionatlas.graphs.PairOfBigraphsWithDuals$","AllowShortContext"->False];
 LoadJavaClass["org.fusionatlas.graphs.Bigraph$","AllowShortContext"->False];
 LoadJavaClass["org.fusionatlas.graphs.BigraphWithDuals$","AllowShortContext"->False];
