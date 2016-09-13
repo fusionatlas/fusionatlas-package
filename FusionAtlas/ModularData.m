@@ -28,7 +28,7 @@ BeginPackage["FusionAtlas`ModularData`",{"FusionAtlas`","FusionAtlas`Bigraphs`",
 FindModularData::usage="FindModularData[X_] computes all possible modular data for the centre; the argument X may be a fusion ring and induction matrix, a fusion ring, the rank 3 tensor of fusion multiplicities, a matrix of fusion multiplicities for a single object, or a principal graph.";
 
 
-ExplicitGenerators;CharacterTable;GaloisGroup;GaloisAction;GaloisGroupGenerators;PossibleConductors;workOnRepresentations;SInRepresentation;TInRepresentation;DimensionsFromInductionMatrix;GaloisOrbitClumps;PossibleGaloisImages;PossibleGaloisTraces;RepresentationsForRank;RepresentationsForInductionMatrix;SaveRepresentationsForRank;SaveCharacterTables;SaveGenerators;SaveConjugacyClasses;AllocateEigenvaluesToGaloisOrbitClumps;AllocateEigenvaluesToSimples;AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators;AllocateEigenvaluesToSimplesAndCompleteGaloisActions;FindQLinearSolutions
+ExplicitGenerators;CharacterTable;GaloisGroup;GaloisAction;GaloisGroupGenerators;PossibleConductors;workOnRepresentations;SInRepresentation;TInRepresentation;DimensionsFromInductionMatrix;GaloisOrbitClumps;PossibleGaloisImages;PossibleGaloisTraces;RepresentationsForRank;RepresentationsForInductionMatrix;SaveRepresentationsForRank;SaveCharacterTables;SaveGenerators;SaveConjugacyClasses;SaveAllModularData;ClearSavedModularData;AllocateEigenvaluesToGaloisOrbitClumps;AllocateEigenvaluesToSimples;AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators;AllocateEigenvaluesToSimplesAndCompleteGaloisActions;FindQLinearSolutions
 
 
 Begin["`Private`"];
@@ -120,6 +120,9 @@ result
 
 
 SHA1[x_]:=IntegerString[Hash[x,"SHA1"],16,32]
+
+
+ClearSavedModularData[fusion_,induction_]:=DeleteFile/@(FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[induction]<>"*"}]]~Join~FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[{fusion,induction}]<>"*"}]])
 
 
 GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,1],[-1,0]],[[1,1],[0,1]]]*One(Integers mod "<>ToString[N]<>"))"
@@ -722,7 +725,7 @@ RepresentationsForRankLoaded=Union[RepresentationsForRankLoaded,{n}];
 RepresentationsForRankLoaded={};
 
 
-SaveAll[]:=(SaveRepresentationsForRank[];SaveTEigenvalues[];SaveConjugacyClasses[];SaveCharacterTables[];
+SaveAllModularData[]:=(SaveRepresentationsForRank[];SaveTEigenvalues[];SaveConjugacyClasses[];SaveCharacterTables[];
 SaveGenerators[];)
 
 
@@ -1110,7 +1113,7 @@ GaloisOrbitOfInvariant[n_,{d_,t_}]:=Union[Table[{Abs[GaloisAction[n][l][d]],Mod[
 
 
 Unprotect[Abs];
-Abs[x_AlgebraicNumber]/;RootReduce[Im[x]]===0:=If[Chop[N[x]]>=0,x,-x]
+Abs[x_AlgebraicNumber]/;cachedRootReduce[Im[x]]===0:=If[Chop[N[x]]>=0,x,-x]
 Protect[Abs];
 
 
@@ -1157,19 +1160,21 @@ Module[{orbit,indexInOrbit,coset,indexInCoset,imageIndexInOrbit,imageIndexInCose
 imageIndexInOrbit=Position[action[[orbit,2,All,1]],{Abs[GaloisAction[n][l][action[[orbit,2,indexInOrbit,1,1]]]],Mod[l^2 action[[orbit,2,indexInOrbit,1,2]],1]}][[1,1]];
 (*Print["{orbit,indexInOrbit,coset,indexInCoset},imageIndexInOrbit=",{orbit,indexInOrbit,coset,indexInCoset},imageIndexInOrbit];*)
 stabilizer=GaloisStabilizer[n,action[[orbit,2,1,1]]];
-If[Length[GaloisSubgroupSplittings[n,stabilizer]]==0,
-Print["Stabilizer subgroup of ",action[[orbit,2,1,1]]," (with conductor ",n,") isn't complemented! Tell Scott about this example, and ask him to write a better algorithm."];
+(*If[Length[GaloisSubgroupSplittings[n,stabilizer]]\[Equal]0,
+Print["Stabilizer subgroup of ",action\[LeftDoubleBracket]orbit,2,1,1\[RightDoubleBracket]," (with conductor ",n,") isn't complemented! Tell Scott about this example, and ask him to write a better algorithm."];
 Abort[];
-];
-splitting=GaloisSubgroupSplittings[n,stabilizer][[1]];
-imageInStabilizer=l/.splitting;
+];*)
+(*splitting=GaloisSubgroupSplittings[n,stabilizer]\[LeftDoubleBracket]1\[RightDoubleBracket];
+imageInStabilizer=l/.splitting;*)
 (*Print["splitting=",splitting];*)
-cosets=GaloisCosets[n,action[[orbit,1,coset]],stabilizer];
-(*Print["imageInStabilizer=",imageInStabilizer];
+cosets=GaloisCosets[n,action[[orbit,1,coset]],Union[Mod[l stabilizer,n]]];
+(*
+Print["imageInStabilizer=",imageInStabilizer];
 Print["stabilizer=",stabilizer];
 Print["cosets=",cosets];
-Print[Sort[Mod[imageInStabilizer cosets\[LeftDoubleBracket]indexInCoset\[RightDoubleBracket],n]]];*)
-imageIndexInCoset=Position[cosets,Sort[Mod[imageInStabilizer cosets[[indexInCoset]],n]],1,1][[1,1]];
+Print[Sort[Mod[imageInStabilizer cosets\[LeftDoubleBracket]indexInCoset\[RightDoubleBracket],n]]];
+*)
+imageIndexInCoset=Position[cosets,Sort[Mod[l GaloisCosets[n,action[[orbit,1,coset]],stabilizer][[indexInCoset]],n]],1,1][[1,1]];
 action[[orbit,2,imageIndexInOrbit,2,coset,imageIndexInCoset]]
 ]
 ,{i,1,Length[induction[[1]]]}]
