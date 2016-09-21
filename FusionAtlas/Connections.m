@@ -297,9 +297,6 @@ reducedRules=reduceRules[newRules];
 (* PhaseSolver returns a list of alternative lists of rules. The first argument is a list of rules. *)
 
 
-Clear[PhaseSolver]
-
-
 fastAndLooseRootReduce[x_?NumericQ]:=fastAndLooseRootReduce[x]=Module[{approximation,precision=100},
 DebugPrint["starting fastAndLooseRootReduce: ",x];
 Off[N::meprec];
