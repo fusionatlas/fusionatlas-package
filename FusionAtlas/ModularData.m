@@ -125,7 +125,7 @@ SHA1[x_]:=IntegerString[Hash[x,"SHA1"],16,32]
 ClearSavedModularData[fusion_,induction_]:=DeleteFile/@(FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[induction]<>"*"}]]~Join~FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[{fusion,induction}]<>"*"}]])
 
 
-GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,1],[-1,0]],[[1,1],[0,1]]]*One(Integers mod "<>ToString[N]<>"))"
+GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,1],[-1,0]],[[1,0],[1,1]]]*One(Integers mod "<>ToString[N]<>"))"
 
 
 GAPPath="~/gap/gap";
@@ -153,7 +153,7 @@ ExplicitGenerators[q_][k_]/;PrimePowerQ[q]:=ExplicitGenerators[q][k]=Module[{out
 out=Execute["
 LoadPackage(\"repsn\");
 S:=[[0,1],[-1,0]]*One(Integers mod "<>ToString[q]<>");;
-T:=[[1,1],[0,1]]*One(Integers mod "<>ToString[q]<>");;
+T:=[[1,0],[1,1]]*One(Integers mod "<>ToString[q]<>");;
 G:=Group([S,T]);;
 rep:=IrreducibleAffordingRepresentation(Irr(G)["<>ToString[k]<>"]);;
 Print(\"+++++++\");
@@ -292,14 +292,14 @@ DownValues[ConjugacyClassesOfGalois]=Get[FileNameJoin[{dataDirectory,"conjugacyC
 
 ConjugacyClassesOfGalois[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfGalois[q]=Module[{galois,cmd,lines},
 galois=StringReplace[ToString[GaloisGroup[q]],{"{"->"[","}"->"]"}];
-cmd = "m := "<>ToString[q] <>";; G := Group([[[0,1],[-1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List("<>galois<>", n -> Position(cc,ConjugacyClass(G,[[n, 0], [0, n^(-1)]]*One(Integers mod m))));";
+cmd = "m := "<>ToString[q] <>";; G := Group([[[0,1],[-1,0]],[[1,0],[1,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List("<>galois<>", n -> Position(cc,ConjugacyClass(G,[[n, 0], [0, n^(-1)]]*One(Integers mod m))));";
 lines=Execute[cmd];
 Rule@@#&/@Transpose[{GaloisGroup[q],ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]}]
 ]
 
 
 ConjugacyClassesOfPowersOfT[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfPowersOfT[q]=Module[{cmd,lines},
-cmd = "m := "<>ToString[q] <>";; G := Group([[[0,1],[-1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List([0..(m-1)], n -> Position(cc,ConjugacyClass(G,[[1, n], [0, 1]]*One(Integers mod m))));";
+cmd = "m := "<>ToString[q] <>";; G := Group([[[0,1],[-1,0]],[[1,0],[1,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List([0..(m-1)], n -> Position(cc,ConjugacyClass(G,[[1, 0], [n, 1]]*One(Integers mod m))));";
 lines=Execute[cmd];
 ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]
 ]
@@ -308,12 +308,13 @@ ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]
 LoadConjugacyClasses[]
 
 
-GaloisMatrix[n_,l_]:=GaloisMatrix[n,l]=With[{c={{-1,0},{0,-1}},s={{0,1},{-1,0}},t={{1,1},{0,1}}},Mod[c.s.{{1,PowerMod[l,-1,n]},{0,1}}.s.{{1,l},{0,1}}.s.{{1,PowerMod[l,-1,n]},{0,1}},n]]
+(*GaloisMatrix[n_,l_]:=GaloisMatrix[n,l]=With[{c={{-1,0},{0,-1}},s={{0,1},{-1,0}},t={{1,0},{1,1}}},Mod[c.s.{{1,PowerMod[l,-1,n]},{0,1}}.s.{{1,l},{0,1}}.s.{{1,PowerMod[l,-1,n]},{0,1}},n]]*)
 
 
+Clear[GaloisInRepresentation]
 GaloisInRepresentation[q_/;PrimePowerQ[q],k_Integer (* which irrep *),l_(* which Galois element *)]:=GaloisInRepresentation[q,k,l]=Module[{S,T},
 {S,T}=ExplicitGenerators[q][k];
-MatrixPower[S,3].MatrixPower[T,PowerMod[l,-1,q]].S.MatrixPower[T,l].S.MatrixPower[T,PowerMod[l,-1,q]]
+MatrixPower[S,3].MatrixPower[T,PowerMod[l,1,q]].S.MatrixPower[T,PowerMod[l,-1,q]].S.MatrixPower[T,PowerMod[l,1,q]]
 ]
 
 
@@ -839,7 +840,7 @@ AllocateEigenvaluesToSimples[n_,inductionMatrix_]:=Module[{outputDirectory,filen
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimples"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>SHA1[inductionMatrix]<>".m.gz"}];
-If[(*False\[And]*)False\[And]FileExistsQ[filename],
+If[(*False\[And]*)FileExistsQ[filename],
 ImportGZIP[filename],
 result=Join@@(Map[Function[A,{A[[1]],#}&/@AllocateEigenvaluesToSimples[n,inductionMatrix,A[[3]]]],AllocateEigenvaluesToGaloisOrbitClumps[n,inductionMatrix]]);
 GZIP[result,filename];
@@ -1188,7 +1189,7 @@ AllocateEigenvaluesToSimplesAndCompleteGaloisActions[n_,fusion_,k_,induction_]:=
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimplesAndCompleteGaloisActions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>ToString[k]<>","<>SHA1[{fusion,induction}]<>".m.gz"}];
-If[False\[And]FileExistsQ[filename],
+If[(*False\[And]*)FileExistsQ[filename],
 ImportGZIP[filename],
 Print["Computing Galois actions for ",DisplayGraph[fusion]," ",MatrixForm[induction]];
 result=Join@@Map[Function[ga,{#,ga}]/@CompleteGaloisActions2[n,induction,#[[2]]]&,AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n,fusion,k,induction]];
@@ -1208,7 +1209,7 @@ SignedGaloisAction[signs/@ga[[1]]]
 (*SignedPermutationMatrix[signedPermutation_]:=IdentityMatrix[Length[signedPermutation]]\[LeftDoubleBracket]Abs[signedPermutation]\[RightDoubleBracket]Sign[signedPermutation]*)
 
 
-SignedPermutationMatrix[signedPermutation_]:=Table[Sign[signedPermutation[[i]]]DiracDelta[j-Abs[signedPermutation[[i]]]],{i,1,Length[signedPermutation]},{j,1,Length[signedPermutation]}]
+SignedPermutationMatrix[signedPermutation_]:=Table[Sign[signedPermutation[[i]]]KroneckerDelta[j,Abs[signedPermutation[[i]]]],{i,1,Length[signedPermutation]},{j,1,Length[signedPermutation]}]
 
 
 QLinearSolutions[n_Integer,inductionMatrix_][{{Vs_,Ts_},ga_}]:=Module[{Q,q,sga,dims,S1,T,tEquations,modularInvariantEquations,galoisEquations,galoisOnSEquations,C,S2eqCEquations,inductionEquations,equations,Tp,Sp,result},
@@ -1237,9 +1238,12 @@ C=IdentityMatrix[Length[inductionMatrix[[1]]]][[n-1/.ga[[1]]]];
 S2eqCEquations={Sp.Sp.Q-Q.C};,
 galoisEquations=galoisOnSEquations=S2eqCEquations={};
 ];
-inductionEquations={Sp.Q.T.Transpose[inductionMatrix]-Q.Inverse[T].Transpose[inductionMatrix]};
-equations=Collect[LiftToCommonCyclotomicField[Flatten[tEquations~Join~modularInvariantEquations~Join~galoisEquations~Join~galoisOnSEquations~Join~S2eqCEquations~Join~inductionEquations]],_q];
-lastLinearEquations=equations;
+(*A^t=TS^{-1}T A^{t}*)
+(*S T^(-1) A^t = T A^t*)
+(*S' Q T^(-1) A^t = Q T A^t*)
+inductionEquations={Sp.Q.Inverse[T].Transpose[inductionMatrix]-Q.T.Transpose[inductionMatrix]};
+lastLinearEquations={tEquations,modularInvariantEquations,galoisEquations,galoisOnSEquations,S2eqCEquations,inductionEquations};
+equations=Collect[LiftToCommonCyclotomicField[Flatten[tEquations~Join~modularInvariantEquations(*~Join~galoisEquations*)~Join~galoisOnSEquations~Join~S2eqCEquations~Join~inductionEquations]],_q];
 (*Print["prepared linear equations in Q"];*)
 Print["Preparing to solve linear equations for the change of basis matrix..."];
 Check[
@@ -1335,7 +1339,7 @@ FindQLinearSolutions[n_,fusion_,k_,inductionMatrix_,useGalois:(True|False):True]
 outputDirectory=FileNameJoin[{dataDirectory,"findQLinearSolutions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>ToString[k]<>","<>SHA1[{fusion,inductionMatrix}]<>If[useGalois,"","-no-galois"]<>".m.gz"}];
-If[False\[And]FileExistsQ[filename],
+If[(*False\[And]*)FileExistsQ[filename],
 ImportGZIP[filename],
 result=Module[{allocations,q},
 allocations=If[useGalois,
