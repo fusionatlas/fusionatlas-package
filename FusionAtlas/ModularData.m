@@ -1188,7 +1188,7 @@ AllocateEigenvaluesToSimplesAndCompleteGaloisActions[n_,fusion_,k_,induction_]:=
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimplesAndCompleteGaloisActions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>ToString[k]<>","<>SHA1[{fusion,induction}]<>".m.gz"}];
-If[(*False\[And]*)FileExistsQ[filename],
+If[False\[And]FileExistsQ[filename],
 ImportGZIP[filename],
 Print["Computing Galois actions for ",DisplayGraph[fusion]," ",MatrixForm[induction]];
 result=Join@@Map[Function[ga,{#,ga}]/@CompleteGaloisActions2[n,induction,#[[2]]]&,AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n,fusion,k,induction]];
@@ -1200,17 +1200,20 @@ result]
 
 CalculateGaloisSigns[n_Integer,inductionMatrix_,ga_GaloisAction]:=Module[{S1,dims=DimensionsFromInductionMatrix[n,inductionMatrix],signs},
 S1=dims[[2]]/dims[[1]];
-signs[l_->permutation_]:=l->(permutation ((GaloisAction[n][l]/@S1)/S1[[permutation]]));
+signs[l_->permutation_]:=l->(permutation ((GaloisAction[n][l]/@S1)/S1[[InversePermutation[permutation]]]));
 SignedGaloisAction[signs/@ga[[1]]]
 ]
 
 
-SignedPermutationMatrix[signedPermutation_]:=IdentityMatrix[Length[signedPermutation]][[Abs[signedPermutation]]]Sign[signedPermutation]
+(*SignedPermutationMatrix[signedPermutation_]:=IdentityMatrix[Length[signedPermutation]]\[LeftDoubleBracket]Abs[signedPermutation]\[RightDoubleBracket]Sign[signedPermutation]*)
+
+
+SignedPermutationMatrix[signedPermutation_]:=Table[Sign[signedPermutation[[i]]]DiracDelta[j-Abs[signedPermutation[[i]]]],{i,1,Length[signedPermutation]},{j,1,Length[signedPermutation]}]
 
 
 QLinearSolutions[n_Integer,inductionMatrix_][{{Vs_,Ts_},ga_}]:=Module[{Q,q,sga,dims,S1,T,tEquations,modularInvariantEquations,galoisEquations,galoisOnSEquations,C,S2eqCEquations,inductionEquations,equations,Tp,Sp,result},
+Print["Preparing the linear equations for the change of basis matrix..."];
 Q=Table[q[i,j],{i,1,Length[inductionMatrix[[1]]]},{j,1,Length[inductionMatrix[[1]]]}];
-Print["Preparing to solve linear equations for the change of basis matrix..."];
 Tp=TInRepresentation[n,Vs[[All,1]]];
 Sp=SInRepresentation[n,Vs[[All,1]]];
 T=DiagonalMatrix[Power[\[Zeta][n],n Ts]];
@@ -1224,7 +1227,10 @@ galoisEquations=Table[GaloisInRepresentation[n,Vs[[All,1]],p[[1]]].Q-Q.SignedPer
 (*Print["prepared galoisEquations"];*)
 dims=DimensionsFromInductionMatrix[n,inductionMatrix];
 S1=dims[[2]]/dims[[1]];
-galoisOnSEquations=Collect[Table[(Sp.Q)[[All,Abs[p[[2,1]]]]]-(Q.(Sign[p[[2,1]]](GaloisAction[n][p[[1]]]/@S1))),{p,sga[[1]]}],_q];
+(* TODO try uncommenting the second half of this one! *)
+galoisOnSEquations=Collect[
+Table[(Sp.Q)[[All,Abs[p[[2,1]]]]]-(Q.(Sign[p[[2,1]]](GaloisAction[n][p[[1]]]/@S1))),{p,sga[[1]]}](*~Join~
+Table[(Sp.Q)\[LeftDoubleBracket]All,1\[RightDoubleBracket]-(Q.(Sign[p\[LeftDoubleBracket]2\[RightDoubleBracket]](GaloisAction[n][PowerMod[p\[LeftDoubleBracket]1\[RightDoubleBracket],-1,n]]/@S1\[LeftDoubleBracket]InversePermutation[p\[LeftDoubleBracket]2\[RightDoubleBracket]]\[RightDoubleBracket]))),{p,sga\[LeftDoubleBracket]1\[RightDoubleBracket]}]*),_q];
 (*Print["prepared galoisOnSEquations"];*)
 (*Print[Flatten[galoisOnSEquations]];*)
 C=IdentityMatrix[Length[inductionMatrix[[1]]]][[n-1/.ga[[1]]]];
@@ -1233,7 +1239,9 @@ galoisEquations=galoisOnSEquations=S2eqCEquations={};
 ];
 inductionEquations={Sp.Q.T.Transpose[inductionMatrix]-Q.Inverse[T].Transpose[inductionMatrix]};
 equations=Collect[LiftToCommonCyclotomicField[Flatten[tEquations~Join~modularInvariantEquations~Join~galoisEquations~Join~galoisOnSEquations~Join~S2eqCEquations~Join~inductionEquations]],_q];
+lastLinearEquations=equations;
 (*Print["prepared linear equations in Q"];*)
+Print["Preparing to solve linear equations for the change of basis matrix..."];
 Check[
 result=Q/.Solve[equations==0][[1]],
 Print["Something went wrong: here are the equations."];
@@ -1327,7 +1335,7 @@ FindQLinearSolutions[n_,fusion_,k_,inductionMatrix_,useGalois:(True|False):True]
 outputDirectory=FileNameJoin[{dataDirectory,"findQLinearSolutions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
 filename=FileNameJoin[{outputDirectory,ToString[n]<>","<>ToString[k]<>","<>SHA1[{fusion,inductionMatrix}]<>If[useGalois,"","-no-galois"]<>".m.gz"}];
-If[(*False\[And]*)FileExistsQ[filename],
+If[False\[And]FileExistsQ[filename],
 ImportGZIP[filename],
 result=Module[{allocations,q},
 allocations=If[useGalois,
