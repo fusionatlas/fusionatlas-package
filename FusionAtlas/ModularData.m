@@ -1184,7 +1184,29 @@ action[[orbit,2,imageIndexInOrbit,2,coset,imageIndexInCoset]]
 ,{l,GaloisGroup[n]}]
 
 
-CompleteGaloisActions2[n_,induction_,eigenvalues_]:=GaloisAction[GaloisActionFromStabilizerAction[n,induction,#]]&/@StabilizerActions[n,induction,eigenvalues]
+CompleteGaloisActions2[n_,induction_,eigenvalues_]:=verifyGaloisAction[n,induction,eigenvalues][GaloisAction[GaloisActionFromStabilizerAction[n,induction,#]]]&/@StabilizerActions[n,induction,eigenvalues]
+verifyGaloisAction[n_,induction_,eigenvalues_][GaloisAction[ga_]]:=Module[{dims,S1},
+dims=DimensionsFromInductionMatrix[n,induction];
+S1=dims[[2]]/dims[[1]];
+Do[
+If[Mod[l^2 eigenvalues,1]=!=eigenvalues[[l/.ga]],
+Print["Bad Galois action on eigenvalues for l = ",l];
+Print["eigenvalues = ",eigenvalues];
+Print[Mod[l^2 eigenvalues,1]];
+Print[eigenvalues[[InversePermutation[l/.ga]]]];
+Print[ga];
+Abort[]
+];
+If[Abs[GaloisAction[n][l]/@S1]=!=S1[[l/.ga]],
+Print["Bad Galois action on dimensions for l = ",l];
+Print["S1 = ",Chop[N[S1]]];
+Print["eigenvalues = ",eigenvalues];
+Print[ga];
+Abort[]
+];
+,{l,GaloisGroup[n]}];
+GaloisAction[ga]
+]
 
 
 AllocateEigenvaluesToSimplesAndCompleteGaloisActions[n_,fusion_,k_,induction_]:=Module[{filename,outputDirectory,result},
@@ -1203,9 +1225,10 @@ result]
 
 CalculateGaloisSigns[n_Integer,inductionMatrix_,ga_GaloisAction]:=Module[{S1,dims=DimensionsFromInductionMatrix[n,inductionMatrix],signs},
 S1=dims[[2]]/dims[[1]];
-signs[l_->permutation_]:=l->(permutation ((GaloisAction[n][l]/@S1)/S1[[InversePermutation[permutation]]]));
+signs[l_->permutation_]:=l->(permutation verifySigns[((GaloisAction[n][l]/@S1)/S1[[permutation]]),ga]);
 SignedGaloisAction[signs/@ga[[1]]]
 ]
+verifySigns[stuff_,ga_]:=(If[Complement[stuff,{1,-1}]=!={},Print["Something went wrong calculating Galois signs for: ", ga];Abort[]];stuff)
 
 
 (*SignedPermutationMatrix[signedPermutation_]:=IdentityMatrix[Length[signedPermutation]]\[LeftDoubleBracket]Abs[signedPermutation]\[RightDoubleBracket]Sign[signedPermutation]*)
@@ -1243,7 +1266,7 @@ galoisEquations=galoisOnSEquations=S2eqCEquations={};
 (*A^t=TS^{-1}T A^{t}*)
 (*S T^(-1) A^t = T A^t*)
 (*S' Q T^(-1) A^t = Q T A^t*)
-inductionEquations={Sp.Q.Inverse[T].Transpose[inductionMatrix]-Q.T.Transpose[inductionMatrix]};
+inductionEquations={Sp.Q.T.Transpose[inductionMatrix]-Q.Inverse[T].Transpose[inductionMatrix]};
 lastLinearEquations={tEquations,modularInvariantEquations,galoisEquations,galoisOnSEquations,S2eqCEquations,inductionEquations};
 equations=Collect[LiftToCommonCyclotomicField[Flatten[tEquations~Join~modularInvariantEquations~Join~galoisEquations~Join~galoisOnSEquations~Join~S2eqCEquations~Join~inductionEquations]],_q];
 (*Print["prepared linear equations in Q"];*)
