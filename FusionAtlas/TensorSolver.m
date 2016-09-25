@@ -104,11 +104,11 @@ FusionRules[g,multiplicities]/.Solve[equations,Union[Cases[equations,_Z,\[Infini
 FindFusionRules[m_?MatrixQ,Z_]:=
 Module[{partialFusionRules=FindPartialFusionRules[m,Z],possibleDimensionList,FPEigenvector,possibleValues,vars,dim,solutions,numberCases},
 DebugPrint["Completed partial fusion rules."];
-If[MemberQ[Flatten[MatrixPower[m,Length[m]]],0],
+If[MemberQ[Flatten[Sum[MatrixPower[m,k],{k,1,Length[m]}]],0],
 Print["FindFusionRules requires a tensor generator, this won't do: ",m];
 Abort[]
 ];
-FPEigenvector=Eigenvectors[m][[1]];
+FPEigenvector=Select[Eigenvectors[m],And@@Positive[#]&][[1]];
 FPEigenvector=RootReduce[FPEigenvector/Min[FPEigenvector]];
 dim[k_]:=FPEigenvector[[k]];
 vars=Union[Cases[partialFusionRules,_Z,\[Infinity]]];

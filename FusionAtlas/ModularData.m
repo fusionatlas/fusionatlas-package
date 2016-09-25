@@ -125,7 +125,7 @@ SHA1[x_]:=IntegerString[Hash[x,"SHA1"],16,32]
 ClearSavedModularData[fusion_,induction_]:=DeleteFile/@(FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[induction]<>"*"}]]~Join~FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[{fusion,induction}]<>"*"}]])
 
 
-GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,1],[-1,0]],[[1,0],[1,1]]]*One(Integers mod "<>ToString[N]<>"))"
+GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod "<>ToString[N]<>"))"
 
 
 GAPPath="~/gap/gap";
@@ -134,8 +134,8 @@ GAPPath="~/gap/gap";
 Execute[cmd_]:=Module[{lines,return},
 Print["Calling GAP:"];
 Print[cmd];
-return=Run["echo '"<>cmd<>"' | "<>GAPPath<>" -x 10000 -o 16g > /tmp/gap"<>ToString[$KernelID]<>".out"];
-lines=StringSplit[Import["/tmp/gap"<>ToString[$KernelID]<>".out","String"],"\n"];
+return=Run["echo '"<>cmd<>"' | "<>GAPPath<>" -x 10000 -o 16g > /tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out"];
+lines=StringSplit[Import["/tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out","String"],"\n"];
 If[return!=0,
 If[Count[lines,l_/;!StringFreeQ[l,"+++++++"]]<3,
 Print["It looks like something went wrong running GAP (error code "<>ToString[return]<>"). Please check that you have GAP installed, and modify FusionAtlas`ModularData`Private`GAPPath if necessary."];
@@ -152,8 +152,8 @@ lines
 ExplicitGenerators[q_][k_]/;PrimePowerQ[q]:=ExplicitGenerators[q][k]=Module[{out,S,T,N,i,Q,invQ},
 out=Execute["
 LoadPackage(\"repsn\");
-S:=[[0,1],[-1,0]]*One(Integers mod "<>ToString[q]<>");;
-T:=[[1,0],[1,1]]*One(Integers mod "<>ToString[q]<>");;
+S:=[[0,-1],[1,0]]*One(Integers mod "<>ToString[q]<>");;
+T:=[[1,1],[0,1]]*One(Integers mod "<>ToString[q]<>");;
 G:=Group([S,T]);;
 rep:=IrreducibleAffordingRepresentation(Irr(G)["<>ToString[k]<>"]);;
 Print(\"+++++++\");
@@ -292,14 +292,14 @@ DownValues[ConjugacyClassesOfGalois]=Get[FileNameJoin[{dataDirectory,"conjugacyC
 
 ConjugacyClassesOfGalois[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfGalois[q]=Module[{galois,cmd,lines},
 galois=StringReplace[ToString[GaloisGroup[q]],{"{"->"[","}"->"]"}];
-cmd = "m := "<>ToString[q] <>";; G := Group([[[0,1],[-1,0]],[[1,0],[1,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List("<>galois<>", n -> Position(cc,ConjugacyClass(G,[[n, 0], [0, n^(-1)]]*One(Integers mod m))));";
+cmd = "m := "<>ToString[q] <>";; G := Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List("<>galois<>", n -> Position(cc,ConjugacyClass(G,[[n, 0], [0, n^(-1)]]*One(Integers mod m))));";
 lines=Execute[cmd];
 Rule@@#&/@Transpose[{GaloisGroup[q],ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]}]
 ]
 
 
 ConjugacyClassesOfPowersOfT[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfPowersOfT[q]=Module[{cmd,lines},
-cmd = "m := "<>ToString[q] <>";; G := Group([[[0,1],[-1,0]],[[1,0],[1,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List([0..(m-1)], n -> Position(cc,ConjugacyClass(G,[[1, 0], [n, 1]]*One(Integers mod m))));";
+cmd = "m := "<>ToString[q] <>";; G := Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List([0..(m-1)], n -> Position(cc,ConjugacyClass(G,[[1, n], [0, 1]]*One(Integers mod m))));";
 lines=Execute[cmd];
 ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]
 ]
@@ -314,7 +314,7 @@ LoadConjugacyClasses[]
 Clear[GaloisInRepresentation]
 GaloisInRepresentation[q_/;PrimePowerQ[q],k_Integer (* which irrep *),l_(* which Galois element *)]:=GaloisInRepresentation[q,k,l]=Module[{S,T},
 {S,T}=ExplicitGenerators[q][k];
-MatrixPower[S,3].MatrixPower[T,PowerMod[l,1,q]].S.MatrixPower[T,PowerMod[l,-1,q]].S.MatrixPower[T,PowerMod[l,1,q]]
+MatrixPower[S,3].MatrixPower[T,PowerMod[l,-1,q]].S.MatrixPower[T,PowerMod[l,1,q]].S.MatrixPower[T,PowerMod[l,-1,q]]
 ]
 
 
@@ -427,7 +427,7 @@ dimensions=RootReduce[Together[Eigenvectors[Transpose[inductionMatrix].induction
 dimensions=Plus@@(RootReduce[#/Norm[#]]&/@Cases[dimensions,d_/;And@@(NonNegative[d])]);
 dimensions=RootReduce[dimensions/Min[dimensions]];
 dimensions=ToCyclotomicField[dimensions];
-n=Cases[dimensions,a_AlgebraicNumber:>identify\[Zeta][a[[1]]],1][[1]];
+n=(Cases[dimensions,a_AlgebraicNumber:>identify\[Zeta][a[[1]]],1]~Join~{1})[[1]];
 {n,{cachedToNumberField[Sum[d^2,{d,dimensions}]^(1/2),\[Zeta][n]],dimensions}}
 ]
 
@@ -487,14 +487,15 @@ GaloisOrbitClumps[induction_]:=GaloisOrbitClumps@@DimensionsFromInductionMatrix[
 Clear[PossibleConductors]
 
 
-PossibleConductors[inductionMatrix_]:=PossibleConductors[inductionMatrix]=Module[{rank,inductionsFromOne,dimensions,\[ScriptCapitalD],n,primes,powers,l=3,largestClump},
+PossibleConductors[inductionMatrix_]:=PossibleConductors[inductionMatrix]=Module[{dimensionConductor,rank,inductionsFromOne,dimensions,\[ScriptCapitalD],n,primes,powers,l=3,largestClump},
+dimensionConductor=DimensionsFromInductionMatrix[inductionMatrix][[1]];
 dimensions=DimensionsFromInductionMatrix[inductionMatrix][[2,2]];
 (*Print[dimensions];*)
 rank=Length[dimensions];
 inductionsFromOne=Count[inductionMatrix[[1]],Except[0]];
 largestClump=Max@@(Length/@GaloisOrbitClumps[inductionMatrix]);
 \[ScriptCapitalD]=Sum[d^2,{d,dimensions}];
-n=identify\[Zeta][\[ScriptCapitalD][[1]]];
+n=Switch[\[ScriptCapitalD],_AlgebraicNumber,identify\[Zeta][\[ScriptCapitalD][[1]]],_,1];
 primes=FactorInteger[AlgebraicNumberNorm[\[ScriptCapitalD]]][[All,1]];
 sizeOfOrbit[p_,k_]:=p^(k-1) (p-1)/2;
 sizeOfOrbit[2,k_]:=Max[1,2^(k-3)];
@@ -503,7 +504,7 @@ While[(Max@@powers)>=l,
 l++;
 powers=Cases[Tuples[Table[Range[l],{Length[primes]}]],t_/;(Max@@Table[sizeOfOrbit[primes[[i]],t[[i]]],{i,1,Length[primes]}]<=largestClump)\[And](Sum[sizeOfOrbit[primes[[i]],t[[i]]],{i,1,Length[primes]}]<=rank-inductionsFromOne)];
 ];
-Times@@(primes^#)&/@powers
+Cases[Times@@(primes^#)&/@powers,N_/;Mod[N,dimensionConductor]==0]
 ]
 
 
@@ -730,16 +731,17 @@ SaveAllModularData[]:=(SaveRepresentationsForRank[];SaveTEigenvalues[];SaveConju
 SaveGenerators[];)
 
 
-workOnRepresentations[conductors_,rank_:\[Infinity]]:=Module[{status,min,i,timing,length,counter=0},
+workOnRepresentations[conductors_,rank_:\[Infinity]]:=Module[{status,min,i,timing,length,counter=0,cells={}},
 LoadRepresentationsForRank/@conductors;
 status={#,0.0,0,0}&/@conductors;
 While[(Min@@status[[All,3]])<rank,
 min=Min@@(status[[All,2]]+10.^-4 status[[All,4]]);
 i=Position[status,{_,m_,_,l_}/;m+10.^-4 l<=min+10.^-6][[1,1]];
-Print["Running RepresentationsForRank[",status[[i,1]],",",status[[i,3]]+1, "] ..."];
+AppendTo[cells,PrintTemporary["Running RepresentationsForRank[",status[[i,1]],",",status[[i,3]]+1, "] ..."]];
 {timing,length}=AbsoluteTiming[Length[RepresentationsForRank[status[[i,1]],status[[i,3]]+1]]];
-Print["Took ",timing," seconds."];
-Print["Found ",length," decompositions."];
+AppendTo[cells,PrintTemporary["Took ",timing," seconds."]];
+AppendTo[cells,PrintTemporary["Found ",length," decompositions."]];
+If[Length[cells]>9,NotebookDelete/@Drop[cells,-9];cells=Take[cells,-9]];
 status[[i]]={status[[i,1]],timing,status[[i,3]]+1,length};
 status=DeleteCases[status,{_,_,rank,_}];
 ];
@@ -806,7 +808,7 @@ Cases[result,r_/;And@@Table[Min@@(Length/@PossibleGaloisImages[n,DimensionsFromI
 
 AllocateEigenvaluesToSimples[n_,inductionMatrix_,clumps_,{},assigned_,_,_]:=
 Module[{t,T,\[ScriptCapitalD],d},
-(* now we check the top left entry of STS=TST exactly *)
+(* now we check the top left entry of STSTST=C exactly *)
 t=Sort[assigned][[All,2]];
 T=\[Zeta][n]^(n t);
 (*counter++;*)
@@ -1243,7 +1245,7 @@ galoisEquations=galoisOnSEquations=S2eqCEquations={};
 (*S' Q T^(-1) A^t = Q T A^t*)
 inductionEquations={Sp.Q.Inverse[T].Transpose[inductionMatrix]-Q.T.Transpose[inductionMatrix]};
 lastLinearEquations={tEquations,modularInvariantEquations,galoisEquations,galoisOnSEquations,S2eqCEquations,inductionEquations};
-equations=Collect[LiftToCommonCyclotomicField[Flatten[tEquations~Join~modularInvariantEquations(*~Join~galoisEquations*)~Join~galoisOnSEquations~Join~S2eqCEquations~Join~inductionEquations]],_q];
+equations=Collect[LiftToCommonCyclotomicField[Flatten[tEquations~Join~modularInvariantEquations~Join~galoisEquations~Join~galoisOnSEquations~Join~S2eqCEquations~Join~inductionEquations]],_q];
 (*Print["prepared linear equations in Q"];*)
 Print["Preparing to solve linear equations for the change of basis matrix..."];
 Check[
