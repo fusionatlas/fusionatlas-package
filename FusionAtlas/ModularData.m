@@ -28,6 +28,9 @@ BeginPackage["FusionAtlas`ModularData`",{"FusionAtlas`","FusionAtlas`Bigraphs`",
 FindModularData::usage="FindModularData[X_] computes all possible modular data for the centre; the argument X may be a fusion ring and induction matrix, a fusion ring, the rank 3 tensor of fusion multiplicities, a matrix of fusion multiplicities for a single object, or a principal graph.";
 
 
+ExecuteGAP;
+
+
 ExplicitGenerators;CharacterTable;GaloisGroup;GaloisAction;GaloisGroupGenerators;PossibleConductors;workOnRepresentations;SInRepresentation;TInRepresentation;DimensionsFromInductionMatrix;GaloisOrbitClumps;PossibleGaloisImages;PossibleGaloisTraces;RepresentationsForRank;RepresentationsForInductionMatrix;SaveRepresentationsForRank;SaveCharacterTables;SaveGenerators;SaveConjugacyClasses;SaveAllModularData;ClearSavedModularData;AllocateEigenvaluesToGaloisOrbitClumps;AllocateEigenvaluesToSimples;AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators;AllocateEigenvaluesToSimplesAndCompleteGaloisActions;FindQLinearSolutions
 
 
@@ -131,7 +134,7 @@ GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers 
 GAPPath="~/gap/gap";
 
 
-Execute[cmd_]:=Module[{lines,return},
+ExecuteGAP[cmd_]:=Module[{lines,return},
 Print["Calling GAP:"];
 Print[cmd];
 return=Run["echo '"<>cmd<>"' | "<>GAPPath<>" -x 10000 -o 16g > /tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out"];
@@ -150,7 +153,7 @@ lines
 
 
 ExplicitGenerators[q_][k_]/;PrimePowerQ[q]:=ExplicitGenerators[q][k]=Module[{out,S,T,N,i,Q,invQ},
-out=Execute["
+out=ExecuteGAP["
 LoadPackage(\"repsn\");
 S:=[[0,-1],[1,0]]*One(Integers mod "<>ToString[q]<>");;
 T:=[[1,1],[0,1]]*One(Integers mod "<>ToString[q]<>");;
@@ -193,7 +196,7 @@ Clear[ReadCharacterTable]
 ReadCharacterTable[gapName_List]:=ReadCharacterTable@@gapName
 ReadCharacterTable[gapName_]:=ReadCharacterTable["",gapName]
 ReadCharacterTable[stuff_,gapName_]:=ReadCharacterTable[stuff,gapName]=Module[{lines},
-lines=Execute[stuff<>"Display(CharacterTable("<>gapName<>"));"];
+lines=ExecuteGAP[stuff<>"Display(CharacterTable("<>gapName<>"));"];
 Print["Calculated the character table for "<>gapName<>":"];
 Print[TableForm[lines]];
 lines=Take[lines,{3,-1}+Flatten[Position[lines,s_/;StringMatchQ[s,"gap>"~~___],{1},Heads->False]]];
@@ -267,7 +270,7 @@ LoadCharacterTables[];
 Clear[ConjugacyClassOf]
 ConjugacyClassOf[q_][m_]:=ConjugacyClassOf[q][m]=Module[{cmd,lines},
 cmd="Position(ConjugacyClasses("<>GAP[SL[2,Subscript[Z, q]]]<>"),ConjugacyClass("<>GAP[SL[2,Subscript[Z, q]]]<>","<>StringReplace[ToString[m],{"{"->"[","}"->"]"}]<>"*One(Integers mod "<>ToString[q]<>")));";
-lines=Execute[cmd];
+lines=ExecuteGAP[cmd];
 ToExpression[StringDrop[lines[[-2]],5]]
 ]
 
@@ -293,14 +296,14 @@ DownValues[ConjugacyClassesOfGalois]=Get[FileNameJoin[{dataDirectory,"conjugacyC
 ConjugacyClassesOfGalois[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfGalois[q]=Module[{galois,cmd,lines},
 galois=StringReplace[ToString[GaloisGroup[q]],{"{"->"[","}"->"]"}];
 cmd = "m := "<>ToString[q] <>";; G := Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List("<>galois<>", n -> Position(cc,ConjugacyClass(G,[[n, 0], [0, n^(-1)]]*One(Integers mod m))));";
-lines=Execute[cmd];
+lines=ExecuteGAP[cmd];
 Rule@@#&/@Transpose[{GaloisGroup[q],ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]}]
 ]
 
 
 ConjugacyClassesOfPowersOfT[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfPowersOfT[q]=Module[{cmd,lines},
 cmd = "m := "<>ToString[q] <>";; G := Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List([0..(m-1)], n -> Position(cc,ConjugacyClass(G,[[1, n], [0, 1]]*One(Integers mod m))));";
-lines=Execute[cmd];
+lines=ExecuteGAP[cmd];
 ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]
 ]
 

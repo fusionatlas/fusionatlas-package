@@ -62,7 +62,7 @@ DeclarePackage["FusionAtlas`InductionMatrix`",
 
 
 DeclarePackage["FusionAtlas`ModularData`",
-{"FindModularData","ExplicitGenerators","CharacterTable","GaloisGroup","GaloisAction","GaloisGroupGenerators","PossibleConductors","workOnRepresentations","SInRepresentation","TInRepresentation","DimensionsFromInductionMatrix","GaloisOrbitClumps","PossibleGaloisImages","PossibleGaloisTraces","RepresentationsForRank","RepresentationsForInductionMatrix","SaveRepresentationsForRank","SaveCharacterTables","SaveGenerators","SaveConjugacyClasses","SaveAllModularData","ClearSavedModularData","AllocateEigenvaluesToGaloisOrbitClumps","AllocateEigenvaluesToSimples","AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators","AllocateEigenvaluesToSimplesAndCompleteGaloisActions","FindQLinearSolutions"}];
+{"FindModularData","ExplicitGenerators","ExecuteGAP","CharacterTable","GaloisGroup","GaloisAction","GaloisGroupGenerators","PossibleConductors","workOnRepresentations","SInRepresentation","TInRepresentation","DimensionsFromInductionMatrix","GaloisOrbitClumps","PossibleGaloisImages","PossibleGaloisTraces","RepresentationsForRank","RepresentationsForInductionMatrix","SaveRepresentationsForRank","SaveCharacterTables","SaveGenerators","SaveConjugacyClasses","SaveAllModularData","ClearSavedModularData","AllocateEigenvaluesToGaloisOrbitClumps","AllocateEigenvaluesToSimples","AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators","AllocateEigenvaluesToSimplesAndCompleteGaloisActions","FindQLinearSolutions"}];
 
 
 DeclarePackage["FusionAtlas`FindGraphPartners`",
