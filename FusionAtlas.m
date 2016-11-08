@@ -209,6 +209,9 @@ parallelRootReduce;
 progressiveRootReduce;
 
 
+\[Zeta];CyclotomicOrder;ToCyclotomicField;LiftToCommonCyclotomicField;AlgebraicConjugate;IdentifyRootOfUnity;PrimePowers;UniqueGaloisConjugate;cachedToNumberField;
+
+
 Begin["`Private`"];
 
 
@@ -325,6 +328,70 @@ qFromd[d_]:= cachedRootReduce[(d+Sqrt[d^2-4])/2]
 
 
 qInteger[n_][q_]:=RootReduce[Sum[q^i,{i,-n+1,n-1,2}]]
+
+
+\[Zeta][n_]:=\[Zeta][n]=With[{p=Evaluate[Cyclotomic[n,#]]&},With[{d=Module[{m},Exponent[p[m],m]]},
+AlgebraicNumber[Root[p,d],{0,1}~Join~Table[0,{d-2}]]]]
+
+
+Clear[IdentifyRootOfUnity]
+IdentifyRootOfUnity[z_]:=IdentifyRootOfUnity[z]=Module[{n=1},While[z=!=\[Zeta][n]\[And](n<=2\[Or]z=!=\[Zeta][n][[1]]),n++];n]
+
+
+(*Clear[cachedToNumberField]*)
+cachedToNumberField[X_,Y_]:=Module[{result},
+result=ToNumberField[X,Y];
+If[!MatchQ[result,_ToNumberField],
+cachedToNumberField[X,Y]=result
+];
+result
+]
+
+
+ToCyclotomicField[X_List]:=ToCyclotomicField[X,1][[1]]
+ToCyclotomicField[X_List?MatrixQ]:=Partition[ToCyclotomicField[Flatten[X]],Length[X[[1]]]]
+ToCyclotomicField[{},n_]:={{},n}
+ToCyclotomicField[x_?NumericQ]:=ToCyclotomicField[{x}]
+ToCyclotomicField[{x_,z___},n_]:=Module[{tnf,k=1,zt,p},
+Quiet[
+tnf=cachedToNumberField[x,\[Zeta][n]];
+While[MatchQ[tnf,_ToNumberField],
+k++;
+n0=k n;
+tnf=cachedToNumberField[x,\[Zeta][k n]]
+],
+ToNumberField::nnfel];
+{zt,p}=ToCyclotomicField[{z},k n];
+{{AlgebraicNumberPolynomial[tnf,\[Zeta][p]^(p/(k n))]}~Join~zt,p}
+]
+
+
+PrimePowers[n_]:=#[[1]]^#[[2]]&/@FactorInteger[n]
+
+
+LiftToCommonCyclotomicField[x_]:=Module[{exponents,N},
+exponents=Union[IdentifyRootOfUnity/@Union[Cases[x,AlgebraicNumber[a_,___]:>a,\[Infinity]]]];
+N=LCM@@({1}~Join~exponents);
+If[exponents==={N},
+x,
+x/.a:AlgebraicNumber[z_,_]:>If[IdentifyRootOfUnity[z]==N,a,AlgebraicNumberPolynomial[a,\[Zeta][N]^(N/IdentifyRootOfUnity[z])]]
+]
+]
+
+
+SetAttributes[AlgebraicConjugate,Listable]
+AlgebraicConjugate[n_Integer]:=n
+
+
+CyclotomicOrder[x_]:=CyclotomicOrder[x]=Round[(2\[Pi])/Arg[x]]
+
+
+AlgebraicConjugate[a:AlgebraicNumber[r_,x_]]/;r==\[Zeta][CyclotomicOrder[r]][[1]]:= AlgebraicNumberPolynomial[a,\[Zeta][CyclotomicOrder[r]]^-1]
+AlgebraicConjugate[a:AlgebraicNumber[r_,x_]]:=cachedToNumberField[RootReduce[Conjugate[a]],r]
+AlgebraicConjugate[x:(_Integer|_Rational)]:=x
+
+
+UniqueGaloisConjugate[a:AlgebraicNumber[x_,__]]:=ToNumberField[RootReduce[a]/.z:Power[_,1/2]:>-z,x]
 
 
 End[];

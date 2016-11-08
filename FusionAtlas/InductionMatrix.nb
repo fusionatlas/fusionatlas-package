@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     76142,       1977]
-NotebookOptionsPosition[     72925,       1869]
-NotebookOutlinePosition[     73340,       1887]
-CellTagsIndexPosition[     73297,       1884]
+NotebookDataLength[     70197,       1813]
+NotebookOptionsPosition[     67187,       1711]
+NotebookOutlinePosition[     67604,       1729]
+CellTagsIndexPosition[     67561,       1726]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -166,7 +166,7 @@ Cell[BoxData[{
           RowBox[{
           "dimensionData", "\[LeftDoubleBracket]", "1", 
            "\[RightDoubleBracket]"}], "]"}], ",", "1", ",", 
-         RowBox[{"identify\[Zeta]", "[", 
+         RowBox[{"IdentifyRootOfUnity", "[", 
           RowBox[{"dimensionData", "\[LeftDoubleBracket]", 
            RowBox[{"1", ",", "1"}], "\[RightDoubleBracket]"}], "]"}]}], 
         "]"}]}], ";", "\[IndentingNewLine]", 
@@ -194,13 +194,13 @@ Cell[BoxData[{
          "]"}]}]}]}], "\[IndentingNewLine]", "]"}]}]}]}], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.635017860042878*^9, 3.635017887646093*^9}, {
-  3.635019858543016*^9, 3.635019863800818*^9}, {3.65655115057771*^9, 
-  3.65655119340775*^9}, {3.673242105284544*^9, 3.673242130717972*^9}, {
-  3.6732421986305656`*^9, 3.6732422086838503`*^9}, {3.673695470991569*^9, 
-  3.673695533014018*^9}, {3.67830234055389*^9, 3.678302352694222*^9}, {
-  3.6797150537906113`*^9, 3.67971507147259*^9}, {3.679715109028116*^9, 
-  3.6797151102187433`*^9}, {3.6797162988784122`*^9, 3.679716302087953*^9}, {
-  3.680365901017708*^9, 3.680365905613908*^9}}],
+   3.635019858543016*^9, 3.635019863800818*^9}, {3.65655115057771*^9, 
+   3.65655119340775*^9}, {3.673242105284544*^9, 3.673242130717972*^9}, {
+   3.6732421986305656`*^9, 3.6732422086838503`*^9}, {3.673695470991569*^9, 
+   3.673695533014018*^9}, {3.67830234055389*^9, 3.678302352694222*^9}, {
+   3.6797150537906113`*^9, 3.67971507147259*^9}, {3.679715109028116*^9, 
+   3.6797151102187433`*^9}, {3.6797162988784122`*^9, 3.679716302087953*^9}, {
+   3.680365901017708*^9, 3.680365905613908*^9}, 3.6875717234642887`*^9}],
 
 Cell[BoxData[
  RowBox[{
@@ -448,165 +448,6 @@ Cell[BoxData[
  InitializationCell->True,
  CellChangeTimes->{{3.6736953240427933`*^9, 3.673695468741119*^9}, 
    3.673695604904006*^9, {3.673696166666641*^9, 3.6736961667409286`*^9}}],
-
-Cell[BoxData[{
- RowBox[{"Clear", "[", "\[Zeta]", "]"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"\[Zeta]", "[", "n_", "]"}], ":=", 
-  RowBox[{
-   RowBox[{"\[Zeta]", "[", "n", "]"}], "=", 
-   RowBox[{"With", "[", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"p", "=", 
-       RowBox[{
-        RowBox[{"Evaluate", "[", 
-         RowBox[{"Cyclotomic", "[", 
-          RowBox[{"n", ",", "#"}], "]"}], "]"}], "&"}]}], "}"}], ",", 
-     RowBox[{"With", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"d", "=", 
-         RowBox[{"Module", "[", 
-          RowBox[{
-           RowBox[{"{", "m", "}"}], ",", 
-           RowBox[{"Exponent", "[", 
-            RowBox[{
-             RowBox[{"p", "[", "m", "]"}], ",", "m"}], "]"}]}], "]"}]}], 
-        "}"}], ",", "\[IndentingNewLine]", 
-       RowBox[{"AlgebraicNumber", "[", 
-        RowBox[{
-         RowBox[{"Root", "[", 
-          RowBox[{"p", ",", "d"}], "]"}], ",", 
-         RowBox[{
-          RowBox[{"{", 
-           RowBox[{"0", ",", "1"}], "}"}], "~", "Join", "~", 
-          RowBox[{"Table", "[", 
-           RowBox[{"0", ",", 
-            RowBox[{"{", 
-             RowBox[{"d", "-", "2"}], "}"}]}], "]"}]}]}], "]"}]}], "]"}]}], 
-    "]"}]}]}]}], "Input",
- InitializationCell->True,
- CellChangeTimes->{{3.559513223258071*^9, 3.5595132326436863`*^9}, {
-  3.559515807400446*^9, 3.559515812406694*^9}, {3.559516359567793*^9, 
-  3.559516375742578*^9}, {3.559516452342175*^9, 3.559516572539567*^9}}],
-
-Cell[BoxData[{
- RowBox[{"Clear", "[", "identify\[Zeta]", "]"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"identify\[Zeta]", "[", "z_", "]"}], ":=", 
-  RowBox[{
-   RowBox[{"identify\[Zeta]", "[", "z", "]"}], "=", 
-   RowBox[{"Module", "[", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"n", "=", "1"}], "}"}], ",", 
-     RowBox[{
-      RowBox[{"While", "[", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"z", "=!=", 
-          RowBox[{"\[Zeta]", "[", "n", "]"}]}], "\[And]", 
-         RowBox[{"(", 
-          RowBox[{
-           RowBox[{"n", "\[LessEqual]", "2"}], "\[Or]", 
-           RowBox[{"z", "=!=", 
-            RowBox[{
-             RowBox[{"\[Zeta]", "[", "n", "]"}], "\[LeftDoubleBracket]", "1", 
-             "\[RightDoubleBracket]"}]}]}], ")"}]}], ",", 
-        RowBox[{"n", "++"}]}], "]"}], ";", "n"}]}], "]"}]}]}]}], "Input",
- InitializationCell->True,
- CellChangeTimes->{{3.673273387342866*^9, 3.673273457125387*^9}, {
-  3.6732739292935753`*^9, 3.673273938008869*^9}, {3.673273976255681*^9, 
-  3.673273990424286*^9}, {3.673274020853307*^9, 3.673274042181876*^9}}],
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"ToCyclotomicField", "[", "X_List", "]"}], ":=", 
-  RowBox[{
-   RowBox[{"ToCyclotomicField", "[", 
-    RowBox[{"X", ",", "1"}], "]"}], "\[LeftDoubleBracket]", "1", 
-   "\[RightDoubleBracket]"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"ToCyclotomicField", "[", 
-   RowBox[{"X_List", "?", "MatrixQ"}], "]"}], ":=", 
-  RowBox[{"Partition", "[", 
-   RowBox[{
-    RowBox[{"ToCyclotomicField", "[", 
-     RowBox[{"Flatten", "[", "X", "]"}], "]"}], ",", 
-    RowBox[{"Length", "[", 
-     RowBox[{"X", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
-     "]"}]}], "]"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"ToCyclotomicField", "[", 
-   RowBox[{
-    RowBox[{"{", "}"}], ",", "n_"}], "]"}], ":=", 
-  RowBox[{"{", 
-   RowBox[{
-    RowBox[{"{", "}"}], ",", "n"}], "}"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"ToCyclotomicField", "[", 
-   RowBox[{
-    RowBox[{"{", 
-     RowBox[{"x_", ",", "z___"}], "}"}], ",", "n_"}], "]"}], ":=", 
-  RowBox[{"Module", "[", 
-   RowBox[{
-    RowBox[{"{", 
-     RowBox[{"tnf", ",", 
-      RowBox[{"k", "=", "1"}], ",", "zt", ",", "p"}], "}"}], ",", 
-    "\[IndentingNewLine]", 
-    RowBox[{
-     RowBox[{"Quiet", "[", "\[IndentingNewLine]", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"tnf", "=", 
-         RowBox[{"cachedToNumberField", "[", 
-          RowBox[{"x", ",", 
-           RowBox[{"\[Zeta]", "[", "n", "]"}]}], "]"}]}], ";", 
-        "\[IndentingNewLine]", 
-        RowBox[{"While", "[", 
-         RowBox[{
-          RowBox[{"MatchQ", "[", 
-           RowBox[{"tnf", ",", "_ToNumberField"}], "]"}], ",", 
-          "\[IndentingNewLine]", 
-          RowBox[{
-           RowBox[{"k", "++"}], ";", "\[IndentingNewLine]", 
-           RowBox[{"n0", "=", 
-            RowBox[{"k", " ", "n"}]}], ";", "\[IndentingNewLine]", 
-           RowBox[{"tnf", "=", 
-            RowBox[{"cachedToNumberField", "[", 
-             RowBox[{"x", ",", 
-              RowBox[{"\[Zeta]", "[", 
-               RowBox[{"k", " ", "n"}], "]"}]}], "]"}]}]}]}], 
-         "\[IndentingNewLine]", "]"}]}], ",", "\[IndentingNewLine]", 
-       RowBox[{"ToNumberField", "::", "nnfel"}]}], "]"}], ";", 
-     "\[IndentingNewLine]", 
-     RowBox[{
-      RowBox[{"{", 
-       RowBox[{"zt", ",", "p"}], "}"}], "=", 
-      RowBox[{"ToCyclotomicField", "[", 
-       RowBox[{
-        RowBox[{"{", "z", "}"}], ",", 
-        RowBox[{"k", " ", "n"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"{", 
-         RowBox[{"AlgebraicNumberPolynomial", "[", 
-          RowBox[{"tnf", ",", 
-           SuperscriptBox[
-            RowBox[{"\[Zeta]", "[", "p", "]"}], 
-            RowBox[{"p", "/", 
-             RowBox[{"(", 
-              RowBox[{"k", " ", "n"}], ")"}]}]]}], "]"}], "}"}], "~", "Join", 
-        "~", "zt"}], ",", "p"}], "}"}]}]}], "\[IndentingNewLine]", 
-   "]"}]}]}], "Input",
- InitializationCell->True,
- CellChangeTimes->{{3.656310652850071*^9, 3.656310943220831*^9}, {
-  3.656311004720512*^9, 3.6563110260225267`*^9}, {3.656311131968268*^9, 
-  3.656311145284636*^9}, {3.656311176849099*^9, 3.656311197455339*^9}, {
-  3.656311237033141*^9, 3.656311237381052*^9}, {3.6565307557902393`*^9, 
-  3.6565307601829433`*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -1155,7 +996,7 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"{", 
      RowBox[{"n", "=", 
-      RowBox[{"identify\[Zeta]", "[", "x", "]"}]}], "}"}], ",", 
+      RowBox[{"IdentifyRootOfUnity", "[", "x", "]"}]}], "}"}], ",", 
     "\[IndentingNewLine]", 
     RowBox[{"Union", "[", 
      RowBox[{"Table", "[", 
@@ -1176,10 +1017,11 @@ Cell[BoxData[{
   RowBox[{"{", "x", "}"}]}]}], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.673686725753374*^9, 3.673686770939899*^9}, {
-  3.673686849260683*^9, 3.673686902399469*^9}, {3.673686987062258*^9, 
-  3.6736869953556023`*^9}, {3.673687050025503*^9, 3.673687069983304*^9}, {
-  3.673688025355649*^9, 3.673688036077937*^9}, {3.673695072182308*^9, 
-  3.673695117895005*^9}, {3.673695149886935*^9, 3.673695169543399*^9}}],
+   3.673686849260683*^9, 3.673686902399469*^9}, {3.673686987062258*^9, 
+   3.6736869953556023`*^9}, {3.673687050025503*^9, 3.673687069983304*^9}, {
+   3.673688025355649*^9, 3.673688036077937*^9}, {3.673695072182308*^9, 
+   3.673695117895005*^9}, {3.673695149886935*^9, 3.673695169543399*^9}, 
+   3.687571731099084*^9}],
 
 Cell[BoxData[{
  RowBox[{
@@ -1870,7 +1712,7 @@ Cell[BoxData[
 AutoGeneratedPackage->Automatic,
 Evaluator->"Local (2)",
 WindowSize->{1221, 778},
-WindowMargins->{{Automatic, 36}, {Automatic, 0}},
+WindowMargins->{{Automatic, 369}, {Automatic, 28}},
 FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
 2014)",
 StyleDefinitions->"Default.nb"
@@ -1922,59 +1764,53 @@ Cell[4226, 124, 119, 3, 28, "Input",
  InitializationCell->True],
 Cell[4348, 129, 558, 15, 28, "Input",
  InitializationCell->True],
-Cell[4909, 146, 2497, 56, 165, "Input",
+Cell[4909, 146, 2532, 56, 165, "Input",
  InitializationCell->True],
-Cell[7409, 204, 7645, 182, 260, "Input",
+Cell[7444, 204, 7645, 182, 260, "Input",
  InitializationCell->True],
-Cell[15057, 388, 556, 14, 28, "Input",
+Cell[15092, 388, 556, 14, 28, "Input",
  InitializationCell->True],
-Cell[15616, 404, 1713, 45, 97, "Input",
+Cell[15651, 404, 1713, 45, 97, "Input",
  InitializationCell->True],
-Cell[17332, 451, 1462, 40, 63, "Input",
+Cell[17367, 451, 6097, 155, 165, "Input",
  InitializationCell->True],
-Cell[18797, 493, 1086, 27, 46, "Input",
+Cell[23467, 608, 426, 11, 28, "Input",
  InitializationCell->True],
-Cell[19886, 522, 3250, 86, 281, "Input",
+Cell[23896, 621, 3083, 75, 114, "Input",
  InitializationCell->True],
-Cell[23139, 610, 6097, 155, 165, "Input",
+Cell[26982, 698, 2512, 60, 215, "Input",
  InitializationCell->True],
-Cell[29239, 767, 426, 11, 28, "Input",
+Cell[29497, 760, 202, 5, 28, "Input",
  InitializationCell->True],
-Cell[29668, 780, 3083, 75, 114, "Input",
+Cell[29702, 767, 2811, 72, 165, "Input",
  InitializationCell->True],
-Cell[32754, 857, 2512, 60, 215, "Input",
+Cell[32516, 841, 4565, 110, 317, "Input",
  InitializationCell->True],
-Cell[35269, 919, 202, 5, 28, "Input",
+Cell[37084, 953, 526, 17, 28, "Input",
  InitializationCell->True],
-Cell[35474, 926, 2811, 72, 165, "Input",
+Cell[37613, 972, 666, 14, 28, "Input",
  InitializationCell->True],
-Cell[38288, 1000, 4565, 110, 317, "Input",
+Cell[38282, 988, 1379, 35, 95, "Input",
  InitializationCell->True],
-Cell[42856, 1112, 526, 17, 28, "Input",
+Cell[39664, 1025, 520, 13, 46, "Input",
  InitializationCell->True],
-Cell[43385, 1131, 666, 14, 28, "Input",
+Cell[40187, 1040, 1088, 33, 53, "Input",
  InitializationCell->True],
-Cell[44054, 1147, 1345, 34, 95, "Input",
+Cell[41278, 1075, 5817, 134, 250, "Input",
  InitializationCell->True],
-Cell[45402, 1183, 520, 13, 46, "Input",
+Cell[47098, 1211, 2596, 67, 131, "Input",
  InitializationCell->True],
-Cell[45925, 1198, 1088, 33, 53, "Input",
+Cell[49697, 1280, 11137, 257, 607, "Input",
  InitializationCell->True],
-Cell[47016, 1233, 5817, 134, 250, "Input",
+Cell[60837, 1539, 531, 15, 28, "Input",
  InitializationCell->True],
-Cell[52836, 1369, 2596, 67, 131, "Input",
+Cell[61371, 1556, 2432, 61, 182, "Input",
  InitializationCell->True],
-Cell[55435, 1438, 11137, 257, 607, "Input",
+Cell[63806, 1619, 3000, 75, 199, "Input",
  InitializationCell->True],
-Cell[66575, 1697, 531, 15, 28, "Input",
+Cell[66809, 1696, 164, 4, 28, "Input",
  InitializationCell->True],
-Cell[67109, 1714, 2432, 61, 182, "Input",
- InitializationCell->True],
-Cell[69544, 1777, 3000, 75, 199, "Input",
- InitializationCell->True],
-Cell[72547, 1854, 164, 4, 28, "Input",
- InitializationCell->True],
-Cell[72714, 1860, 171, 4, 28, "Input",
+Cell[66976, 1702, 171, 4, 28, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
