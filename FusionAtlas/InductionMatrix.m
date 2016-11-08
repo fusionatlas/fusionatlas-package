@@ -35,7 +35,7 @@ permuteColumns[inductionMatrix_]:=Transpose[SortBy[Transpose[inductionMatrix],{T
 Clear[InductionMatrices]
 InductionMatrices[fr_FusionRules]:=InductionMatrices[fr]=Module[{n,dimensionData},
 dimensionData=DimensionData[fr];
-n=If[IntegerQ[dimensionData[[1]]],1,identify\[Zeta][dimensionData[[1,1]]]];
+n=If[IntegerQ[dimensionData[[1]]],1,IdentifyRootOfUnity[dimensionData[[1,1]]]];
 permuteColumns/@Select[
 Cases[AlgebraicDecompositions[AnnularHoms[fr],dimensionData],m_/;Count[Transpose[m],UnitVector[Length[m],1]]>=1],
 CheckGaloisAction[n,dimensionData]
@@ -53,8 +53,8 @@ RowBox[{"(", "", GridBox[{
 {"0", "1", "1", "1", "1", "1", "3", "3", "3", "3", "4", "4", "4", "4", "4", "2", "3", "5", "5", "5", "5", "5"},
 {"0", "1", "1", "1", "1", "1", "1", "1", "1", "1", "2", "2", "2", "2", "1", "2", "2", "3", "3", "3", "3", "3"}
 },
-GridBoxAlignment->{"Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
-GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.7]}, Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {Offset[0.2], {Offset[0.4]}, Offset[0.2]}, "RowsIndexed" -> {}}], "", ")"}],
+GridBoxAlignment->{"Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, "RowsIndexed" -> {}, "Items" -> {}, "ItemsIndexed" -> {}},
+GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.7]}, Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {Offset[0.2], {Offset[0.4]}, Offset[0.2]}, "RowsIndexed" -> {}, "Items" -> {}, "ItemsIndexed" -> {}}], "", ")"}],
 Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]\)};
 
 
@@ -65,32 +65,6 @@ CheckGaloisAction[n_,dimensionData_][inductionMatrix_]:=Module[{\[ScriptCapitalD
 \[ScriptCapitalD]=dimensionData[[1]];
 dimensions=Sort[Transpose[inductionMatrix].(dimensionData[[2,1]])];
 And@@Table[Sort[abs[GaloisAction[n][l][#/\[ScriptCapitalD]]\[ScriptCapitalD]]&/@dimensions]==dimensions,{l,GaloisGroup[n]}]
-]
-
-
-Clear[\[Zeta]]
-\[Zeta][n_]:=\[Zeta][n]=With[{p=Evaluate[Cyclotomic[n,#]]&},With[{d=Module[{m},Exponent[p[m],m]]},
-AlgebraicNumber[Root[p,d],{0,1}~Join~Table[0,{d-2}]]]]
-
-
-Clear[identify\[Zeta]]
-identify\[Zeta][z_]:=identify\[Zeta][z]=Module[{n=1},While[z=!=\[Zeta][n]\[And](n<=2\[Or]z=!=\[Zeta][n][[1]]),n++];n]
-
-
-ToCyclotomicField[X_List]:=ToCyclotomicField[X,1][[1]]
-ToCyclotomicField[X_List?MatrixQ]:=Partition[ToCyclotomicField[Flatten[X]],Length[X[[1]]]]
-ToCyclotomicField[{},n_]:={{},n}
-ToCyclotomicField[{x_,z___},n_]:=Module[{tnf,k=1,zt,p},
-Quiet[
-tnf=cachedToNumberField[x,\[Zeta][n]];
-While[MatchQ[tnf,_ToNumberField],
-k++;
-n0=k n;
-tnf=cachedToNumberField[x,\[Zeta][k n]]
-],
-ToNumberField::nnfel];
-{zt,p}=ToCyclotomicField[{z},k n];
-{{AlgebraicNumberPolynomial[tnf,\[Zeta][p]^(p/(k n))]}~Join~zt,p}
 ]
 
 
@@ -164,7 +138,7 @@ GaloisGroup[n_]:=GaloisGroup[n]=Cases[Table[i,{i,1,n-1}],i_/;GCD[i,n]==1]
 cachedToNumberField[a_,b_]:=cachedToNumberField[a,b]=ToNumberField[a,b]
 
 
-GaloisConjugates[a:AlgebraicNumber[x_,c_]]:=With[{n=identify\[Zeta][x]},
+GaloisConjugates[a:AlgebraicNumber[x_,c_]]:=With[{n=IdentifyRootOfUnity[x]},
 Union[Table[AlgebraicNumberPolynomial[a,\[Zeta][n]^l],{l,GaloisGroup[n]}]]
 ]
 GaloisConjugates[x:(_Integer|_Rational)]:={x}

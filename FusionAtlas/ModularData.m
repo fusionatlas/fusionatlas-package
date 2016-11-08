@@ -28,77 +28,10 @@ BeginPackage["FusionAtlas`ModularData`",{"FusionAtlas`","FusionAtlas`Bigraphs`",
 FindModularData::usage="FindModularData[X_] computes all possible modular data for the centre; the argument X may be a fusion ring and induction matrix, a fusion ring, the rank 3 tensor of fusion multiplicities, a matrix of fusion multiplicities for a single object, or a principal graph.";
 
 
-ExplicitGenerators;CharacterTable;GaloisGroup;GaloisAction;GaloisGroupGenerators;PossibleConductors;workOnRepresentations;SInRepresentation;TInRepresentation;DimensionsFromInductionMatrix;GaloisOrbitClumps;PossibleGaloisImages;PossibleGaloisTraces;RepresentationsForRank;RepresentationsForInductionMatrix;SaveRepresentationsForRank;SaveCharacterTables;SaveGenerators;SaveConjugacyClasses;SaveAllModularData;ClearSavedModularData;AllocateEigenvaluesToGaloisOrbitClumps;AllocateEigenvaluesToSimples;AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators;AllocateEigenvaluesToSimplesAndCompleteGaloisActions;FindQLinearSolutions
+ExplicitGenerators;CharacterTable;GaloisGroup;GaloisAction;GaloisGroupGenerators;PossibleConductors;workOnRepresentations;SInRepresentation;TInRepresentation;DimensionsFromInductionMatrix;GaloisOrbitClumps;PossibleGaloisImages;PossibleGaloisTraces;RepresentationsForRank;RepresentationsForInductionMatrix;SaveRepresentationsForRank;SaveCharacterTables;SaveGenerators;SaveConjugacyClasses;SaveAllModularData;ClearSavedModularData;AllocateEigenvaluesToGaloisOrbitClumps;AllocateEigenvaluesToSimples;AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators;AllocateEigenvaluesToSimplesAndCompleteGaloisActions;FindQLinearSolutions;
 
 
 Begin["`Private`"];
-
-
-Clear[\[Zeta]]
-\[Zeta][n_]:=\[Zeta][n]=With[{p=Evaluate[Cyclotomic[n,#]]&},With[{d=Module[{m},Exponent[p[m],m]]},
-AlgebraicNumber[Root[p,d],{0,1}~Join~Table[0,{d-2}]]]]
-
-
-\[Zeta]inv[n_]:=\[Zeta]inv[n]=\[Zeta][n]^-1
-
-
-Clear[identify\[Zeta]]
-identify\[Zeta][z_]:=identify\[Zeta][z]=Module[{n=1},While[z=!=\[Zeta][n]\[And](n<=2\[Or]z=!=\[Zeta][n][[1]]),n++];n]
-
-
-(*Clear[cachedToNumberField]*)
-cachedToNumberField[X_,Y_]:=Module[{result},
-result=ToNumberField[X,Y];
-If[!MatchQ[result,_ToNumberField],
-cachedToNumberField[X,Y]=result
-];
-result
-]
-
-
-ToCyclotomicField[X_List]:=ToCyclotomicField[X,1][[1]]
-ToCyclotomicField[X_List?MatrixQ]:=Partition[ToCyclotomicField[Flatten[X]],Length[X[[1]]]]
-ToCyclotomicField[{},n_]:={{},n}
-ToCyclotomicField[x_?NumericQ]:=ToCyclotomicField[{x}]
-ToCyclotomicField[{x_,z___},n_]:=Module[{tnf,k=1,zt,p},
-Quiet[
-tnf=cachedToNumberField[x,\[Zeta][n]];
-While[MatchQ[tnf,_ToNumberField],
-k++;
-n0=k n;
-tnf=cachedToNumberField[x,\[Zeta][k n]]
-],
-ToNumberField::nnfel];
-{zt,p}=ToCyclotomicField[{z},k n];
-{{AlgebraicNumberPolynomial[tnf,\[Zeta][p]^(p/(k n))]}~Join~zt,p}
-]
-
-
-PrimePowers[n_]:=#[[1]]^#[[2]]&/@FactorInteger[n]
-
-
-LiftToCommonCyclotomicField[x_]:=Module[{exponents,N},
-exponents=Union[identify\[Zeta]/@Union[Cases[x,AlgebraicNumber[a_,___]:>a,\[Infinity]]]];
-N=LCM@@({1}~Join~exponents);
-If[exponents==={N},
-x,
-x/.a:AlgebraicNumber[z_,_]:>If[identify\[Zeta][z]==N,a,AlgebraicNumberPolynomial[a,\[Zeta][N]^(N/identify\[Zeta][z])]]
-]
-]
-
-
-SetAttributes[AlgebraicConjugate,Listable]
-AlgebraicConjugate[n_Integer]:=n
-
-
-CyclotomicOrder[x_]:=CyclotomicOrder[x]=Round[(2\[Pi])/Arg[x]]
-
-
-AlgebraicConjugate[a_AlgebraicNumber]:=AlgebraicNumberPolynomial[a,\[Zeta]inv[CyclotomicOrder[a[[1]]]]]
-AlgebraicConjugate[x:(_Integer|_Rational)]:=x
-
-
-UniqueGaloisConjugate[a:AlgebraicNumber[x_,__]]:=ToNumberField[RootReduce[a]/.z:Power[_,1/2]:>-z,x]
 
 
 dataDirectory=FileNameJoin[{FusionAtlasDirectory[],"modularData"}];
@@ -139,7 +72,9 @@ lines=StringSplit[Import["/tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$Process
 If[return!=0,
 If[Count[lines,l_/;!StringFreeQ[l,"+++++++"]]<3,
 Print["It looks like something went wrong running GAP (error code "<>ToString[return]<>"). Please check that you have GAP installed, and modify FusionAtlas`ModularData`Private`GAPPath if necessary."];
+Print[cmd];
 Print/@lines;
+Abort[];
 ];
 ];
 lines
@@ -162,10 +97,10 @@ Print(\"+++++++\");
 T^rep;
 Print(\"+++++++\");
 "];
-{S,T}=(contextToExpression/@(StringSplit[(StringJoin@@out),"+++++++"][[{2,3}]]/.s_String:>(StringReplace[s,{"gap> ":>"","[":>"{","]":>"}","E("~~n:(DigitCharacter..)~~")":>"\[Zeta]["<>n<>"]"}])));
-N=LCM[q,Sequence@@(identify\[Zeta]/@Union[Cases[{S,T},a_AlgebraicNumber:>a[[1]],\[Infinity]]])];
+{S,T}=(ToExpression/@(StringSplit[(StringJoin@@out),"+++++++"][[{2,3}]]/.s_String:>(StringReplace[s,{"gap> ":>"","[":>"{","]":>"}","E("~~n:(DigitCharacter..)~~")":>"FusionAtlas`\[Zeta]["<>n<>"]"}])));
+N=LCM[q,Sequence@@(IdentifyRootOfUnity/@Union[Cases[{S,T},a_AlgebraicNumber:>a[[1]],\[Infinity]]])];
 Print["Lifting to Q[\[Zeta]["<>ToString[N]<>"]]"];
-{S,T}={S,T}/.a:AlgebraicNumber[z_,_]:>AlgebraicNumberPolynomial[a,\[Zeta][N]^(N/identify\[Zeta][z])];
+{S,T}={S,T}/.a:AlgebraicNumber[z_,_]:>AlgebraicNumberPolynomial[a,\[Zeta][N]^(N/IdentifyRootOfUnity[z])];
 {lastS,lastT}={S,T};
 Print["Computing eigenspaces..."];
 eigenspaces=Table[(*Print[i];*)NullSpace[T-\[Zeta][N]^(i N/q) IdentityMatrix[Length[T]],"Method"->"OneStepRowReduction"],{i,0,q-1}];
@@ -178,7 +113,7 @@ Print["Done!"];
 ]
 
 
-SaveGenerators[]:=AbortProtect[Put[SubValues[ExplicitGenerators],FileNameJoin[{dataDirectory,"explicitGenerators.m"}]]]
+SaveGenerators[]:=AbortProtect[Put[Cases[SubValues[ExplicitGenerators],r_/;FreeQ[r,Verbatim[Blank[]]]],FileNameJoin[{dataDirectory,"explicitGenerators.m"}]]]
 LoadGenerators[]:=Module[{filename=FileNameJoin[{dataDirectory,"explicitGenerators.m"}]},
 If[FileExistsQ[filename],
 (SubValues[ExplicitGenerators]=Get[filename]~Join~SubValues[ExplicitGenerators];)
@@ -219,11 +154,6 @@ Union[Flatten[Chop[table1.Conjugate[conjugacyClassSizes Transpose[table1]]/(Plus
 ]
 
 
-contextToExpression[X_]:=Module[{result},
-ToExpression[X]/.Global`\[Zeta]->\[Zeta]
-]
-
-
 (*Clear[CharacterTable]*)
 CharacterTable[n_Integer]:=CharacterTable[GAP[SL[2,Subscript[Z, n]]]]
 CharacterTable[gapName__]:=CharacterTable[gapName]=Module[{lines,Xpos,conjugacyClasses,representations,values,numberOfConjugacyClasses,parseRepresentation,result},
@@ -234,9 +164,9 @@ representations=lines[[Xpos]];
 values=If[Max[Xpos]+1>Length[lines],{},Cases[Drop[lines,Max[Xpos]+1],s_String/;!StringMatchQ[s,Whitespace~~"= "~~___]]];
 numberOfConjugacyClasses=Length[StringSplit[conjugacyClasses,Whitespace]];
 
-values=StringSplit[#," = "]/.{n_,v_}:>n->(contextToExpression[StringReplace[v,"E("~~k:(DigitCharacter..)~~")":>"\[Zeta]["<>k<>"]"]])&/@values;
+values=StringSplit[#," = "]/.{n_,v_}:>n->(ToExpression[StringReplace[v,"E("~~k:(DigitCharacter..)~~")":>"FusionAtlas`\[Zeta]["<>k<>"]"]])&/@values;
 
-parseRepresentation[line_]:=StringReplace[Rest[StringSplit[line,Whitespace]],{"."->"0"}]/.{n_String/;StringMatchQ[n,NumberString]:>contextToExpression[n],
+parseRepresentation[line_]:=StringReplace[Rest[StringSplit[line,Whitespace]],{"."->"0"}]/.{n_String/;StringMatchQ[n,NumberString]:>ToExpression[n],
 n_String/;StringMatchQ[n,"-"~~LetterCharacter..]:>-(StringDrop[n,1]/.values),
 n_String/;StringMatchQ[n,"\\*"~~LetterCharacter..]:>UniqueGaloisConjugate[(StringDrop[n,1]/.values)],
 n_String/;StringMatchQ[n,"-\\*"~~LetterCharacter..]:>-UniqueGaloisConjugate[(StringDrop[n,2]/.values)],
@@ -273,7 +203,7 @@ ToExpression[StringDrop[lines[[-2]],5]]
 
 
 SaveConjugacyClasses[]:=Module[{},
-AbortProtect[Put[SubValues[ConjugacyClassOf],FileNameJoin[{dataDirectory,"conjugacyClasses.m"}]]];
+AbortProtect[Put[Cases[SubValues[ConjugacyClassOf],r_/;FreeQ[r,Verbatim[Blank[]]]],FileNameJoin[{dataDirectory,"conjugacyClasses.m"}]]];
 AbortProtect[Put[Cases[DownValues[ConjugacyClassesOfPowersOfT],r_/;FreeQ[r,Blank]],FileNameJoin[{dataDirectory,"conjugacyClassesOfPowersOfT.m"}]]];
 AbortProtect[Put[Cases[DownValues[ConjugacyClassesOfGalois],r_/;FreeQ[r,Blank]],FileNameJoin[{dataDirectory,"conjugacyClassesOfGalois.m"}]]];
 ]
@@ -322,7 +252,7 @@ BlockDiagonalMatrix=With[{r=MapIndexed[#2[[1]] {1,1}->#&,#,1]},Normal[SparseArra
 
 
 GaloisInRepresentation[n_Integer,ks:{__Integer} (* a product of irreps for the prime powers *),l_ (* which Galois element *)]:=
-KroneckerProduct@@Table[GaloisInRepresentation[p[[1]],p[[2]],Mod[l,p[[1]]]]/.a_AlgebraicNumber:>AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/identify\[Zeta][a[[1]]])],{p,Transpose[{PrimePowers[n],ks}]}]
+KroneckerProduct@@Table[GaloisInRepresentation[p[[1]],p[[2]],Mod[l,p[[1]]]]/.a_AlgebraicNumber:>AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/IdentifyRootOfUnity[a[[1]]])],{p,Transpose[{PrimePowers[n],ks}]}]
 GaloisInRepresentation[n_Integer,Vs:{{__Integer}..},l_]:=BlockDiagonalMatrix[Table[GaloisInRepresentation[n,V,l],{V,Vs}]]
 
 
@@ -398,7 +328,7 @@ SInRepresentation[n_Integer,ks:{__Integer} (* a product of irreps for the prime 
 LiftToCommonCyclotomicField[KroneckerProduct@@Table[SInRepresentation[p[[1]],p[[2]]],{p,Transpose[{PrimePowers[n],ks}]}]]
 SInRepresentation[n_Integer,Vs:{{__Integer}..}]:=LiftToCommonCyclotomicField[BlockDiagonalMatrix[Table[SInRepresentation[n,V],{V,Vs}]]]
 TInRepresentation[n_Integer,ks:{__Integer} (* a product of irreps for the prime powers *)]:=
-KroneckerProduct@@Table[TInRepresentation[p[[1]],p[[2]]],{p,Transpose[{PrimePowers[n],ks}]}]/.a_AlgebraicNumber:>AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/identify\[Zeta][a[[1]]])]
+KroneckerProduct@@Table[TInRepresentation[p[[1]],p[[2]]],{p,Transpose[{PrimePowers[n],ks}]}]/.a_AlgebraicNumber:>AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/IdentifyRootOfUnity[a[[1]]])]
 TInRepresentation[n_Integer,Vs:{{__Integer}..}]:=BlockDiagonalMatrix[Table[TInRepresentation[n,V],{V,Vs}]]
 
 
@@ -411,7 +341,7 @@ GlobalDimension[fr_FusionRules]:=GlobalDimension[fr]=ToCyclotomicField[Norm[FPDi
 
 DimensionsFromFusionRules[fusion_]:=DimensionsFromFusionRules[fusion]=Module[{\[ScriptCapitalD],N},
 \[ScriptCapitalD]=GlobalDimension[fusion];
-N=Switch[\[ScriptCapitalD],_AlgebraicNumber,identify\[Zeta][\[ScriptCapitalD][[1]]],_,1];
+N=Switch[\[ScriptCapitalD],_AlgebraicNumber,IdentifyRootOfUnity[\[ScriptCapitalD][[1]]],_,1];
 {\[ScriptCapitalD],cachedToNumberField[#,\[Zeta][N]]&/@FPDimensions[fusion]}
 ]
 
@@ -427,7 +357,7 @@ dimensions=RootReduce[Together[Eigenvectors[Transpose[inductionMatrix].induction
 dimensions=Plus@@(RootReduce[#/Norm[#]]&/@Cases[dimensions,d_/;And@@(NonNegative[d])]);
 dimensions=RootReduce[dimensions/Min[dimensions]];
 dimensions=ToCyclotomicField[dimensions];
-n=(Cases[dimensions,a_AlgebraicNumber:>identify\[Zeta][a[[1]]],1]~Join~{1})[[1]];
+n=(Cases[dimensions,a_AlgebraicNumber:>IdentifyRootOfUnity[a[[1]]],1]~Join~{1})[[1]];
 {n,{cachedToNumberField[Sum[d^2,{d,dimensions}]^(1/2),\[Zeta][n]],dimensions}}
 ]
 
@@ -439,7 +369,7 @@ dims/.x_AlgebraicNumber:>AlgebraicNumberPolynomial[x,\[Zeta][N]^(N/n)]
 ]
 
 
-SaveDimensionsFromInductionMatrix[]:=(LoadDimensionsFromInductionMatrixOnce[];AbortProtect[Put[DownValues[DimensionsFromInductionMatrix],FileNameJoin[{dataDirectory,"dimensionsFromInductionMatrix.m"}]]])
+SaveDimensionsFromInductionMatrix[]:=(LoadDimensionsFromInductionMatrixOnce[];AbortProtect[Put[Cases[DownValues[DimensionsFromInductionMatrix],r_/;FreeQ[r,Blank]],FileNameJoin[{dataDirectory,"dimensionsFromInductionMatrix.m"}]]])
 LoadDimensionsFromInductionMatrixOnce[]:=LoadDimensionsFromInductionMatrixOnce[]=LoadDimensionsFromInductionMatrix[]
 LoadDimensionsFromInductionMatrix[]:=Module[{filename=FileNameJoin[{dataDirectory,"dimensionsFromInductionMatrix.m"}]},
 If[FileExistsQ[filename],
@@ -459,7 +389,7 @@ CheckGaloisVerlinde[n,dimensions]
 
 CheckGaloisVerlinde[fusion_FusionRules,inductionMatrix_?MatrixQ]:=Module[{N,dimensions},
 dimensions=DimensionsFromFusionRulesAndInductionMatrix[fusion,inductionMatrix];
-N=Switch[dimensions[[1]],_AlgebraicNumber,identify\[Zeta][dimensions[[1,1]]],_,1];
+N=Switch[dimensions[[1]],_AlgebraicNumber,IdentifyRootOfUnity[dimensions[[1,1]]],_,1];
 CheckGaloisVerlinde[N,dimensions]
 ]
 
@@ -495,7 +425,7 @@ rank=Length[dimensions];
 inductionsFromOne=Count[inductionMatrix[[1]],Except[0]];
 largestClump=Max@@(Length/@GaloisOrbitClumps[inductionMatrix]);
 \[ScriptCapitalD]=Sum[d^2,{d,dimensions}];
-n=Switch[\[ScriptCapitalD],_AlgebraicNumber,identify\[Zeta][\[ScriptCapitalD][[1]]],_,1];
+n=Switch[\[ScriptCapitalD],_AlgebraicNumber,IdentifyRootOfUnity[\[ScriptCapitalD][[1]]],_,1];
 primes=FactorInteger[AlgebraicNumberNorm[\[ScriptCapitalD]]][[All,1]];
 sizeOfOrbit[p_,k_]:=p^(k-1) (p-1)/2;
 sizeOfOrbit[2,k_]:=Max[1,2^(k-3)];
@@ -584,12 +514,12 @@ NewtonsIdentity[q,\[Chi]]
 
 
 liftCyclotomicNumber[N_][x:(_Integer|_Rational)]:=x
-liftCyclotomicNumber[N_][a_AlgebraicNumber]:=liftCyclotomicNumber[N][a]=With[{n=LCM[N,identify\[Zeta][a[[1]]]]},
-AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/identify\[Zeta][a[[1]]])]
+liftCyclotomicNumber[N_][a_AlgebraicNumber]:=liftCyclotomicNumber[N][a]=With[{n=LCM[N,IdentifyRootOfUnity[a[[1]]]]},
+AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/IdentifyRootOfUnity[a[[1]]])]
 ]
 
 
-SaveTEigenvalues[]:=AbortProtect[Put[DownValues[TEigenvalues],FileNameJoin[{dataDirectory,"tEigenvalues.m"}]]]
+SaveTEigenvalues[]:=AbortProtect[Put[Cases[DownValues[TEigenvalues],r_/;FreeQ[r,Verbatim[Blank[]]]],FileNameJoin[{dataDirectory,"tEigenvalues.m"}]]]
 LoadTEigenvalues[]:=(DownValues[TEigenvalues]=Get[FileNameJoin[{dataDirectory,"tEigenvalues.m"}]]~Join~DownValues[TEigenvalues];)
 
 
