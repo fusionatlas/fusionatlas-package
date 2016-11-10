@@ -61,7 +61,18 @@ ClearSavedModularData[fusion_,induction_]:=DeleteFile/@(FileNames[FileNameJoin[{
 GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod "<>ToString[N]<>"))"
 
 
-GAPPath="~/gap/gap";
+PossibleGAPPaths:=
+Module[{paths},
+Run["mdfind -name gap4r8 > /tmp/out"];
+Run["locate gap4r8 >> /tmp/out"];
+paths=FileNames[#<>"/bin/gap.sh"&/@Flatten[Import["/tmp/out"]]];
+If[Length[paths]==0,
+Print["No copy of GAP was found. Please install gap4r8."];
+Abort[]
+];
+paths
+]
+GAPPath:=GAPPath=PossibleGAPPaths[[1]];
 
 
 ExecuteGAP[cmd_]:=Module[{lines,return},
