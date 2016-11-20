@@ -61,6 +61,7 @@ AddToClassPath[ProjectJars];
 RebuildScalaLibraries[]:=(CleanScalaLibraries[];BuildScalaLibraries[])
 If[Length[ProjectJars]==0,
 Print["The Scala libraries for the FusionAtlas haven't been compiled. I'm doing that now (Scala version "<>ScalaMajorVersion<>")..."];
+Print["Go and get a coffee, as this takes a few minutes, or longer if you have a slow connection."];
 CleanScalaLibraries[];
 RebuildScalaLibraries[];
 If[Length[ProjectJars]==0,
