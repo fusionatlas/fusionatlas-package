@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     30945,        787]
-NotebookOptionsPosition[     29025,        721]
-NotebookOutlinePosition[     29461,        739]
-CellTagsIndexPosition[     29418,        736]
+NotebookDataLength[     31181,        792]
+NotebookOptionsPosition[     29261,        726]
+NotebookOutlinePosition[     29697,        744]
+CellTagsIndexPosition[     29654,        741]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -238,6 +238,10 @@ Cell[BoxData[
         "\"\<The Scala libraries for the FusionAtlas haven't been compiled. \
 I'm doing that now (Scala version \>\"", "<>", "ScalaMajorVersion", "<>", 
          "\"\<)...\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+       "Print", "[", 
+        "\"\<Go and get a coffee, as this takes a few minutes, or longer if \
+you have a slow connection.\>\"", "]"}], ";", "\[IndentingNewLine]", 
        RowBox[{"CleanScalaLibraries", "[", "]"}], ";", "\[IndentingNewLine]", 
        
        RowBox[{"RebuildScalaLibraries", "[", "]"}], ";", 
@@ -333,7 +337,8 @@ I'm doing that now (Scala version \>\"", "<>", "ScalaMajorVersion", "<>",
    3.547234948851606*^9, 3.547234965240471*^9}, {3.54723501610465*^9, 
    3.5472350305694103`*^9}, {3.5678042826663713`*^9, 
    3.5678043499448223`*^9}, {3.575940208858138*^9, 3.575940212313472*^9}, {
-   3.617056601024688*^9, 3.6170566057246428`*^9}}],
+   3.617056601024688*^9, 3.6170566057246428`*^9}, {3.688629584970717*^9, 
+   3.688629585224162*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -761,31 +766,31 @@ Cell[3468, 96, 409, 10, 28, "Input",
  InitializationCell->True],
 Cell[3880, 108, 457, 10, 28, "Input",
  InitializationCell->True],
-Cell[4340, 120, 9374, 215, 573, "Input",
+Cell[4340, 120, 9610, 220, 590, "Input",
  InitializationCell->True],
-Cell[13717, 337, 4681, 98, 352, "Input",
+Cell[13953, 342, 4681, 98, 352, "Input",
  InitializationCell->True],
-Cell[18401, 437, 152, 3, 28, "Input",
+Cell[18637, 442, 152, 3, 28, "Input",
  InitializationCell->True],
-Cell[18556, 442, 941, 21, 63, "Input",
+Cell[18792, 447, 941, 21, 63, "Input",
  InitializationCell->True],
-Cell[19500, 465, 588, 14, 46, "Input",
+Cell[19736, 470, 588, 14, 46, "Input",
  InitializationCell->True],
-Cell[20091, 481, 2006, 55, 80, "Input",
+Cell[20327, 486, 2006, 55, 80, "Input",
  InitializationCell->True],
-Cell[22100, 538, 572, 10, 28, "Input",
+Cell[22336, 543, 572, 10, 28, "Input",
  InitializationCell->True],
-Cell[22675, 550, 1596, 40, 114, "Input",
+Cell[22911, 555, 1596, 40, 114, "Input",
  InitializationCell->True],
-Cell[24274, 592, 1487, 34, 98, "Input",
+Cell[24510, 597, 1487, 34, 98, "Input",
  InitializationCell->True],
-Cell[25764, 628, 2206, 54, 165, "Input",
+Cell[26000, 633, 2206, 54, 165, "Input",
  InitializationCell->True],
-Cell[27973, 684, 819, 23, 63, "Input",
+Cell[28209, 689, 819, 23, 63, "Input",
  InitializationCell->True],
-Cell[28795, 709, 96, 3, 28, "Input",
+Cell[29031, 714, 96, 3, 28, "Input",
  InitializationCell->True],
-Cell[28894, 714, 103, 3, 28, "Input",
+Cell[29130, 719, 103, 3, 28, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
