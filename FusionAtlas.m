@@ -386,7 +386,7 @@ AlgebraicConjugate[n_Integer]:=n
 CyclotomicOrder[x_]:=CyclotomicOrder[x]=Round[(2\[Pi])/Arg[x]]
 
 
-AlgebraicConjugate[a:AlgebraicNumber[r_,x_]]/;r==\[Zeta][CyclotomicOrder[r]][[1]]:= AlgebraicNumberPolynomial[a,\[Zeta][CyclotomicOrder[r]]^-1]
+AlgebraicConjugate[a:AlgebraicNumber[r_,x_]]/;r==\[Zeta][CyclotomicOrder[r]][[1]]:= AlgebraicConjugate[a]=AlgebraicNumberPolynomial[a,\[Zeta][CyclotomicOrder[r]]^-1]
 AlgebraicConjugate[a:AlgebraicNumber[r_,x_]]:=cachedToNumberField[RootReduce[Conjugate[a]],r]
 AlgebraicConjugate[x:(_Integer|_Rational)]:=x
 
