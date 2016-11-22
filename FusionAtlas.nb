@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     88544,       2138]
-NotebookOptionsPosition[     81569,       1918]
-NotebookOutlinePosition[     82142,       1943]
-CellTagsIndexPosition[     82073,       1938]
+NotebookDataLength[     88671,       2141]
+NotebookOptionsPosition[     81696,       1921]
+NotebookOutlinePosition[     82269,       1946]
+CellTagsIndexPosition[     82200,       1941]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1853,12 +1853,14 @@ Cell[BoxData[{
      RowBox[{"\[Zeta]", "[", 
       RowBox[{"CyclotomicOrder", "[", "r", "]"}], "]"}], 
      "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}]}], ":=", " ", 
-  RowBox[{"AlgebraicNumberPolynomial", "[", 
-   RowBox[{"a", ",", 
-    SuperscriptBox[
-     RowBox[{"\[Zeta]", "[", 
-      RowBox[{"CyclotomicOrder", "[", "r", "]"}], "]"}], 
-     RowBox[{"-", "1"}]]}], "]"}]}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"AlgebraicConjugate", "[", "a", "]"}], "=", 
+   RowBox[{"AlgebraicNumberPolynomial", "[", 
+    RowBox[{"a", ",", 
+     SuperscriptBox[
+      RowBox[{"\[Zeta]", "[", 
+       RowBox[{"CyclotomicOrder", "[", "r", "]"}], "]"}], 
+      RowBox[{"-", "1"}]]}], "]"}]}]}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"AlgebraicConjugate", "[", 
    RowBox[{"a", ":", 
@@ -1881,7 +1883,8 @@ Cell[BoxData[{
    3.626834990564331*^9}, {3.626835070497987*^9, 3.626835127840558*^9}, {
    3.6268351933763027`*^9, 3.6268351961216927`*^9}, {3.62683522730613*^9, 
    3.626835230001079*^9}, {3.626835720706133*^9, 3.626835721529357*^9}, {
-   3.674401586120199*^9, 3.67440159576958*^9}, 3.6875710012522078`*^9}],
+   3.674401586120199*^9, 3.67440159576958*^9}, 3.6875710012522078`*^9, {
+   3.688779868661088*^9, 3.6887798729804583`*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -1937,7 +1940,7 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"Union", 81955, 1931}
+ {"Union", 82082, 1934}
  }
 *)
 (*NotebookFileOutline
@@ -2129,13 +2132,13 @@ Cell[78212, 1817, 417, 10, 46, "Input",
  InitializationCell->True],
 Cell[78632, 1829, 421, 12, 28, "Input",
  InitializationCell->True],
-Cell[79056, 1843, 1613, 40, 70, "Input",
+Cell[79056, 1843, 1740, 43, 70, "Input",
  InitializationCell->True],
-Cell[80672, 1885, 652, 18, 28, "Input",
+Cell[80799, 1888, 652, 18, 28, "Input",
  InitializationCell->True],
-Cell[81327, 1905, 96, 3, 28, "Input",
+Cell[81454, 1908, 96, 3, 28, "Input",
  InitializationCell->True],
-Cell[81426, 1910, 103, 3, 28, "Input",
+Cell[81553, 1913, 103, 3, 28, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
