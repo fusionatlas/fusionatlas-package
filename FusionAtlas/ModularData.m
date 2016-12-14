@@ -63,9 +63,9 @@ GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers 
 
 PossibleGAPPaths:=
 Module[{paths},
-Run["mdfind -name gap4r8 > /tmp/out"];
+Run[nu];
 Run["locate gap4r8 >> /tmp/out"];
-paths=FileNames[#<>"/bin/gap.sh"&/@Flatten[Import["/tmp/out"]]];
+paths=FileNames[#<>"/bin/gap.sh"&/@Flatten[{Import["/tmp/out"]}]];
 If[Length[paths]==0,
 Print["No copy of GAP was found. Please install gap4r8."];
 Abort[]
