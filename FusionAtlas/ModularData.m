@@ -63,7 +63,7 @@ GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers 
 
 PossibleGAPPaths:=
 Module[{paths},
-Run[nu];
+Run["mdfind -name gap4r8 > /tmp/out"];
 Run["locate gap4r8 >> /tmp/out"];
 paths=FileNames[#<>"/bin/gap.sh"&/@Flatten[{Import["/tmp/out"]}]];
 If[Length[paths]==0,
