@@ -80,13 +80,11 @@ Print["Calling GAP:"];
 Print[cmd];
 return=Run["echo '"<>cmd<>"' | "<>GAPPath<>" -x 10000 -o 16g > /tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out"];
 lines=StringSplit[Import["/tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out","String"],"\n"];
-If[return!=0,
-If[Count[lines,l_/;!StringFreeQ[l,"+++++++"]]<3,
+If[return!=0\[And]return!=1 (* very mysteriously, for large character tables GAP works fine, but return exit code 1 *),
 Print["It looks like something went wrong running GAP (error code "<>ToString[return]<>"). Please check that you have GAP installed, and modify FusionAtlas`ModularData`Private`GAPPath if necessary."];
 Print[cmd];
 Print/@lines;
 Abort[];
-];
 ];
 lines
 ]
