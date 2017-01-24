@@ -41,6 +41,16 @@ FusionAtlasJavaDirectory[]:=ToFileName[FusionAtlasDirectory[],"java"]
 FusionAtlasScalaDirectory[]:=ToFileName[FusionAtlasDirectory[],"scala"]
 
 
+javaVersionOutput=FileNameJoin[{$TemporaryDirectory,"java.version"}];
+Run["java -version 2> "<>javaVersionOutput]
+javaVersion=ToExpression[StringSplit[StringCases[Import[javaVersionOutput],"java version \""~~v:Except["\""]...~~"\""~~___:>v][[1]],"."|"_"]]
+If[Sort[{javaVersion,{1,8,0,100}}][[1]]==={1,8,0,100},
+(* The java version is recent enough! *),
+Print["The FusionAtlas requires a recent version of Java; please install a recent JDK, e.g. from ",Hyperlink["http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html"], " and restart Mathematica."];
+Abort[];
+]
+
+
 (* Add old java libraries to the classpath *)
 AddToClassPath[ToFileName[FusionAtlasJavaDirectory[],"target"],ToFileName[FusionAtlasJavaDirectory[],"jars"]];
 
@@ -58,8 +68,8 @@ DeleteDirectory::nodir
 BuildScalaLibraries[]:=Module[{},
 SetDirectory[FusionAtlasScalaDirectory[]];
 If[$OperatingSystem==="Windows",
-Run["sbt.bat clean update package"];
-Run["./sbt clean update package"];
+Run["sbt.bat clean update package 2> sbt.err > sbt.out"];,
+Run["./sbt clean update package 2> sbt.err > sbt.out"];
 ];
 ResetDirectory[];
 AddToClassPath[ProjectJars];
@@ -72,6 +82,7 @@ CleanScalaLibraries[];
 RebuildScalaLibraries[];
 If[Length[ProjectJars]==0,
 Print["Compilation failed. Please complain to Scott Morrison <scott@tqft.net>."];
+Print[Import[FileNameJoin[{FusionAtlasScalaDirectory[],"sbt.err"}],"Text"]];
 ]
 ];
 
@@ -84,7 +95,8 @@ AddToClassPath[ProjectJars];
 
 RestartJava[]:=Module[{},
 If[!NumericQ[Global`$JVMHeap],Global`$JVMHeap=512];
-javaPath=FileNameJoin[{RunThrough["echo \\\"$(/usr/libexec/java_home -v 1.7)\\\"",""],"bin","java"}];
+javaPath=
+If[$OperatingSystem==="Windows",RunThrough["for %i in (java.exe) do @echo. \"%~$PATH:i\"",""],FileNameJoin[{RunThrough["echo \\\"$(/usr/libexec/java_home -v 1.8)\\\"",""],"bin","java"}]];
 ReinstallJava[CommandLine->javaPath,JVMArguments->"-Xmx"<>ToString[Global`$JVMHeap]<>"m"];
 AllowRaggedArrays[True];
 LoadJavaClass["org.fusionatlas.graphs.PairOfBigraphsWithDuals$","AllowShortContext"->False];
