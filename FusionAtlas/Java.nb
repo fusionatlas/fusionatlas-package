@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     38639,        966]
-NotebookOptionsPosition[     36177,        884]
-NotebookOutlinePosition[     36598,        901]
-CellTagsIndexPosition[     36555,        898]
+NotebookDataLength[     42183,       1054]
+NotebookOptionsPosition[     39648,        970]
+NotebookOutlinePosition[     40069,        987]
+CellTagsIndexPosition[     40026,        984]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -117,6 +117,67 @@ Cell[BoxData[
  CellChangeTimes->{{3.4327594279471197`*^9, 3.432759434236163*^9}, {
   3.441993874780366*^9, 3.441993878457967*^9}, {3.494776167516108*^9, 
   3.494776172286058*^9}, {3.515333902509885*^9, 3.515333906454295*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"javaVersionOutput", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{"$TemporaryDirectory", ",", "\"\<java.version\>\""}], "}"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Run", "[", 
+  RowBox[{"\"\<java -version 2> \>\"", "<>", "javaVersionOutput"}], 
+  "]"}], "\n", 
+ RowBox[{"javaVersion", "=", 
+  RowBox[{"ToExpression", "[", 
+   RowBox[{"StringSplit", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"StringCases", "[", 
+       RowBox[{
+        RowBox[{"Import", "[", "javaVersionOutput", "]"}], ",", 
+        RowBox[{
+         RowBox[{"\"\<java version \\\"\>\"", "~~", 
+          RowBox[{"v", ":", 
+           RowBox[{
+            RowBox[{"Except", "[", "\"\<\\\"\>\"", "]"}], "..."}]}], "~~", 
+          "\"\<\\\"\>\"", "~~", "___"}], "\[RuleDelayed]", "v"}]}], "]"}], 
+      "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ",", 
+     RowBox[{"\"\<.\>\"", "|", "\"\<_\>\""}]}], "]"}], "]"}]}], "\n", 
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"Sort", "[", 
+      RowBox[{"{", 
+       RowBox[{"javaVersion", ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "8", ",", "0", ",", "100"}], "}"}]}], "}"}], "]"}],
+      "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "===", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "8", ",", "0", ",", "100"}], "}"}]}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"The", " ", "java", " ", "version", " ", "is", " ", "recent", " ", 
+     RowBox[{"enough", "!"}]}], " ", "*)"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<The FusionAtlas requires a recent version of Java; please install a \
+recent JDK, e.g. from \>\"", ",", 
+      RowBox[{
+      "Hyperlink", "[", 
+       "\"\<http://www.oracle.com/technetwork/java/javase/downloads/jdk8-\
+downloads-2133151.html\>\"", "]"}], ",", " ", 
+      "\"\< and restart Mathematica.\>\""}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Abort", "[", "]"}], ";"}]}], "\[IndentingNewLine]", 
+  "]"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6877345937728148`*^9, 3.687734616255188*^9}, {
+   3.687735214982531*^9, 3.687735291681095*^9}, {3.694246367526928*^9, 
+   3.694246410896344*^9}, {3.6942466163133307`*^9, 3.6942466368991184`*^9}, 
+   3.694247818515724*^9, {3.6942480330153046`*^9, 3.6942480415579996`*^9}}],
 
 Cell[CellGroupData[{
 
@@ -226,9 +287,14 @@ Cell[BoxData[
          RowBox[{"$OperatingSystem", "===", "\"\<Windows\>\""}], ",", 
          "\[IndentingNewLine]", 
          RowBox[{
-          RowBox[{"Run", "[", "\"\<sbt.bat clean update package\>\"", "]"}], 
-          ";", "\[IndentingNewLine]", 
-          RowBox[{"Run", "[", "\"\<./sbt clean update package\>\"", "]"}], 
+          RowBox[{
+          "Run", "[", 
+           "\"\<sbt.bat clean update package 2> sbt.err > sbt.out\>\"", "]"}],
+           ";"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+          "Run", "[", 
+           "\"\<./sbt clean update package 2> sbt.err > sbt.out\>\"", "]"}], 
           ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
        RowBox[{"ResetDirectory", "[", "]"}], ";", "\[IndentingNewLine]", 
        RowBox[{"AddToClassPath", "[", "ProjectJars", "]"}], ";"}]}], 
@@ -269,7 +335,16 @@ you have a slow connection.\>\"", "]"}], ";", "\[IndentingNewLine]",
           RowBox[{
           "Print", "[", 
            "\"\<Compilation failed. Please complain to Scott Morrison \
-<scott@tqft.net>.\>\"", "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}]}], 
+<scott@tqft.net>.\>\"", "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"Print", "[", 
+           RowBox[{"Import", "[", 
+            RowBox[{
+             RowBox[{"FileNameJoin", "[", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+                "\"\<sbt.err\>\""}], "}"}], "]"}], ",", "\"\<Text\>\""}], 
+            "]"}], "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}]}], 
      "\[IndentingNewLine]", "]"}], ";"}], "\[IndentingNewLine]", 
    "\[IndentingNewLine]", 
    RowBox[{
@@ -354,7 +429,8 @@ you have a slow connection.\>\"", "]"}], ";", "\[IndentingNewLine]",
    3.617056601024688*^9, 3.6170566057246428`*^9}, {3.688629584970717*^9, 
    3.688629585224162*^9}, {3.69424416133143*^9, 3.694244171063326*^9}, {
    3.694244204949775*^9, 3.694244247758572*^9}, {3.694244808057431*^9, 
-   3.694244816713492*^9}, {3.6942449190652113`*^9, 3.6942449421989284`*^9}}],
+   3.694244816713492*^9}, {3.6942449190652113`*^9, 3.6942449421989284`*^9}, {
+   3.6942468164711776`*^9, 3.6942468867127247`*^9}, 3.6942475767785215`*^9}],
 
 Cell[CellGroupData[{
 
@@ -385,15 +461,23 @@ Cell[BoxData[
         RowBox[{"NumericQ", "[", "Global`$JVMHeap", "]"}]}], ",", 
        RowBox[{"Global`$JVMHeap", "=", "512"}]}], "]"}], ";", 
      "\[IndentingNewLine]", 
-     RowBox[{"javaPath", "=", 
-      RowBox[{"FileNameJoin", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"RunThrough", "[", 
+     RowBox[{"javaPath", "=", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"$OperatingSystem", "===", "\"\<Windows\>\""}], ",", 
+        RowBox[{"RunThrough", "[", 
+         RowBox[{
+         "\"\<for %i in (java.exe) do @echo. \\\"%~$PATH:i\\\"\>\"", ",", 
+          "\"\<\>\""}], "]"}], ",", 
+        RowBox[{"FileNameJoin", "[", 
+         RowBox[{"{", 
           RowBox[{
-          "\"\<echo \\\\\\\"$(/usr/libexec/java_home -v 1.7)\\\\\\\"\>\"", 
-           ",", "\"\<\>\""}], "]"}], ",", "\"\<bin\>\"", ",", 
-         "\"\<java\>\""}], "}"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"RunThrough", "[", 
+            RowBox[{
+            "\"\<echo \\\\\\\"$(/usr/libexec/java_home -v 1.8)\\\\\\\"\>\"", 
+             ",", "\"\<\>\""}], "]"}], ",", "\"\<bin\>\"", ",", 
+           "\"\<java\>\""}], "}"}], "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
      RowBox[{"ReinstallJava", "[", 
       RowBox[{
        RowBox[{"CommandLine", "\[Rule]", "javaPath"}], ",", 
@@ -470,7 +554,9 @@ Cell[BoxData[
    3.569350054182892*^9}, 3.569350090752297*^9, {3.575938198011812*^9, 
    3.5759382232167597`*^9}, 3.57613523168762*^9, {3.5961385625079517`*^9, 
    3.596138562742934*^9}, 3.621796674544561*^9, {3.621796911038477*^9, 
-   3.621796924414166*^9}, 3.6827886085598707`*^9}],
+   3.621796924414166*^9}, 3.6827886085598707`*^9, {3.6942469508850956`*^9, 
+   3.694246951127741*^9}, {3.6942473130123043`*^9, 3.694247354086357*^9}, {
+   3.6942487538917294`*^9, 3.694248759253996*^9}}],
 
 Cell[CellGroupData[{
 
@@ -883,8 +969,8 @@ Cell[BoxData[
 }, Open  ]]
 },
 AutoGeneratedPackage->Automatic,
-WindowSize->{1219, 811},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{724, 721},
+WindowMargins->{{Automatic, -6}, {Automatic, 0}},
 TaggingRules->{"SearchTextTranslated" -> ""},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (April 11, 2016)",
 StyleDefinitions->"Default.nb"
@@ -908,13 +994,13 @@ Cell[761, 27, 237, 5, 30, "Text",
 Cell[CellGroupData[{
 Cell[1023, 36, 60, 1, 63, "Section",
  InitializationCell->True],
-Cell[1086, 39, 1016, 19, 52, "Input",
+Cell[1086, 39, 1016, 19, 92, "Input",
  InitializationCell->True],
-Cell[2105, 60, 369, 10, 31, "Input",
+Cell[2105, 60, 369, 10, 52, "Input",
  InitializationCell->True],
-Cell[2477, 72, 604, 10, 52, "Input",
+Cell[2477, 72, 604, 10, 152, "Input",
  InitializationCell->True],
-Cell[3084, 84, 259, 5, 31, "Input",
+Cell[3084, 84, 259, 5, 52, "Input",
  InitializationCell->True,
  CellID->1269338625],
 Cell[3346, 91, 119, 3, 31, "Input",
@@ -923,48 +1009,50 @@ Cell[3468, 96, 409, 10, 31, "Input",
  InitializationCell->True],
 Cell[3880, 108, 457, 10, 31, "Input",
  InitializationCell->True],
-Cell[CellGroupData[{
-Cell[4362, 122, 10406, 234, 832, "Input",
+Cell[4340, 120, 2408, 59, 372, "Input",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[14793, 360, 185, 2, 23, "Print"],
-Cell[14981, 364, 170, 2, 23, "Print"],
-Cell[15154, 368, 151, 2, 23, "Print"]
+Cell[6773, 183, 10982, 249, 1412, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[17780, 436, 185, 2, 43, "Print"],
+Cell[17968, 440, 170, 2, 43, "Print"],
+Cell[18141, 444, 151, 2, 23, "Print"]
 }, Open  ]]
 }, Open  ]],
-Cell[15332, 374, 4681, 98, 412, "Input",
+Cell[18319, 450, 5165, 108, 712, "Input",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[20038, 476, 152, 3, 31, "Input",
+Cell[23509, 562, 152, 3, 31, "Input",
  InitializationCell->True],
-Cell[20193, 481, 923, 17, 158, "Message"],
-Cell[21119, 500, 543, 11, 21, "Message"],
-Cell[21665, 513, 905, 16, 158, "Message"],
-Cell[22573, 531, 525, 11, 21, "Message"],
-Cell[23101, 544, 918, 17, 158, "Message"],
-Cell[24022, 563, 561, 12, 21, "Message"],
-Cell[24586, 577, 536, 11, 21, "Message"],
-Cell[25125, 590, 568, 12, 21, "Message"]
+Cell[23664, 567, 923, 17, 175, "Message"],
+Cell[24590, 586, 543, 11, 21, "Message"],
+Cell[25136, 599, 905, 16, 158, "Message"],
+Cell[26044, 617, 525, 11, 21, "Message"],
+Cell[26572, 630, 918, 17, 175, "Message"],
+Cell[27493, 649, 561, 12, 21, "Message"],
+Cell[28057, 663, 536, 11, 21, "Message"],
+Cell[28596, 676, 568, 12, 21, "Message"]
 }, Open  ]],
-Cell[25708, 605, 941, 21, 72, "Input",
+Cell[29179, 691, 941, 21, 112, "Input",
  InitializationCell->True],
-Cell[26652, 628, 588, 14, 52, "Input",
+Cell[30123, 714, 588, 14, 52, "Input",
  InitializationCell->True],
-Cell[27243, 644, 2006, 55, 92, "Input",
+Cell[30714, 730, 2006, 55, 192, "Input",
  InitializationCell->True],
-Cell[29252, 701, 572, 10, 31, "Input",
+Cell[32723, 787, 572, 10, 31, "Input",
  InitializationCell->True],
-Cell[29827, 713, 1596, 40, 132, "Input",
+Cell[33298, 799, 1596, 40, 172, "Input",
  InitializationCell->True],
-Cell[31426, 755, 1487, 34, 112, "Input",
+Cell[34897, 841, 1487, 34, 112, "Input",
  InitializationCell->True],
-Cell[32916, 791, 2206, 54, 192, "Input",
+Cell[36387, 877, 2206, 54, 192, "Input",
  InitializationCell->True],
-Cell[35125, 847, 819, 23, 72, "Input",
+Cell[38596, 933, 819, 23, 72, "Input",
  InitializationCell->True],
-Cell[35947, 872, 96, 3, 31, "Input",
+Cell[39418, 958, 96, 3, 31, "Input",
  InitializationCell->True],
-Cell[36046, 877, 103, 3, 31, "Input",
+Cell[39517, 963, 103, 3, 31, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
