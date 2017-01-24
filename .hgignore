@@ -12,5 +12,7 @@ scala/lib_managed
 scala/project/target
 scala/project/project/target
 scala/.*
+scala/sbt.err
+scala/sbt.out
 java/target
 java/.*
