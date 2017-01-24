@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     31181,        792]
-NotebookOptionsPosition[     29261,        726]
-NotebookOutlinePosition[     29697,        744]
-CellTagsIndexPosition[     29654,        741]
+NotebookDataLength[     38639,        966]
+NotebookOptionsPosition[     36177,        884]
+NotebookOutlinePosition[     36598,        901]
+CellTagsIndexPosition[     36555,        898]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -118,6 +118,8 @@ Cell[BoxData[
   3.441993874780366*^9, 3.441993878457967*^9}, {3.494776167516108*^9, 
   3.494776172286058*^9}, {3.515333902509885*^9, 3.515333906454295*^9}}],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  RowBox[{
   RowBox[{"(*", " ", 
@@ -187,24 +189,29 @@ Cell[BoxData[
      RowBox[{
       RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
       RowBox[{
-       RowBox[{"DeleteDirectory", "[", 
+       RowBox[{"Quiet", "[", "\[IndentingNewLine]", 
         RowBox[{
-         RowBox[{"ToFileName", "[", 
-          RowBox[{"{", 
+         RowBox[{
+          RowBox[{"DeleteDirectory", "[", 
            RowBox[{
-            RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
-            "\"\<lib_managed\>\""}], "}"}], "]"}], ",", 
-         RowBox[{"DeleteContents", "\[Rule]", "True"}]}], "]"}], ";", 
-       "\[IndentingNewLine]", 
-       RowBox[{"DeleteDirectory", "[", 
-        RowBox[{
-         RowBox[{"ToFileName", "[", 
-          RowBox[{"{", 
+            RowBox[{"ToFileName", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+               "\"\<lib_managed\>\""}], "}"}], "]"}], ",", 
+            RowBox[{"DeleteContents", "\[Rule]", "True"}]}], "]"}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"DeleteDirectory", "[", 
            RowBox[{
-            RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
-            "\"\<target\>\""}], "}"}], "]"}], ",", 
-         RowBox[{"DeleteContents", "\[Rule]", "True"}]}], "]"}], ";"}]}], 
-     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+            RowBox[{"ToFileName", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], ",", 
+               "\"\<target\>\""}], "}"}], "]"}], ",", 
+            RowBox[{"DeleteContents", "\[Rule]", "True"}]}], "]"}], ";"}], 
+         ",", "\[IndentingNewLine]", 
+         RowBox[{"DeleteDirectory", "::", "nodir"}]}], "\[IndentingNewLine]", 
+        "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"BuildScalaLibraries", "[", "]"}], ":=", 
     RowBox[{"Module", "[", 
@@ -214,8 +221,15 @@ Cell[BoxData[
        RowBox[{"SetDirectory", "[", 
         RowBox[{"FusionAtlasScalaDirectory", "[", "]"}], "]"}], ";", 
        "\[IndentingNewLine]", 
-       RowBox[{"Run", "[", "\"\<./sbt clean update package\>\"", "]"}], ";", 
-       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"$OperatingSystem", "===", "\"\<Windows\>\""}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Run", "[", "\"\<sbt.bat clean update package\>\"", "]"}], 
+          ";", "\[IndentingNewLine]", 
+          RowBox[{"Run", "[", "\"\<./sbt clean update package\>\"", "]"}], 
+          ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
        RowBox[{"ResetDirectory", "[", "]"}], ";", "\[IndentingNewLine]", 
        RowBox[{"AddToClassPath", "[", "ProjectJars", "]"}], ";"}]}], 
      "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
@@ -338,7 +352,25 @@ you have a slow connection.\>\"", "]"}], ";", "\[IndentingNewLine]",
    3.5472350305694103`*^9}, {3.5678042826663713`*^9, 
    3.5678043499448223`*^9}, {3.575940208858138*^9, 3.575940212313472*^9}, {
    3.617056601024688*^9, 3.6170566057246428`*^9}, {3.688629584970717*^9, 
-   3.688629585224162*^9}}],
+   3.688629585224162*^9}, {3.69424416133143*^9, 3.694244171063326*^9}, {
+   3.694244204949775*^9, 3.694244247758572*^9}, {3.694244808057431*^9, 
+   3.694244816713492*^9}, {3.6942449190652113`*^9, 3.6942449421989284`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"The Scala libraries for the FusionAtlas haven't been \
+compiled. I'm doing that now (Scala version 2.11)...\"\>"], "Print",
+ CellChangeTimes->{3.6942447963733406`*^9}],
+
+Cell[BoxData["\<\"Go and get a coffee, as this takes a few minutes, or longer \
+if you have a slow connection.\"\>"], "Print",
+ CellChangeTimes->{3.6942447963753457`*^9}],
+
+Cell[BoxData["\<\"Compilation failed. Please complain to Scott Morrison \
+<scott@tqft.net>.\"\>"], "Print",
+ CellChangeTimes->{3.6942447964365096`*^9}]
+}, Open  ]]
+}, Open  ]],
 
 Cell[BoxData[
  RowBox[{
@@ -440,10 +472,136 @@ Cell[BoxData[
    3.596138562742934*^9}, 3.621796674544561*^9, {3.621796911038477*^9, 
    3.621796924414166*^9}, 3.6827886085598707`*^9}],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  RowBox[{"RestartJava", "[", "]"}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.505176980856522*^9, 3.505176986992567*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Java", "::", "excptn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"A Java exception occurred: \[NoBreak]\\!\\(\\*RowBox[{\\\"\
+\\\\\\\"java.lang.ClassNotFoundException: \
+org.fusionatlas.graphs.PairOfBigraphsWithDuals$\\\\\\\\n\\\\\\\\tat \
+java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
+java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
+java.security.AccessController.doPrivileged(Native \
+Method)\\\\\\\\n\\\\\\\\tat java.net.URLClassLoader.findClass(Unknown Source)\
+\\\\\\\\n\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown Source)\\\\\\\\n\
+\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown \
+Source)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName0(Native \
+Method)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName(Unknown Source)\\\\\\\"\\\
+\"}]\\)\[NoBreak].\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.694244797244658*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"LoadJavaClass", "::", "fail"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Java failed to load class \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"\\\\\\\"org.fusionatlas.graphs.\
+PairOfBigraphsWithDuals$\\\\\\\"\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:JLink/ref/LoadJavaClass\\\", ButtonNote -> \
+\\\"JLink`LoadJavaClass::fail\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6942447973820257`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Java", "::", "excptn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"A Java exception occurred: \[NoBreak]\\!\\(\\*RowBox[{\\\"\
+\\\\\\\"java.lang.ClassNotFoundException: org.fusionatlas.graphs.Bigraph$\\\\\
+\\\\n\\\\\\\\tat java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\
+\\tat java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
+java.security.AccessController.doPrivileged(Native \
+Method)\\\\\\\\n\\\\\\\\tat java.net.URLClassLoader.findClass(Unknown Source)\
+\\\\\\\\n\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown Source)\\\\\\\\n\
+\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown \
+Source)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName0(Native \
+Method)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName(Unknown Source)\\\\\\\"\\\
+\"}]\\)\[NoBreak].\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.694244797647732*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"LoadJavaClass", "::", "fail"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Java failed to load class \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"\\\\\\\"org.fusionatlas.graphs.Bigraph$\\\\\\\"\
+\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:JLink/ref/LoadJavaClass\\\", ButtonNote -> \
+\\\"JLink`LoadJavaClass::fail\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.694244797768052*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Java", "::", "excptn"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"A Java exception occurred: \[NoBreak]\\!\\(\\*RowBox[{\\\"\
+\\\\\\\"java.lang.ClassNotFoundException: \
+org.fusionatlas.graphs.BigraphWithDuals$\\\\\\\\n\\\\\\\\tat \
+java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
+java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
+java.security.AccessController.doPrivileged(Native \
+Method)\\\\\\\\n\\\\\\\\tat java.net.URLClassLoader.findClass(Unknown Source)\
+\\\\\\\\n\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown Source)\\\\\\\\n\
+\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown \
+Source)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName0(Native \
+Method)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName(Unknown Source)\\\\\\\"\\\
+\"}]\\)\[NoBreak].\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6942447979776077`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \
+\[NoBreak]\\!\\(\\*StyleBox[RowBox[{\\\"Java\\\", \\\"::\\\", \
+\\\"excptn\\\"}], \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during \
+this calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.694244798008692*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"LoadJavaClass", "::", "fail"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Java failed to load class \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"\\\\\\\"org.fusionatlas.graphs.\
+BigraphWithDuals$\\\\\\\"\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:JLink/ref/LoadJavaClass\\\", ButtonNote -> \
+\\\"JLink`LoadJavaClass::fail\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6942447981280103`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \
+\[NoBreak]\\!\\(\\*StyleBox[RowBox[{\\\"LoadJavaClass\\\", \\\"::\\\", \
+\\\"fail\\\"}], \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during \
+this calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.694244798156088*^9}]
+}, Open  ]],
 
 Cell[BoxData[{
  RowBox[{
@@ -728,8 +886,7 @@ AutoGeneratedPackage->Automatic,
 WindowSize->{1219, 811},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 TaggingRules->{"SearchTextTranslated" -> ""},
-FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
-2014)",
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (April 11, 2016)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -744,53 +901,70 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[567, 22, 191, 3, 51, "Subtitle",
+Cell[567, 22, 191, 3, 49, "Subtitle",
  InitializationCell->True],
 Cell[761, 27, 237, 5, 30, "Text",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[1023, 36, 60, 1, 64, "Section",
+Cell[1023, 36, 60, 1, 63, "Section",
  InitializationCell->True],
-Cell[1086, 39, 1016, 19, 46, "Input",
+Cell[1086, 39, 1016, 19, 52, "Input",
  InitializationCell->True],
-Cell[2105, 60, 369, 10, 28, "Input",
+Cell[2105, 60, 369, 10, 31, "Input",
  InitializationCell->True],
-Cell[2477, 72, 604, 10, 46, "Input",
+Cell[2477, 72, 604, 10, 52, "Input",
  InitializationCell->True],
-Cell[3084, 84, 259, 5, 28, "Input",
+Cell[3084, 84, 259, 5, 31, "Input",
  InitializationCell->True,
  CellID->1269338625],
-Cell[3346, 91, 119, 3, 28, "Input",
+Cell[3346, 91, 119, 3, 31, "Input",
  InitializationCell->True],
-Cell[3468, 96, 409, 10, 28, "Input",
+Cell[3468, 96, 409, 10, 31, "Input",
  InitializationCell->True],
-Cell[3880, 108, 457, 10, 28, "Input",
+Cell[3880, 108, 457, 10, 31, "Input",
  InitializationCell->True],
-Cell[4340, 120, 9610, 220, 590, "Input",
+Cell[CellGroupData[{
+Cell[4362, 122, 10406, 234, 832, "Input",
  InitializationCell->True],
-Cell[13953, 342, 4681, 98, 352, "Input",
+Cell[CellGroupData[{
+Cell[14793, 360, 185, 2, 23, "Print"],
+Cell[14981, 364, 170, 2, 23, "Print"],
+Cell[15154, 368, 151, 2, 23, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[15332, 374, 4681, 98, 412, "Input",
  InitializationCell->True],
-Cell[18637, 442, 152, 3, 28, "Input",
+Cell[CellGroupData[{
+Cell[20038, 476, 152, 3, 31, "Input",
  InitializationCell->True],
-Cell[18792, 447, 941, 21, 63, "Input",
+Cell[20193, 481, 923, 17, 158, "Message"],
+Cell[21119, 500, 543, 11, 21, "Message"],
+Cell[21665, 513, 905, 16, 158, "Message"],
+Cell[22573, 531, 525, 11, 21, "Message"],
+Cell[23101, 544, 918, 17, 158, "Message"],
+Cell[24022, 563, 561, 12, 21, "Message"],
+Cell[24586, 577, 536, 11, 21, "Message"],
+Cell[25125, 590, 568, 12, 21, "Message"]
+}, Open  ]],
+Cell[25708, 605, 941, 21, 72, "Input",
  InitializationCell->True],
-Cell[19736, 470, 588, 14, 46, "Input",
+Cell[26652, 628, 588, 14, 52, "Input",
  InitializationCell->True],
-Cell[20327, 486, 2006, 55, 80, "Input",
+Cell[27243, 644, 2006, 55, 92, "Input",
  InitializationCell->True],
-Cell[22336, 543, 572, 10, 28, "Input",
+Cell[29252, 701, 572, 10, 31, "Input",
  InitializationCell->True],
-Cell[22911, 555, 1596, 40, 114, "Input",
+Cell[29827, 713, 1596, 40, 132, "Input",
  InitializationCell->True],
-Cell[24510, 597, 1487, 34, 98, "Input",
+Cell[31426, 755, 1487, 34, 112, "Input",
  InitializationCell->True],
-Cell[26000, 633, 2206, 54, 165, "Input",
+Cell[32916, 791, 2206, 54, 192, "Input",
  InitializationCell->True],
-Cell[28209, 689, 819, 23, 63, "Input",
+Cell[35125, 847, 819, 23, 72, "Input",
  InitializationCell->True],
-Cell[29031, 714, 96, 3, 28, "Input",
+Cell[35947, 872, 96, 3, 31, "Input",
  InitializationCell->True],
-Cell[29130, 719, 103, 3, 28, "Input",
+Cell[36046, 877, 103, 3, 31, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
@@ -798,4 +972,3 @@ Cell[29130, 719, 103, 3, 28, "Input",
 ]
 *)
 
-(* End of internal cache information *)

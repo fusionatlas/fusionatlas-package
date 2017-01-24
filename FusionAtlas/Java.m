@@ -49,12 +49,18 @@ ScalaVersion=StringCases[Import[ToFileName[{FusionAtlasScalaDirectory[]},"build.
 ScalaMajorVersion=StringTake[ScalaVersion,4];
 ProjectJars:=FileNames[{ToFileName[{FusionAtlasScalaDirectory[],"target","scala-"<>ScalaMajorVersion},"*.jar"]}];
 CleanScalaLibraries[]:=Module[{},
+Quiet[
 DeleteDirectory[ToFileName[{FusionAtlasScalaDirectory[],"lib_managed"}],DeleteContents->True];
-DeleteDirectory[ToFileName[{FusionAtlasScalaDirectory[],"target"}],DeleteContents->True];
+DeleteDirectory[ToFileName[{FusionAtlasScalaDirectory[],"target"}],DeleteContents->True];,
+DeleteDirectory::nodir
+];
 ]
 BuildScalaLibraries[]:=Module[{},
 SetDirectory[FusionAtlasScalaDirectory[]];
+If[$OperatingSystem==="Windows",
+Run["sbt.bat clean update package"];
 Run["./sbt clean update package"];
+];
 ResetDirectory[];
 AddToClassPath[ProjectJars];
 ]
