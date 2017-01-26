@@ -7,6 +7,8 @@ modularData
 modularData_
 graphs
 
+tikz-diagrams/log
+
 scala/target
 scala/lib_managed
 scala/project/target
