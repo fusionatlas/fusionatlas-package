@@ -42,7 +42,7 @@ FusionAtlasScalaDirectory[]:=ToFileName[FusionAtlasDirectory[],"scala"]
 
 
 javaVersionOutput=FileNameJoin[{$TemporaryDirectory,"java.version"}];
-Run["java -version 2> "<>javaVersionOutput]
+ReadString["!java -version 2> "<>javaVersionOutput];
 javaVersion=ToExpression[StringSplit[StringCases[Import[javaVersionOutput],"java version \""~~v:Except["\""]...~~"\""~~___:>v][[1]],"."|"_"]]
 If[Sort[{javaVersion,{1,8,0,100}}][[1]]==={1,8,0,100},
 (* The java version is recent enough! *),
@@ -68,7 +68,7 @@ DeleteDirectory::nodir
 BuildScalaLibraries[]:=Module[{},
 SetDirectory[FusionAtlasScalaDirectory[]];
 If[$OperatingSystem==="Windows",
-Run["sbt.bat clean update package 2> sbt.err > sbt.out"];,
+ReadString["!sbt.bat clean update package 2> sbt.err > sbt.out"];,
 Run["./sbt clean update package 2> sbt.err > sbt.out"];
 ];
 ResetDirectory[];
@@ -96,7 +96,7 @@ AddToClassPath[ProjectJars];
 RestartJava[]:=Module[{},
 If[!NumericQ[Global`$JVMHeap],Global`$JVMHeap=512];
 javaPath=
-If[$OperatingSystem==="Windows",RunThrough["for %i in (java.exe) do @echo. \"%~$PATH:i\"",""],FileNameJoin[{RunThrough["echo \\\"$(/usr/libexec/java_home -v 1.8)\\\"",""],"bin","java"}]];
+If[$OperatingSystem==="Windows",StringTrim[ReadString["!for %i in (java.exe) do @echo. %~$PATH:i"]],FileNameJoin[{RunThrough["echo \\\"$(/usr/libexec/java_home -v 1.8)\\\"",""],"bin","java"}]];
 ReinstallJava[CommandLine->javaPath,JVMArguments->"-Xmx"<>ToString[Global`$JVMHeap]<>"m"];
 AllowRaggedArrays[True];
 LoadJavaClass["org.fusionatlas.graphs.PairOfBigraphsWithDuals$","AllowShortContext"->False];

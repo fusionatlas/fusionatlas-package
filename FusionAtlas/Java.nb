@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     42183,       1054]
-NotebookOptionsPosition[     39648,        970]
-NotebookOutlinePosition[     40069,        987]
-CellTagsIndexPosition[     40026,        984]
+NotebookDataLength[     36675,        925]
+NotebookOptionsPosition[     34512,        851]
+NotebookOutlinePosition[     34933,        868]
+CellTagsIndexPosition[     34890,        865]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -125,9 +125,10 @@ Cell[BoxData[{
     RowBox[{"{", 
      RowBox[{"$TemporaryDirectory", ",", "\"\<java.version\>\""}], "}"}], 
     "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"Run", "[", 
-  RowBox[{"\"\<java -version 2> \>\"", "<>", "javaVersionOutput"}], 
-  "]"}], "\n", 
+ RowBox[{
+  RowBox[{"ReadString", "[", 
+   RowBox[{"\"\<!java -version 2> \>\"", "<>", "javaVersionOutput"}], "]"}], 
+  ";"}], "\n", 
  RowBox[{"javaVersion", "=", 
   RowBox[{"ToExpression", "[", 
    RowBox[{"StringSplit", "[", 
@@ -177,7 +178,9 @@ downloads-2133151.html\>\"", "]"}], ",", " ",
  CellChangeTimes->{{3.6877345937728148`*^9, 3.687734616255188*^9}, {
    3.687735214982531*^9, 3.687735291681095*^9}, {3.694246367526928*^9, 
    3.694246410896344*^9}, {3.6942466163133307`*^9, 3.6942466368991184`*^9}, 
-   3.694247818515724*^9, {3.6942480330153046`*^9, 3.6942480415579996`*^9}}],
+   3.694247818515724*^9, {3.6942480330153046`*^9, 3.6942480415579996`*^9}, {
+   3.694420491164629*^9, 3.6944204945025067`*^9}, {3.6944208227723694`*^9, 
+   3.694420883055721*^9}, {3.694420991477556*^9, 3.6944209937465887`*^9}}],
 
 Cell[CellGroupData[{
 
@@ -288,9 +291,9 @@ Cell[BoxData[
          "\[IndentingNewLine]", 
          RowBox[{
           RowBox[{
-          "Run", "[", 
-           "\"\<sbt.bat clean update package 2> sbt.err > sbt.out\>\"", "]"}],
-           ";"}], ",", "\[IndentingNewLine]", 
+          "ReadString", "[", 
+           "\"\<!sbt.bat clean update package 2> sbt.err > sbt.out\>\"", 
+           "]"}], ";"}], ",", "\[IndentingNewLine]", 
          RowBox[{
           RowBox[{
           "Run", "[", 
@@ -430,7 +433,8 @@ you have a slow connection.\>\"", "]"}], ";", "\[IndentingNewLine]",
    3.688629585224162*^9}, {3.69424416133143*^9, 3.694244171063326*^9}, {
    3.694244204949775*^9, 3.694244247758572*^9}, {3.694244808057431*^9, 
    3.694244816713492*^9}, {3.6942449190652113`*^9, 3.6942449421989284`*^9}, {
-   3.6942468164711776`*^9, 3.6942468867127247`*^9}, 3.6942475767785215`*^9}],
+   3.6942468164711776`*^9, 3.6942468867127247`*^9}, 3.6942475767785215`*^9, {
+   3.694420505869771*^9, 3.6944205151785517`*^9}}],
 
 Cell[CellGroupData[{
 
@@ -465,10 +469,11 @@ Cell[BoxData[
       RowBox[{"If", "[", 
        RowBox[{
         RowBox[{"$OperatingSystem", "===", "\"\<Windows\>\""}], ",", 
-        RowBox[{"RunThrough", "[", 
+        RowBox[{"StringTrim", "[", 
          RowBox[{
-         "\"\<for %i in (java.exe) do @echo. \\\"%~$PATH:i\\\"\>\"", ",", 
-          "\"\<\>\""}], "]"}], ",", 
+         "ReadString", "[", 
+          "\"\<!for %i in (java.exe) do @echo. %~$PATH:i\>\"", "]"}], "]"}], 
+        ",", 
         RowBox[{"FileNameJoin", "[", 
          RowBox[{"{", 
           RowBox[{
@@ -556,138 +561,14 @@ Cell[BoxData[
    3.596138562742934*^9}, 3.621796674544561*^9, {3.621796911038477*^9, 
    3.621796924414166*^9}, 3.6827886085598707`*^9, {3.6942469508850956`*^9, 
    3.694246951127741*^9}, {3.6942473130123043`*^9, 3.694247354086357*^9}, {
-   3.6942487538917294`*^9, 3.694248759253996*^9}}],
-
-Cell[CellGroupData[{
+   3.6942487538917294`*^9, 3.694248759253996*^9}, {3.6944205688752975`*^9, 
+   3.6944205827010818`*^9}, {3.6944206650060015`*^9, 3.694420682956687*^9}, {
+   3.694420807812578*^9, 3.694420812898125*^9}}],
 
 Cell[BoxData[
  RowBox[{"RestartJava", "[", "]"}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.505176980856522*^9, 3.505176986992567*^9}}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Java", "::", "excptn"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"A Java exception occurred: \[NoBreak]\\!\\(\\*RowBox[{\\\"\
-\\\\\\\"java.lang.ClassNotFoundException: \
-org.fusionatlas.graphs.PairOfBigraphsWithDuals$\\\\\\\\n\\\\\\\\tat \
-java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
-java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
-java.security.AccessController.doPrivileged(Native \
-Method)\\\\\\\\n\\\\\\\\tat java.net.URLClassLoader.findClass(Unknown Source)\
-\\\\\\\\n\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown Source)\\\\\\\\n\
-\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown \
-Source)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName0(Native \
-Method)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName(Unknown Source)\\\\\\\"\\\
-\"}]\\)\[NoBreak].\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.694244797244658*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"LoadJavaClass", "::", "fail"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Java failed to load class \
-\[NoBreak]\\!\\(\\*RowBox[{\\\"\\\\\\\"org.fusionatlas.graphs.\
-PairOfBigraphsWithDuals$\\\\\\\"\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:JLink/ref/LoadJavaClass\\\", ButtonNote -> \
-\\\"JLink`LoadJavaClass::fail\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6942447973820257`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Java", "::", "excptn"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"A Java exception occurred: \[NoBreak]\\!\\(\\*RowBox[{\\\"\
-\\\\\\\"java.lang.ClassNotFoundException: org.fusionatlas.graphs.Bigraph$\\\\\
-\\\\n\\\\\\\\tat java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\
-\\tat java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
-java.security.AccessController.doPrivileged(Native \
-Method)\\\\\\\\n\\\\\\\\tat java.net.URLClassLoader.findClass(Unknown Source)\
-\\\\\\\\n\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown Source)\\\\\\\\n\
-\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown \
-Source)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName0(Native \
-Method)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName(Unknown Source)\\\\\\\"\\\
-\"}]\\)\[NoBreak].\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.694244797647732*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"LoadJavaClass", "::", "fail"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Java failed to load class \
-\[NoBreak]\\!\\(\\*RowBox[{\\\"\\\\\\\"org.fusionatlas.graphs.Bigraph$\\\\\\\"\
-\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:JLink/ref/LoadJavaClass\\\", ButtonNote -> \
-\\\"JLink`LoadJavaClass::fail\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.694244797768052*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Java", "::", "excptn"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"A Java exception occurred: \[NoBreak]\\!\\(\\*RowBox[{\\\"\
-\\\\\\\"java.lang.ClassNotFoundException: \
-org.fusionatlas.graphs.BigraphWithDuals$\\\\\\\\n\\\\\\\\tat \
-java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
-java.net.URLClassLoader$1.run(Unknown Source)\\\\\\\\n\\\\\\\\tat \
-java.security.AccessController.doPrivileged(Native \
-Method)\\\\\\\\n\\\\\\\\tat java.net.URLClassLoader.findClass(Unknown Source)\
-\\\\\\\\n\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown Source)\\\\\\\\n\
-\\\\\\\\tat java.lang.ClassLoader.loadClass(Unknown \
-Source)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName0(Native \
-Method)\\\\\\\\n\\\\\\\\tat java.lang.Class.forName(Unknown Source)\\\\\\\"\\\
-\"}]\\)\[NoBreak].\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6942447979776077`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \
-\[NoBreak]\\!\\(\\*StyleBox[RowBox[{\\\"Java\\\", \\\"::\\\", \
-\\\"excptn\\\"}], \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during \
-this calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.694244798008692*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"LoadJavaClass", "::", "fail"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Java failed to load class \
-\[NoBreak]\\!\\(\\*RowBox[{\\\"\\\\\\\"org.fusionatlas.graphs.\
-BigraphWithDuals$\\\\\\\"\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:JLink/ref/LoadJavaClass\\\", ButtonNote -> \
-\\\"JLink`LoadJavaClass::fail\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6942447981280103`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \
-\[NoBreak]\\!\\(\\*StyleBox[RowBox[{\\\"LoadJavaClass\\\", \\\"::\\\", \
-\\\"fail\\\"}], \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during \
-this calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.694244798156088*^9}]
-}, Open  ]],
 
 Cell[BoxData[{
  RowBox[{
@@ -1009,50 +890,40 @@ Cell[3468, 96, 409, 10, 31, "Input",
  InitializationCell->True],
 Cell[3880, 108, 457, 10, 31, "Input",
  InitializationCell->True],
-Cell[4340, 120, 2408, 59, 372, "Input",
+Cell[4340, 120, 2587, 62, 372, "Input",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[6773, 183, 10982, 249, 1412, "Input",
+Cell[6952, 186, 11043, 250, 1412, "Input",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[17780, 436, 185, 2, 43, "Print"],
-Cell[17968, 440, 170, 2, 43, "Print"],
-Cell[18141, 444, 151, 2, 23, "Print"]
+Cell[18020, 440, 185, 2, 43, "Print"],
+Cell[18208, 444, 170, 2, 43, "Print"],
+Cell[18381, 448, 151, 2, 23, "Print"]
 }, Open  ]]
 }, Open  ]],
-Cell[18319, 450, 5165, 108, 712, "Input",
+Cell[18559, 454, 5326, 111, 712, "Input",
  InitializationCell->True],
-Cell[CellGroupData[{
-Cell[23509, 562, 152, 3, 31, "Input",
+Cell[23888, 567, 152, 3, 31, "Input",
  InitializationCell->True],
-Cell[23664, 567, 923, 17, 175, "Message"],
-Cell[24590, 586, 543, 11, 21, "Message"],
-Cell[25136, 599, 905, 16, 158, "Message"],
-Cell[26044, 617, 525, 11, 21, "Message"],
-Cell[26572, 630, 918, 17, 175, "Message"],
-Cell[27493, 649, 561, 12, 21, "Message"],
-Cell[28057, 663, 536, 11, 21, "Message"],
-Cell[28596, 676, 568, 12, 21, "Message"]
-}, Open  ]],
-Cell[29179, 691, 941, 21, 112, "Input",
+Cell[24043, 572, 941, 21, 112, "Input",
  InitializationCell->True],
-Cell[30123, 714, 588, 14, 52, "Input",
+Cell[24987, 595, 588, 14, 52, "Input",
  InitializationCell->True],
-Cell[30714, 730, 2006, 55, 192, "Input",
+Cell[25578, 611, 2006, 55, 192, "Input",
  InitializationCell->True],
-Cell[32723, 787, 572, 10, 31, "Input",
+Cell[27587, 668, 572, 10, 31, "Input",
  InitializationCell->True],
-Cell[33298, 799, 1596, 40, 172, "Input",
+Cell[28162, 680, 1596, 40, 172, "Input",
  InitializationCell->True],
-Cell[34897, 841, 1487, 34, 112, "Input",
+Cell[29761, 722, 1487, 34, 172, "Input",
  InitializationCell->True],
-Cell[36387, 877, 2206, 54, 192, "Input",
+Cell[31251, 758, 2206, 54, 312, "Input",
  InitializationCell->True],
-Cell[38596, 933, 819, 23, 72, "Input",
+Cell[33460, 814, 819, 23, 72, "Input",
  InitializationCell->True],
-Cell[39418, 958, 96, 3, 31, "Input",
+Cell[34282, 839, 96, 3, 31, "Input",
  InitializationCell->True],
-Cell[39517, 963, 103, 3, 31, "Input",
+Cell[34381, 844, 103, 3, 31, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
