@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     72812,       1832]
-NotebookOptionsPosition[     69901,       1738]
-NotebookOutlinePosition[     70291,       1755]
-CellTagsIndexPosition[     70248,       1752]
+NotebookDataLength[     78152,       1941]
+NotebookOptionsPosition[     75115,       1844]
+NotebookOutlinePosition[     75490,       1860]
+CellTagsIndexPosition[     75447,       1857]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1274,39 +1274,115 @@ Cell[BoxData[
    3.512409695512575*^9}, {3.512490382789863*^9, 3.5124903833831043`*^9}, {
    3.5707516810990763`*^9, 3.5707517027304564`*^9}, 3.5707518040706673`*^9}],
 
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"findExecutable", "[", "cmd_", "]"}], ":=", 
+  RowBox[{"StringTrim", "[", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"$OperatingSystem", "===", "\"\<Windows\>\""}], ",", 
+      RowBox[{"ReadString", "[", 
+       RowBox[{"\"\<!where \>\"", "<>", "cmd"}], "]"}], ",", 
+      RowBox[{"ReadString", "[", 
+       RowBox[{"\"\<!which \>\"", "<>", "cmd"}], "]"}]}], "]"}], "/.", 
+    RowBox[{"EndOfFile", "\[Rule]", "\"\<\>\""}]}], "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6944167348355904`*^9, 3.694416774056676*^9}, {
+  3.694417337666128*^9, 3.694417341020051*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"reportNotFound", "[", 
+   RowBox[{"cmd_", ",", 
+    RowBox[{"{", 
+     RowBox[{"path_", ",", "___"}], "}"}]}], "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"$OperatingSystem", "===", "\"\<Windows\>\""}], ",", 
+    RowBox[{"\"\<\\\"\>\"", "<>", "path", "<>", "\"\<\\\"\>\""}], ",", 
+    "path"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"reportNotFound", "[", 
+   RowBox[{"cmd_", ",", 
+    RowBox[{"{", "}"}]}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Can't find the executable \>\"", "<>", "cmd", "<>", 
+      "\"\<. It is needed for DisplayGraph. Please install it and try again. \
+If you've already installed it, and this still isn't working, look at \
+DisplayGraphs.nb or complain to Scott.\>\""}], "]"}], ";", "cmd"}], 
+   ")"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.69441694523316*^9, 3.6944170084979067`*^9}, {
+  3.6944170452506695`*^9, 3.6944170927222743`*^9}, {3.6944171358790684`*^9, 
+  3.6944171386484385`*^9}, {3.694418515293919*^9, 3.6944185377676964`*^9}}],
+
 Cell[BoxData[{
  RowBox[{
   RowBox[{"pdflatexPath", "=", 
-   RowBox[{
-    RowBox[{"FileNames", "[", 
-     RowBox[{"{", 
-      RowBox[{
-      "\"\</usr/texbin/pdflatex\>\"", ",", 
-       "\"\</Library/TeX/texbin/pdflatex\>\""}], "}"}], "]"}], 
-    "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
+   RowBox[{"reportNotFound", "[", 
+    RowBox[{"\"\<pdflatex\>\"", ",", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\</usr/texbin/pdflatex\>\"", ",", 
+        "\"\</Library/TeX/texbin/pdflatex\>\"", ",", 
+        RowBox[{"findExecutable", "[", "\"\<pdflatex\>\"", "]"}]}], "}"}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"pdftexPath", "=", 
-   RowBox[{
-    RowBox[{"FileNames", "[", 
-     RowBox[{"{", 
-      RowBox[{
-      "\"\</usr/texbin/pdftex\>\"", ",", 
-       "\"\</Library/TeX/texbin/pdftex\>\""}], "}"}], "]"}], 
-    "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
+   RowBox[{"reportNotFound", "[", 
+    RowBox[{"\"\<pdftex\>\"", ",", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\</usr/texbin/pdftex\>\"", ",", 
+        "\"\</Library/TeX/texbin/pdftex\>\"", ",", 
+        RowBox[{"findExecutable", "[", "\"\<pdftex\>\"", "]"}]}], "}"}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"pdfcropPath", "=", 
-   RowBox[{
-    RowBox[{"FileNames", "[", 
-     RowBox[{"{", 
-      RowBox[{
-      "\"\</usr/texbin/pdfcrop\>\"", ",", 
-       "\"\</Library/TeX/texbin/pdfcrop\>\""}], "}"}], "]"}], 
-    "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";"}]}], "Input",\
-
+   RowBox[{"reportNotFound", "[", 
+    RowBox[{"\"\<pdfcrop\>\"", ",", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\</usr/texbin/pdfcrop\>\"", ",", 
+        "\"\</Library/TeX/texbin/pdfcrop\>\"", ",", 
+        RowBox[{"findExecutable", "[", "\"\<pdfcrop\>\"", "]"}]}], "}"}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gsPath", "=", 
+   RowBox[{"reportNotFound", "[", 
+    RowBox[{"\"\<gs\>\"", ",", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\</usr/bin/gs\>\"", ",", "\"\</usr/local/bin/gs\>\"", ",", 
+        "\"\<C:\\\\Program Files\\\\gs\\\\gs9.20\\\\bin\\\\gswin64c.exe\>\"", 
+        ",", 
+        RowBox[{"findExecutable", "[", "\"\<gs\>\"", "]"}]}], "}"}], "]"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"perlPath", "=", 
+   RowBox[{"reportNotFound", "[", 
+    RowBox[{"\"\<perl\>\"", ",", 
+     RowBox[{"FileNames", "[", 
+      RowBox[{"{", 
+       RowBox[{"\"\</opt/local/bin/perl\>\"", ",", 
+        RowBox[{"findExecutable", "[", "\"\<perl\>\"", "]"}]}], "}"}], 
+      "]"}]}], "]"}]}], ";"}]}], "Input",
  InitializationCell->True,
- CellChangeTimes->{{3.6614563915761623`*^9, 3.661456544632069*^9}}],
+ CellChangeTimes->{{3.6614563915761623`*^9, 3.661456544632069*^9}, {
+  3.6944167810552917`*^9, 3.694416868386853*^9}, {3.694416904927948*^9, 
+  3.6944169198787165`*^9}, {3.6944170190720367`*^9, 3.6944170290475793`*^9}, {
+  3.6944171505641336`*^9, 3.6944171758985357`*^9}, {3.694417367602191*^9, 
+  3.6944173680945005`*^9}, {3.6944194619836526`*^9, 3.694419472478633*^9}, {
+  3.694419504949922*^9, 3.694419511467256*^9}, {3.6944195638164964`*^9, 
+  3.694419564215558*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -1316,9 +1392,22 @@ Cell[BoxData[
   RowBox[{"Module", "[", 
    RowBox[{
     RowBox[{"{", 
-     RowBox[{"tikz", ",", "result", ",", "gs", ",", "cmd"}], "}"}], ",", 
-    "\[IndentingNewLine]", 
+     RowBox[{
+     "tikz", ",", "result", ",", "cmd", ",", "cat", ",", "rm", ",", 
+      "semicolon"}], "}"}], ",", "\[IndentingNewLine]", 
     RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"cat", ",", "rm", ",", "semicolon"}], "}"}], "=", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"$OperatingSystem", "===", "\"\<Windows\>\""}], ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<type\>\"", ",", "\"\<del\>\"", ",", "\"\< & \>\""}], 
+         "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<cat\>\"", ",", "\"\<rm\>\"", ",", "\"\< ; \>\""}], 
+         "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
      RowBox[{"tikz", "=", 
       RowBox[{"\"\<$$\\\\begin{tikzpicture}\\n\>\"", "<>", 
        RowBox[{"function", "[", "g", "]"}], "<>", 
@@ -1361,25 +1450,29 @@ Cell[BoxData[
           ",", 
           RowBox[{"filename", "<>", "\"\<.tex\>\""}]}], "}"}], "]"}]}], "]"}],
       ";", "\[IndentingNewLine]", 
-     RowBox[{"gs", "=", 
-      RowBox[{
-       RowBox[{"FileNames", "[", 
-        RowBox[{"{", 
-         RowBox[{"\"\</usr/bin/gs\>\"", ",", "\"\</usr/local/bin/gs\>\""}], 
-         "}"}], "]"}], "\[LeftDoubleBracket]", "1", 
-       "\[RightDoubleBracket]"}]}], ";", "\[IndentingNewLine]", 
-     RowBox[{"Run", "[", "\[IndentingNewLine]", 
+     RowBox[{"ReadString", "[", "\[IndentingNewLine]", 
       RowBox[{"cmd", "=", 
        RowBox[{
-       "\"\<\ncat top-template > document.tex;\ncat snippet >> document.tex;\n\
-cat bottom-template >> document.tex;\n\>\"", "<>", "pdflatexPath", "<>", 
-        "\"\< document.tex;\n\>\"", "<>", "pdfcropPath", "<>", 
-        "\"\< document.pdf --gscmd \>\"", "<>", "gs", "<>", 
+       "\"\<!\>\"", "<>", "\[IndentingNewLine]", "cat", "<>", 
+        "\"\< top-template > document.tex\>\"", "<>", "semicolon", "<>", 
+        "\[IndentingNewLine]", "cat", "<>", 
+        "\"\< snippet >> document.tex\>\"", "<>", "semicolon", "<>", 
+        "\[IndentingNewLine]", "cat", "<>", 
+        "\"\< bottom-template >> document.tex\>\"", "<>", "semicolon", "<>", 
+        "\[IndentingNewLine]", "pdflatexPath", "<>", 
+        "\"\< document.tex > log\>\"", "<>", "semicolon", "<>", 
+        "\[IndentingNewLine]", "pdfcropPath", "<>", 
+        "\"\< document.pdf --gscmd \>\"", "<>", "gsPath", "<>", 
         "\"\< --pdftexcmd \>\"", "<>", "pdftexPath", "<>", 
-        "\"\< --verbose --debug;\n\>\"", "<>", "gs", "<>", 
+        "\"\< --verbose --debug >> log\>\"", "<>", "semicolon", "<>", 
+        "\[IndentingNewLine]", "gsPath", "<>", 
         "\"\< -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite \
--sOutputFile=finished.pdf document-crop.pdf;\nrm tmp-pdfcrop-*;\nrm \
-document.*;\nrm snippet;\n\>\""}]}], "]"}], ";", "\[IndentingNewLine]", 
+-sOutputFile=finished.pdf document-crop.pdf >> log\>\"", "<>", "semicolon", "<>",
+         "rm", "<>", "\"\< tmp-pdfcrop-*\>\"", "<>", "semicolon", "<>", 
+        "\[IndentingNewLine]", "rm", "<>", "\"\< document.*\>\"", "<>", 
+        "semicolon", "<>", "\[IndentingNewLine]", "rm", "<>", 
+        "\"\< snippet\>\"", "<>", "semicolon"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
      RowBox[{"If", "[", 
       RowBox[{
        RowBox[{"!", 
@@ -1406,20 +1499,33 @@ document.*;\nrm snippet;\n\>\""}]}], "]"}], ";", "\[IndentingNewLine]",
        RowBox[{"Import", "[", "\"\<finished.pdf\>\"", "]"}], 
        "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], ";", 
      "\[IndentingNewLine]", 
-     RowBox[{"Run", "[", "\"\<rm *.pdf\>\"", "]"}], ";", 
+     RowBox[{"DeleteFile", "/@", 
+      RowBox[{"FileNames", "[", "\"\<*.pdf\>\"", "]"}]}], ";", 
      "\[IndentingNewLine]", 
      RowBox[{"ResetDirectory", "[", "]"}], ";", "\[IndentingNewLine]", 
      "result"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
  InitializationCell->True,
- CellChangeTimes->CompressedData["
-1:eJxTTMoPSmViYGAQB2IQHc4xeaa/0ivHCTefLQbRVwRKYwKAdM45rjgQfe6i
-ZDGInrRVpQREc50TPAaiJ/MuPA6iGWbcDwwE0pez5oWA6MDogD0g2kosGkw7
-CRUcANETPFrB9LUZzNOCgPTx+ZPBtFnmEfMQIP1w23Mw/fTK2R0LVV45CrA3
-7wTRk+Jf7QPR2ou+gekVYmKHQTRLhBOYFr4ys3oRkDZ4fLIRRB9p5Zm1GEjf
-jV+6AESrJa/9dNn7lWOTmtNnEC3C1bP2CpCeqxu4DkRPYTZ9DaL7mBeD6fCD
-qxmuAunsTy/BdGBUiQCI1nh8RBhEn/m0sV31xitHo5KGHhCt9s//CIi2utUJ
-pm/6bpy2xv21o8Zsg1kgeqW+cPa+7NeORl6KOSAaAKaRtP0=
-  "]],
+ CellChangeTimes->{{3.507649740594768*^9, 3.507649823214058*^9}, {
+   3.507651299658304*^9, 3.507651312337698*^9}, {3.507651480806861*^9, 
+   3.5076514891471643`*^9}, {3.5076521445564013`*^9, 3.507652157032907*^9}, {
+   3.5076532629873047`*^9, 3.50765328495054*^9}, {3.507654114511147*^9, 
+   3.507654114846463*^9}, {3.5076541475022287`*^9, 3.5076541481651077`*^9}, {
+   3.5076558561124067`*^9, 3.507655860613254*^9}, {3.507659198137843*^9, 
+   3.507659199241074*^9}, {3.508866502432238*^9, 3.508866508094612*^9}, {
+   3.5088665513241663`*^9, 3.508866551707296*^9}, {3.5088665846902657`*^9, 
+   3.508866586073244*^9}, {3.508868060807138*^9, 3.508868110308983*^9}, {
+   3.508870352391329*^9, 3.508870405167952*^9}, {3.529416597418353*^9, 
+   3.5294166020672007`*^9}, {3.5294180923762302`*^9, 3.529418098536818*^9}, {
+   3.529418585656687*^9, 3.529418589094184*^9}, {3.529418757367351*^9, 
+   3.529418759310842*^9}, {3.529418883636025*^9, 3.529418910152729*^9}, {
+   3.6029839975608883`*^9, 3.602984036014184*^9}, {3.602984482499774*^9, 
+   3.602984484307889*^9}, {3.661456565540753*^9, 3.66145659351894*^9}, {
+   3.680367448599568*^9, 3.680367457040307*^9}, {3.694416826897415*^9, 
+   3.69441684584787*^9}, {3.6944177082584553`*^9, 3.694417809563604*^9}, {
+   3.694417900201452*^9, 3.694417910013549*^9}, {3.694418115798997*^9, 
+   3.6944181651673527`*^9}, {3.6944182960510516`*^9, 
+   3.6944183591796474`*^9}, {3.6944187499821854`*^9, 3.6944187623230333`*^9}, 
+   3.694418961387607*^9, {3.6944201693636494`*^9, 3.6944202518881626`*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -1739,8 +1845,7 @@ Cell[BoxData[
 AutoGeneratedPackage->Automatic,
 WindowSize->{1280, 751},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
-FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
-2014)",
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (April 11, 2016)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -1755,82 +1860,86 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[567, 22, 297, 4, 51, "Subtitle",
+Cell[567, 22, 297, 4, 49, "Subtitle",
  InitializationCell->True],
 Cell[867, 28, 250, 4, 30, "Text",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[1142, 36, 60, 1, 64, "Section",
+Cell[1142, 36, 60, 1, 63, "Section",
  InitializationCell->True],
-Cell[1205, 39, 1314, 24, 46, "Input",
+Cell[1205, 39, 1314, 24, 52, "Input",
  InitializationCell->True],
-Cell[2522, 65, 617, 9, 28, "Input",
+Cell[2522, 65, 617, 9, 31, "Input",
  InitializationCell->True],
-Cell[3142, 76, 119, 3, 28, "Input",
+Cell[3142, 76, 119, 3, 31, "Input",
  InitializationCell->True],
-Cell[3264, 81, 6807, 163, 335, "Input",
+Cell[3264, 81, 6807, 163, 412, "Input",
  InitializationCell->True],
-Cell[10074, 246, 9894, 252, 335, "Input",
+Cell[10074, 246, 9894, 252, 392, "Input",
  InitializationCell->True],
-Cell[19971, 500, 1850, 47, 97, "Input",
+Cell[19971, 500, 1850, 47, 112, "Input",
  InitializationCell->True],
-Cell[21824, 549, 2729, 66, 131, "Input",
+Cell[21824, 549, 2729, 66, 152, "Input",
  InitializationCell->True],
-Cell[24556, 617, 3155, 70, 264, "Input",
+Cell[24556, 617, 3155, 70, 279, "Input",
  InitializationCell->True],
-Cell[27714, 689, 4633, 116, 182, "Input",
+Cell[27714, 689, 4633, 116, 212, "Input",
  InitializationCell->True],
-Cell[32350, 807, 5894, 148, 216, "Input",
+Cell[32350, 807, 5894, 148, 252, "Input",
  InitializationCell->True],
-Cell[38247, 957, 2967, 69, 97, "Input",
+Cell[38247, 957, 2967, 69, 112, "Input",
  InitializationCell->True],
-Cell[41217, 1028, 1497, 34, 63, "Input",
+Cell[41217, 1028, 1497, 34, 72, "Input",
  InitializationCell->True],
-Cell[42717, 1064, 1722, 41, 80, "Input",
+Cell[42717, 1064, 1722, 41, 92, "Input",
  InitializationCell->True],
-Cell[44442, 1107, 1177, 18, 28, "Input",
+Cell[44442, 1107, 1177, 18, 31, "Input",
  InitializationCell->True],
-Cell[45622, 1127, 212, 5, 28, "Input",
+Cell[45622, 1127, 212, 5, 31, "Input",
  InitializationCell->True],
-Cell[45837, 1134, 163, 3, 28, "Input",
+Cell[45837, 1134, 163, 3, 31, "Input",
  InitializationCell->True],
-Cell[46003, 1139, 1126, 30, 46, "Input",
+Cell[46003, 1139, 1126, 30, 52, "Input",
  InitializationCell->True],
-Cell[47132, 1171, 278, 6, 28, "Input",
+Cell[47132, 1171, 278, 6, 31, "Input",
  InitializationCell->True],
-Cell[47413, 1179, 545, 15, 28, "Input",
+Cell[47413, 1179, 545, 15, 31, "Input",
  InitializationCell->True],
-Cell[47961, 1196, 2601, 56, 199, "Input",
+Cell[47961, 1196, 2601, 56, 232, "Input",
  InitializationCell->True],
-Cell[50565, 1254, 887, 20, 114, "Input",
+Cell[50565, 1254, 887, 20, 132, "Input",
  InitializationCell->True],
-Cell[51455, 1276, 1055, 32, 63, "Input",
+Cell[51455, 1276, 643, 15, 31, "Input",
  InitializationCell->True],
-Cell[52513, 1310, 4722, 111, 556, "Input",
+Cell[52101, 1293, 1111, 27, 132, "Input",
  InitializationCell->True],
-Cell[57238, 1423, 3093, 72, 250, "Input",
+Cell[53215, 1322, 2519, 62, 152, "Input",
  InitializationCell->True],
-Cell[60334, 1497, 4040, 78, 250, "Input",
+Cell[55737, 1386, 6712, 141, 632, "Input",
  InitializationCell->True],
-Cell[64377, 1577, 1149, 32, 80, "Input",
+Cell[62452, 1529, 3093, 72, 292, "Input",
  InitializationCell->True],
-Cell[65529, 1611, 902, 25, 122, "Input",
+Cell[65548, 1603, 4040, 78, 292, "Input",
  InitializationCell->True],
-Cell[66434, 1638, 409, 12, 28, "Input",
+Cell[69591, 1683, 1149, 32, 92, "Input",
  InitializationCell->True],
-Cell[66846, 1652, 476, 12, 28, "Input",
+Cell[70743, 1717, 902, 25, 123, "Input",
  InitializationCell->True],
-Cell[67325, 1666, 535, 11, 28, "Input",
+Cell[71648, 1744, 409, 12, 28, "Input",
  InitializationCell->True],
-Cell[67863, 1679, 491, 12, 28, "Input",
+Cell[72060, 1758, 476, 12, 28, "Input",
  InitializationCell->True],
-Cell[68357, 1693, 448, 10, 28, "Input",
+Cell[72539, 1772, 535, 11, 28, "Input",
  InitializationCell->True],
-Cell[68808, 1705, 721, 17, 28, "Input",
+Cell[73077, 1785, 491, 12, 28, "Input",
  InitializationCell->True],
-Cell[69532, 1724, 187, 5, 28, "Input",
+Cell[73571, 1799, 448, 10, 28, "Input",
  InitializationCell->True],
-Cell[69722, 1731, 151, 3, 28, "Input",
+Cell[74022, 1811, 721, 17, 28, "Input",
+ InitializationCell->True],
+Cell[74746, 1830, 187, 5, 28, "Input",
+ InitializationCell->True],
+Cell[74936, 1837, 151, 3, 28, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]]
