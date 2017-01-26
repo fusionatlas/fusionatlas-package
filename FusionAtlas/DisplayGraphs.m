@@ -180,13 +180,23 @@ DisplayGraph[g]
 ]
 
 
-pdflatexPath=FileNames[{"/usr/texbin/pdflatex","/Library/TeX/texbin/pdflatex"}][[1]];
-pdftexPath=FileNames[{"/usr/texbin/pdftex","/Library/TeX/texbin/pdftex"}][[1]];
-pdfcropPath=FileNames[{"/usr/texbin/pdfcrop","/Library/TeX/texbin/pdfcrop"}][[1]];
+findExecutable[cmd_]:=StringTrim[If[$OperatingSystem==="Windows",ReadString["!where "<>cmd],ReadString["!which "<>cmd]]/.EndOfFile->""]
+
+
+reportNotFound[cmd_,{path_,___}]:=If[$OperatingSystem==="Windows","\""<>path<>"\"",path]
+reportNotFound[cmd_,{}]:=(Print["Can't find the executable "<>cmd<>". It is needed for DisplayGraph. Please install it and try again. If you've already installed it, and this still isn't working, look at DisplayGraphs.nb or complain to Scott."];cmd)
+
+
+pdflatexPath=reportNotFound["pdflatex",FileNames[{"/usr/texbin/pdflatex","/Library/TeX/texbin/pdflatex",findExecutable["pdflatex"]}]];
+pdftexPath=reportNotFound["pdftex",FileNames[{"/usr/texbin/pdftex","/Library/TeX/texbin/pdftex",findExecutable["pdftex"]}]];
+pdfcropPath=reportNotFound["pdfcrop",FileNames[{"/usr/texbin/pdfcrop","/Library/TeX/texbin/pdfcrop",findExecutable["pdfcrop"]}]];
+gsPath=reportNotFound["gs",FileNames[{"/usr/bin/gs","/usr/local/bin/gs","C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe",findExecutable["gs"]}]];
+perlPath=reportNotFound["perl",FileNames[{"/opt/local/bin/perl",findExecutable["perl"]}]];
 
 
 CreateFiles[g_,function_,filename_]:=
-Module[{tikz,result,gs,cmd},
+Module[{tikz,result,cmd,cat,rm,semicolon},
+{cat,rm,semicolon}=If[$OperatingSystem==="Windows",{"type","del"," & "},{"cat","rm"," ; "}];
 tikz="$$\\begin{tikzpicture}\n"<>function[g]<>"\\end{tikzpicture}$$";
 SetDirectory[FileNameJoin[{FusionAtlasDirectory[],"tikz-diagrams"}]];
 If[Length[Streams["snippet"]]>0,Close["snippet"]];
@@ -195,23 +205,20 @@ WriteString[OpenWrite["snippet"],tikz];
 Close["snippet"];
 Off[CopyFile::"filex"];
 CopyFile["snippet",FileNameJoin[{FusionAtlasDirectory[],"graphs",filename<>".tex"}]];
-gs=FileNames[{"/usr/bin/gs","/usr/local/bin/gs"}][[1]];
-Run[
-cmd="
-cat top-template > document.tex;
-cat snippet >> document.tex;
-cat bottom-template >> document.tex;
-"<>pdflatexPath<>" document.tex;
-"<>pdfcropPath<>" document.pdf --gscmd "<>gs<>" --pdftexcmd "<>pdftexPath<>" --verbose --debug;
-"<>gs<>" -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdf document-crop.pdf;
-rm tmp-pdfcrop-*;
-rm document.*;
-rm snippet;
-"];
+ReadString[
+cmd="!"<>
+cat<>" top-template > document.tex"<>semicolon<>
+cat<>" snippet >> document.tex"<>semicolon<>
+cat<>" bottom-template >> document.tex"<>semicolon<>
+pdflatexPath<>" document.tex > log"<>semicolon<>
+pdfcropPath<>" document.pdf --gscmd "<>gsPath<>" --pdftexcmd "<>pdftexPath<>" --verbose --debug >> log"<>semicolon<>
+gsPath<>" -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdf document-crop.pdf >> log"<>semicolon<>rm<>" tmp-pdfcrop-*"<>semicolon<>
+rm<>" document.*"<>semicolon<>
+rm<>" snippet"<>semicolon];
 If[!FileExistsQ["finished.pdf"],Print["Generating a diagram failed --- no PDF produced."];Print[cmd];Print[tikz];Abort[]];
 CopyFile["finished.pdf",FileNameJoin[{FusionAtlasDirectory[],"graphs",filename<>".pdf"}]];
 result=Import["finished.pdf"][[1]];
-Run["rm *.pdf"];
+DeleteFile/@FileNames["*.pdf"];
 ResetDirectory[];
 result
 ]
