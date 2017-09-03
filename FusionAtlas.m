@@ -19,91 +19,116 @@
 
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`Bigraphs`",{"GradedGraph","GradedBigraph","GraphRank","GraphEvenRank","GraphOddRank","GraphDepth","RankAtDepth","GraphAdjacencyMatrix","EvenPart","GraphIndex","DimensionOfGenerator","ReducedDimensionOfGenerator","NumericDimensionOfGenerator","DimensionsByDepth","NumericDimensionsByDepth","ReducedDimensionsByDepth","GlobalEvenDimension","GlobalDimension","DimensionAtMostQ","DimensionOfLowWeightSpace","StableLowWeightSpaceDimensions","AnnularTanglesSubgraphTest","AnnularTanglesTest","FindBigraphExtensions","FindBigraphExtensionsUpToRank","FindBigraphExtensionsUpToRankAndDepth","CanonicalizeBigraph","AnBigraph","DnBigraph","EnBigraph","trivalentBigraph","haagerupFamilyBigraph","dualHaagerupFamilyBigraph","HaagerupBigraph","DualHaagerupBigraph","IzumiStarBigraph","ExtendedDnBigraph","HexagonBigraph","DualHexagonBigraph","HaagerupAsaedaBigraph","DualHaagerupAsaedaBigraph","ExtendedEnBigraph","S4S5Bigraph", "A4A5Bigraph","A5A6Bigraph", "GraphToString","GraphFromString","ClearCachedGraphFromString","CachedGraphFromString","DepthOfBranchPoint","HasSimpleBranchQ","Truncate","BranchFactor"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`DisplayGraphs`",{"DisplayFusionGraph","DisplayBigraph","DisplayGraph","GraphHash","DeleteGraph"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`CyclotomicityBound`",{"CyclotomicityBound","CyclotomicTranslates","CyclotomicTranslatesWithWitnesses"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`Java`",{"FusionAtlasJavaDirectory","FusionAtlasScalaDirectory","RestartJava","AsScalaSet","AsScalaList","AsScalaOption","AsScalaObject","FromScalaObject","UnpackJavaLists","BuildScalaLibraries","CleanScalaLibraries","RebuildScalaLibraries","UnpackJavaObjects","GraphToScalaObject"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`JavaOdometer`",{"FindBigraphExtensionsUpToRankJava","FindBigraphExtensionsUpToRankAndDepthJava","FindBigraphExtensionsUpToRankAndDepthJavaIterator","FindBigraphExtensionsMatching"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`FindAllBigraphs`",{"AlgebraicIntegerTest","PositivityTest","GHJTest","BigraphConditions","AllBigraphs","FindAllBigraphs","RequestAllBigraphs","KnownObstructions","FindAllObstructions","RequestMoreBigraphs"}]
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`PackageData`",
 {"ValuesAsString","DefiniteValuesAsString","PackageData","MatchingValues","DefiniteValues","PackageEverything","PackageCachedRootReduce","PackageDimensions","PackageBigraphExtensions","PackageBifusionAlgebras","PackageLowWeightSpaces","PackageAlgebraicIntegerTest","PackageObstructions","PackageKnapsackTest","PackageFindGraphPartners","PackageLowestWeightEigenspaces","PackageIdempotents","PackagePairExtensions"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`TensorSolver`",
 {"FindFusionRules","FindFusionRulesTimeLimit","FlipFusionRules","EvenPartFusionRules","FusionRules"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`ExtractGraphs`",
 {"ExtractFusionGraphLabels","ExtractFusionGraph","ExtractPairOfBigraphsWithDuals"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`FormalCodegrees`",
 {"FormalCodegreesInDimensionFieldTest","FormalCodegrees","FindDimensionFunctions","FormalCodegreesInequalityTest","FPDimensions"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`Iterators`",
 {"Iterator"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`InductionMatrix`",
 {"InductionMatrices","AllDecompositions"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`ModularData`",
 {"FindModularData","ExplicitGenerators","ExecuteGAP","CharacterTable","GaloisGroup","GaloisAction","GaloisGroupGenerators","PossibleConductors","workOnRepresentations","SInRepresentation","TInRepresentation","DimensionsFromInductionMatrix","GaloisOrbitClumps","PossibleGaloisImages","PossibleGaloisTraces","RepresentationsForRank","RepresentationsForInductionMatrix","SaveRepresentationsForRank","SaveCharacterTables","SaveGenerators","SaveConjugacyClasses","SaveAllModularData","ClearSavedModularData","AllocateEigenvaluesToGaloisOrbitClumps","AllocateEigenvaluesToSimples","AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators","AllocateEigenvaluesToSimplesAndCompleteGaloisActions","FindQLinearSolutions"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`FindGraphPartners`",
 {"FindGraphPartners","FindWeedPartners"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`CyclotomicTest`",
 {"CyclotomicTest"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`KnapsackTest`",
 {"KnapsackTest"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`QuadraticTanglesTest`",
 {"ParityTest","HaagerupTypeBranchTest"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`dTest`",{"DTest"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`Debugging`",
 {"DebugEcho","DebugPrint","DebugEvaluate","SetDebugMode","SetDebugQueueInterval","SetDebugFile","DebugPrintHeld","ToStringHeld"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`RemoteInterface`",
 {"RecordObstructions","RequestObstructions","LookupObstructions","LoadObstructions","LookupCanonicalForms","ProcessObstructionsQueue","WorkOnObstructionsQueue","ClearObstructionsQueue","ObstructionsQueueLength","EstimateQueueCompletionTime","RetrieveGraphs","LookupGraphs","TakeGraphs","RecordCanonicalForms","RecordFindGraphPartners","GraphsNeedingPartners","ReapplyTestToDatabase","RecordRequestAllBigraphs","BigraphRequests","MaximalBigraphRequests","MaximalIncompleteBigraphRequests","DisplayBigraphRequests","QueueExpression"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`GraphPairs`",{"BigraphWithDuals","GraphWithDuals","DualData","OcneanuDisplay","HaagerupWithDuals","DualHaagerupWithDuals","HaagerupAsaedaWithDuals","DualHaagerupAsaedaWithDuals","TwistBigraph","FullOcneanuTest","PartialOcneanuTest","DualDataList","CompatibleDualDataList","CheckDualDimensions","GraphPairsIsomorphicQ","ClearGraphPairsCachedValues","PermuteToReduceCrossings","GraphVertices","DirectionsFromVertices","EdgesAdjacentTo","GraphPathsFrom","GraphPathsTo","GraphPathsBetween","GraphPaths","GraphLoops","ConcatenatePaths","PathLength","ReverseLoop","Vertex","SplitPathAt","PathToLoop","TruncatesToOneOfQ","RemoveDuplicates","ScalaTriplePointObstruction","StabilitySequence","CylinderQ","CylinderObstruction"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`PairOdometer`",{"FindBigraphPairExtensionsUpToDepth","FamiliesOfBigraphPairs","DisplayFamiliesOfBigraphPairs","ChooseIsomorphismRepresentatives"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`AfzalyEnumerator`",{"FilteredEnumerate","FilteredEnumerateToRank","FilteredEnumerateToDepth","IgnoredWeeds"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`Enumerator2014`",{"DescendantsTree","FindGraphPartners2"}];
 
 
+(* ::Input::Initialization:: *)
 (*
 DeclarePackage["FusionAtlas`GraphPlanarAlgebra`",{
 "GPAElement","GPAMatrix",
@@ -116,72 +141,90 @@ DeclarePackage["FusionAtlas`GraphPlanarAlgebra`",{
 *)
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`GraphPlanarAlgebra4`",{
-"NumberFieldGenerator","EnlargeNumberField","RedefineLopsidedDimension","LopsidedDimension","SphericalDimension","CriticalPointCoefficient","GPA4Element","EmptyGPA4Element","CapTopLeft","PartialTrace","GPA4Trace","GPA4TraceEvaluation","TurnUpBottomRightCorner","TurnDownTopRightCorner","TurnUpBottomLeftCorner","TurnDownTopLeftCorner","RotateOneClick","RotateTwoClicks","GPAFourierTransform","GPAFourierTransformTwice","AddStrandOnRight","AddStrandOnLeft","AddStrandsOnLeft","GPAMultiply","GPAConjugate","GPACoefficients","GPACoefficientsAtStar","VariableGPA4Element","GPA4Matrix","GPATensor","GPAInverse","Rotate\[Pi]Clockwise","Rotate\[Pi]Counterclockwise","GPAMultiplyWithOffset","PivotalStructure","ConnectionGrid","StrandCrossingAbove","StrandCrossingBelow","TwoStrandFlatness","OneStrandFlatness","FusionRulesFromConnection","LowestWeightEigenvectorConditions","LowestWeightConditions","CollectGPA4Matrix","CollectGPA4Element","LowestWeightEigenspace","LowestWeightSpace","LoadLowestWeightEigenspaces","ChangePivotalStructure","NumberFieldGauge","FindEquationsForFlatGenerators","FindFlatGenerators","FindFlatLowestWeightVectors","qInteger\[Delta]","JonesWenzlIdempotent","LoadIdempotents","S2Equation","RowReducedS2Equation","S2Solutions","IdentityTL","OneCupTL","OneCupJonesWenzl","SomeOneCupJonesWenzl","AnnularConsequences","GPACirc","GPAStar","GaugeTransform", "GaugeAction", "VariableGaugeElement", "FindGaugeElementRelating","WenzlRecursion"
+"NumberFieldGenerator","EnlargeNumberField","RedefineLopsidedDimension","LopsidedDimension","SphericalDimension","CriticalPointCoefficient","GPA4Element","LargeGPA4Element","EmptyGPA4Element","CapTopLeft","PartialTrace","GPA4Trace","GPA4TraceEvaluation","TurnUpBottomRightCorner","TurnDownTopRightCorner","TurnUpBottomLeftCorner","TurnDownTopLeftCorner","RotateOneClick","RotateTwoClicks","GPAFourierTransform","GPAFourierTransformTwice","AddStrandOnRight","AddStrandOnLeft","AddStrandsOnLeft","GPAMultiply","GPAConjugate","GPACoefficients","GPACoefficientsAtStar","VariableGPA4Element","GPA4Matrix","GPATensor","GPAInverse","Rotate\[Pi]Clockwise","Rotate\[Pi]Counterclockwise","GPAMultiplyWithOffset","PivotalStructure","ConnectionGrid","StrandCrossingAbove","StrandCrossingBelow","TwoStrandFlatness","OneStrandFlatness","FusionRulesFromConnection","LowestWeightEigenvectorConditions","LowestWeightConditions","CollectGPA4Matrix","CollectGPA4Element","LowestWeightEigenspace","LowestWeightSpace","LoadLowestWeightEigenspaces","ChangePivotalStructure","NumberFieldGauge","FindEquationsForFlatGenerators","FindFlatGenerators","FindFlatLowestWeightVectors","qInteger\[Delta]","JonesWenzlIdempotent","LoadIdempotents","S2Equation","RowReducedS2Equation","S2Solutions","IdentityTL","OneCupTL","OneCupJonesWenzl","SomeOneCupJonesWenzl","AnnularConsequences","GPACirc","GPAStar","GaugeTransform", "GaugeAction", "VariableGaugeElement", "FindGaugeElementRelating","WenzlRecursion"
 }]
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`Connections`",{"ClearConnection","ConnectionEquations","SimplifyConnectionEquations","BranchMatrix","UUt","ConnectionNormEquations","ConnectionPhaseEquations","SolveConnectionNormEquations","SolveConnectionNormEquationsForExtraDimensions","SolveConnectionPhaseEquations","ConnectionNormConditions","ReducedConnectionNormConditions","ConnectionTriangleInequalities","ConnectionPolygonInequalities","IndexRangeFromConnectionNorms","IndexRangeFromTriangleInequalities","ConnectionTrianglesNormsAndArgs","complicatedOnes","newComplicatedOne","PhaseSolver","LawOfCosinesAlternatives","norm","arg"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`RelativeDimensions`",{"RelativeDimensionsByDepthEquations","SolveRelativeDimensionsByDepthEquations","RelativeBranchFactor","RelativeDimensionsByDepth","RelativeDimensionsConditions","PositiveOmegaInequality"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`TriplePointTest`",{"TriplePointObstruction","EvenTriplePointObstruction","OddTriplePointObstruction"}];
 
 
+(* ::Input::Initialization:: *)
 DeclarePackage["FusionAtlas`Utilities`IntersectSubspaces`",{"IntersectSubspaces"}];
 
 
+(* ::Input::Initialization:: *)
 Print[
 "Loading FusionAtlas` version 0\n",
 "Read more at http://tqft.net/wiki/Atlas_of_subfactors"
 ]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<6,
 BeginPackage["FusionAtlas`",{"LinearAlgebra`MatrixManipulation`"}],
 BeginPackage["FusionAtlas`"]
 ]
 
 
+(* ::Input::Initialization:: *)
 FusionAtlasDirectory::usage="FusionAtlasDirectory[] should hopefully return the location the FusionAtlas` package was loaded from.";
 FusionAtlasDataDirectory::usage="FusionAtlasDataDirectory[] specifies were the FusionAtlas` package should look for, and save, precomputed data.";
 
 
+(* ::Input::Initialization:: *)
 FusionAtlas::loading="Loading precomputed data in `1`.";
 
 
+(* ::Input::Initialization:: *)
 cachedRootReduce::usage="";
 
 
+(* ::Input::Initialization:: *)
 UnsortedUnion::usage="UnsortedUnion[list] a list of all the unique elements in list, in the order that they first appear.";
 
 
+(* ::Input::Initialization:: *)
 FindFirst::usage="";
 
 
+(* ::Input::Initialization:: *)
 RealMax::usage="";
 RealMaxPosition::usage="";
 
 
+(* ::Input::Initialization:: *)
 NaturalQ::usage="NaturalNumberQ[n] tests if n is a non-negative integer.";
 
 
+(* ::Input::Initialization:: *)
 qInteger::usage="qInteger[n][q] computes the quantum integer n with the variable q; in our conventions qInteger[2][q]==q+\!\(\*SuperscriptBox[\(q\), \(-1\)]\)";
 {qFactorial,qBinomial};
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<7,
 SplitBy[x_,f_]:=Split[x,f[#1]===f[#2]&]
 ]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<6,
 UnitVector::usage="UnitVector[n,i] returns the i-th n-dimensional unit vector, if i is an integer between 1 and n, and the n-dimensional zero vector otherwise.";
 ]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber>=6,
 BlockMatrix=ArrayFlatten;
 ZeroMatrix[n_]:=ZeroMatrix[n,n];
@@ -189,39 +232,50 @@ ZeroMatrix[n_,m_]:=ConstantArray[0,{n,m}]
 ]
 
 
+(* ::Input::Initialization:: *)
 ZeroVector::usage="ZeroVector[n] returns the n-dimensional 0 vector.";
 
 
+(* ::Input::Initialization:: *)
 UnitVectorQ::usage="UnitVectorQ[v] tests if v is a unit coordinate vector.";
 
 
+(* ::Input::Initialization:: *)
 ZeroVectorQ::usage="ZeroVectorQ[v] tests if v is the zero vector.";
 
 
+(* ::Input::Initialization:: *)
 ZeroMatrixQ::usage=""
 
 
+(* ::Input::Initialization:: *)
 qFromd::usage="Computes q given d=q+q^(-1)";
 
 
+(* ::Input::Initialization:: *)
 $parallelMode::usage="'$parallelMode = True' allows the FusionAtlas to use multiple kernels.";
 parallelRootReduce;
 progressiveRootReduce;
 
 
+(* ::Input::Initialization:: *)
 \[Zeta];CyclotomicOrder;ToCyclotomicField;LiftToCommonCyclotomicField;AlgebraicConjugate;IdentifyRootOfUnity;PrimePowers;UniqueGaloisConjugate;cachedToNumberField;
 
 
+(* ::Input::Initialization:: *)
 Begin["`Private`"];
 
 
+(* ::Input::Initialization:: *)
 FusionAtlasDirectory[]:=FusionAtlasDirectory[]=StringDrop[(File/.Flatten[FileInformation[ToFileName[#,"FusionAtlas"]]&/@(Reverse[$Path]/."."->Directory[])]),-12]
 
 
+(* ::Input::Initialization:: *)
 (*might be dangerous if FusionAtlasDirectory[] is somehow incorrect!*)
 If[!MemberQ[$Path,FusionAtlasDirectory[]],AppendTo[$Path,FusionAtlasDirectory[]]]
 
 
+(* ::Input::Initialization:: *)
 (*If[StringTake[FusionAtlasDirectory[],-7]=="package",
 FusionAtlasDataDirectory[]:=StringDrop[FusionAtlasDirectory[],-7]<>"data";
 Print["Found precomputed data in ",FusionAtlasDataDirectory[]];
@@ -230,12 +284,15 @@ Print["Remember to set FusionAtlasDataDirectory[] to the appropriate path, if yo
 ];*)
 
 
+(* ::Input::Initialization:: *)
 UnsortedUnion[x_]:=Module[{f},f[y_]:=(f[y]=Sequence[];y);f/@x]
 
 
+(* ::Input::Initialization:: *)
 cachedRootReduceCount=0;
 
 
+(* ::Input::Initialization:: *)
 cachedRootReduce[x_Root]:=x
 cachedRootReduce[x_Integer]:=x
 cachedRootReduce[x_Complex]:=x
@@ -243,6 +300,7 @@ cachedRootReduce[x_]:=(++cachedRootReduceCount;cachedRootReduce[x]=RootReduce[x]
 cachedRootReduce[x_List]:=cachedRootReduce/@x
 
 
+(* ::Input::Initialization:: *)
 progressiveRootReduce[x_Plus]:=cachedRootReduce[progressiveRootReduce/@x]
 progressiveRootReduce[x_Times]:=cachedRootReduce[progressiveRootReduce/@x]
 progressiveRootReduce[x_Root]:=x
@@ -251,13 +309,16 @@ progressiveRootReduce[x_List] :=progressiveRootReduce/@x
 progressiveRootReduce[x_->y_]:=x->progressiveRootReduce[y]
 
 
+(* ::Input::Initialization:: *)
 parallelModeHook:=
 ($parallelMode/:Set[$parallelMode,x_]:=(UpValues[$parallelMode]={};$parallelMode=x;setupParallelMode;parallelModeHook;x))
 
 
+(* ::Input::Initialization:: *)
 parallelModeHook
 
 
+(* ::Input::Initialization:: *)
 setupParallelMode:=Module[{},
 If[$parallelMode,
 CloseKernels[];
@@ -271,12 +332,15 @@ ParallelNeeds["FusionAtlas`"];
 ]
 
 
+(* ::Input::Initialization:: *)
 $parallelMode=False;
 
 
+(* ::Input::Initialization:: *)
 conditionalParallelMap[X___]:=If[$parallelMode===True,ParallelMap[X],Map[X]]
 
 
+(* ::Input::Initialization:: *)
 Clear[parallelRootReduce]
 parallelRootReduce[x_Plus]:=progressiveRootReduce[conditionalParallelMap[progressiveRootReduce,x]]
 parallelRootReduce[x_Times]:=progressiveRootReduce[conditionalParallelMap[progressiveRootReduce,x]]
@@ -287,18 +351,23 @@ parallelRootReduce[x_List] :=conditionalParallelMap[progressiveRootReduce,x]
 parallelRootReduce[x_->y_]:=x->parallelRootReduce[y]
 
 
+(* ::Input::Initialization:: *)
 NaturalQ[n_]:=NonNegative[n]&&IntegerQ[n]
 
 
+(* ::Input::Initialization:: *)
 FindFirst[a_,b_]:=With[{p=Position[a,b,{1},1,Heads->False]},If[Length[p]==0,-1,p[[1,1]]]]
 
 
+(* ::Input::Initialization:: *)
 RealMax[a_] := Max[Cases[a,x_/;Im[x]==0]]
 
 
+(* ::Input::Initialization:: *)
 RealMaxPosition[a_] := FindFirst[a,RealMax[a]]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber>=6.,
 Unprotect[IdentityMatrix];
 IdentityMatrix[0]={};
@@ -306,9 +375,11 @@ Protect[IdentityMatrix];
 ]
 
 
+(* ::Input::Initialization:: *)
 ZeroVector[n_]:=Table[0,{n}]
 
 
+(* ::Input::Initialization:: *)
 If[$VersionNumber<6,
 (UnitVector[n_,i_Integer]/;(1<=i<=n):=Module[{z=Table[0,{n}]},z[[i]]=1;z]);
 (UnitVector[n_,i_Integer]:=Table[0,{n}]),
@@ -318,26 +389,33 @@ Protect[UnitVector];
 ]
 
 
+(* ::Input::Initialization:: *)
 UnitVectorQ[v_?VectorQ]:=Complement[v,{0,1}]=={}\[And]Count[v,1]==1
 
 
+(* ::Input::Initialization:: *)
 ZeroVectorQ[v_?VectorQ]:=Union[v]==={0}\[Or]v=={}
 
 
+(* ::Input::Initialization:: *)
 qFromd[d_]:= cachedRootReduce[(d+Sqrt[d^2-4])/2]
 
 
+(* ::Input::Initialization:: *)
 qInteger[n_][q_]:=RootReduce[Sum[q^i,{i,-n+1,n-1,2}]]
 
 
+(* ::Input::Initialization:: *)
 \[Zeta][n_]:=\[Zeta][n]=With[{p=Evaluate[Cyclotomic[n,#]]&},With[{d=Module[{m},Exponent[p[m],m]]},
 AlgebraicNumber[Root[p,d],{0,1}~Join~Table[0,{d-2}]]]]
 
 
+(* ::Input::Initialization:: *)
 Clear[IdentifyRootOfUnity]
 IdentifyRootOfUnity[z_]:=IdentifyRootOfUnity[z]=Module[{n=1},While[z=!=\[Zeta][n]\[And](n<=2\[Or]z=!=\[Zeta][n][[1]]),n++];n]
 
 
+(* ::Input::Initialization:: *)
 (*Clear[cachedToNumberField]*)
 cachedToNumberField[X_,Y_]:=Module[{result},
 result=ToNumberField[X,Y];
@@ -348,6 +426,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 ToCyclotomicField[X_List]:=ToCyclotomicField[X,1][[1]]
 ToCyclotomicField[X_List?MatrixQ]:=Partition[ToCyclotomicField[Flatten[X]],Length[X[[1]]]]
 ToCyclotomicField[{},n_]:={{},n}
@@ -366,9 +445,11 @@ ToNumberField::nnfel];
 ]
 
 
+(* ::Input::Initialization:: *)
 PrimePowers[n_]:=#[[1]]^#[[2]]&/@FactorInteger[n]
 
 
+(* ::Input::Initialization:: *)
 LiftToCommonCyclotomicField[x_]:=Module[{exponents,N},
 exponents=Union[IdentifyRootOfUnity/@Union[Cases[x,AlgebraicNumber[a_,___]:>a,\[Infinity]]]];
 N=LCM@@({1}~Join~exponents);
@@ -379,22 +460,28 @@ x/.a:AlgebraicNumber[z_,_]:>If[IdentifyRootOfUnity[z]==N,a,AlgebraicNumberPolyno
 ]
 
 
+(* ::Input::Initialization:: *)
 SetAttributes[AlgebraicConjugate,Listable]
 AlgebraicConjugate[n_Integer]:=n
 
 
+(* ::Input::Initialization:: *)
 CyclotomicOrder[x_]:=CyclotomicOrder[x]=Round[(2\[Pi])/Arg[x]]
 
 
+(* ::Input::Initialization:: *)
 AlgebraicConjugate[a:AlgebraicNumber[r_,x_]]/;r==\[Zeta][CyclotomicOrder[r]][[1]]:= AlgebraicConjugate[a]=AlgebraicNumberPolynomial[a,\[Zeta][CyclotomicOrder[r]]^-1]
 AlgebraicConjugate[a:AlgebraicNumber[r_,x_]]:=cachedToNumberField[RootReduce[Conjugate[a]],r]
 AlgebraicConjugate[x:(_Integer|_Rational)]:=x
 
 
+(* ::Input::Initialization:: *)
 UniqueGaloisConjugate[a:AlgebraicNumber[x_,__]]:=ToNumberField[RootReduce[a]/.z:Power[_,1/2]:>-z,x]
 
 
+(* ::Input::Initialization:: *)
 End[];
 
 
+(* ::Input::Initialization:: *)
 EndPackage[];
