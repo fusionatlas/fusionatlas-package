@@ -19,26 +19,33 @@
 
 
 
+(* ::Input::Initialization:: *)
 BeginPackage["FusionAtlas`GraphPlanarAlgebra4`",{"FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`PackageData`","FusionAtlas`Debugging`"}];
 
 
+(* ::Input::Initialization:: *)
 NumberFieldGenerator;EnlargeNumberField;RedefineLopsidedDimension;LopsidedDimension;SphericalDimension;CriticalPointCoefficient;GPA4Element;EmptyGPA4Element;CapTopLeft;PartialTrace;GPA4Trace;GPA4TraceEvaluation;TurnUpBottomRightCorner;TurnDownTopRightCorner;TurnUpBottomLeftCorner;TurnDownTopLeftCorner;RotateOneClick;RotateTwoClicks;GPAFourierTransform;GPAFourierTransformTwice;AddStrandOnRight;AddStrandOnLeft;AddStrandsOnLeft;GPAMultiply;GPAConjugate;GPACoefficients;GPACoefficientsAtStar;VariableGPA4Element;GPA4Matrix;GPATensor;GPAInverse;Rotate\[Pi]Clockwise;Rotate\[Pi]Counterclockwise;GPAMultiplyWithOffset;PivotalStructure;ConnectionGrid;StrandCrossingAbove;StrandCrossingBelow;TwoStrandFlatness;OneStrandFlatness;FusionRulesFromConnection;LowestWeightEigenvectorConditions;LowestWeightConditions;CollectGPA4Matrix;CollectGPA4Element;LowestWeightEigenspace;LowestWeightSpace;LoadLowestWeightEigenspaces;ChangePivotalStructure;NumberFieldGauge;FindEquationsForFlatGenerators;FindFlatGenerators;FindFlatLowestWeightVectors;qInteger\[Delta];JonesWenzlIdempotent;LoadIdempotents;S2Equation;RowReducedS2Equation;S2Solutions;IdentityTL;OneCupTL;OneCupJonesWenzl;SomeOneCupJonesWenzl;AnnularConsequences;GPACirc;GPAStar;GaugeTransform; GaugeAction; VariableGaugeElement; FindGaugeElementRelating;WenzlRecursion;
 
 
+(* ::Input::Initialization:: *)
 progressiveRootReduce[x_GPA4Element]:= MapAt[progressiveRootReduce,x,-1]
 parallelRootReduce[x_GPA4Element]:= MapAt[parallelRootReduce,x,-1]
 
 
+(* ::Input::Initialization:: *)
 Begin["`Private`"];
 
 
+(* ::Input::Initialization:: *)
 NumberFieldGenerator[g:{_BigraphWithDuals,_BigraphWithDuals}]:=NumberFieldGenerator[g]=RootReduce[Sqrt[2-ReducedDimensionOfGenerator[g[[1,1]]]^2]]
 
 
+(* ::Input::Initialization:: *)
 ToNumberField0[x_?NumericQ,y_?NumericQ]:=(ToNumberField[RootReduce[x],y])
 ToNumberField0[x_,y_]:=x
 
 
+(* ::Input::Initialization:: *)
 EnlargeNumberField[g:{_BigraphWithDuals,_BigraphWithDuals}][x_?NumericQ]:=Module[{},
 (*Off[ToNumberField::"nnfel"];*)
 Switch[ToNumberField0[x,NumberFieldGenerator[g]],
@@ -53,6 +60,7 @@ NumberFieldGenerator[g]
 ]
 
 
+(* ::Input::Initialization:: *)
 RedefineLopsidedDimension[]:=(
 Clear[LopsidedDimension];
 LopsidedDimension[g:{_BigraphWithDuals,_BigraphWithDuals},Vertex[i_,j_,d_,k_]]:=LopsidedDimension[g,Vertex[i,j,d,k]]=
@@ -62,29 +70,36 @@ ToNumberField0[RootReduce[Switch[{i,j},{0,0},1,{0,1},1/\[Delta],{1,1},1,{1,0},\[
 )
 
 
+(* ::Input::Initialization:: *)
 RedefineLopsidedDimension[]
 
 
+(* ::Input::Initialization:: *)
 Clear[SphericalDimension]
 
 
+(* ::Input::Initialization:: *)
 SphericalDimension[g:{_BigraphWithDuals,_BigraphWithDuals},Vertex[i_,j_,d_,k_]]:=SphericalDimension[g,Vertex[i,j,d,k]]=ReducedDimensionsByDepth[g[[i+1,1]]][[d+1,k]]
 
 
 
+(* ::Input::Initialization:: *)
 CriticalPointCoefficient[G:{_BigraphWithDuals,_BigraphWithDuals},sign_,above_Vertex,below_Vertex,pivotalStructure:("Spherical"|"Lopsided")]:=Switch[pivotalStructure,
 "Spherical",(Sqrt[SphericalDimension[G,above]])^sign (Sqrt[SphericalDimension[G,below]])^-sign,
 "Lopsided",LopsidedDimension[G,above]^sign
 ]
 
 
+(* ::Input::Initialization:: *)
 EmptyGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{0,0}|{0,1}|{1,1}|{1,0},pivotalStructure:("Spherical"|"Lopsided")]:=GPA4Element[g,{over},{0,0},pivotalStructure,#->1&/@GraphLoops[g,{over}]]
 
 
+(* ::Input::Initialization:: *)
 otherLoopsZero[n_]:={RepeatedSequence[_Vertex,_Integer,{n}]}->0
 otherLoopsZero[0]:={_Vertex}->0
 
 
+(* ::Input::Initialization:: *)
 CapTopLeft[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]]/;up>=2\[And]up+down>=4\[And]over[[1]]==over[[3]]:=
 With[{dispatch=Dispatch[coefficients~Join~{otherLoopsZero[down+up]}]},
 ExpandCoefficientRules[
@@ -93,6 +108,7 @@ GPA4Element[g,Drop[over,2],{down,up-2},pivotalStructure,{{a_Vertex,na_Integer,z_
 ]
 
 
+(* ::Input::Initialization:: *)
 CapTopLeft[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{0,2},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]]/;over[[1]]==over[[3]]:=
 With[{dispatch=Dispatch[coefficients~Join~{otherLoopsZero[2]}]},
 ExpandCoefficientRules[
@@ -101,12 +117,15 @@ GPA4Element[g,Drop[over,2],{0,0},pivotalStructure,{{a_Vertex}:>Plus@@((CriticalP
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[PartialTrace]
 
 
+(* ::Input::Initialization:: *)
 (* Note; the implementation below doesn't seem to work when one of up and down is 1 *)
 
 
+(* ::Input::Initialization:: *)
 PartialTrace[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]]/;(up>1&&down>1)\[And]over[[up]]==over[[up+2]]:=
 With[{dispatch=Dispatch[coefficients~Join~{otherLoopsZero[down+up]}]},
 ExpandCoefficientRules[
@@ -115,6 +134,7 @@ GPA4Element[g,Drop[over,{up+1,up+2}],{down-1,up-1},pivotalStructure,{{A:Repeated
 ]
 
 
+(* ::Input::Initialization:: *)
 PartialTrace[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{1,1},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]]:=
 With[{dispatch=Dispatch[coefficients~Join~{otherLoopsZero[2]}]},
 ExpandCoefficientRules[
@@ -123,58 +143,81 @@ GPA4Element[g,Drop[over,{2,3}],{0,0},pivotalStructure,{{v_Vertex}:>Plus@@((Criti
 ]
 
 
+(* ::Input::Initialization:: *)
 GPA4Trace[A:GPA4Element[_,_,{k_,k_},_,_]]:=Nest[PartialTrace,A,k]
 
 
+(* ::Input::Initialization:: *)
 GPA4TraceEvaluation[A:GPA4Element[_,_,{k_,k_},_,_]]:=With[{coeffs=GPACoefficients[GPA4Trace[A]]},
 Union[cachedRootReduce[coeffs]]/.{{x_}:>(coeffs[[1]]/.{y_AlgebraicNumber:>y,y_:>RootReduce[y]}),_:>(Print["0-box didn't have constant values"];Abort[])}
 ]
 
 
+(* ::Input::Initialization:: *)
 RepeatedSequence[A__,repeat:(_Integer|{_Integer}|{_Integer,_Integer}):\[Infinity]]:=Repeated[PatternSequence[A],repeat]
 
 
+(* ::Input::Initialization:: *)
 TurnUpBottomRightCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;down>=1]:=
 GPA4Element[g,over,{down-1,up+1},pivotalStructure,
 coefficients/.({A:RepeatedSequence[_Vertex,_Integer,{up}],v_Vertex,n_Integer,B___}->\[Zeta]_):>({A,v,n,B}->\[Zeta] CriticalPointCoefficient[g,1,v,{B,A}[[1]],pivotalStructure])
 ]
 
 
+(* ::Input::Initialization:: *)
+TurnUpBottomRightCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;down>=1]:=
+Module[{transform},
+transform[{A:RepeatedSequence[_Vertex,_Integer,{up}],v_Vertex,n_Integer,B___}->\[Zeta]_]:=({A,v,n,B}->\[Zeta] CriticalPointCoefficient[g,1,v,{B,A}[[1]],pivotalStructure]);
+GPA4Element[g,over,{down-1,up+1},pivotalStructure,
+transform/@coefficients
+]
+]
+
+
+(* ::Input::Initialization:: *)
 TurnDownTopRightCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;up>=1]:=
 GPA4Element[g,over,{down+1,up-1},pivotalStructure,coefficients/.({A:RepeatedSequence[_Vertex,_Integer,{up-1}],v_Vertex,n_Integer,B___}->\[Zeta]_):>({A,v,n,B}->\[Zeta] CriticalPointCoefficient[g,-1,v,{B,A}[[1]],pivotalStructure])
 ]
 
 
+(* ::Input::Initialization:: *)
 TurnUpBottomLeftCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;down>=1]:=
 GPA4Element[g,{over[[-2]]}~Join~Most[over],{down-1,up+1},pivotalStructure,
 coefficients/.({a_Vertex,na_Integer,B___,b_Vertex,nb_Integer}->\[Zeta]_):>({b,nb,a,na,B}->\[Zeta] CriticalPointCoefficient[g,1,a,b,pivotalStructure])
 ]
 
 
+(* ::Input::Initialization:: *)
 TurnDownTopLeftCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;up>=1]:=
 GPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
 coefficients/.({a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_):>({b,nb,B,a,na}->\[Zeta] CriticalPointCoefficient[g,-1,b,a,pivotalStructure])]
 
 
+(* ::Input::Initialization:: *)
 (*RotateOneClick is the WRONG rotation by QuadraticTangles standards. It moves the external star clockwise. *)
 RotateOneClick[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;up>=1]:=TurnUpBottomRightCorner[TurnDownTopLeftCorner[k]]
 
 
+(* ::Input::Initialization:: *)
 RotateOneClick[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,0},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;down>=1]:=TurnDownTopLeftCorner[TurnUpBottomRightCorner[k]]
 
 
+(* ::Input::Initialization:: *)
 (*Also rotates the wrong way.*)
 RotateTwoClicks[k_GPA4Element]:=RotateOneClick[RotateOneClick[k]]
 
 
+(* ::Input::Initialization:: *)
 (*GPAFourierTranform is the other one click rotation (the right one that rotates counterclockwise *)
 GPAFourierTransform[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;up>=1]:=TurnUpBottomLeftCorner[TurnDownTopRightCorner[k]]
 GPAFourierTransform[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,0},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;down>=1]:=TurnDownTopRightCorner[TurnUpBottomLeftCorner[k]]
 
 
+(* ::Input::Initialization:: *)
 GPAFourierTransformTwice[k_GPA4Element]:=GPAFourierTransform[GPAFourierTransform[k]]
 
 
+(* ::Input::Initialization:: *)
 AddStrandOnRight[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_],newOver:{0,0}|{0,1}|{1,1}|{1,0}]:=Module[{dispatch},
 dispatch=Dispatch[coefficients~Join~{otherLoopsZero[down+up]}];
 ExpandCoefficientRules[GPA4Element[g,Take[over,up+1]~Join~{newOver}~Join~Drop[over,up],{down+1,up+1},pivotalStructure,
@@ -187,6 +230,7 @@ Switch[{down,up},
 ]
 
 
+(* ::Input::Initialization:: *)
 AddStrandsOnLeft[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_],newOvers:{({0,0}|{0,1}|{1,1}|{1,0})..}]:=Module[{dispatch,k},
 k=Length[newOvers];
 dispatch=Dispatch[coefficients~Join~{otherLoopsZero[down+up]}];
@@ -195,15 +239,19 @@ ExpandCoefficientRules[GPA4Element[g,newOvers~Join~over~Join~Reverse[newOvers],{
 ]]]
 
 
+(* ::Input::Initialization:: *)
 AddStrandsOnLeft[A_GPA4Element,{}]:=A
 
 
+(* ::Input::Initialization:: *)
 AddStrandOnRight[A_GPA4Matrix,over_]:=GPA4Matrix[AddStrandOnRight[GPA4Element[A],over]]
 
 
+(* ::Input::Initialization:: *)
 Clear[GPAMultiply]
 
 
+(* ::Input::Initialization:: *)
 GPAMultiply[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},overBelow:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,middle_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients1_],GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},overAbove:{({0,0}|{0,1}|{1,1}|{1,0})...},{middle_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients2_]]/;Take[overBelow,middle+1]==Reverse[Take[overAbove,-middle-1]]:=
 Module[{dispatch1,dispatch2,expand},
 expand=If[!(MemberQ[coefficients1,{Except[Vertex[_,_,0,1]],___}->_]\[And]MemberQ[coefficients2,{Except[Vertex[_,_,0,1]],___}->_]),
@@ -224,21 +272,27 @@ Switch[{down,middle,up},
 ]
 
 
+(* ::Input::Initialization:: *)
 GPAMultiply[x_,y_,Z__]:=GPAMultiply[GPAMultiply[x,y],Z]
 
 
+(* ::Input::Initialization:: *)
 GPAConjugate[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},overs:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:"Lopsided",coefficients_]]:=GPA4Element[g,Reverse[overs],{up,down},pivotalStructure,coefficients/.(a_->b_):>(ReverseLoop[a]->(If[down>=2,Times@@(Power[LopsidedDimension[g,#],-1]&/@a[[3;;2down-1;;2]]),1])(If[up>=2,Times@@(LopsidedDimension[g,#]&/@a[[-2;;2-2up;;-2]]),1])conjugate[b])]
 
 
+(* ::Input::Initialization:: *)
 GPAConjugate[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},overs:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:"Spherical",coefficients_]]:=GPA4Element[g,Reverse[overs],{up,down},pivotalStructure,coefficients/.(a_->b_):>(ReverseLoop[a]->conjugate[b])]
 
 
+(* ::Input::Initialization:: *)
 GPAConjugate[A_GPA4Matrix]:=GPA4Matrix[GPAConjugate[GPA4Element[A]]]
 
 
+(* ::Input::Initialization:: *)
 Clear[conjugate]
 
 
+(* ::Input::Initialization:: *)
 conjugate[a_Times]:=conjugate/@a
 conjugate[b_Plus]:=conjugate/@b
 conjugate[Exp[x_]]:=Exp[conjugate[x]]
@@ -248,21 +302,26 @@ conjugate[x_AlgebraicNumber]:=ToNumberField[Conjugate[x],x[[1]]]
 conjugate[x_?NumericQ]:=Conjugate[x]
 
 
+(* ::Input::Initialization:: *)
 conjugate[conjugate[x_]]:=x
 
 
+(* ::Input::Initialization:: *)
 GaugeTransform[GPA4Element[g_,over_,{down_,up_},pivotalStructure:("Spherical"|"Lopsided"),values_],\[Mu]_]:=GPA4Element[g,over,{down,up},pivotalStructure,values/.(path_->coefficient_):>(path->(Times@@((\[Mu]@@#)&/@Partition[path~Join~{First[path]},3,2]))coefficient)]
 
 
+(* ::Input::Initialization:: *)
 GPA4Element/:z_ GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]:=GPA4Element[g,over,{down,up},pivotalStructure,coefficients/.(loop_List->\[Zeta]_):>(loop->z \[Zeta])]
 
 
+(* ::Input::Initialization:: *)
 GPA4Element/:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients1_List]+GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients2_List]:=
 With[{dispatch1=Dispatch[coefficients1~Join~{otherLoopsZero[up+down]}],dispatch2=Dispatch[coefficients2~Join~{otherLoopsZero[up+down]}],loops=Union[First/@coefficients1,First/@coefficients2]},
 GPA4Element[g,over,{down,up},pivotalStructure,Thread[loops->(loops/.dispatch1)+(loops/.dispatch2)]]
 ]
 
 
+(* ::Input::Initialization:: *)
 ExpandCoefficientRules[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]]:=Module[{result},
 expansionCounter=0;
 DebugPrint[".... expanding coefficients (",Length[GraphLoops[g,over]],")"];
@@ -273,6 +332,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 ExpandCoefficientRulesAtStar[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]]:=Module[{result,loopsAtStar},
 loopsAtStar=Select[GraphLoops[g,over],#[[1]]==Vertex[0,0,0,1]&];
 expansionCounter=0;
@@ -284,26 +344,32 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 GPACoefficients[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_List]]:=GraphLoops[g,over]/.Dispatch[coefficients~Join~{otherLoopsZero[up+down]}]
 
 
+(* ::Input::Initialization:: *)
 GPACoefficientsAtStar[X:GPA4Element[G_,overs_,updown_,ps_,rules_]]/;overs[[1]]=={0,0}:=Module[{loops},
 loops=Select[GraphLoops[G,overs],#[[1]]==Vertex[0,0,0,1]&];
 loops/.X[[5]]/.{{_Vertex,__}->0}
 ]
 
 
+(* ::Input::Initialization:: *)
 GPACoefficients[A:GPA4Matrix[xx__,matrices_]]:=GPACoefficients[GPA4Element[A]]
 
 
+(* ::Input::Initialization:: *)
 VariableGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{0,0},pivotalStructure:("Spherical"|"Lopsided"),f_]:=
 ExpandCoefficientRules[GPA4Element[g,over,{0,0},pivotalStructure,{loop:{_Vertex}:>f[loop]}]]
 
 
+(* ::Input::Initialization:: *)
 VariableGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),f_]/;up+down>=2:=
 ExpandCoefficientRules[GPA4Element[g,over,{down,up},pivotalStructure,{loop:{PatternSequence[_Vertex,_Integer]..}:>f[loop]}]]
 
 
+(* ::Input::Initialization:: *)
 GPA4Matrix[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values_]]:=
 Module[{initialVertices,finalVertices,pathsList,matrices,coefficients},
 coefficients=(values~Join~{otherLoopsZero[up+down]});
@@ -315,25 +381,31 @@ GPA4Matrix[g,over,{down,up},pivotalStructure,matrices]
 ]
 
 
+(* ::Input::Initialization:: *)
 GraphPathToGraphLoop[{v_Vertex}]:={v}
 GraphPathToGraphLoop[{v_Vertex,o___,v_Vertex}]:={v,o}
 
 
+(* ::Input::Initialization:: *)
 GPA4Matrix/:GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overBelow:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,middle_Integer},pivotalStructure:("Spherical"|"Lopsided"),values1_].GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overAbove:{({0,0}|{0,1}|{1,1}|{1,0})...},{middle_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values2_]:=
 GPA4Matrix[g,Take[overAbove,up]~Join~Take[overBelow,-down-1],{down,up},pivotalStructure,(#[[1,1]]->#[[2,2]].#[[1,2]])&/@Transpose[{values1,values2}]]
 
 
+(* ::Input::Initialization:: *)
 GPA4Matrix/:GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values1_]+GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values2_]:=
 GPA4Matrix[g,over,{down,up},pivotalStructure,(#[[1,1]]->#[[2,2]]+#[[1,2]])&/@Transpose[{values1,values2}]]
 
 
+(* ::Input::Initialization:: *)
 GPA4Matrix/:\[Alpha]_ GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values_]:=
 GPA4Matrix[g,over,{down,up},pivotalStructure,(#[[1]]->\[Alpha] #[[2]])&/@values]
 
 
+(* ::Input::Initialization:: *)
 AddStrandOnRight[m_GPA4Matrix,newOver_]:=GPA4Matrix[AddStrandOnRight[GPA4Element[m],newOver]]
 
 
+(* ::Input::Initialization:: *)
 GPA4Element[GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_,up_},pivotalStructure:("Spherical"|"Lopsided"),values_]]:=
 GPA4Element[g,over,{down,up},pivotalStructure,DeleteCases[Flatten[values/.({initial_Vertex,final_Vertex}->matrix_):>
 With[{
@@ -346,27 +418,32 @@ MapThread[Rule,{Outer[GraphPathToGraphLoop[ConcatenatePaths[#1,Reverse[#2]]]&,up
 ],_->0]]
 
 
+(* ::Input::Initialization:: *)
 GPAMultiply[GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overBelow:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,middle_Integer},pivotalStructure:("Spherical"|"Lopsided"),matrices1_],GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overAbove:{({0,0}|{0,1}|{1,1}|{1,0})...},{middle_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),matrices2_]]/;Take[overBelow,middle+1]==Reverse[Take[overAbove,-middle-1]]:=
 GPA4Matrix[g,Take[overAbove,up+1]~Join~Take[overBelow,-down],{down,up},pivotalStructure,
 matrices1[[All,1]]/.{p:{_Vertex,_Vertex}:>(If[Length[p/.matrices1]>10,DebugPrint["multiplying matrices: ",p,", size: ",Length[p/.matrices1]]];(p->(p/.matrices1).(p/.matrices2)))}
 ]
 
 
+(* ::Input::Initialization:: *)
 TurnDownTopLeftCorner[m_GPA4Matrix]:=GPA4Matrix[TurnDownTopLeftCorner[GPA4Element[m]]]
 TurnDownTopRightCorner[m_GPA4Matrix]:=GPA4Matrix[TurnDownTopRightCorner[GPA4Element[m]]]
 TurnUpBottomLeftCorner[m_GPA4Matrix]:=GPA4Matrix[TurnUpBottomLeftCorner[GPA4Element[m]]]
 TurnUpBottomRightCorner[m_GPA4Matrix]:=GPA4Matrix[TurnUpBottomRightCorner[GPA4Element[m]]]
 
 
+(* ::Input::Initialization:: *)
 RotateOneClick[m_GPA4Matrix]:=GPA4Matrix[RotateOneClick[GPA4Element[m]]]
 GPAFourierTransform[m_GPA4Matrix]:=GPA4Matrix[GPAFourierTransform[GPA4Element[m]]]
 
 
+(* ::Input::Initialization:: *)
 PartialTrace[m_GPA4Matrix]:=GPA4Matrix[PartialTrace[GPA4Element[m]]]
 GPA4Trace[m_GPA4Matrix]:=GPA4Trace[GPA4Element[m]]
 GPA4TraceEvaluation[m_GPA4Matrix]:=GPA4TraceEvaluation[GPA4Element[m]]
 
 
+(* ::Input::Initialization:: *)
 GPA4Element[G:{BigraphWithDuals[g_GradedBigraph,_DualData],_BigraphWithDuals},GPAElement[g_,False,{down_,up_},coefficients_]]/;PivotalStructure=="Lopsided":=Module[{bump},
 bump[Vertex[i_,j_]]:=Vertex[0,Mod[i,2],i,j];
 bump[l_List]:=bump/@l;
@@ -375,21 +452,27 @@ GPA4Element[G,Flatten[Table[{{0,0},{0,1}},{(up+down)/2}],1]~Join~{{0,0}},{down,u
 ]
 
 
+(* ::Input::Initialization:: *)
 GPATensor[A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over1_,{down1_Integer,up1_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients1_],B:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over2_,{down2_Integer,up2_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients2_]]/;over1[[up1+1]]==over2[[1]]:=TurnUpBottomRightCorner[TurnDownTopLeftCorner[GPAMultiply[TurnDownTopRightCorner[B,up2],TurnUpBottomLeftCorner[A,down1]],down1],up2]
 
 
+(* ::Input::Initialization:: *)
 GPAInverse[A:GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},over_,{k_,k_},pivotalStructure:("Spherical"|"Lopsided"),matrices_]]:=GPA4Matrix[g,Reverse[over],{k,k},pivotalStructure,matrices/.(p_->m_):>(p->Inverse[m])]
 
 
+(* ::Input::Initialization:: *)
 GPAInverse[A_GPA4Element]:=GPA4Element[GPAInverse[GPA4Matrix[A]]]
 
 
+(* ::Input::Initialization:: *)
 Rotate\[Pi]Clockwise[A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=TurnDownTopRightCorner[TurnUpBottomLeftCorner[A,down],up]
 
 
+(* ::Input::Initialization:: *)
 Rotate\[Pi]Counterclockwise[A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=TurnDownTopLeftCorner[TurnUpBottomRightCorner[A,down],up]
 
 
+(* ::Input::Initialization:: *)
 TurnDownTopRightCorner[X_,k_]/;k>=0:=Nest[TurnDownTopRightCorner,X, k]
 TurnDownTopRightCorner[X_,k_]/;k<0:=Nest[TurnUpBottomRightCorner,X, -k]
 TurnDownTopLeftCorner[X_,k_]/;k>=0:=Nest[TurnDownTopLeftCorner,X, k]
@@ -400,12 +483,15 @@ TurnUpBottomLeftCorner[X_,k_]/;k>=0:=Nest[TurnUpBottomLeftCorner,X, k]
 TurnUpBottomLeftCorner[X_,k_]/;k<0:=Nest[TurnDownTopLeftCorner,X, -k]
 
 
+(* ::Input::Initialization:: *)
 Clear[GPAMultiplyWithOffset]
 
 
+(* ::Input::Initialization:: *)
 (* Positive k shifts the lower factor to the right *)
 
 
+(* ::Input::Initialization:: *)
 GPAMultiplyWithOffset[lower:GPA4Element[g_,_,{down1_,up1_},pivotalStructure:("Spherical"|"Lopsided"),_],upper:GPA4Element[g_,_,{down2_,up2_},pivotalStructure:("Spherical"|"Lopsided"),_],k_]/;k>=0\[And]k+up1>=down2:=GPAMultiplyWithOffset[lower,upper,k]=Module[{result},
 DebugPrint["beginning GPAMultiplyWithOffset"];
 result=TurnDownTopLeftCorner[TurnUpBottomRightCorner[GPAMultiply[TurnDownTopRightCorner[lower,k+up1-down2],TurnUpBottomLeftCorner[upper,k]],k+up1-down2],k];
@@ -414,6 +500,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 GPAMultiplyWithOffset[lower:GPA4Element[g_,_,{down1_,up1_},pivotalStructure:("Spherical"|"Lopsided"),_],upper:GPA4Element[g_,_,{down2_,up2_},pivotalStructure:("Spherical"|"Lopsided"),_],k_]/;k>=0\[And]k+up1<down2:=GPAMultiplyWithOffset[lower,upper,k]=Module[{result},
 DebugPrint["beginning GPAMultiplyWithOffset"];
 result=TurnDownTopLeftCorner[TurnDownTopRightCorner[GPAMultiply[lower,TurnUpBottomRightCorner[TurnUpBottomLeftCorner[upper,k],down2-k-up1]],down2-k-up1],k];
@@ -422,6 +509,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 GPAMultiplyWithOffset[lower:GPA4Element[g_,_,{down1_,up1_},pivotalStructure:("Spherical"|"Lopsided"),_],upper:GPA4Element[g_,_,{down2_,up2_},pivotalStructure:("Spherical"|"Lopsided"),_],k_]/;k<0\[And]-k+down2>=up1:=GPAMultiplyWithOffset[lower,upper,k]=Module[{result},
 DebugPrint["beginning GPAMultiplyWithOffset"];
 result=TurnDownTopRightCorner[TurnUpBottomLeftCorner[GPAMultiply[TurnDownTopLeftCorner[lower,-k],TurnUpBottomRightCorner[upper,-k+down2-up1]],-k],-k+down2-up1];
@@ -430,6 +518,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 GPAMultiplyWithOffset[lower:GPA4Element[g_,_,{down1_,up1_},pivotalStructure:("Spherical"|"Lopsided"),_],upper:GPA4Element[g_,_,{down2_,up2_},pivotalStructure:("Spherical"|"Lopsided"),_],k_]/;k<0\[And]-k+down2<up1:=GPAMultiplyWithOffset[lower,upper,k]=Module[{result},
 DebugPrint["beginning GPAMultiplyWithOffset"];
 result=TurnUpBottomRightCorner[TurnUpBottomLeftCorner[GPAMultiply[TurnDownTopRightCorner[TurnDownTopLeftCorner[lower,-k],up1+k-down2],upper],-k],up1+k-down2];
@@ -438,32 +527,40 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 simplifyCoefficients[x_,pivotalStructure:("Spherical"|"Lopsided")]:=Switch[pivotalStructure,"Spherical",RootReduce[x],"Lopsided",If[MatchQ[x,_AlgebraicNumber|_Integer|_Rational|_Real],x,Print["Panic --- not an AlgebraicNumber: ",x];Abort[]]]
 
 
+(* ::Input::Initialization:: *)
 Clear[ConnectionGrid]
 
 
+(* ::Input::Initialization:: *)
 ss[{0,0}]={0,1};ss[{0,1}]={1,1};ss[{1,1}]={1,0};ss[{1,0}]={0,0};
 pp[{0,0}]={1,0};pp[{1,0}]={1,1};pp[{1,1}]={0,1};pp[{0,1}]={0,0};
 
 
+(* ::Input::Initialization:: *)
 PivotalStructure[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=pivotalStructure
 
 
+(* ::Input::Initialization:: *)
 ConnectionGrid[conn_][1,1,{0,0},1]:=conn
 ConnectionGrid[conn_][1,1,{0,0},-1]:=If[PivotalStructure[conn]=="Spherical",GPAConjugate[conn],GPAInverse[conn]]
 
 
+(* ::Input::Initialization:: *)
 ConnectionGrid[conn_][1,1,start_,orientation_]:=ConnectionGrid[conn][1,1,start,orientation]=TurnUpBottomRightCorner[TurnDownTopLeftCorner[ConnectionGrid[conn][1,1,Switch[orientation,1,pp,-1,ss][start],orientation]]]/.(x_->y_):>(x->simplifyCoefficients[y,PivotalStructure[conn]])
 
 
+(* ::Input::Initialization:: *)
 ConnectionGrid[conn_][1,k_,start_,orientation_]/;k>=2:=ConnectionGrid[conn][1,k,start,orientation]=Module[{},
 DebugPrint["Computing ConnectionGrid for 1, ",k, ", ",start,", ",orientation];
 GPAMultiplyWithOffset[ConnectionGrid[conn][1,1,Switch[{Mod[k,2],orientation},{1,_},start,{0,1},pp[start],{0,-1},ss[start]],(-1)^(k-1) orientation],ConnectionGrid[conn][1,k-1,start,orientation],k-1]/.(x_->y_):>(x->simplifyCoefficients[y,PivotalStructure[conn]])
 ]
 
 
+(* ::Input::Initialization:: *)
 ConnectionGrid[conn_][j_,k_,start_,orientation_]/;j>=2:=ConnectionGrid[conn][j,k,start,orientation]=Module[{},
 simplifyCounter=0;
 DebugPrint["Computing ConnectionGrid for ",j, ", ",k, ", ",start,", ",orientation];
@@ -471,19 +568,23 @@ GPAMultiplyWithOffset[ConnectionGrid[conn][j-1,k,start,orientation],ConnectionGr
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[StrandCrossingAbove]
 
 
+(* ::Input::Initialization:: *)
 StrandCrossingAbove[conn_][A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})},{0,0},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=Module[{newOver=over[[1]]/.{{0,0}->{1,0},{0,1}->{1,1},{1,1}->{0,1},{1,0}->{0,0}}},
 AddStrandOnRight[A,newOver]
 ]
 
 
+(* ::Input::Initialization:: *)
 StrandCrossingAbove[conn_][A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,0},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=Module[{newOver=ss[ss[over[[2]]]]},
 AddStrandOnRight[A,newOver]
 ]
 
 
+(* ::Input::Initialization:: *)
 StrandCrossingAbove[conn_][A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]/;up>=1:=Module[{firstOrientation,newOver,strandOnRight,connections,offsets},
 DebugPrint["Starting StrandCrossingAbove on ",Append[Most[A],"..."]];
 firstOrientation=If[ss[over[[up+1]]]==over[[up]],1,-1];
@@ -499,28 +600,35 @@ Fold[GPAMultiplyWithOffset[#1,#2[[1]],#2[[2]]]&,strandOnRight,Transpose[{connect
 ]
 
 
+(* ::Input::Initialization:: *)
 StrandCrossingBelow[conn_][A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=Rotate\[Pi]Counterclockwise[StrandCrossingAbove[conn][Rotate\[Pi]Clockwise[A]]]
 
 
+(* ::Input::Initialization:: *)
 (*This bad implementation prepares a giant grid first *)
 (*Flatness[conn_][A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{{0,0},({0,0}|{0,1})..},{0,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=
 GPAMultiply[A,TurnUpBottomRightCorner[TurnUpBottomRightCorner[ConnectionGrid[conn][2,up,{0,0},-1]]]]- TurnUpBottomLeftCorner[TurnUpBottomLeftCorner[AddStrandOnRight[AddStrandOnRight[A,{1,0}],{0,0}]]]*)
 
 
+(* ::Input::Initialization:: *)
 (* FIXME: replace the constants passed to AddStrandOnRight. *)
 
 
+(* ::Input::Initialization:: *)
 TwoStrandFlatness[conn_][A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{{0,0},({0,0}|{0,1})..},{0,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]]:=
 TurnUpBottomLeftCorner[StrandCrossingAbove[conn][TurnDownTopLeftCorner[StrandCrossingAbove[conn][A]]]]- TurnUpBottomLeftCorner[TurnDownTopRightCorner[AddStrandOnRight[AddStrandOnRight[A,{1,0}],{0,0}],2],2]
 
 
+(* ::Input::Initialization:: *)
 OneStrandFlatness[conn_][A_GPA4Element,B_GPA4Element]:=
 StrandCrossingAbove[conn][A]-StrandCrossingBelow[conn][B]
 
 
+(* ::Input::Initialization:: *)
 Clear[FusionRulesFromConnection]
 
 
+(* ::Input::Initialization:: *)
 FusionRulesFromConnection[G_,conn_][a_Vertex,b_Vertex,c_Vertex]/;(a[[2]]==b[[1]]\[And]a[[1]]==c[[1]]\[And]b[[2]]==c[[2]]):=
 Module[{star,starover,overa,overb,overac,overbc,pa,pb,psac,psbc,grid1,grid2,loops},
 starover={a[[2]],a[[2]]};
@@ -544,6 +652,7 @@ Plus@@((#/.grid1[[-1]])(ReverseLoop[#]/.grid2[[-1]])&/@loops)
 ]
 
 
+(* ::Input::Initialization:: *)
 SolveTwoTermEquations[conditions_,variablePattern_,variablePreferenceFunction_:(#&)]:=
 Module[{constantConditions,oneVariableConditions,twoVariableConditions,sortedConditions,condition,targetVariable,solutions},
 sortedConditions=conditions;
@@ -572,12 +681,15 @@ sortedConditions
 ]
 
 
+(* ::Input::Initialization:: *)
 VertexPreferences[g_GradedBigraph][Vertex[i_,j_,d_,k_]]:=-LopsidedDimension[g,Vertex[i,j,d,k]]+0.1 k+0.01d
 
 
+(* ::Input::Initialization:: *)
 LoopPreferences[g_][loop_]:=Table[1.+.01k,{k,1,Length[loop]/2}].(VertexPreferences[g]/@loop[[;;;;2]])
 
 
+(* ::Input::Initialization:: *)
 LowestWeightEigenvectorConditions[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values_],\[Lambda]0_]/;up>=2:=
 Module[{\[Lambda]=If[NumericQ[\[Lambda]0],ToNumberField[RootReduce[\[Lambda]0],NumberFieldGenerator[k[[1]]]],\[Lambda]0]},
 If[pivotalStructure=="Lopsided",EnlargeNumberField[k[[1]]][\[Lambda]]];
@@ -587,24 +699,30 @@ If[pivotalStructure=="Lopsided",EnlargeNumberField[k[[1]]][\[Lambda]]];
 ]
 
 
+(* ::Input::Initialization:: *)
 LowestWeightEigenvectorConditions[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{1,1},pivotalStructure:("Spherical"|"Lopsided"),values_],\[Lambda]0_]:=LowestWeightEigenvectorConditions[TurnUpBottomLeftCorner[k]]
 
 
+(* ::Input::Initialization:: *)
 LowestWeightEigenvectorConditions[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{0,0},pivotalStructure:("Spherical"|"Lopsided"),values_],\[Lambda]0_]:={}
 
 
+(* ::Input::Initialization:: *)
 LowestWeightConditions[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values_]]/;up>=2:=
 Module[{},
 Join@@(GPACoefficients[CapTopLeft[#]]&/@NestList[RotateOneClick,k,up+down-1])
 ]
 
 
+(* ::Input::Initialization:: *)
 LowestWeightConditions[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{1,1},pivotalStructure:("Spherical"|"Lopsided"),values_]]:=LowestWeightConditions[TurnUpBottomLeftCorner[k]]
 
 
+(* ::Input::Initialization:: *)
 LowestWeightConditions[k:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{0,0},pivotalStructure:("Spherical"|"Lopsided"),values_]]:={}
 
 
+(* ::Input::Initialization:: *)
 SparseMatrixSolve[conditions_,variablePattern_,variablePreferenceFunction_:(#&)]:=
 Module[{variables=SortBy[Union[Cases[conditions,variablePattern,\[Infinity]]],variablePreferenceFunction],arrays,matrix,nullspace},
 (*matrix=SparseArray[{i_,j_}\[RuleDelayed]Coefficient[conditions\[LeftDoubleBracket]i\[RightDoubleBracket],variables\[LeftDoubleBracket]j\[RightDoubleBracket]],{Length[conditions],Length[variables]}];*)
@@ -619,21 +737,26 @@ Thread[variables->#]&/@nullspace
 ]
 
 
+(* ::Input::Initialization:: *)
 ManyTermSparseMatrixSolve[conditions_,variablePattern_,variablePreferenceFunction_:(#&)]:=
 SparseMatrixSolve[SolveTwoTermEquations[conditions,variablePattern,variablePreferenceFunction],variablePattern,variablePreferenceFunction]
 
 
+(* ::Input::Initialization:: *)
 CollectGPA4Matrix[GPA4Matrix[xx__,matrices_],p_]:=GPA4Matrix[xx,matrices/.((v_->m_):>(v->Collect[m,p,Together]))]
 CollectGPA4Matrix[GPA4Matrix[xx__,matrices_],p_,f_]:=GPA4Matrix[xx,matrices/.((v_->m_):>(v->Collect[m,p,f]))]
 
 
+(* ::Input::Initialization:: *)
 CollectGPA4Element[GPA4Element[xx__,values_],p_]:=GPA4Element[xx,values/.((v_->m_):>(v->Collect[m,p,Together]))]
 CollectGPA4Element[GPA4Element[xx__,values_],p_,f_]:=GPA4Element[xx,values/.((v_->m_):>(v->Collect[m,p,f]))]
 
 
+(* ::Input::Initialization:: *)
 Clear[LowestWeightEigenspace]
 
 
+(* ::Input::Initialization:: *)
 LowestWeightEigenspace[G:{_BigraphWithDuals,_BigraphWithDuals},pivotalStructure:("Spherical"|"Lopsided"),\[Lambda]_,t:(0|1):0]:=
 If[LoadLowestWeightEigenspaces[G],LowestWeightEigenspace[G,pivotalStructure,\[Lambda],t],
 Module[{result,f,over,kernel,conditions,solutions,variables,matrix,c,replacements,remainingf},
@@ -661,9 +784,11 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[LowestWeightSpace]
 
 
+(* ::Input::Initialization:: *)
 LowestWeightSpace[G:{_BigraphWithDuals,_BigraphWithDuals},pivotalStructure:("Spherical"|"Lopsided"),n_Integer,t:(0|1):0]:=
 If[LoadLowestWeightEigenspaces[G],LowestWeightSpace[G,pivotalStructure,n,t],
 Module[{result,f,over,kernel,conditions,solutions,variables,matrix,c,replacements},
@@ -691,6 +816,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 LoadLowestWeightEigenspaces[G:{_BigraphWithDuals,_BigraphWithDuals}]:=Module[{},
 Off[Get::noopen,Needs::nocont];
 Needs["FusionAtlas`Data`"<>(StringJoin@@(GraphToString/@G))<>"`LowestWeightEigenspace`"];
@@ -700,9 +826,11 @@ True
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[ChangePivotalStructure]
 
 
+(* ::Input::Initialization:: *)
 ChangePivotalStructure[A:GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_],newPivotalStructure:("Spherical"|"Lopsided")]:=Module[{exponent,simplifyCoefficient},
 If[pivotalStructure==newPivotalStructure,Return[A]];
 exponent=Switch[{pivotalStructure,newPivotalStructure},
@@ -714,19 +842,24 @@ GPA4Element[g,over,{down,up},newPivotalStructure,coefficients/.(loop_->\[Zeta]_)
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[UpVertices,DownVertices]
 
 
+(* ::Input::Initialization:: *)
 UpVertices[loop_,up_]:=(loop~Join~loop)[[1;;2up+1;;2]]
 DownVertices[loop_,down_]:=(loop~Join~loop~Join~{loop[[1]]})[[-1;;-2down-1;;-2]]
 
 
+(* ::Input::Initialization:: *)
 ChangePivotalStructure[A_GPA4Matrix,ps_]:=If[A[[4]]==ps,A,GPA4Matrix[ChangePivotalStructure[GPA4Element[A],ps]]]
 
 
+(* ::Input::Initialization:: *)
 cachedToNumberField[z__]:=cachedToNumberField[z]=ToNumberField[z]
 
 
+(* ::Input::Initialization:: *)
 GaugeAction[g_,X_GPA4Element]:=Module[{f,gauge},
 f=g~Join~(Reverse[#[[1]]]->#[[2]]^-1&/@g);
 gauge[loop_]:=Times@@(Partition[loop,3,2,{1,2}]/.f);
@@ -734,12 +867,14 @@ X/.(loop_->value_):>(loop->value gauge[loop])
 ]
 
 
+(* ::Input::Initialization:: *)
 VariableGaugeElement[G_,\[Gamma]_]:=Module[{edges},
 edges=Flatten[GraphPaths[G,#]&/@Partition[{{0,0},{0,1},{1,1},{1,0},{0,0}},2,1],1];
 #->\[Gamma][#]&/@edges
 ]
 
 
+(* ::Input::Initialization:: *)
 FindGaugeElementRelating[X_GPA4Element,Y_GPA4Element]:=Module[{G,\[Gamma],g,solutions},
 G=X[[1]];
 g=VariableGaugeElement[G,\[Gamma]];
@@ -750,6 +885,7 @@ If[solutions=={},{},
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[NumberFieldGauge]
 NumberFieldGauge[conn_,expandNumberField:(True|False):False]:=Module[{c=conn,G,\[Gamma],targets,var,solutions,gaugeElement,length},
 G=c[[1]];
@@ -779,10 +915,12 @@ gaugeElement=gaugeElement/.solutions[[1]];
 ]
 
 
+(* ::Input::Initialization:: *)
 PivotalStructureOf[A_GPA4Element]:=A[[4]]
 PivotalStructureOf[A_GPA4Matrix]:=A[[4]]
 
 
+(* ::Input::Initialization:: *)
 Clear[FindEquationsForFlatGenerators]
 FindEquationsForFlatGenerators[conn0_,\[Lambda]_,c_,allowGaugeTransformation:(True|False):True]:=Module[{G=conn0[[1]],ps,conn,lws0,lws1,flatness,solutions,generators,remaining},
 ps=If[allowGaugeTransformation,"Lopsided",PivotalStructureOf[conn0]];
@@ -796,6 +934,7 @@ flatness=OneStrandFlatness[conn][lws0,RotateOneClick[lws1]]
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[FindFlatGenerators]
 FindFlatGenerators[conn0_,\[Lambda]_,allowGaugeTransformation:(True|False):True]:=FindFlatGenerators[conn0,\[Lambda],allowGaugeTransformation]=Module[{G=conn0[[1]],ps,c,lws0,lws1,flatness,solutions,generators,remaining,map},
 ps=If[allowGaugeTransformation,"Lopsided",PivotalStructureOf[conn0]];
@@ -814,6 +953,7 @@ generators=(lws0/.#&)/@solutions
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[FindFlatLowestWeightVectors];
 FindFlatLowestWeightVectors[conn0_,n_Integer]:=FindFlatLowestWeightVectors[conn0,n]=Module[{G=conn0[[1]],c,conn,lws0,lws1,flatness,solutions,generators,remaining},
 lws0=GPA4Element[LowestWeightSpace[G,"Lopsided",n,0][c[0,#]&]];
@@ -825,24 +965,29 @@ generators=(lws0/.#&)/@solutions
 ]
 
 
+(* ::Input::Initialization:: *)
 qInteger\[Delta][k_]:=qInteger\[Delta][k]=Function[{\[Delta]},Evaluate[Collect[\[Delta] qInteger\[Delta][k-1][\[Delta]]-qInteger\[Delta][k-2][\[Delta]],\[Delta]]]]
 qInteger\[Delta][2]=#&;
 qInteger\[Delta][1]=1&;
 qInteger\[Delta][0]=0&;
 
 
+(* ::Input::Initialization:: *)
 WenzlRecursion[gpa:(_GPA4Matrix|_GPA4Element),x_]:=
 (DebugPrint["Beginning Wenzl recursion calculation."];
 (DebugPrint["   adding strand on right"];AddStrandOnRight[gpa,gpa[[2,gpa[[3,2]]+2]]])-x GPAMultiply[(DebugPrint["   turning down top right"];TurnDownTopRightCorner[gpa]),(DebugPrint["   turning up bottom right"];TurnUpBottomRightCorner[gpa])])
 
 
+(* ::Input::Initialization:: *)
 Clear[JonesWenzlIdempotent]
 
 
+(* ::Input::Initialization:: *)
 JonesWenzlIdempotent[g:{_BigraphWithDuals,_BigraphWithDuals},0,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]:=GPA4Matrix[EmptyGPA4Element[g,over1,pivotalStructure]];
 JonesWenzlIdempotent[g:{_BigraphWithDuals,_BigraphWithDuals},1,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]:=JonesWenzlIdempotent[g,1,over1,over2,pivotalStructure]=AddStrandOnRight[JonesWenzlIdempotent[g,0,over1,over2,pivotalStructure],over2];
 
 
+(* ::Input::Initialization:: *)
 JonesWenzlIdempotent[g:{_BigraphWithDuals,_BigraphWithDuals},k_,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]/;k>1:=
 If[LoadIdempotents[g],JonesWenzlIdempotent[g,k,over1,over2,pivotalStructure],
 JonesWenzlIdempotent[g,k,over1,over2,pivotalStructure]=Module[{sm=GPA4Element[JonesWenzlIdempotent[g,k-1,over1,over2,pivotalStructure]],td,\[Delta]=DimensionOfGenerator[g],shove},
@@ -857,6 +1002,7 @@ JonesWenzlIdempotent[g,k,over1,over2,pivotalStructure]
 ]
 
 
+(* ::Input::Initialization:: *)
 (*JonesWenzlIdempotent[g:{_BigraphWithDuals,_BigraphWithDuals},k_,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]/;k>1:=
 If[LoadIdempotents[g],JonesWenzlIdempotent[g,k,over1,over2,pivotalStructure],
 Module[{result},
@@ -872,6 +1018,7 @@ result
 ]*)
 
 
+(* ::Input::Initialization:: *)
 LoadIdempotents[g:{_BigraphWithDuals,_BigraphWithDuals}]:=Module[{},
 Off[Get::noopen,Needs::nocont];
 Needs["FusionAtlas`Data`"<>(StringJoin@@(GraphToString/@g))<>"`Idempotents`"];
@@ -881,6 +1028,7 @@ True
 ]
 
 
+(* ::Input::Initialization:: *)
 S2Equation[G:{__BigraphWithDuals},\[Lambda]_]:=Module[{S,r,f},Function[{c},Evaluate[
 S=CollectGPA4Matrix[LowestWeightEigenspace[G,"Lopsided",\[Lambda],0][c],_c];
 r=ToNumberField0[RootReduce[BranchFactor[G[[1]]]],NumberFieldGenerator[G]];
@@ -890,6 +1038,7 @@ GPA4Element[S.S-(r-1)S-r JonesWenzlIdempotent[G,DepthOfBranchPoint[G[[1]]]+1,{0,
 ]
 
 
+(* ::Input::Initialization:: *)
 ProgressiveRowReduce[matrix_,p_:50]:=Module[{counter=0,result={},remainingRows=matrix},
 While[Length[remainingRows]>0,
 DebugPrint[counter];
@@ -901,6 +1050,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 RowReducedS2Equation[G:{__BigraphWithDuals},\[Lambda]_]:=Module[{quadratics,variables,vectors,rr,monomials},
 Function[{c},Evaluate[
 quadratics=DeleteCases[Union[GPACoefficients[S2Equation[G,\[Lambda]][c]]],0];
@@ -914,9 +1064,11 @@ DeleteCases[rr,_?ZeroVectorQ].monomials
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[S2Solutions]
 
 
+(* ::Input::Initialization:: *)
 S2Solutions[G:{__BigraphWithDuals},\[Lambda]_]:=Module[{simplifyCoefficient,S,gb,solution},
 simplifyCoefficient[x_]:=ToNumberField[x,NumberFieldGenerator[G]];
 Function[{c},Evaluate[
@@ -930,13 +1082,16 @@ CollectGPA4Matrix[#,_c,simplifyCoefficient]&/@(S/.solution)
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[IdentityTL]
 
 
+(* ::Input::Initialization:: *)
 IdentityTL[G:{_BigraphWithDuals,_BigraphWithDuals},0,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]:=
 EmptyGPA4Element[G,over1,pivotalStructure]
 
 
+(* ::Input::Initialization:: *)
 IdentityTL[G:{_BigraphWithDuals,_BigraphWithDuals},n_Integer/;n>=1,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]:=IdentityTL[G,n,over1,over2,pivotalStructure]=Module[{over,paths,rpath,ae,be,p1,p2,p3,p4,values},
 DebugPrint["Computing IdentityTL[G,",n,", ...]"];
 over[0]=over1;
@@ -950,18 +1105,23 @@ GPA4Element[G,Most[Flatten[Table[{over1,over2},{n+1}],1]],{n,n},pivotalStructure
 ]
 
 
+(* ::Input::Initialization:: *)
 (* a counts the number of strands until the cup from the top left, b counts from the bottom right *)
 
 
+(* ::Input::Initialization:: *)
 Clear[OneCupTL]
 
 
+(* ::Input::Initialization:: *)
 (*OneCupTL[G:{_BigraphWithDuals,_BigraphWithDuals},n_Integer,{a_,b_},over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]:=(*OneCupTL[G,n,{a,b},over1,over2,pivotalStructure]=*)TurnDownTopRightCorner[AddStrandOnRight[TurnUpBottomRightCorner[AddStrandOnRight[TurnDownTopRightCorner[IdentityTL[G,n-2,over1,over2,pivotalStructure],n-a-2],{over1,over2}\[LeftDoubleBracket]Mod[a+1,2]+1\[RightDoubleBracket]],n-a-1+b],{over1,over2}\[LeftDoubleBracket]Mod[n-b-1,2]+1\[RightDoubleBracket]],b+1]*)
 
 
+(* ::Input::Initialization:: *)
 OneCupPaths[G:{_BigraphWithDuals,_BigraphWithDuals},n_Integer,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0})]:=OneCupPaths[G,n,over1,over2]=GraphPaths[G,Take[Flatten[Table[{over1,over2},{n/2}],1],n-1]]
 
 
+(* ::Input::Initialization:: *)
 OneCupTL[G:{_BigraphWithDuals,_BigraphWithDuals},n_Integer,{a_,b_},over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:("Spherical"|"Lopsided")]:=OneCupTL[G,n,{a,b},over1,over2,pivotalStructure]=Module[{over,paths,rpath,ae,be,p1,p2,p3,p4,values},
 DebugPrint["Computing OneCupTL[G,",n,",",{a,b},"..."];
 over[0]=over1;
@@ -980,10 +1140,12 @@ GPA4Element[G,Most[Flatten[Table[{over1,over2},{n+1}],1]],{n,n},pivotalStructure
 ]
 
 
+(* ::Input::Initialization:: *)
 OneCupJonesWenzl[G:{_BigraphWithDuals,_BigraphWithDuals},n_Integer,over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:"Spherical"]:=OneCupJonesWenzl[G,n,over1,over2,pivotalStructure]=
 IdentityTL[G,n,over1,over2,pivotalStructure]+Sum[With[{\[Delta]=DimensionOfGenerator[G],aa=Min[a,n-b-2],bb=Min[b,n-a-2]},With[{cc=n-aa-bb-2},(-1)^(cc+1) qInteger\[Delta][aa+1][\[Delta]]qInteger\[Delta][bb+1][\[Delta]]qInteger\[Delta][n][\[Delta]]^-1]]OneCupTL[G,n,{a,b},over1,over2,pivotalStructure],{a,0,n-2},{b,0,n-2}]
 
 
+(* ::Input::Initialization:: *)
 SomeOneCupJonesWenzl[G:{_BigraphWithDuals,_BigraphWithDuals},n_Integer/;EvenQ[n],over1:({0,0}|{0,1}|{1,1}|{1,0}),over2:({0,0}|{0,1}|{1,1}|{1,0}),pivotalStructure:"Spherical"]:=SomeOneCupJonesWenzl[G,n,over1,over2,pivotalStructure]=Module[{result},
 DebugPrint["beginning SomeOneCupJonesWenzl[",G,",",n,"...]"];
 result=IdentityTL[G,n,over1,over2,pivotalStructure]+Sum[With[{\[Delta]=DimensionOfGenerator[G],aa=Min[a,n-b-2],bb=Min[b,n-a-2]},With[{cc=n-aa-bb-2},Power[(-1),cc+1]qInteger\[Delta][aa+1][\[Delta]]qInteger\[Delta][bb+1][\[Delta]]Power[qInteger\[Delta][n][\[Delta]],-1]]]OneCupTL[G,n,{a,b},over1,over2,pivotalStructure],{a,{0,n/2-1,n-2}},{b,0,n-2}];
@@ -992,20 +1154,26 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 AddStrandOnLeft[A_GPA4Element,newOver_]:=TurnUpBottomRightCorner[TurnDownTopLeftCorner[AddStrandOnRight[TurnDownTopRightCorner[A,A[[3,2]]],newOver]],A[[3,2]]+1]
 
 
+(* ::Input::Initialization:: *)
 AnnularConsequences[A_GPA4Element,\[Sigma]_]:=AnnularConsequences[A,\[Sigma]]=Module[{n=Plus@@A[[3]]},
 Flatten[Transpose[{NestList[GPAFourierTransformTwice[#]&,AddStrandOnLeft[\[Sigma]^-1 GPAFourierTransform[A],A[[2,1]]],n/2],GPAFourierTransform/@NestList[GPAFourierTransformTwice[#]&,AddStrandOnLeft[A,A[[2,2]]],n/2]}],1]]
 
 
+(* ::Input::Initialization:: *)
 GPACirc[A_GPA4Element,B_GPA4Element]:=GPAMultiply[TurnDownTopRightCorner[A],TurnUpBottomRightCorner[B]]
 
 
+(* ::Input::Initialization:: *)
 GPAStar[S_GPA4Element,T_GPA4Element]:=GPAFourierTransform[GPACirc[GPAFourierTransform[S],GPAFourierTransform[T]]]
 
 
+(* ::Input::Initialization:: *)
 End[];
 
 
+(* ::Input::Initialization:: *)
 EndPackage[];
