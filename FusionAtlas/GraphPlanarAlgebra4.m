@@ -24,7 +24,10 @@ BeginPackage["FusionAtlas`GraphPlanarAlgebra4`",{"FusionAtlas`","FusionAtlas`Big
 
 
 (* ::Input::Initialization:: *)
-NumberFieldGenerator;EnlargeNumberField;RedefineLopsidedDimension;LopsidedDimension;SphericalDimension;CriticalPointCoefficient;GPA4Element;EmptyGPA4Element;CapTopLeft;PartialTrace;GPA4Trace;GPA4TraceEvaluation;TurnUpBottomRightCorner;TurnDownTopRightCorner;TurnUpBottomLeftCorner;TurnDownTopLeftCorner;RotateOneClick;RotateTwoClicks;GPAFourierTransform;GPAFourierTransformTwice;AddStrandOnRight;AddStrandOnLeft;AddStrandsOnLeft;GPAMultiply;GPAConjugate;GPACoefficients;GPACoefficientsAtStar;VariableGPA4Element;GPA4Matrix;GPATensor;GPAInverse;Rotate\[Pi]Clockwise;Rotate\[Pi]Counterclockwise;GPAMultiplyWithOffset;PivotalStructure;ConnectionGrid;StrandCrossingAbove;StrandCrossingBelow;TwoStrandFlatness;OneStrandFlatness;FusionRulesFromConnection;LowestWeightEigenvectorConditions;LowestWeightConditions;CollectGPA4Matrix;CollectGPA4Element;LowestWeightEigenspace;LowestWeightSpace;LoadLowestWeightEigenspaces;ChangePivotalStructure;NumberFieldGauge;FindEquationsForFlatGenerators;FindFlatGenerators;FindFlatLowestWeightVectors;qInteger\[Delta];JonesWenzlIdempotent;LoadIdempotents;S2Equation;RowReducedS2Equation;S2Solutions;IdentityTL;OneCupTL;OneCupJonesWenzl;SomeOneCupJonesWenzl;AnnularConsequences;GPACirc;GPAStar;GaugeTransform; GaugeAction; VariableGaugeElement; FindGaugeElementRelating;WenzlRecursion;
+NumberFieldGenerator;EnlargeNumberField;RedefineLopsidedDimension;LopsidedDimension;SphericalDimension;CriticalPointCoefficient;
+GPA4Element;
+LargeGPA4Element;
+EmptyGPA4Element;CapTopLeft;PartialTrace;GPA4Trace;GPA4TraceEvaluation;TurnUpBottomRightCorner;TurnDownTopRightCorner;TurnUpBottomLeftCorner;TurnDownTopLeftCorner;RotateOneClick;RotateTwoClicks;GPAFourierTransform;GPAFourierTransformTwice;AddStrandOnRight;AddStrandOnLeft;AddStrandsOnLeft;GPAMultiply;GPAConjugate;GPACoefficients;GPACoefficientsAtStar;VariableGPA4Element;GPA4Matrix;GPATensor;GPAInverse;Rotate\[Pi]Clockwise;Rotate\[Pi]Counterclockwise;GPAMultiplyWithOffset;PivotalStructure;ConnectionGrid;StrandCrossingAbove;StrandCrossingBelow;TwoStrandFlatness;OneStrandFlatness;FusionRulesFromConnection;LowestWeightEigenvectorConditions;LowestWeightConditions;CollectGPA4Matrix;CollectGPA4Element;LowestWeightEigenspace;LowestWeightSpace;LoadLowestWeightEigenspaces;ChangePivotalStructure;NumberFieldGauge;FindEquationsForFlatGenerators;FindFlatGenerators;FindFlatLowestWeightVectors;qInteger\[Delta];JonesWenzlIdempotent;LoadIdempotents;S2Equation;RowReducedS2Equation;S2Solutions;IdentityTL;OneCupTL;OneCupJonesWenzl;SomeOneCupJonesWenzl;AnnularConsequences;GPACirc;GPAStar;GaugeTransform; GaugeAction; VariableGaugeElement; FindGaugeElementRelating;WenzlRecursion;
 
 
 (* ::Input::Initialization:: *)
@@ -159,13 +162,6 @@ RepeatedSequence[A__,repeat:(_Integer|{_Integer}|{_Integer,_Integer}):\[Infinity
 
 (* ::Input::Initialization:: *)
 TurnUpBottomRightCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;down>=1]:=
-GPA4Element[g,over,{down-1,up+1},pivotalStructure,
-coefficients/.({A:RepeatedSequence[_Vertex,_Integer,{up}],v_Vertex,n_Integer,B___}->\[Zeta]_):>({A,v,n,B}->\[Zeta] CriticalPointCoefficient[g,1,v,{B,A}[[1]],pivotalStructure])
-]
-
-
-(* ::Input::Initialization:: *)
-TurnUpBottomRightCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;down>=1]:=
 Module[{transform},
 transform[{A:RepeatedSequence[_Vertex,_Integer,{up}],v_Vertex,n_Integer,B___}->\[Zeta]_]:=({A,v,n,B}->\[Zeta] CriticalPointCoefficient[g,1,v,{B,A}[[1]],pivotalStructure]);
 GPA4Element[g,over,{down-1,up+1},pivotalStructure,
@@ -191,6 +187,59 @@ coefficients/.({a_Vertex,na_Integer,B___,b_Vertex,nb_Integer}->\[Zeta]_):>({b,nb
 TurnDownTopLeftCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;up>=1]:=
 GPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
 coefficients/.({a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_):>({b,nb,B,a,na}->\[Zeta] CriticalPointCoefficient[g,-1,b,a,pivotalStructure])]
+
+
+(* ::Input::Initialization:: *)
+TurnDownTopLeftCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;up>=1]:=
+Module[{transform},
+transform[{a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_]:=({b,nb,B,a,na}->\[Zeta] CriticalPointCoefficient[g,-1,b,a,pivotalStructure]);
+GPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
+transform/@coefficients
+]
+]
+
+
+(* ::Input::Initialization:: *)
+LargeGPA4Element[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_],tag_String]:=
+Module[{},
+Do[
+Put[coefficients[[i;;i+999]],FileNameJoin[{NotebookDirectory[],tag<>"-"<>ToString[i]}]]
+,{i,1,Length[coefficients],1000}];
+LargeGPA4Element[g,over,{down,up},pivotalStructure,tag]
+]
+
+
+(* ::Input::Initialization:: *)
+GPA4Element[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String]]:=
+GPA4Element[g,over,{down,up},pivotalStructure,Flatten[Get/@FileNames[FileNameJoin[{NotebookDirectory[],tag<>"-*.m"}]],1]]
+
+
+(* ::Input::Initialization:: *)
+TurnUpBottomRightCorner[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String]/;down>=1]:=
+Module[{transform,newTag=tag<>"r",coefficients},
+transform[{A:RepeatedSequence[_Vertex,_Integer,{up}],v_Vertex,n_Integer,B___}->\[Zeta]_]:=({A,v,n,B}->\[Zeta] CriticalPointCoefficient[g,1,v,{B,A}[[1]],pivotalStructure]);
+Do[
+coefficients=Get[file];
+Put[transform/@coefficients,StringReplace[file,tag->newTag]];
+,{file,FileNames[FileNameJoin[{NotebookDirectory[],tag<>"-*.m"}]]}];
+LargeGPA4Element[g,over,{down-1,up+1},pivotalStructure,
+newTag
+]
+]
+
+
+(* ::Input::Initialization:: *)
+TurnDownTopLeftCorner[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String _]/;up>=1]:=
+Module[{transform,newTag=tag<>"s",coefficients},
+transform[{a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_]:=({b,nb,B,a,na}->\[Zeta] CriticalPointCoefficient[g,-1,b,a,pivotalStructure]);
+Do[
+coefficients=Get[file];
+Put[transform/@coefficients,StringReplace[file,tag->newTag]];
+,{file,FileNames[FileNameJoin[{NotebookDirectory[],tag<>"-*.m"}]]}]
+LargeGPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
+newTag
+]
+]
 
 
 (* ::Input::Initialization:: *)
