@@ -19,31 +19,39 @@
 
 
 
+(* ::Input::Initialization:: *)
 $RecursionLimit=Max[$RecursionLimit,4096];
 
 
+(* ::Input::Initialization:: *)
 BeginPackage["FusionAtlas`ModularData`",{"FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`TensorSolver`","FusionAtlas`FormalCodegrees`","FusionAtlas`InductionMatrix`","FusionAtlas`DisplayGraphs`"}];
 
 
+(* ::Input::Initialization:: *)
 FindModularData::usage="FindModularData[X_] computes all possible modular data for the centre; the argument X may be a fusion ring and induction matrix, a fusion ring, the rank 3 tensor of fusion multiplicities, a matrix of fusion multiplicities for a single object, or a principal graph.";
 
 
+(* ::Input::Initialization:: *)
 ExplicitGenerators;CharacterTable;ExecuteGAP;GaloisGroup;GaloisAction;GaloisGroupGenerators;PossibleConductors;workOnRepresentations;SInRepresentation;TInRepresentation;DimensionsFromInductionMatrix;GaloisOrbitClumps;PossibleGaloisImages;PossibleGaloisTraces;RepresentationsForRank;RepresentationsForInductionMatrix;SaveRepresentationsForRank;SaveCharacterTables;SaveGenerators;SaveConjugacyClasses;SaveAllModularData;ClearSavedModularData;AllocateEigenvaluesToGaloisOrbitClumps;AllocateEigenvaluesToSimples;AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators;AllocateEigenvaluesToSimplesAndCompleteGaloisActions;FindQLinearSolutions;
 
 
+(* ::Input::Initialization:: *)
 Begin["`Private`"];
 
 
+(* ::Input::Initialization:: *)
 dataDirectory=FileNameJoin[{FusionAtlasDirectory[],"modularData"}];
 If[!FileExistsQ[dataDirectory],CreateDirectory[dataDirectory]];
 
 
+(* ::Input::Initialization:: *)
 GZIP[data_,filename_]/;StringTake[filename,-3]==".gz":=AbortProtect[Module[{},
 Put[data,StringDrop[filename, -3]];
 Run["cd "<>DirectoryName[filename]<>" && gzip "<>StringDrop[filename, -3]];
 ]]
 
 
+(* ::Input::Initialization:: *)
 ImportGZIP[filename_]/;StringTake[filename,-3]==".gz":=Module[{unzipped="/tmp/unzipped"<>ToString[$KernelID]<>"-"<>StringDrop[StringDrop[filename, -3],StringLength[DirectoryName[filename]]],result},
 Run["cd "<>DirectoryName[filename]<>" && gzip -cd "<>filename<>" > "<>unzipped];
 result=Get[unzipped];
@@ -52,15 +60,19 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 SHA1[x_]:=IntegerString[Hash[x,"SHA1"],16,32]
 
 
+(* ::Input::Initialization:: *)
 ClearSavedModularData[fusion_,induction_]:=DeleteFile/@(FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[induction]<>"*"}]]~Join~FileNames[FileNameJoin[{dataDirectory,"*","*"<>SHA1[{fusion,induction}]<>"*"}]])
 
 
+(* ::Input::Initialization:: *)
 GAP[SL[2,Subscript[Z, N_]]]:="Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod "<>ToString[N]<>"))"
 
 
+(* ::Input::Initialization:: *)
 PossibleGAPPaths:=
 Module[{paths},
 Run["mdfind -name gap4r8 > /tmp/out"];
@@ -75,13 +87,14 @@ paths
 GAPPath:=GAPPath=PossibleGAPPaths[[1]];
 
 
+(* ::Input::Initialization:: *)
 ExecuteGAP[cmd_]:=Module[{lines,return},
 Print["Calling GAP:"];
 Print[cmd];
 return=Run["echo '"<>cmd<>"' | "<>GAPPath<>" -x 10000 -o 16g > /tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out"];
 lines=StringSplit[Import["/tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out","String"],"\n"];
 If[StringTake[lines[[1]],11]=!=" ********* "\[Or]
-lines[[-1]]=!="gap> ",
+lines[[-1]]=!="gap> gap> ",
 Print["It looks like something went wrong running GAP (error code "<>ToString[return]<>"). Please check that you have GAP installed, and modify FusionAtlas`ModularData`Private`GAPPath if necessary."];
 Print[cmd];
 Print/@lines;
@@ -91,9 +104,11 @@ lines
 ]
 
 
+(* ::Input::Initialization:: *)
 (* This uses Vahid Dabbaghian's RepSn package for GAP: http://www.gap-system.org/Packages/repsn.html *)
 
 
+(* ::Input::Initialization:: *)
 ExplicitGenerators[q_][k_]/;PrimePowerQ[q]:=ExplicitGenerators[q][k]=Module[{out,S,T,N,i,Q,invQ},
 out=ExecuteGAP["
 LoadPackage(\"repsn\");
@@ -123,6 +138,7 @@ Print["Done!"];
 ]
 
 
+(* ::Input::Initialization:: *)
 SaveGenerators[]:=AbortProtect[Put[Cases[SubValues[ExplicitGenerators],r_/;FreeQ[r,Verbatim[Blank[]]]],FileNameJoin[{dataDirectory,"explicitGenerators.m"}]]]
 LoadGenerators[]:=Module[{filename=FileNameJoin[{dataDirectory,"explicitGenerators.m"}]},
 If[FileExistsQ[filename],
@@ -131,9 +147,11 @@ If[FileExistsQ[filename],
 ]
 
 
+(* ::Input::Initialization:: *)
 LoadGenerators[]
 
 
+(* ::Input::Initialization:: *)
 Clear[ReadCharacterTable]
 ReadCharacterTable[gapName_List]:=ReadCharacterTable@@gapName
 ReadCharacterTable[gapName_]:=ReadCharacterTable["",gapName]
@@ -146,6 +164,7 @@ lines
 ]
 
 
+(* ::Input::Initialization:: *)
 VerifyUnitarity[table_]:=Module[{table1,M,conjugacyClassSizes},
 table1=ToCyclotomicField[table];
 M=AlgebraicConjugate[Transpose[table1]].table1;
@@ -155,6 +174,7 @@ table1.AlgebraicConjugate[conjugacyClassSizes Transpose[table1]]/(Plus@@conjugac
 ]
 
 
+(* ::Input::Initialization:: *)
 VerifyUnitarityNumerically[table_]:=Module[{table1,M,conjugacyClassSizes},
 table1=N[table,100];
 M=Conjugate[Transpose[table1]].table1;
@@ -164,6 +184,7 @@ Union[Flatten[Chop[table1.Conjugate[conjugacyClassSizes Transpose[table1]]/(Plus
 ]
 
 
+(* ::Input::Initialization:: *)
 (*Clear[CharacterTable]*)
 CharacterTable[n_Integer]:=CharacterTable[GAP[SL[2,Subscript[Z, n]]]]
 CharacterTable[gapName__]:=CharacterTable[gapName]=Module[{lines,Xpos,conjugacyClasses,representations,values,numberOfConjugacyClasses,parseRepresentation,result},
@@ -192,6 +213,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 SaveCharacterTables[]:=AbortProtect[Put[Cases[DownValues[CharacterTable],r_/;FreeQ[r,Blank|BlankSequence|BlankNullSequence]],FileNameJoin[{dataDirectory,"characterTables.m"}]]]
 LoadCharacterTables[]:=
 Module[{filename=FileNameJoin[{dataDirectory,"characterTables.m"}]},
@@ -201,9 +223,11 @@ If[FileExistsQ[filename],
 ]
 
 
+(* ::Input::Initialization:: *)
 LoadCharacterTables[];
 
 
+(* ::Input::Initialization:: *)
 Clear[ConjugacyClassOf]
 ConjugacyClassOf[q_][m_]:=ConjugacyClassOf[q][m]=Module[{cmd,lines},
 cmd="Position(ConjugacyClasses("<>GAP[SL[2,Subscript[Z, q]]]<>"),ConjugacyClass("<>GAP[SL[2,Subscript[Z, q]]]<>","<>StringReplace[ToString[m],{"{"->"[","}"->"]"}]<>"*One(Integers mod "<>ToString[q]<>")));";
@@ -212,6 +236,7 @@ ToExpression[StringDrop[lines[[-2]],5]]
 ]
 
 
+(* ::Input::Initialization:: *)
 SaveConjugacyClasses[]:=Module[{},
 AbortProtect[Put[Cases[SubValues[ConjugacyClassOf],r_/;FreeQ[r,Verbatim[Blank[]]]],FileNameJoin[{dataDirectory,"conjugacyClasses.m"}]]];
 AbortProtect[Put[Cases[DownValues[ConjugacyClassesOfPowersOfT],r_/;FreeQ[r,Blank]],FileNameJoin[{dataDirectory,"conjugacyClassesOfPowersOfT.m"}]]];
@@ -230,6 +255,7 @@ DownValues[ConjugacyClassesOfGalois]=Get[FileNameJoin[{dataDirectory,"conjugacyC
 ]
 
 
+(* ::Input::Initialization:: *)
 ConjugacyClassesOfGalois[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfGalois[q]=Module[{galois,cmd,lines},
 galois=StringReplace[ToString[GaloisGroup[q]],{"{"->"[","}"->"]"}];
 cmd = "m := "<>ToString[q] <>";; G := Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List("<>galois<>", n -> Position(cc,ConjugacyClass(G,[[n, 0], [0, n^(-1)]]*One(Integers mod m))));";
@@ -238,6 +264,7 @@ Rule@@#&/@Transpose[{GaloisGroup[q],ToExpression[StringReplace[StringDrop[lines[
 ]
 
 
+(* ::Input::Initialization:: *)
 ConjugacyClassesOfPowersOfT[q_]/;PrimePowerQ[q]:=ConjugacyClassesOfPowersOfT[q]=Module[{cmd,lines},
 cmd = "m := "<>ToString[q] <>";; G := Group([[[0,-1],[1,0]],[[1,1],[0,1]]]*One(Integers mod m));; cc := ConjugacyClasses(G);; List([0..(m-1)], n -> Position(cc,ConjugacyClass(G,[[1, n], [0, 1]]*One(Integers mod m))));";
 lines=ExecuteGAP[cmd];
@@ -245,12 +272,15 @@ ToExpression[StringReplace[StringDrop[lines[[-2]],5],{"["->"{","]"->"}"}]]
 ]
 
 
+(* ::Input::Initialization:: *)
 LoadConjugacyClasses[]
 
 
+(* ::Input::Initialization:: *)
 (*GaloisMatrix[n_,l_]:=GaloisMatrix[n,l]=With[{c={{-1,0},{0,-1}},s={{0,1},{-1,0}},t={{1,0},{1,1}}},Mod[c.s.{{1,PowerMod[l,-1,n]},{0,1}}.s.{{1,l},{0,1}}.s.{{1,PowerMod[l,-1,n]},{0,1}},n]]*)
 
 
+(* ::Input::Initialization:: *)
 Clear[GaloisInRepresentation]
 GaloisInRepresentation[q_/;PrimePowerQ[q],k_Integer (* which irrep *),l_(* which Galois element *)]:=GaloisInRepresentation[q,k,l]=Module[{S,T},
 {S,T}=ExplicitGenerators[q][k];
@@ -258,36 +288,45 @@ MatrixPower[S,3].MatrixPower[T,PowerMod[l,-1,q]].S.MatrixPower[T,PowerMod[l,1,q]
 ]
 
 
+(* ::Input::Initialization:: *)
 BlockDiagonalMatrix=With[{r=MapIndexed[#2[[1]] {1,1}->#&,#,1]},Normal[SparseArray`SparseBlockMatrix[r]]]&;
 
 
+(* ::Input::Initialization:: *)
 GaloisInRepresentation[n_Integer,ks:{__Integer} (* a product of irreps for the prime powers *),l_ (* which Galois element *)]:=
 KroneckerProduct@@Table[GaloisInRepresentation[p[[1]],p[[2]],Mod[l,p[[1]]]]/.a_AlgebraicNumber:>AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/IdentifyRootOfUnity[a[[1]]])],{p,Transpose[{PrimePowers[n],ks}]}]
 GaloisInRepresentation[n_Integer,Vs:{{__Integer}..},l_]:=BlockDiagonalMatrix[Table[GaloisInRepresentation[n,V,l],{V,Vs}]]
 
 
+(* ::Input::Initialization:: *)
 TraceOfGalois[q_/;PrimePowerQ[q],k_Integer(* which irrep *),l_ (* which Galois element *)]:=CharacterTable[GAP[SL[2,Subscript[Z, q]]]][[k,l/.ConjugacyClassesOfGalois[q]]]
 
 
+(* ::Input::Initialization:: *)
 TraceOfGalois[n_Integer,ks:{__Integer} (* a product of irreps for the prime powers *),l_ (* which Galois element *)]:=TraceOfGalois[n,ks,l]=
 Product[TraceOfGalois[p[[1]],p[[2]],Mod[l,p[[1]]]],{p,Transpose[{PrimePowers[n],ks}]}]
 TraceOfGalois[n_Integer,Vs:{{__Integer}..},l_]:=Sum[TraceOfGalois[n,V,l],{V,Vs}]
 
 
+(* ::Input::Initialization:: *)
 GaloisGroup[n_]:=GaloisGroup[n]=Cases[Table[i,{i,1,n-1}],i_/;GCD[i,n]==1]
 
 
+(* ::Input::Initialization:: *)
 GaloisConjugates[n_][AlgebraicNumber[s_,a_]]/;s==\[Zeta][n][[1]]:=Table[AlgebraicNumber[s,Flatten[Transpose[{a}~Join~Table[0,{m-1},{Length[a]}]]]],{m,GaloisGroup[n]}]
 GaloisConjugates[n_][k:(_Integer|_Rational)]:=Table[k,{m,GaloisGroup[n]}]
 
 
+(* ::Input::Initialization:: *)
 GaloisInverse[n_][l_]:=PowerMod[l,-1,n]
 
 
+(* ::Input::Initialization:: *)
 GaloisAction[n_][l_][a:AlgebraicNumber[r_,x_]]/;r==\[Zeta][n][[1]]:=GaloisAction[n][l][a]=AlgebraicNumberPolynomial[a,\[Zeta][n]^l]
 GaloisAction[n_][l_][a:(_Integer|_Rational)]:=a
 
 
+(* ::Input::Initialization:: *)
 Clear[GaloisGroupRepresentatives]
 GaloisGroupRepresentatives[n_]:=GaloisGroupRepresentatives[n]=Module[{iterators,a},
 iterators=Table[{a[i],0,MultiplicativeOrder[GaloisGroupGenerators[n][[i]],n]-1},{i,1,Length[GaloisGroupGenerators[n]]}];
@@ -295,12 +334,15 @@ iterators=Table[{a[i],0,MultiplicativeOrder[GaloisGroupGenerators[n][[i]],n]-1},
 ]
 
 
+(* ::Input::Initialization:: *)
 GaloisGroupElementAsProductOfGenerators[n_,k_]:=k/.GaloisGroupRepresentatives[n]
 
 
+(* ::Input::Initialization:: *)
 Clear[GeneratorsOfUnitsModPrimePower]
 
 
+(* ::Input::Initialization:: *)
 GeneratorsOfUnitsModPrimePower[q_]/;PrimePowerQ[q]\[And]FactorInteger[q][[1,1]]!=2:=GeneratorsOfUnitsModPrimePower[q]=Module[{p,n=1},
 p=FactorInteger[q][[1,1]];
 While[!CoprimeQ[n,q]\[Or]MultiplicativeOrder[n,q]!=q/p (p-1),n++];
@@ -308,13 +350,16 @@ While[!CoprimeQ[n,q]\[Or]MultiplicativeOrder[n,q]!=q/p (p-1),n++];
 ]
 
 
+(* ::Input::Initialization:: *)
 GeneratorsOfUnitsModPrimePower[2]={};
 GeneratorsOfUnitsModPrimePower[4]={3};
 
 
+(* ::Input::Initialization:: *)
 GeneratorsOfUnitsModPrimePower[q_]/;PrimePowerQ[q]\[And]FactorInteger[q][[1,1]]==2/;q>=8:=(*GeneratorsOfUnitsModPrimePower[q]=*){3}~Join~Take[Complement[{q/2-1,q/2+1,q-1},PowerMod[3,Range[q-1],q]],1]
 
 
+(* ::Input::Initialization:: *)
 GaloisGroupGenerators[n_]:=Module[{factors=#[[1]]^#[[2]]&/@FactorInteger[n],m},
 m=Length[factors];
 Flatten[Table[ChineseRemainder[(g-1)UnitVector[m,i]+1,factors],{i,1,m},{g,GeneratorsOfUnitsModPrimePower[factors[[i]]]}]]
@@ -322,18 +367,22 @@ Flatten[Table[ChineseRemainder[(g-1)UnitVector[m,i]+1,factors],{i,1,m},{g,Genera
 
 
 
+(* ::Input::Initialization:: *)
 SInRepresentation[q_/;PrimePowerQ[q],k_Integer (* which irrep *)]:=ExplicitGenerators[q][k][[1]]
 TInRepresentation[q_/;PrimePowerQ[q],k_Integer (* which irrep *)]:=ExplicitGenerators[q][k][[2]]
 
 
+(* ::Input::Initialization:: *)
 (* Sometimes S will lie in an even larger number field. *)
 
 
+(* ::Input::Initialization:: *)
 Unprotect[KroneckerProduct];
 KroneckerProduct[X_]:=X
 Protect[KroneckerProduct];
 
 
+(* ::Input::Initialization:: *)
 SInRepresentation[n_Integer,ks:{__Integer} (* a product of irreps for the prime powers *)]:=
 LiftToCommonCyclotomicField[KroneckerProduct@@Table[SInRepresentation[p[[1]],p[[2]]],{p,Transpose[{PrimePowers[n],ks}]}]]
 SInRepresentation[n_Integer,Vs:{{__Integer}..}]:=LiftToCommonCyclotomicField[BlockDiagonalMatrix[Table[SInRepresentation[n,V],{V,Vs}]]]
@@ -342,13 +391,16 @@ KroneckerProduct@@Table[TInRepresentation[p[[1]],p[[2]]],{p,Transpose[{PrimePowe
 TInRepresentation[n_Integer,Vs:{{__Integer}..}]:=BlockDiagonalMatrix[Table[TInRepresentation[n,V],{V,Vs}]]
 
 
+(* ::Input::Initialization:: *)
 Clear[FPDimensions,GlobalDimension,DimensionsFromFusionRules,DimensionsFromInductionMatrix,DimensionsFromFusionRulesAndInductionMatrix]
 
 
+(* ::Input::Initialization:: *)
 FPDimensions[fr_FusionRules]:=FPDimensions[fr]=Max[Cases[Eigenvalues[#],x_/;Im[x]==0]]&/@fr[[2,1,2]]
 GlobalDimension[fr_FusionRules]:=GlobalDimension[fr]=ToCyclotomicField[Norm[FPDimensions[fr]]^2][[1]]
 
 
+(* ::Input::Initialization:: *)
 DimensionsFromFusionRules[fusion_]:=DimensionsFromFusionRules[fusion]=Module[{\[ScriptCapitalD],N},
 \[ScriptCapitalD]=GlobalDimension[fusion];
 N=Switch[\[ScriptCapitalD],_AlgebraicNumber,IdentifyRootOfUnity[\[ScriptCapitalD][[1]]],_,1];
@@ -356,12 +408,14 @@ N=Switch[\[ScriptCapitalD],_AlgebraicNumber,IdentifyRootOfUnity[\[ScriptCapitalD
 ]
 
 
+(* ::Input::Initialization:: *)
 DimensionsFromFusionRulesAndInductionMatrix[fusion_,induction_]:=DimensionsFromFusionRulesAndInductionMatrix[fusion, induction]=Module[{\[ScriptCapitalD],dims},
 {\[ScriptCapitalD],dims}=DimensionsFromFusionRules[fusion];
 {\[ScriptCapitalD],Transpose[induction].dims}
 ]
 
 
+(* ::Input::Initialization:: *)
 DimensionsFromInductionMatrix[inductionMatrix_]:=DimensionsFromInductionMatrix[inductionMatrix]=Module[{dimensions,n},
 dimensions=RootReduce[Together[Eigenvectors[Transpose[inductionMatrix].inductionMatrix]]];
 dimensions=Plus@@(RootReduce[#/Norm[#]]&/@Cases[dimensions,d_/;And@@(NonNegative[d])]);
@@ -372,6 +426,7 @@ n=(Cases[dimensions,a_AlgebraicNumber:>IdentifyRootOfUnity[a[[1]]],1]~Join~{1})[
 ]
 
 
+(* ::Input::Initialization:: *)
 DimensionsFromInductionMatrix[N_,inductionMatrix_]:=DimensionsFromInductionMatrix[N,inductionMatrix]=
 Module[{n,dims},
 {n,dims}=DimensionsFromInductionMatrix[inductionMatrix];
@@ -379,6 +434,7 @@ dims/.x_AlgebraicNumber:>AlgebraicNumberPolynomial[x,\[Zeta][N]^(N/n)]
 ]
 
 
+(* ::Input::Initialization:: *)
 SaveDimensionsFromInductionMatrix[]:=(LoadDimensionsFromInductionMatrixOnce[];AbortProtect[Put[Cases[DownValues[DimensionsFromInductionMatrix],r_/;FreeQ[r,Blank]],FileNameJoin[{dataDirectory,"dimensionsFromInductionMatrix.m"}]]])
 LoadDimensionsFromInductionMatrixOnce[]:=LoadDimensionsFromInductionMatrixOnce[]=LoadDimensionsFromInductionMatrix[]
 LoadDimensionsFromInductionMatrix[]:=Module[{filename=FileNameJoin[{dataDirectory,"dimensionsFromInductionMatrix.m"}]},
@@ -388,15 +444,18 @@ DownValues[DimensionsFromInductionMatrix]=Get[filename]~Join~DownValues[Dimensio
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[CheckGaloisVerlinde]
 
 
+(* ::Input::Initialization:: *)
 CheckGaloisVerlinde[inductionMatrix_]:=Module[{n,dimensions},
 {n,dimensions}=DimensionsFromInductionMatrix[inductionMatrix];
 CheckGaloisVerlinde[n,dimensions]
 ]
 
 
+(* ::Input::Initialization:: *)
 CheckGaloisVerlinde[fusion_FusionRules,inductionMatrix_?MatrixQ]:=Module[{N,dimensions},
 dimensions=DimensionsFromFusionRulesAndInductionMatrix[fusion,inductionMatrix];
 N=Switch[dimensions[[1]],_AlgebraicNumber,IdentifyRootOfUnity[dimensions[[1,1]]],_,1];
@@ -404,6 +463,7 @@ CheckGaloisVerlinde[N,dimensions]
 ]
 
 
+(* ::Input::Initialization:: *)
 CheckGaloisVerlinde[n_Integer,dimensions:{_?NumericQ,{___?NumericQ}}]:=CheckGaloisVerlinde[n,dimensions]=Module[{S,galoisElements},
 S[1]=dimensions[[2]]/dimensions[[1]];
 S[l_]:=S[l]=GaloisAction[n][l]/@S[1];
@@ -412,21 +472,26 @@ And@@(NonNegative[#]\[And]IntegerQ[#]&/@Flatten[Table[Sum[(S[x][[w]]S[y][[w]]Alg
 ]
 
 
+(* ::Input::Initialization:: *)
 GaloisOrbitClumps[n_,dimension_]:=GaloisOrbitClumps[n,dimension]=Module[{clumps},
 clumps=Union[#~Join~(-#)]&/@Outer[GaloisAction[n][#2][#1/dimension[[1]]]dimension[[1]]&,dimension[[2]],GaloisGroup[n]];
 Sort[Flatten[Position[clumps,#]]&/@Union[clumps]]
 ]
 
 
+(* ::Input::Initialization:: *)
 GaloisOrbitClumps[induction_]:=GaloisOrbitClumps@@DimensionsFromInductionMatrix[induction]
 
 
+(* ::Input::Initialization:: *)
 (* TODO this could be tightened in many ways *)
 
 
+(* ::Input::Initialization:: *)
 Clear[PossibleConductors]
 
 
+(* ::Input::Initialization:: *)
 PossibleConductors[inductionMatrix_]:=PossibleConductors[inductionMatrix]=Module[{dimensionConductor,rank,inductionsFromOne,dimensions,\[ScriptCapitalD],n,primes,powers,l=3,largestClump},
 dimensionConductor=DimensionsFromInductionMatrix[inductionMatrix][[1]];
 dimensions=DimensionsFromInductionMatrix[inductionMatrix][[2,2]];
@@ -448,9 +513,11 @@ Cases[Times@@(primes^#)&/@powers,N_/;Mod[N,dimensionConductor]==0]
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[PossibleGaloisImages,PossibleGaloisImagesWithSigns];
 
 
+(* ::Input::Initialization:: *)
 PossibleGaloisImages[n_,dimensions_,1]:=Table[{i},{i,1,Length[dimensions[[2]]]}];
 PossibleGaloisImages[n_,dimensions_,l_]:=PossibleGaloisImages[n,dimensions,l]=Module[{images},
 images=GaloisAction[n][l][#/dimensions[[1]]]dimensions[[1]]&/@dimensions[[2]];
@@ -459,9 +526,11 @@ Flatten[Position[dimensions[[2]],#|(-#),1]]&/@images
 PossibleGaloisImages[n_,dimensions_]:=Table[l->PossibleGaloisImages[n,dimensions,l],{l,GaloisGroup[n]}]
 
 
+(* ::Input::Initialization:: *)
 PossibleGaloisImages[n_,induction_?MatrixQ]:=PossibleGaloisImages[n,DimensionsFromInductionMatrix[n,induction]]
 
 
+(* ::Input::Initialization:: *)
 PossibleGaloisImagesWithSigns[n_,dimensions_,1]:=Table[{i},{i,1,Length[dimensions[[2]]]}];
 PossibleGaloisImagesWithSigns[n_,dimensions_,l_]:=PossibleGaloisImagesWithSigns[n,dimensions,l]=Module[{images},
 images=GaloisAction[n][l][#/dimensions[[1]]]dimensions[[1]]&/@dimensions[[2]];
@@ -469,6 +538,7 @@ Flatten[Position[dimensions[[2]],#,1]~Join~(-Position[dimensions[[2]],-#,1])]&/@
 ]
 
 
+(* ::Input::Initialization:: *)
 PossibleGaloisImages[n_Integer,dimensions_List,eigenvalues_List,1]:=Table[{i},{i,1,Length[dimensions[[2]]]}]
 PossibleGaloisImages[n_Integer,dimensions_List,eigenvalues_List,l_Integer]:=PossibleGaloisImages[n,dimensions,eigenvalues,l]=Module[{images},
 images={GaloisAction[n][l][#[[1]]/dimensions[[1]]]dimensions[[1]],Mod[l^2 #[[2]],1]}&/@Transpose[{dimensions[[2]],eigenvalues}];
@@ -476,13 +546,16 @@ Flatten[Position[Transpose[{dimensions[[2]],eigenvalues}],{#[[1]]|(-#[[1]]),#[[2
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[PossibleGaloisTraces]
 
 
+(* ::Input::Initialization:: *)
 possibleSums[{x_List}]:=x
 possibleSums[{x_List,y_List,z___List}]:=possibleSums[{Union[Flatten[Outer[Plus,x,y,1]]],z}]
 
 
+(* ::Input::Initialization:: *)
 PossibleGaloisTraces[n_,dimensions_,l_]:=PossibleGaloisTraces[n,dimensions,l]=Module[{images,contributions},
 images=Transpose[{Range[Length[dimensions[[2]]]],PossibleGaloisImagesWithSigns[n,dimensions,l]}];
 contributions[{k_,i_}]/;MemberQ[i,k]\[And]Length[i]>1:={1,0};
@@ -495,27 +568,33 @@ possibleSums[contributions/@images]
 PossibleGaloisTraces[n_,dimensions_]:=Table[l->PossibleGaloisTraces[n,dimensions,l],{l,GaloisGroup[n]}]
 
 
+(* ::Input::Initialization:: *)
 MaximumGaloisFixedPoints[n_,dimensions_,l_]:=MaximumGaloisFixedPoints[n,dimensions,l]=With[{\[ScriptCapitalD]=dimensions[[1]]},Count[dimensions[[2]],d_/;With[{ga=GaloisAction[n][l][d/\[ScriptCapitalD]]\[ScriptCapitalD]},ga==d||ga==-d]]]
 MaximumGaloisFixedPoints[n_,dimensions_]:=Table[l->MaximumGaloisFixedPoints[n,dimensions,l],{l,GaloisGroup[n]}]
 
 
+(* ::Input::Initialization:: *)
 RepresentationSign[q_,k_Integer]/;PrimePowerQ[q]:=RepresentationSign[q,k]=Sign[CharacterTable[GAP[SL[2,Subscript[Z, q]]]][[k,ConjugacyClassOf[q][{{-1,0},{0,-1}}]]]]
 RepresentationSign[n_,ts:{__Integer}]:=Product[RepresentationSign[p[[1]],p[[2]]],{p,Transpose[{PrimePowers[n],ts}]}]
 
 
+(* ::Input::Initialization:: *)
 totalModOne[x___]:=Mod[Total[{x}],1]
 
 
+(* ::Input::Initialization:: *)
 TEigenvalues[N_,t:{__Integer}]:=TEigenvalues[N,t]=Module[{primePowers=#[[1]]^#[[2]]&/@FactorInteger[N]},
 Flatten[Outer[totalModOne,Sequence@@Table[TEigenvalues[primePowers[[i]],t[[i]]],{i,1,Length[primePowers]}]]]
 ]
 TEigenvalues[N_,ts:{{__Integer}...}]:=TEigenvalues[N,#]&/@ts
 
 
+(* ::Input::Initialization:: *)
 (* Given \[Chi] = ( tr(M^r) )_{r=0}^{n-1}, this lists all the eigenvalues of M which are n-th roots of unity. *)
 NewtonsIdentity[n_,\[Chi]_]:=Join@@Table[Table[m/n,{RootReduce[1/n \[Chi].Table[\[Zeta][n]^(-m l),{l,0,n-1}]]}],{m,0,n-1}]
 
 
+(* ::Input::Initialization:: *)
 TEigenvalues[q_,k_Integer]/;PrimePowerQ[q]:=TEigenvalues[q,k]=Module[{\[Chi]},
 lastTEigenvalues={q,k};
 \[Chi]=liftCyclotomicNumber[q]/@Table[CharacterTable[GAP[SL[2,Subscript[Z, q]]]][[k,l]],{l,ConjugacyClassesOfPowersOfT[q]}];
@@ -523,38 +602,46 @@ NewtonsIdentity[q,\[Chi]]
 ]
 
 
+(* ::Input::Initialization:: *)
 liftCyclotomicNumber[N_][x:(_Integer|_Rational)]:=x
 liftCyclotomicNumber[N_][a_AlgebraicNumber]:=liftCyclotomicNumber[N][a]=With[{n=LCM[N,IdentifyRootOfUnity[a[[1]]]]},
 AlgebraicNumberPolynomial[a,\[Zeta][n]^(n/IdentifyRootOfUnity[a[[1]]])]
 ]
 
 
+(* ::Input::Initialization:: *)
 SaveTEigenvalues[]:=AbortProtect[Put[Cases[DownValues[TEigenvalues],r_/;FreeQ[r,Verbatim[Blank[]]]],FileNameJoin[{dataDirectory,"tEigenvalues.m"}]]]
 LoadTEigenvalues[]:=(DownValues[TEigenvalues]=Get[FileNameJoin[{dataDirectory,"tEigenvalues.m"}]]~Join~DownValues[TEigenvalues];)
 
 
+(* ::Input::Initialization:: *)
 RepresentationConductor[N_,{}]:=1
 RepresentationConductor[N_,t:{__Integer}]:=RepresentationConductor[N,t]=LCM@@(Denominator/@TEigenvalues[N,t])
 RepresentationConductor[N_,ts:{{__Integer}...}]:=LCM@@(RepresentationConductor[N,#]&/@ts)
 
 
+(* ::Input::Initialization:: *)
 RepresentationDimension[q_,t_Integer]/;PrimePowerQ[q]:=RepresentationDimension[q,t]=CharacterTable[GAP[SL[2,Subscript[Z, q]]]][[t,1]]
 RepresentationDimension[n_,t:{__Integer}]:=Product[RepresentationDimension[p[[1]],p[[2]]],{p,Transpose[{PrimePowers[n],t}]}]
 RepresentationDimension[n_,ts:{{__Integer}...}]:=Sum[RepresentationDimension[n,t],{t,ts}]
 
 
+(* ::Input::Initialization:: *)
 addMaps[m1_,m2_]:=Module[{keys},
 keys=Union[m1[[All,1]]~Join~m2[[All,1]]];
 #->Replace[#,m1~Join~{_->0}]+Replace[#,m2~Join~{_->0}]&/@keys
 ]
 
 
+(* ::Input::Initialization:: *)
 $RecursionLimit=4000;
 
 
+(* ::Input::Initialization:: *)
 RepresentationsForRankDirty={};
 
 
+(* ::Input::Initialization:: *)
 RepresentationsForRank[n_,r_]:=RepresentationsForRank[n,r]=Module[{characterTables,tuples,PartialRepresentation,addRepresentation,addRepresentations,representations,factors,trivial},
 Print["Enumerating allowed representation types for conductor ",n, " and rank " ,r,"."];
 characterTables=CharacterTable[GAP[SL[2,Subscript[Z, #]]]]&/@PrimePowers[n];
@@ -614,6 +701,7 @@ representations
 ]
 
 
+(* ::Input::Initialization:: *)
 RepresentationsForDimensions[N_,dimensions:{\[ScriptCapitalD]_?NumericQ,{__?NumericQ}}]:=RepresentationsForDimensions[N,dimensions]=Module[{},
 If[!MemberQ[RepresentationsForRankLoaded,N],LoadRepresentationsForRank[N]];
 Cases[RepresentationsForRank[N,Length[dimensions[[2]]]],{V_,_}/;
@@ -621,6 +709,7 @@ And@@Table[MemberQ[PossibleGaloisTraces[N,dimensions,l],TraceOfGalois[N,V[[All,1
 ]
 
 
+(* ::Input::Initialization:: *)
 RepresentationsForInductionMatrix[N_,inductionMatrix:{{__Integer}..}]:=Module[{dimensions,numberOfObjectsInInductionOfOne,result},
 dimensions=DimensionsFromInductionMatrix[N,inductionMatrix];
 numberOfObjectsInInductionOfOne=Count[inductionMatrix[[1]],Except[0]];
@@ -630,15 +719,18 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 RepresentationsForRankProgress[]:=SortBy[(#[[1]]->Max@@(#[[2,All,2]]))&/@Normal[GroupBy[Cases[DownValues[RepresentationsForRank],(p_:>_)/;IntegerQ[p[[1,2]]]:>{p[[1,1]],p[[1,2]]}],#[[1]]&]],#[[2]]&]
 
 
+(* ::Input::Initialization:: *)
 SaveRepresentationsForRank[]:=SaveRepresentationsForRank/@RepresentationsForRankDirty;
 LoadRepresentationsForRank[]:=Module[{data},
 LoadRepresentationsForRank/@Flatten[StringCases[#,___~~"-"~~(n:(DigitCharacter..))~~".m.gz":>ToExpression[n]]&/@FileNames[FileNameJoin[{dataDirectory,"representationsForRank-*.m.gz"}]]];
 ]
 
 
+(* ::Input::Initialization:: *)
 SaveRepresentationsForRank[n_Integer]:=Module[{data,outputDirectory,timing},
 If[!MemberQ[RepresentationsForRankLoaded,n],LoadRepresentationsForRank[n]];
 data=Cases[DownValues[RepresentationsForRank],((p_:>v_)/;p[[1,1]]===n\[And]IntegerQ[p[[1,2]]]):>({p[[1,1]],p[[1,2]]}->v[[All,1,All,1]])];
@@ -664,13 +756,16 @@ RepresentationsForRankLoaded=Union[RepresentationsForRankLoaded,{n}];
 ]
 
 
+(* ::Input::Initialization:: *)
 RepresentationsForRankLoaded={};
 
 
+(* ::Input::Initialization:: *)
 SaveAllModularData[]:=(SaveRepresentationsForRank[];SaveTEigenvalues[];SaveConjugacyClasses[];SaveCharacterTables[];
 SaveGenerators[];)
 
 
+(* ::Input::Initialization:: *)
 workOnRepresentations[conductors_,rank_:\[Infinity]]:=Module[{status,min,i,timing,length,counter=0,cells={}},
 LoadRepresentationsForRank/@conductors;
 status={#,0.0,0,0}&/@conductors;
@@ -690,13 +785,16 @@ SaveRepresentationsForRank/@conductors;
 ]
 
 
+(* ::Input::Initialization:: *)
 LiftsOf1[inductionMatrix_]:=Flatten[Position[Transpose[inductionMatrix],{Except[0],___},1]]
 
 
+(* ::Input::Initialization:: *)
 ListDifference[{a___,b_,c___},{b_,d___}]:=ListDifference[{a,c},{d}]
 ListDifference[L_,{}]:=L
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToGaloisOrbitClumps[n_Integer,inductionMatrix_]:=Module[{outputDirectory,filename,liftsOf1,result,EigenvalueClumps,allocations,AllocateEigenvaluesToGaloisOrbitClumpsImpl,AllocateEigenvaluesToGaloisOrbitClumpsImpl0},
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToGaloisOrbitClumps"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
@@ -729,15 +827,19 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 EquivalenceClassesOfSimples[inductionMatrix_]:=EquivalenceClassesOfSimples[inductionMatrix]=Normal[GroupBy[Range[Length[inductionMatrix[[1]]]],inductionMatrix[[All,#]]&]][[All,2]]
 
 
+(* ::Input::Initialization:: *)
 EquivalenceClassesOfSimples[induction_,eigenvalues_]:=Normal[GroupBy[Range[Length[induction[[1]]]],{induction[[All,#1]],eigenvalues[[#1]]}&]][[All,2]]
 
 
+(* ::Input::Initialization:: *)
 (*Clear[AllocateEigenvaluesToSimples]*)
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToSimples[n_,inductionMatrix_,clumps_]:=(*AllocateEigenvaluesToSimples[n,inductionMatrix,clumps]=*)
 Module[{toAssign,result},
 toAssign=SortBy[EquivalenceClassesOfSimples[inductionMatrix],Function[class,{-Length[Intersection[class,LiftsOf1[inductionMatrix]]],-DimensionsFromInductionMatrix[n,inductionMatrix][[2,class[[1]]]]}]];
@@ -746,6 +848,7 @@ Cases[result,r_/;And@@Table[Min@@(Length/@PossibleGaloisImages[n,DimensionsFromI
 ]
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToSimples[n_,inductionMatrix_,clumps_,{},assigned_,_,_]:=
 Module[{t,T,\[ScriptCapitalD],d},
 (* now we check the top left entry of STSTST=C exactly *)
@@ -759,6 +862,7 @@ If[(d^2).T-\[ScriptCapitalD]==0,
 ]
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToSimples[n_,inductionMatrix_,clumps_,{toAssign_,others___},assigned_,partialSum_,totalRemainingDimension_]:=Module[{i,subsets,dims},
 (*Print[{clumps,{toAssign,others},assigned,partialSum,totalRemainingDimension}];*)
 If[Abs[N[partialSum]]>=totalRemainingDimension+1,
@@ -778,6 +882,7 @@ Join@@(Function[subset,AllocateEigenvaluesToSimples[n,inductionMatrix,ReplacePar
 ]
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToSimples[n_,inductionMatrix_]:=Module[{outputDirectory,filename,result},
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimples"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
@@ -791,6 +896,7 @@ result]
 ]
 
 
+(* ::Input::Initialization:: *)
 FrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_]:=Module[{dims,\[ScriptCapitalD]},
 {\[ScriptCapitalD],dims}=DimensionsFromInductionMatrix[n,inductionMatrix];
 Table[
@@ -801,15 +907,18 @@ Table[
 ]
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators1[n_,fusion_,inductionMatrix_]:=Cases[
 AllocateEigenvaluesToSimples[n,inductionMatrix], 
 a_/;FrobeniusSchurIndicators[n,fusion,inductionMatrix][a[[2]]][1]==UnitVector[Length[inductionMatrix],1]
 ]
 
 
+(* ::Input::Initialization:: *)
 FusionPower[fusion_][i_ (* i-th object *),k_ (* raised to the k-th power *)]:=MatrixPower[fusion[[2,1,2,i]],k].UnitVector[Length[fusion[[2,1,2]]],1]
 
 
+(* ::Input::Initialization:: *)
 FrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_,l_]/;GCD[k,l]==1:=
 Quiet[
 Module[{fsind=FrobeniusSchurIndicators[n,fusion,inductionMatrix][Ts][k]},
@@ -825,6 +934,7 @@ If[FreeQ[result,$Failed],result,$Failed]
 ]
 
 
+(* ::Input::Initialization:: *)
 VerifyFrobeniusSchurIndicators[n_,fusion_,inductionMatrix_][Ts_][k_]:=Table[
 {Module[{traces=Table[FrobeniusSchurIndicators[Ts][k,l][[m]],{l,0,k-1}]},
 If[FreeQ[traces,$Failed],
@@ -835,10 +945,12 @@ Length[NewtonsIdentity[k,traces]],
 {m,1,Length[inductionMatrix]}]
 
 
+(* ::Input::Initialization:: *)
 reportedOnce=False;
 reportFPIndicatorsInBadField[stuff___]:=(If[!reportedOnce,Print["Found a Frobenius-Schur indicator that isn't even in the correct field: ",{stuff}]];reportedOnce=True;)
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators[n_,fusion_,k0_,inductionMatrix_]:=Module[{outputDirectory,filename,result,allocated},
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
@@ -878,25 +990,32 @@ result]
 ]
 
 
+(* ::Input::Initialization:: *)
 (*Progress[fusion_,induction_]:=FileNames[ToFileName[{dataDirectory,"*","*"<>SHA1[induction]<>"*"}]]~Join~FileNames[ToFileName[{dataDirectory,"*","*"<>SHA1[{fusion,induction}]<>"*"}]]*)
 
 
+(* ::Input::Initialization:: *)
 (*StillTodo[fusion_,induction_]:=Complement[PossibleConductors[induction],ToExpression[StringSplit[StringSplit[#,"/"]\[LeftDoubleBracket]-1\[RightDoubleBracket],","]\[LeftDoubleBracket]1\[RightDoubleBracket]]&/@Cases[Progress[fusion,induction],s_/;!StringFreeQ[s,"allocateEigenvaluesToSimplesAndCheckFrobeniusSchurIndicators"]]]*)
 
 
+(* ::Input::Initialization:: *)
 Clear[PartialGaloisAction]
 
 
+(* ::Input::Initialization:: *)
 PartialGaloisAction[n_Integer,induction_?MatrixQ]:=PartialGaloisAction[Table[l->PossibleGaloisImages[n,DimensionsFromInductionMatrix[n,induction],l],{l,GaloisGroup[n]}],EquivalenceClassesOfSimples[induction]]
 PartialGaloisAction[n_Integer,induction_?MatrixQ,eigenvalues_List]:=PartialGaloisAction[Table[l->PossibleGaloisImages[n,DimensionsFromInductionMatrix[n,induction],eigenvalues,l],{l,GaloisGroup[n]}],EquivalenceClassesOfSimples[induction,eigenvalues]]
 
 
+(* ::Input::Initialization:: *)
 SplitSymmetries[pga_PartialGaloisAction,ks:{__Integer}]:=ReplacePart[pga,2->SortBy[DeleteCases[Flatten[{Intersection[#,ks],Complement[#,ks]}&/@pga[[2]],1],{}],#[[1]]&]]
 
 
+(* ::Input::Initialization:: *)
 Clear[RefinePartialGaloisAction]
 
 
+(* ::Input::Initialization:: *)
 RefinePartialGaloisAction[n_,pga_PartialGaloisAction]:=Module[{targets,l,k},
 (* look for a Galois element which isn't determined yet. *)
 targets=Position[pga[[1]],images_/;Length[images]>1,{3}];
@@ -911,6 +1030,7 @@ lastPartialGaloisAction=RefinePartialGaloisAction[n,SplitSymmetries[pga,{k}],l,k
 ]
 
 
+(* ::Input::Initialization:: *)
 RefinePartialGaloisAction[n_,pga_PartialGaloisAction,l_Integer,k_Integer]:=Module[{images},
 (* okay, decide where l sends k *)
 images=(l/.pga[[1]])[[k]];
@@ -920,9 +1040,11 @@ Join@@(RefinePartialGaloisAction[n,SplitSymmetries[pga,{#}],l,k,{#}]&/@images)
 ]
 
 
+(* ::Input::Initialization:: *)
 RefinePartialGaloisAction[n_,pga_PartialGaloisAction,l_Integer,k_Integer,ms0:{}]:={}
 
 
+(* ::Input::Initialization:: *)
 RefinePartialGaloisAction[n_,pga_PartialGaloisAction,l_Integer,k_Integer,ms0:{__Integer}]:=Module[{ms,result,updateResult,rank},
 If[Length[Complement[(l/.pga[[1]])[[k]],ms0]]==0,
 (* No new information *)
@@ -943,6 +1065,7 @@ result
 ]
 
 
+(* ::Input::Initialization:: *)
 (* if we know a(k) exactly, we know a^{-1}(a(k)) *)
 EnforcePartialGaloisActionInverses[n_,pgas_List,a_Integer,k_Integer]:=Join@@(EnforcePartialGaloisActionInverses[n,#,a,k]&/@pgas)
 EnforcePartialGaloisActionInverses[n_,pga_PartialGaloisAction,a_Integer,k_Integer]:=Module[{},
@@ -961,9 +1084,11 @@ RefinePartialGaloisAction[n,pga,Mod[a b,n],k,targets]
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[CompletePartialGaloisAction]
 
 
+(* ::Input::Initialization:: *)
 CompletePartialGaloisAction[n_,pga_PartialGaloisAction]:=Module[{f},
 f[p_PartialGaloisAction]:=f/@RefinePartialGaloisAction[n,p];
 f[ga_GaloisAction]:={ga};
@@ -971,12 +1096,15 @@ Flatten[f[pga]]
 ]
 
 
+(* ::Input::Initialization:: *)
 mkString[x_List,sep_]:=StringJoin@@(ToString/@Most[Flatten[Transpose[{x,Table[sep,{Length[x]}]}]]])
 
 
+(* ::Input::Initialization:: *)
 DreadnautPath="~/bin/dreadnaut";
 
 
+(* ::Input::Initialization:: *)
 NautyHash[ga_GaloisAction]:=Module[{G,X,preamble,edges,partition,cmd,return},
 G=Length[ga[[1]]];
 X=Length[1/.ga[[1]]];
@@ -993,6 +1121,7 @@ Print["Something went wrong while running dreadnaut. Please check you have a cop
 ]
 
 
+(* ::Input::Initialization:: *)
 CompleteGaloisActions[n_,induction_]:=CompleteGaloisActions[n,induction]=Module[{outputDirectory,filename,result},
 outputDirectory=FileNameJoin[{dataDirectory,"completeGaloisActions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
@@ -1007,6 +1136,7 @@ result
 CompleteGaloisActions[n_,induction_,eigenvalues_]:=CompleteGaloisActions[n,induction,eigenvalues]=Normal[GroupBy[CompletePartialGaloisAction[n,PartialGaloisAction[n,induction,eigenvalues]],NautyHash]][[All,2,1]]
 
 
+(* ::Input::Initialization:: *)
 GaloisSubgroups[n_]:=GaloisSubgroups[n]=Module[{oneStepClosure,closure,extensions},
 oneStepClosure[elements_List]:=Union@@Outer[Mod[#1 #2,n]&,elements,elements];
 closure[elements_List]:=FixedPoint[oneStepClosure,elements];
@@ -1015,18 +1145,23 @@ FixedPoint[Union@@(extensions/@#)&,{{1}}]
 ]
 
 
+(* ::Input::Initialization:: *)
 GaloisSubgroups[n_,subgroup_]:=Cases[GaloisSubgroups[n],G_/;Length[Complement[G,subgroup]]==0]
 
 
+(* ::Input::Initialization:: *)
 GaloisEigenvalueStabilizer[n_,t_]:=Cases[GaloisGroup[n],l_/;Mod[(l^2-1)t,1]==0]
 
 
+(* ::Input::Initialization:: *)
 GaloisDimensionStabilizer[n_,d_]:=Cases[GaloisGroup[n],l_/;Abs[GaloisAction[n][l][d]]==d]
 
 
+(* ::Input::Initialization:: *)
 GaloisStabilizer[n_,{d_,t_}]:=GaloisStabilizer[n,{d,t}]=Cases[GaloisGroup[n],l_/;Mod[(l^2-1)t,1]==0\[And]Abs[GaloisAction[n][l][d]]==d]
 
 
+(* ::Input::Initialization:: *)
 StabilizerSubgroupMultiplicities[n_,subgroup_,totalSize_]:=StabilizerSubgroupMultiplicities[n,subgroup,totalSize]=Module[{subgroups=GaloisSubgroups[n,subgroup],max},
 Flatten[Table[Table[a[i],{i,1,Length[subgroups]}],
 Evaluate[Sequence@@Table[(max=(totalSize-Sum[a[j]Length[subgroup]/Length[subgroups[[j]]],{j,1,i-1}])Length[subgroups[[i]]]/Length[subgroup];{a[i],If[i==Length[subgroups],Ceiling[max],0],max}),{i,1,Length[subgroups]}]]
@@ -1034,6 +1169,7 @@ Evaluate[Sequence@@Table[(max=(totalSize-Sum[a[j]Length[subgroup]/Length[subgrou
 ]
 
 
+(* ::Input::Initialization:: *)
 BallsInUrns[urns_,{redBalls_,otherBalls___}]:=Module[{totalUrns,iterators,max,redDistributions,newUrns},
 totalUrns=Total[urns[[All,2]]];
 iterators=Flatten[Table[(max=redBalls-Sum[Sum[r[i0,j0],{j0,1,If[i0==i,j-1,urns[[i0,2]]]}],{i0,1,i}];{r[i,j],If[i==Length[urns]\[And]j==urns[[i,2]],max,0],Min[max,urns[[i,1]],If[j>1,r[i,j-1],\[Infinity]]]}),{i,1,Length[urns]},{j,1,urns[[i,2]]}],1];
@@ -1048,18 +1184,22 @@ Flatten[Function[redDistribution,{redDistribution}~Join~#&/@BallsInUrns[newUrns[
 ]
 
 
+(* ::Input::Initialization:: *)
 BallsInUrns[{{0,_}...},{}]:={{}}
 BallsInUrns[urnSizes_,{}]:={}
 
 
+(* ::Input::Initialization:: *)
 GaloisOrbitOfInvariant[n_,{d_,t_}]:=Union[Table[{Abs[GaloisAction[n][l][d]],Mod[l^2 t,1]},{l,GaloisGroup[n]}]]
 
 
+(* ::Input::Initialization:: *)
 Unprotect[Abs];
 Abs[x_AlgebraicNumber]/;cachedRootReduce[Im[x]]===0:=If[Chop[N[x]]>=0,x,-x]
 Protect[Abs];
 
 
+(* ::Input::Initialization:: *)
 PartitionObjectsByInvariants[n_,induction_,T_]:=Module[{\[ScriptCapitalD],dims,pairs,indices},
 {\[ScriptCapitalD],dims}=DimensionsFromInductionMatrix[n,induction];
 pairs=Transpose[{dims/\[ScriptCapitalD],T}];
@@ -1068,6 +1208,7 @@ Map[indices,Union[(GaloisOrbitOfInvariant[n,#]&/@pairs)],{2}]
 ]
 
 
+(* ::Input::Initialization:: *)
 StabilizerActions[n_,induction_,orbit:{{d_,t_}->objects1_,others___}]:=Module[{subgroups,cosetSizes,multiplicities,howManyInEachCoset,objectsInCosets},
 subgroups=GaloisSubgroups[n,GaloisStabilizer[n,{d,t}]];
 cosetSizes=Length[GaloisStabilizer[n,{d,t}]]/(Length/@subgroups);
@@ -1078,25 +1219,30 @@ objectsInCosets/@howManyInEachCoset
 ]
 
 
+(* ::Input::Initialization:: *)
 StabilizerActions[n_,induction_,T_]:=Module[{orbits},
 orbits=PartitionObjectsByInvariants[n,induction,T];
 Flatten[Outer[List,Sequence@@(StabilizerActions[n,induction,#]&/@orbits),1],Length[orbits]-1]
 ]
 
 
+(* ::Input::Initialization:: *)
 GaloisSubgroupSplittings[n_,subgroup_]:=GaloisSubgroupSplittings[n,subgroup]=
 Cases[
 Cases[GaloisSubgroups[n],G_/;Length[G]Length[subgroup]==Length[GaloisGroup[n]]:>{G,Mod[Outer[Times,subgroup,G],n]}],
 ({G_,products_}/;(Union[Flatten[products]]==GaloisGroup[n])):>Table[l->Cases[products,p_/;MemberQ[p,l]:>Intersection[p,subgroup][[1]],1,1][[1]],{l,GaloisGroup[n]}]]
 
 
+(* ::Input::Initialization:: *)
 GaloisSubgroupSplittings[n_]:=GaloisSubgroupSplittings[n,#]&/@GaloisSubgroups[n]
 
 
+(* ::Input::Initialization:: *)
 (* H a subgroup of K a subgroup of Gal(n) *)
 GaloisCosets[n_,H_,K_]:=GaloisCosets[n,H,K]=Union[Union/@Mod[H #&/@K,n]]
 
 
+(* ::Input::Initialization:: *)
 GaloisActionFromStabilizerAction[n_,induction_,action_]:=Table[(*Print[l];*)l->Table[(*Print[i];*)
 Module[{orbit,indexInOrbit,coset,indexInCoset,imageIndexInOrbit,imageIndexInCoset,stabilizer,splitting,imageInStabilizer,cosets},
 {orbit,indexInOrbit,coset,indexInCoset}=Position[action,i,{6}][[1,{1,3,5,6}]];
@@ -1124,6 +1270,7 @@ action[[orbit,2,imageIndexInOrbit,2,coset,imageIndexInCoset]]
 ,{l,GaloisGroup[n]}]
 
 
+(* ::Input::Initialization:: *)
 CompleteGaloisActions2[n_,induction_,eigenvalues_]:=verifyGaloisAction[n,induction,eigenvalues][GaloisAction[GaloisActionFromStabilizerAction[n,induction,#]]]&/@StabilizerActions[n,induction,eigenvalues]
 verifyGaloisAction[n_,induction_,eigenvalues_][GaloisAction[ga_]]:=Module[{dims,S1},
 dims=DimensionsFromInductionMatrix[n,induction];
@@ -1149,6 +1296,7 @@ GaloisAction[ga]
 ]
 
 
+(* ::Input::Initialization:: *)
 AllocateEigenvaluesToSimplesAndCompleteGaloisActions[n_,fusion_,k_,induction_]:=Module[{filename,outputDirectory,result},
 outputDirectory=FileNameJoin[{dataDirectory,"allocateEigenvaluesToSimplesAndCompleteGaloisActions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
@@ -1163,6 +1311,7 @@ result]
 ]
 
 
+(* ::Input::Initialization:: *)
 CalculateGaloisSigns[n_Integer,inductionMatrix_,ga_GaloisAction]:=Module[{S1,dims=DimensionsFromInductionMatrix[n,inductionMatrix],signs},
 S1=dims[[2]]/dims[[1]];
 signs[l_->permutation_]:=l->(permutation verifySigns[((GaloisAction[n][l]/@S1)/S1[[permutation]]),ga]);
@@ -1171,12 +1320,15 @@ SignedGaloisAction[signs/@ga[[1]]]
 verifySigns[stuff_,ga_]:=(If[Complement[stuff,{1,-1}]=!={},Print["Something went wrong calculating Galois signs for: ", ga];Abort[]];stuff)
 
 
+(* ::Input::Initialization:: *)
 (*SignedPermutationMatrix[signedPermutation_]:=IdentityMatrix[Length[signedPermutation]]\[LeftDoubleBracket]Abs[signedPermutation]\[RightDoubleBracket]Sign[signedPermutation]*)
 
 
+(* ::Input::Initialization:: *)
 SignedPermutationMatrix[signedPermutation_]:=Table[Sign[signedPermutation[[i]]]KroneckerDelta[j,Abs[signedPermutation[[i]]]],{i,1,Length[signedPermutation]},{j,1,Length[signedPermutation]}]
 
 
+(* ::Input::Initialization:: *)
 QLinearSolutions[n_Integer,inductionMatrix_][{{Vs_,Ts_},ga_}]:=Module[{Q,q,sga,dims,S1,T,tEquations,modularInvariantEquations,galoisEquations,galoisOnSEquations,C,S2eqCEquations,inductionEquations,equations,Tp,Sp,result},
 Print["Preparing the linear equations for the change of basis matrix..."];
 Q=Table[q[i,j],{i,1,Length[inductionMatrix[[1]]]},{j,1,Length[inductionMatrix[[1]]]}];
@@ -1226,14 +1378,17 @@ Function[{q0},Evaluate[result/.q->q0]]
 ]
 
 
+(* ::Input::Initialization:: *)
 timesToList[X_Times]:=List@@X
 timesToList[X_]:={X}
 
 
+(* ::Input::Initialization:: *)
 AlgebraicDegree[eqn_,vars_List]:=Max[Total[GroebnerBasis`DistributedTermsList[eqn/.Equal:>Subtract,vars][[1,All,1]],{2}]]
 AlgebraicDegree[eqn_]:=AlgebraicDegree[eqn,Variables[eqn]]
 
 
+(* ::Input::Initialization:: *)
 SolveSEquations[n_Integer,inductionMatrix_][Vs_,ga_,Q0_]:=Module[{S,Sp,Q,s,q,dims, S1,C,equations,det,det0,variables,targets,target,\[Alpha],result,solutions},
 Sp=SInRepresentation[n,Vs];
 S=Table[s[Min[i,j],Max[i,j]],{i,1,Length[inductionMatrix[[1]]]},{j,1,Length[inductionMatrix[[1]]]}];
@@ -1291,6 +1446,7 @@ Function[{q0,s0},Evaluate[result/.{q->q0,s->s0}]]
 ]
 
 
+(* ::Input::Initialization:: *)
 invertibleQ[m_]:=Module[{rules},
 rules=(#->RandomInteger[{1000,2000}])&/@Variables[m];
 If[Det[m/.rules]!=0,
@@ -1300,6 +1456,7 @@ Factor[Det[m]]=!=0
 ]
 
 
+(* ::Input::Initialization:: *)
 FindQLinearSolutions[n_,fusion_,k_,inductionMatrix_,useGalois:(True|False):True]:=Module[{filename,outputDirectory,result,pairs,triples,pMap},
 outputDirectory=FileNameJoin[{dataDirectory,"findQLinearSolutions"}];
 If[!FileExistsQ[outputDirectory],CreateDirectory[outputDirectory]];
@@ -1321,14 +1478,17 @@ result]
 ]
 
 
+(* ::Input::Initialization:: *)
 FindModularData[n_,fusion_,inductionMatrix_,k:_Integer:6,useGalois:(True|False):True]:=Module[{qsols=FindQLinearSolutions[n,fusion,k,inductionMatrix,useGalois],q,s},
 Flatten[Map[(Function[S,{S,#[[1,1,2]]}]/@Union[SolveSEquations[n,inductionMatrix][#[[1,1,1,All,1]],#[[1,2]],#[[2]]][q,s]])&,qsols],1]
 ]
 
 
+(* ::Input::Initialization:: *)
 permuteColumns[inductionMatrix_]:=Transpose[SortBy[Transpose[inductionMatrix],{Total[#],Reverse[#]}&]]
 
 
+(* ::Input::Initialization:: *)
 FindModularData[fusion_,induction_?MatrixQ]:=
 Module[{},
 Print["Beginning calculation of modular data for ",DisplayGraph[fusion]," ",MatrixForm[induction]];
@@ -1366,7 +1526,9 @@ Join@@(ParallelFindModularData/@FindFusionRules[m])
 
 
 
+(* ::Input::Initialization:: *)
 End[];
 
 
+(* ::Input::Initialization:: *)
 EndPackage[];

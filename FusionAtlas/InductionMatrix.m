@@ -19,19 +19,24 @@
 
 
 
+(* ::Input::Initialization:: *)
 BeginPackage["FusionAtlas`InductionMatrix`",{"FusionAtlas`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`TensorSolver`","FusionAtlas`FormalCodegrees`"}];
 
 
+(* ::Input::Initialization:: *)
 InductionMatrices::usage="InductionMatrices[fr_FusionRules] computes the possible induction matrices to the centre for a fusion ring.";
 AllDecompositions::usage="AllDecompositions[m] for m a symmetric non-negative integer matrix, gives all matrices a so a.Transpose[a] == m";
 
 
+(* ::Input::Initialization:: *)
 Begin["`Private`"];
 
 
+(* ::Input::Initialization:: *)
 permuteColumns[inductionMatrix_]:=Transpose[SortBy[Transpose[inductionMatrix],{Total[#],Reverse[#]}&]]
 
 
+(* ::Input::Initialization:: *)
 Clear[InductionMatrices]
 InductionMatrices[fr_FusionRules]:=InductionMatrices[fr]=Module[{n,dimensionData},
 dimensionData=DimensionData[fr];
@@ -43,6 +48,7 @@ CheckGaloisAction[n,dimensionData]
 ]
 
 
+(* ::Input::Initialization:: *)
 InductionMatrices[FusionRules[{{0,1,0,0,0,0},{1,1,1,0,0,0},{0,1,1,1,0,0},{0,0,1,1,1,1},{0,0,0,1,2,1},{0,0,0,1,1,0}},{{0,0,0}->{{{1,0,0,0,0,0},{0,1,0,0,0,0},{0,0,1,0,0,0},{0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,1}},{{0,1,0,0,0,0},{1,1,1,0,0,0},{0,1,1,1,0,0},{0,0,1,1,1,1},{0,0,0,1,2,1},{0,0,0,1,1,0}},{{0,0,1,0,0,0},{0,1,1,1,0,0},{1,1,1,1,1,1},{0,1,1,2,3,1},{0,0,1,3,3,2},{0,0,1,1,2,1}},{{0,0,0,1,0,0},{0,0,1,1,1,1},{0,1,1,2,3,1},{1,1,2,4,5,3},{0,1,3,5,6,3},{0,1,1,3,3,2}},{{0,0,0,0,1,0},{0,0,0,1,2,1},{0,0,1,3,3,2},{0,1,3,5,6,3},{1,2,3,6,7,4},{0,1,2,3,4,2}},{{0,0,0,0,0,1},{0,0,0,1,1,0},{0,0,1,1,2,1},{0,1,1,3,3,2},{0,1,2,3,4,2},{1,0,1,2,2,1}}}}]]={\!\(\*
 TagBox[
 RowBox[{"(", "", GridBox[{
@@ -58,9 +64,11 @@ GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.7]}, Off
 Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]\)};
 
 
+(* ::Input::Initialization:: *)
 InductionMatrices[g_GradedBigraph]:={#,InductionMatrices[#]}&/@(EvenPartFusionRules/@FindFusionRules[g])
 
 
+(* ::Input::Initialization:: *)
 CheckGaloisAction[n_,dimensionData_][inductionMatrix_]:=Module[{\[ScriptCapitalD],dimensions},
 \[ScriptCapitalD]=dimensionData[[1]];
 dimensions=Sort[Transpose[inductionMatrix].(dimensionData[[2,1]])];
@@ -68,6 +76,7 @@ And@@Table[Sort[abs[GaloisAction[n][l][#/\[ScriptCapitalD]]\[ScriptCapitalD]]&/@
 ]
 
 
+(* ::Input::Initialization:: *)
 AnnularHoms[f_FusionRules]:=Module[{m,d,n,objects},
 m[i_,j_,k_]:={i,j,k}/.f[[-1]];
 n[i_,j_]:=Length[m[i,j,j]];
@@ -78,9 +87,11 @@ Table[Sum[m[q[[1]],p[[1]],p[[1]]][[s,p[[2]],t]]m[p[[1]],q[[1]],q[[1]]][[d[p[[1]]
 ]
 
 
+(* ::Input::Initialization:: *)
 AnnularHoms[{G1_BigraphWithDuals,G2_BigraphWithDuals}]:=AnnularHoms/@FindFusionRules[G1,G2]
 
 
+(* ::Input::Initialization:: *)
 DimensionData[G:{_BigraphWithDuals,_BigraphWithDuals},\[Lambda]0_:0]:=Module[{\[Lambda],\[ScriptCapitalD],dims,dimsForFormalCodegrees},
 \[Lambda]=ToCyclotomicField[If[\[Lambda]0==0,RootReduce[GlobalEvenDimension[G[[1,1]]]],\[Lambda]0]];
 \[ScriptCapitalD]=ToNumberField[GlobalEvenDimension[G[[1,1]]],\[Lambda]];
@@ -89,6 +100,7 @@ ZeroVector[GraphEvenRank[G[[1]]]]~Join~ToNumberField[Flatten[DimensionsByDepth[G
 {\[ScriptCapitalD],dims}]
 
 
+(* ::Input::Initialization:: *)
 DimensionData[fr_FusionRules]:=Module[{\[Lambda],dims,codegrees,\[ScriptCapitalD]},
 dims=ToCyclotomicField[ToNumberField[FPDimensions[fr]]];
 If[MemberQ[dims,_AlgebraicNumber],
@@ -102,9 +114,11 @@ dims=dims/dims[[1]];
 ]
 
 
+(* ::Input::Initialization:: *)
 dNumberQ=FusionAtlas`dTest`Private`dNumberQ;
 
 
+(* ::Input::Initialization:: *)
 Clear[columnCondition]
 columnCondition[{\[ScriptCapitalD]_,dims_,dimsForFormalCodegrees_}][v_]:=columnCondition[{\[ScriptCapitalD],dims,dimsForFormalCodegrees}][v]=With[{d=dims.v},
 numberOfColumnsToCheck--;
@@ -115,6 +129,7 @@ Clear[dimensionCondition]
 dimensionCondition[\[ScriptCapitalD]_,d_]:=dimensionCondition[\[ScriptCapitalD],d]=(And@@(Chop[N[#]]>0&/@d))\[And](And@@(AlgebraicIntegerQ/@(\[ScriptCapitalD]/d)))\[And](And@@(dNumberQ/@d))
 
 
+(* ::Input::Initialization:: *)
 DowndateCholeskyDecomposition[L0_,x0_]:=Module[{L=L0,x=x0,p=Length[x0],d,r,c,s},
 Do[
 d=L[[k,k]]^2-x[[k]]^2;
@@ -132,26 +147,32 @@ L
 ]
 
 
+(* ::Input::Initialization:: *)
 GaloisGroup[n_]:=GaloisGroup[n]=Cases[Table[i,{i,1,n-1}],i_/;GCD[i,n]==1]
 
 
+(* ::Input::Initialization:: *)
 cachedToNumberField[a_,b_]:=cachedToNumberField[a,b]=ToNumberField[a,b]
 
 
+(* ::Input::Initialization:: *)
 GaloisConjugates[a:AlgebraicNumber[x_,c_]]:=With[{n=IdentifyRootOfUnity[x]},
 Union[Table[AlgebraicNumberPolynomial[a,\[Zeta][n]^l],{l,GaloisGroup[n]}]]
 ]
 GaloisConjugates[x:(_Integer|_Rational)]:={x}
 
 
+(* ::Input::Initialization:: *)
 cachedRootReduce[x_]:=cachedRootReduce[x]=RootReduce[x]
 abs[x_]:=Sign[cachedRootReduce[x]]x
 
 
+(* ::Input::Initialization:: *)
 GaloisAction[n_][l_][a:AlgebraicNumber[r_,x_]]/;r==\[Zeta][n][[1]]:=GaloisAction[n][l][a]=AlgebraicNumberPolynomial[a,\[Zeta][n]^l]
 GaloisAction[n_][l_][a:(_Integer|_Rational)]:=a
 
 
+(* ::Input::Initialization:: *)
 Clear[AllowedColumns]
 AllowedColumns[m_,dimensionData_]:=Module[{bounds,allColumns,\[ScriptCapitalD],allowedColumns,columnDimensions},
 bounds=Table[Floor[Sqrt[m[[i,i]]]],{i,1,Length[m]}];
@@ -166,13 +187,15 @@ Cases[allowedColumns,c_/;Length[Complement[abs[GaloisConjugates[(c.(dimensionDat
 ]
 
 
-AllDecompositions[m_]:=Module[{bounds,columns},
+(* ::Input::Initialization:: *)
+AllDecompositions[m_,maxColumns_:\[Infinity]]:=Module[{bounds,columns,a},
 bounds=Table[Floor[Sqrt[m[[i,i]]]],{i,1,Length[m]}];
 columns=DeleteCases[Flatten[Table[Table[a[i],{i,1,Length[m]}],Evaluate[Sequence@@Table[{a[i],Range[0,bounds[[i]]]},{i,1,Length[m]}]]],Length[m]-1],{0..}];
-Transpose/@AlgebraicDecompositionsImplementation[m,N[CholeskyDecomposition[m+0.001IdentityMatrix[Length[m]]]],{},columns]
+Transpose/@AlgebraicDecompositionsImplementation[m,N[CholeskyDecomposition[m+0.001IdentityMatrix[Length[m]]]],{},columns,maxColumns]
 ]
 
 
+(* ::Input::Initialization:: *)
 Clear[AlgebraicDecompositions]
 AlgebraicDecompositions[m_,dimensionData:{_,_,_}]/;MatrixRank[m]==Length[m]:=AlgebraicDecompositions[m,dimensionData]=Transpose/@AlgebraicDecompositions[m,N[CholeskyDecomposition[m+0.001IdentityMatrix[Length[m]]]],dimensionData,{}]
 AlgebraicDecompositions[m_,{\[ScriptCapitalD]_,dims_,dimsForFormalCodegrees_}]/;MatrixRank[m]<Length[m]:=Module[{mr,dr,i},
@@ -181,11 +204,12 @@ Transpose[i].#&/@AlgebraicDecompositions[mr,{\[ScriptCapitalD],dr,dimsForFormalC
 ]
 AlgebraicDecompositions[m_,cholesky_,{\[ScriptCapitalD]_,dims_,dimsForFormalCodegrees_},{}]:=Module[{bounds,allColumns,allowedColumns},
 allowedColumns=AllowedColumns[m,{\[ScriptCapitalD],dims,dimsForFormalCodegrees}];
-AlgebraicDecompositionsImplementation[m,cholesky,{},allowedColumns]
+AlgebraicDecompositionsImplementation[m,cholesky,{},allowedColumns,\[Infinity]]
 ]
-AlgebraicDecompositionsImplementation[m_,None,columns_,allowedColumns_]:={}
-AlgebraicDecompositionsImplementation[m_,cholesky_,columns_,allowedColumns_]/;Union[Flatten[m]]==={0}:=((*Print[{columns}];*){columns})
-AlgebraicDecompositionsImplementation[m_,cholesky_,columns_,allowedColumns_]:=Module[{t,i,bounds,firstNonZeroRow,nextColumns,nextAllowedColumns},
+AlgebraicDecompositionsImplementation[m_,None,columns_,allowedColumns_,maxColumns_]:={}
+AlgebraicDecompositionsImplementation[m_,cholesky_,columns_,allowedColumns_,maxColumns_]/;Union[Flatten[m]]==={0}:=((*Print[{columns}];*){columns})
+AlgebraicDecompositionsImplementation[m_,cholesky_,columns_,allowedColumns_,maxColumns_]/;(Length[columns]==maxColumns)\[And](Union[Flatten[m]]=!={0}):={}
+AlgebraicDecompositionsImplementation[m_,cholesky_,columns_,allowedColumns_,maxColumns_]:=Module[{t,i,bounds,firstNonZeroRow,nextColumns,nextAllowedColumns},
 latestColumn=columns;
 (*Print["decomposing: " ,m ," with columns: ",columns];*)
 bounds=Table[Floor[Sqrt[m[[i,i]]]],{i,1,Length[m]}];
@@ -199,14 +223,16 @@ nextAllowedColumns=Cases[nextAllowedColumns,c_/;(And@@Table[c[[i]]<=bounds[[i]],
 nextColumns=Cases[nextAllowedColumns,c_/;(c[[firstNonZeroRow]]!=0)];
 numberOfColumnsToCheck=Length[nextColumns];
 (*Print[Length[allowedNextColumns]];*)
-Join@@(AlgebraicDecompositionsImplementation[m-Outer[Times,#,#],DowndateCholeskyDecomposition[cholesky,#],columns~Join~{#},nextAllowedColumns]&/@nextColumns)
+Join@@(AlgebraicDecompositionsImplementation[m-Outer[Times,#,#],DowndateCholeskyDecomposition[cholesky,#],columns~Join~{#},nextAllowedColumns,maxColumns]&/@nextColumns)
 ]
 
 
 
+(* ::Input::Initialization:: *)
 identityColumn[FusionRules[_,{{0,0,0}->{m_,___}}]]:=UnitVector[Length[m],1]
 
 
+(* ::Input::Initialization:: *)
 FindSpanningSet[m_?MatrixQ]:=FindSpanningSetI[0,{},{},m]
 FindSpanningSet[{}]:={}
 FindSpanningSetI[considered_,basis_,rowReduced_,{}]:=basis
@@ -219,6 +245,7 @@ FindSpanningSetI[considered+1,basis~Join~{considered+1},newRR,Rest[remaining]]
 ]
 
 
+(* ::Input::Initialization:: *)
 RankReduction[m_,dims_]:=Module[{p,o,mr,m2,i},
 o=Ordering[Table[m[[i,i]],{i,1,Length[m]}]];
 p=FindSpanningSet[m[[o,o]]];
@@ -232,7 +259,9 @@ i=RowReduce[NullSpace[NullSpace[m2]]][[All,pi]][[All,oi]];
 ]
 
 
+(* ::Input::Initialization:: *)
 End[];
 
 
+(* ::Input::Initialization:: *)
 EndPackage[];
