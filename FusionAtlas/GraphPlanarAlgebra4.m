@@ -230,13 +230,14 @@ newTag
 
 
 (* ::Input::Initialization:: *)
-TurnDownTopLeftCorner[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String _]/;up>=1]:=
-Module[{transform,newTag=tag<>"s",coefficients},
+TurnDownTopLeftCorner[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String]/;up>=1]:=
+Module[{transform,newTag,coefficients},
+newTag=tag<>"s";
 transform[{a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_]:=({b,nb,B,a,na}->\[Zeta] CriticalPointCoefficient[g,-1,b,a,pivotalStructure]);
 Do[
 coefficients=Get[file];
 Put[transform/@coefficients,StringReplace[file,tag->newTag]];
-,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]}]
+,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]}];
 LargeGPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
 newTag
 ]
@@ -422,13 +423,23 @@ ExpandCoefficientRules[GPA4Element[g,over,{down,up},pivotalStructure,{loop:{Patt
 (* ::Input::Initialization:: *)
 GPA4Matrix[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values_]]:=
 Module[{initialVertices,finalVertices,pathsList,matrices,coefficients},
-coefficients=(values~Join~{otherLoopsZero[up+down]});
+coefficients=Dispatch[(values~Join~{otherLoopsZero[up+down]})];
 initialVertices=GraphVertices[g,over[[1]]];
 finalVertices=GraphVertices[g,over[[up+1]]];
 pathsList=DeleteCases[Flatten[Outer[{{#1,#2},GraphPathsBetween[g,#1,#2,Take[over,up+1]],GraphPathsBetween[g,#1,#2,Reverse[Take[over,-down-1]]]}&,initialVertices,finalVertices],1],{{_Vertex,_Vertex},{},{}}];
-matrices=pathsList/.{{initial_Vertex,final_Vertex},upPaths_List,downPaths_List}:>({initial,final}->(Outer[GraphPathToGraphLoop[ConcatenatePaths[#1,Reverse[#2]]](*#1~Join~Most[Reverse[Most[#2]]]*)&,upPaths,downPaths,1]/.coefficients));
+matrices=pathsList/.{{initial_Vertex,final_Vertex},upPaths_List,downPaths_List}:>({initial,final}->MatrixWrapper[Length[upPaths],Length[downPaths],(Outer[GraphPathToGraphLoop[ConcatenatePaths[#1,Reverse[#2]]](*#1~Join~Most[Reverse[Most[#2]]]*)&,upPaths,downPaths,1]/.coefficients)]);
 GPA4Matrix[g,over,{down,up},pivotalStructure,matrices]
 ]
+
+
+(* ::Input::Initialization:: *)
+MatrixWrapper/:MatrixWrapper[rows_,columns_,m1_]+MatrixWrapper[rows_,columns_,m2_]:=MatrixWrapper[rows,columns,m1+m2]
+MatrixWrapper/: \[Alpha]_ MatrixWrapper[rows_,columns_,m_]:=MatrixWrapper[rows,columns,\[Alpha] m]
+MatrixWrapper/:MatrixWrapper[a_,0,{{}...}].MatrixWrapper[0,b_,{}]:=MatrixWrapper[a,b,Table[0,{a},{b}]]
+MatrixWrapper/:MatrixWrapper[0,b_,{}].MatrixWrapper[b_,c_,m_]:=MatrixWrapper[0,c,{}]
+MatrixWrapper/:MatrixWrapper[a_,b_,m_].MatrixWrapper[b_,0,{{}...}]:=MatrixWrapper[a,0,Table[{},{a}]]
+MatrixWrapper/:MatrixWrapper[a_,b_,m_].MatrixWrapper[b_,c_,n_]:=MatrixWrapper[a,c,m.n]
+MatrixWrapper/:Inverse[MatrixWrapper[a_,a_,m_]]:=MatrixWrapper[a,a,Inverse[m]]
 
 
 (* ::Input::Initialization:: *)
@@ -437,8 +448,8 @@ GraphPathToGraphLoop[{v_Vertex,o___,v_Vertex}]:={v,o}
 
 
 (* ::Input::Initialization:: *)
-GPA4Matrix/:GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overBelow:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,middle_Integer},pivotalStructure:("Spherical"|"Lopsided"),values1_].GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overAbove:{({0,0}|{0,1}|{1,1}|{1,0})...},{middle_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values2_]:=
-GPA4Matrix[g,Take[overAbove,up]~Join~Take[overBelow,-down-1],{down,up},pivotalStructure,(#[[1,1]]->#[[2,2]].#[[1,2]])&/@Transpose[{values1,values2}]]
+(*GPA4Matrix/:GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overBelow:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,middle_Integer},pivotalStructure:("Spherical"|"Lopsided"),values1_].GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overAbove:{({0,0}|{0,1}|{1,1}|{1,0})...},{middle_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),values2_]:=
+GPA4Matrix[g,Take[overAbove,up]~Join~Take[overBelow,-down-1],{down,up},pivotalStructure,(#\[LeftDoubleBracket]1,1\[RightDoubleBracket]\[Rule]#\[LeftDoubleBracket]2,2\[RightDoubleBracket].#\[LeftDoubleBracket]1,2\[RightDoubleBracket])&/@Transpose[{values1,values2}]]*)
 
 
 (* ::Input::Initialization:: *)
@@ -457,7 +468,7 @@ AddStrandOnRight[m_GPA4Matrix,newOver_]:=GPA4Matrix[AddStrandOnRight[GPA4Element
 
 (* ::Input::Initialization:: *)
 GPA4Element[GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_,up_},pivotalStructure:("Spherical"|"Lopsided"),values_]]:=
-GPA4Element[g,over,{down,up},pivotalStructure,DeleteCases[Flatten[values/.({initial_Vertex,final_Vertex}->matrix_):>
+GPA4Element[g,over,{down,up},pivotalStructure,DeleteCases[Flatten[values/.({initial_Vertex,final_Vertex}->MatrixWrapper[_,_,matrix_]):>
 With[{
 downPaths=GraphPathsBetween[g,initial,final,Reverse[Take[over,-down-1]]],
 upPaths=GraphPathsBetween[g,initial,final,Take[over,up+1]]
@@ -470,8 +481,10 @@ MapThread[Rule,{Outer[GraphPathToGraphLoop[ConcatenatePaths[#1,Reverse[#2]]]&,up
 
 (* ::Input::Initialization:: *)
 GPAMultiply[GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overBelow:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,middle_Integer},pivotalStructure:("Spherical"|"Lopsided"),matrices1_],GPA4Matrix[g:{_BigraphWithDuals,_BigraphWithDuals},overAbove:{({0,0}|{0,1}|{1,1}|{1,0})...},{middle_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),matrices2_]]/;Take[overBelow,middle+1]==Reverse[Take[overAbove,-middle-1]]:=
+Module[{d1=Dispatch[matrices1],d2=Dispatch[matrices2]},
 GPA4Matrix[g,Take[overAbove,up+1]~Join~Take[overBelow,-down],{down,up},pivotalStructure,
-matrices1[[All,1]]/.{p:{_Vertex,_Vertex}:>(If[Length[p/.matrices1]>10,DebugPrint["multiplying matrices: ",p,", size: ",Length[p/.matrices1]]];(p->(p/.matrices1).(p/.matrices2)))}
+matrices1[[All,1]]/.{p:{_Vertex,_Vertex}:>(If[Length[p/.d1]>10,DebugPrint["multiplying matrices: ",p,", size: ",Length[p/.d1]]];(p->(p/.d1).(p/.d2)))}
+]
 ]
 
 
@@ -793,8 +806,8 @@ SparseMatrixSolve[SolveTwoTermEquations[conditions,variablePattern,variablePrefe
 
 
 (* ::Input::Initialization:: *)
-CollectGPA4Matrix[GPA4Matrix[xx__,matrices_],p_]:=GPA4Matrix[xx,matrices/.((v_->m_):>(v->Collect[m,p,Together]))]
-CollectGPA4Matrix[GPA4Matrix[xx__,matrices_],p_,f_]:=GPA4Matrix[xx,matrices/.((v_->m_):>(v->Collect[m,p,f]))]
+CollectGPA4Matrix[GPA4Matrix[xx__,matrices_],p_]:=GPA4Matrix[xx,matrices/.((v_->MatrixWrapper[a_,b_,m_]):>(v->MatrixWrapper[a,b,Collect[m,p,Together]]))]
+CollectGPA4Matrix[GPA4Matrix[xx__,matrices_],p_,f_]:=GPA4Matrix[xx,matrices/.((v_->MatrixWrapper[a_,b_,m_]):>(v->MatrixWrapper[a,b,Collect[m,p,f]]))]
 
 
 (* ::Input::Initialization:: *)
