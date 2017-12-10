@@ -190,6 +190,28 @@ coefficients/.({a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_):>({b,nb
 
 
 (* ::Input::Initialization:: *)
+GZIPGet[file_]:=Module[{gzip=file<>".gz",result},
+If[FileExistsQ[gzip],
+Run["gunzip < "<>gzip<>" > "<>file];
+result=Get[file];
+DeleteFile[file];
+result,
+Get[file]
+]
+]
+
+
+(* ::Input::Initialization:: *)
+GZIPPut[expression_,file_]:=Module[{gzip=file<>".gz"},
+AbortProtect[
+Put[expression,file];
+Run["gzip < "<>file<>" > "<>gzip];
+DeleteFile[file];
+]
+]
+
+
+(* ::Input::Initialization:: *)
 TurnDownTopLeftCorner[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_]/;up>=1]:=
 Module[{transform},
 transform[{a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_]:=({b,nb,B,a,na}->\[Zeta] CriticalPointCoefficient[g,-1,b,a,pivotalStructure]);
@@ -203,7 +225,7 @@ transform/@coefficients
 LargeGPA4Element[GPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),coefficients_],tag_String]:=
 Module[{},
 Do[
-Put[coefficients[[i;;Min[i+999,Length[coefficients]]]],FileNameJoin[{NotebookDirectory[],"large",tag<>"-"<>ToString[i]<>".m"}]]
+GZIPPut[coefficients[[i;;Min[i+999,Length[coefficients]]]],FileNameJoin[{NotebookDirectory[],"large",tag<>"-"<>ToString[i]<>".m"}]]
 ,{i,1,Length[coefficients],1000}];
 LargeGPA4Element[g,over,{down,up},pivotalStructure,tag]
 ]
@@ -211,17 +233,17 @@ LargeGPA4Element[g,over,{down,up},pivotalStructure,tag]
 
 (* ::Input::Initialization:: *)
 GPA4Element[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String]]:=
-GPA4Element[g,over,{down,up},pivotalStructure,Flatten[Get/@FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]],1]]
+GPA4Element[g,over,{down,up},pivotalStructure,Flatten[GZIPGet/@FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]],1]]
 
 
 (* ::Input::Initialization:: *)
 TurnUpBottomRightCorner[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String]/;down>=1]:=
-Module[{transform,newTag,coefficients},
+Module[{transform,newTag,coefficients,file},
 newTag=tag<>"r";
 transform[{A:RepeatedSequence[_Vertex,_Integer,{up}],v_Vertex,n_Integer,B___}->\[Zeta]_]:=({A,v,n,B}->\[Zeta] CriticalPointCoefficient[g,1,v,{B,A}[[1]],pivotalStructure]);
 Do[
-coefficients=Get[file];
-Put[transform/@coefficients,StringReplace[file,tag->newTag]];
+coefficients=GZIPGet[file];
+GZIPPut[transform/@coefficients,StringReplace[file,tag->newTag]];
 ,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]}];
 LargeGPA4Element[g,over,{down-1,up+1},pivotalStructure,
 newTag
@@ -231,12 +253,12 @@ newTag
 
 (* ::Input::Initialization:: *)
 TurnDownTopLeftCorner[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String]/;up>=1]:=
-Module[{transform,newTag,coefficients},
+Module[{transform,newTag,coefficients,file},
 newTag=tag<>"s";
 transform[{a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_]:=({b,nb,B,a,na}->\[Zeta] CriticalPointCoefficient[g,-1,b,a,pivotalStructure]);
 Do[
-coefficients=Get[file];
-Put[transform/@coefficients,StringReplace[file,tag->newTag]];
+coefficients=GZIPGet[file];
+GZIPPut[transform/@coefficients,StringReplace[file,tag->newTag]];
 ,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]}];
 LargeGPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
 newTag
