@@ -27,6 +27,7 @@ BeginPackage["FusionAtlas`GraphPlanarAlgebra4`",{"FusionAtlas`","FusionAtlas`Big
 NumberFieldGenerator;EnlargeNumberField;RedefineLopsidedDimension;LopsidedDimension;SphericalDimension;CriticalPointCoefficient;
 GPA4Element;
 LargeGPA4Element;
+DeleteLargeGPA4Element;
 EmptyGPA4Element;CapTopLeft;PartialTrace;GPA4Trace;GPA4TraceEvaluation;TurnUpBottomRightCorner;TurnDownTopRightCorner;TurnUpBottomLeftCorner;TurnDownTopLeftCorner;RotateOneClick;RotateTwoClicks;GPAFourierTransform;GPAFourierTransformTwice;AddStrandOnRight;AddStrandOnLeft;AddStrandsOnLeft;GPAMultiply;GPAConjugate;GPACoefficients;GPACoefficientsAtStar;VariableGPA4Element;GPA4Matrix;GPATensor;GPAInverse;Rotate\[Pi]Clockwise;Rotate\[Pi]Counterclockwise;GPAMultiplyWithOffset;PivotalStructure;ConnectionGrid;StrandCrossingAbove;StrandCrossingBelow;TwoStrandFlatness;OneStrandFlatness;FusionRulesFromConnection;LowestWeightEigenvectorConditions;LowestWeightConditions;CollectGPA4Matrix;CollectGPA4Element;LowestWeightEigenspace;LowestWeightSpace;LoadLowestWeightEigenspaces;ChangePivotalStructure;NumberFieldGauge;FindEquationsForFlatGenerators;FindFlatGenerators;FindFlatLowestWeightVectors;qInteger\[Delta];JonesWenzlIdempotent;LoadIdempotents;S2Equation;RowReducedS2Equation;S2Solutions;IdentityTL;OneCupTL;OneCupJonesWenzl;SomeOneCupJonesWenzl;AnnularConsequences;GPACirc;GPAStar;GaugeTransform; GaugeAction; VariableGaugeElement; FindGaugeElementRelating;WenzlRecursion;
 
 
@@ -219,6 +220,10 @@ GPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
 transform/@coefficients
 ]
 ]
+
+
+(* ::Input::Initialization:: *)
+DeleteLargeGPA4Element[___,tag_]:=DeleteFile/@FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]
 
 
 (* ::Input::Initialization:: *)
