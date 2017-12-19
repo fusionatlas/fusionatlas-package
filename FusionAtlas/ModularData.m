@@ -94,7 +94,7 @@ Print[cmd];
 return=Run["echo '"<>cmd<>"' | "<>GAPPath<>" -x 10000 -o 16g > /tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out"];
 lines=StringSplit[Import["/tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out","String"],"\n"];
 If[StringTake[lines[[1]],11]=!=" ********* "\[Or]
-lines[[-1]]=!="gap> gap> ",
+(lines[[-1]]=!="gap> "\[And]lines[[-1]]=!="gap> gap> "),
 Print["It looks like something went wrong running GAP (error code "<>ToString[return]<>"). Please check that you have GAP installed, and modify FusionAtlas`ModularData`Private`GAPPath if necessary."];
 Print[cmd];
 Print/@lines;
@@ -843,7 +843,7 @@ EquivalenceClassesOfSimples[induction_,eigenvalues_]:=Normal[GroupBy[Range[Lengt
 AllocateEigenvaluesToSimples[n_,inductionMatrix_,clumps_]:=(*AllocateEigenvaluesToSimples[n,inductionMatrix,clumps]=*)
 Module[{toAssign,result},
 toAssign=SortBy[EquivalenceClassesOfSimples[inductionMatrix],Function[class,{-Length[Intersection[class,LiftsOf1[inductionMatrix]]],-DimensionsFromInductionMatrix[n,inductionMatrix][[2,class[[1]]]]}]];
-result=AllocateEigenvaluesToSimples[n,inductionMatrix,clumps,toAssign,{},Chop[N[-DimensionsFromInductionMatrix[n,inductionMatrix][[1]]]],Chop[N[DimensionsFromInductionMatrix[n,inductionMatrix][[1]]^2]]];
+result=AllocateEigenvaluesToSimples[n,inductionMatrix,clumps,toAssign,{},Chop[N[-DimensionsFromInductionMatrix[n,inductionMatrix][[1]]],10^-5],Chop[N[DimensionsFromInductionMatrix[n,inductionMatrix][[1]]^2],10^-5]];
 Cases[result,r_/;And@@Table[Min@@(Length/@PossibleGaloisImages[n,DimensionsFromInductionMatrix[n,inductionMatrix],r,l])>=1,{l,GaloisGroupGenerators[n]}]]
 ]
 

@@ -191,23 +191,35 @@ coefficients/.({a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_):>({b,nb
 
 
 (* ::Input::Initialization:: *)
-GZIPGet[file_]:=Module[{gzip=file<>".gz",result},
+GZIPGet[file_]:=Module[{gzip,file0,result},
+If[StringTake[file,-3]==".gz",
+gzip=file;
+file0=StringDrop[file,-3],
+gzip=file<>".gz";
+file0=file
+];
 If[FileExistsQ[gzip],
-Run["gunzip < "<>gzip<>" > "<>file];
-result=Get[file];
-DeleteFile[file];
+Run["gunzip < "<>gzip<>" > "<>file0];
+result=Get[file0];
+DeleteFile[file0];
 result,
-Get[file]
+Get[file0]
 ]
 ]
 
 
 (* ::Input::Initialization:: *)
-GZIPPut[expression_,file_]:=Module[{gzip=file<>".gz"},
+GZIPPut[expression_,file_]:=Module[{gzip,file0},
+If[StringTake[file,-3]==".gz",
+gzip=file;
+file0=StringDrop[file,-3],
+gzip=file<>".gz";
+file0=file
+];
 AbortProtect[
-Put[expression,file];
-Run["gzip < "<>file<>" > "<>gzip];
-DeleteFile[file];
+Put[expression,file0];
+Run["gzip < "<>file0<>" > "<>gzip];
+DeleteFile[file0];
 ]
 ]
 
@@ -223,7 +235,7 @@ transform/@coefficients
 
 
 (* ::Input::Initialization:: *)
-DeleteLargeGPA4Element[___,tag_]:=DeleteFile/@FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]
+DeleteLargeGPA4Element[LargeGPA4Element[___,tag_]]:=(DeleteFile/@FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m.gz"}]];)
 
 
 (* ::Input::Initialization:: *)
@@ -238,7 +250,7 @@ LargeGPA4Element[g,over,{down,up},pivotalStructure,tag]
 
 (* ::Input::Initialization:: *)
 GPA4Element[LargeGPA4Element[g:{_BigraphWithDuals,_BigraphWithDuals},over:{({0,0}|{0,1}|{1,1}|{1,0})...},{down_Integer,up_Integer},pivotalStructure:("Spherical"|"Lopsided"),tag_String]]:=
-GPA4Element[g,over,{down,up},pivotalStructure,Flatten[GZIPGet/@FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]],1]]
+GPA4Element[g,over,{down,up},pivotalStructure,Flatten[GZIPGet/@FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m.gz"}]],1]]
 
 
 (* ::Input::Initialization:: *)
@@ -249,7 +261,7 @@ transform[{A:RepeatedSequence[_Vertex,_Integer,{up}],v_Vertex,n_Integer,B___}->\
 Do[
 coefficients=GZIPGet[file];
 GZIPPut[transform/@coefficients,StringReplace[file,tag->newTag]];
-,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]}];
+,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m.gz"}]]}];
 LargeGPA4Element[g,over,{down-1,up+1},pivotalStructure,
 newTag
 ]
@@ -264,7 +276,7 @@ transform[{a_Vertex,na_Integer,b_Vertex,nb_Integer,B___}->\[Zeta]_]:=({b,nb,B,a,
 Do[
 coefficients=GZIPGet[file];
 GZIPPut[transform/@coefficients,StringReplace[file,tag->newTag]];
-,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m"}]]}];
+,{file,FileNames[FileNameJoin[{NotebookDirectory[],"large",tag<>"-*.m.gz"}]]}];
 LargeGPA4Element[g,Rest[over]~Join~{over[[2]]},{down+1,up-1},pivotalStructure,
 newTag
 ]
