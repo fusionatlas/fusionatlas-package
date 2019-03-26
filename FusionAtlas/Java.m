@@ -19,38 +19,47 @@
 
 
 
+(* ::Input::Initialization:: *)
 BeginPackage["FusionAtlas`Java`",{"FusionAtlas`","JLink`","FusionAtlas`Bigraphs`","FusionAtlas`GraphPairs`","FusionAtlas`TensorSolver`","FusionAtlas`DisplayGraphs`"}];
 
 
+(* ::Input::Initialization:: *)
 FusionAtlasJavaDirectory::usage="";FusionAtlasScalaDirectory::usage="";
 
 
+(* ::Input::Initialization:: *)
 AsScalaSet;AsScalaList;AsScalaOption;AsScalaObject;FromScalaObject;UnpackJavaLists;UnpackJavaObjects;
 GraphToScalaObject;
 
 
+(* ::Input::Initialization:: *)
 RestartJava;CleanScalaLibraries;BuildScalaLibraries;RebuildScalaLibraries;
 
 
+(* ::Input::Initialization:: *)
 Begin["`Private`"];
 
 
+(* ::Input::Initialization:: *)
 FusionAtlasJavaDirectory[]:=ToFileName[FusionAtlasDirectory[],"java"]
 
 
+(* ::Input::Initialization:: *)
 FusionAtlasScalaDirectory[]:=ToFileName[FusionAtlasDirectory[],"scala"]
 
 
+(* ::Input::Initialization:: *)
 javaVersionOutput=FileNameJoin[{$TemporaryDirectory,"java.version"}];
 ReadString["!java -version 2> "<>javaVersionOutput];
 javaVersion=ToExpression[StringSplit[StringCases[Import[javaVersionOutput],"java version \""~~v:Except["\""]...~~"\""~~___:>v][[1]],"."|"_"]]
-If[Sort[{javaVersion,{1,8,0,100}}][[1]]==={1,8,0,100},
+If[javaVersion[[1]]>=11\[Or]Sort[{javaVersion,{1,8,0,100}}][[1]]==={1,8,0,100},
 (* The java version is recent enough! *),
 Print["The FusionAtlas requires a recent version of Java; please install a recent JDK, e.g. from ",Hyperlink["http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html"], " and restart Mathematica."];
 Abort[];
 ]
 
 
+(* ::Input::Initialization:: *)
 (* Add old java libraries to the classpath *)
 AddToClassPath[ToFileName[FusionAtlasJavaDirectory[],"target"],ToFileName[FusionAtlasJavaDirectory[],"jars"]];
 
@@ -93,6 +102,7 @@ AddToClassPath[FileNames[ToFileName[{FusionAtlasScalaDirectory[],"lib_managed","
 AddToClassPath[ProjectJars];
 
 
+(* ::Input::Initialization:: *)
 RestartJava[]:=Module[{},
 If[!NumericQ[Global`$JVMHeap],Global`$JVMHeap=512];
 javaPath=
@@ -116,32 +126,40 @@ LoadJavaClass["org.fusionatlas.graphs.obstructions.TriplePointObstruction$"];
 ]
 
 
+(* ::Input::Initialization:: *)
 RestartJava[]
 
 
+(* ::Input::Initialization:: *)
 AsScalaSet[list_]:=scala`collection`JavaConversions`asScalaSet[JavaNew["java.util.HashSet",java`util`Arrays`asList[MakeJavaObject[list]]]]@toSet[]
 AsScalaSet[{}]:=scala`collection`immutable`Set$`MODULE$@empty[]
 
 
+(* ::Input::Initialization:: *)
 AsScalaOption[{}]:=scala`None$`MODULE$
 AsScalaOption[{x_}]:=scala`Some$`MODULE$@apply[MakeJavaObject[x]]
 
 
+(* ::Input::Initialization:: *)
 unpackListRules={Y_/;InstanceOf[Y,"scala.collection.Traversable"]:>JavaConversions`seqAsJavaList[Y@toList[]],Y_/;InstanceOf[Y,"scala.Tuple2"]->Y@productIterator[]@toList[],Y_/;InstanceOf[Y,"scala.Tuple3"]->Y@productIterator[]@toList[],Y_/;InstanceOf[Y,"scala.Tuple4"]->Y@productIterator[]@toList[],Y_/;InstanceOf[Y,"java.util.List"]:>Y@toArray[],Y_/;InstanceOf[Y,"net.tqft.toolkit.algebra.matrices.Matrix"]:>Y@entries[]};
 
 
+(* ::Input::Initialization:: *)
 UnpackJavaLists[X_]:=X//.unpackListRules
 
 
+(* ::Input::Initialization:: *)
 FromScalaObject[X_]:=X//.unpackListRules~Join~{Y_/;InstanceOf[Y,"net.tqft.toolkit.mathematica.MathematicaExpression"]:>ToExpression[Y@toMathematicaInputString[]]}~Join~{Y_/;InstanceOf[Y,"net.tqft.toolkit.algebra.fusion.FusionRing"]:>FusionRules[_,{{0,0,0}->UnpackJavaLists[Y@structureCoefficients[]]}]}
 
 
+(* ::Input::Initialization:: *)
 AsScalaList[list:{__Integer|__Real}]:=scala`collection`JavaConversions`asScalaBuffer[java`util`Arrays`asList[MakeJavaObject/@list]]@toList[]
 AsScalaList[list:{__List}]:=AsScalaList[AsScalaList/@list]
 AsScalaList[list_List]:=scala`collection`JavaConversions`asScalaBuffer[java`util`Arrays`asList[MakeJavaObject[list]]]@toList[]
 AsScalaList[{}]:=scala`collection`immutable`List$`MODULE$@empty[]
 
 
+(* ::Input::Initialization:: *)
 AsScalaObject[x_List]:=AsScalaList[x]
 AsScalaObject[FusionRules[_,{{0,0,0}->m_}]]:=net`tqft`toolkit`algebra`fusion`FusionRing$`MODULE$@apply[AsScalaList[net`tqft`toolkit`algebra`matrices`Matrix$`MODULE$@from[Map[AsScalaList,#,{0,1}]]&/@m]]
 AsScalaObject[g_GradedBigraph]:=org`fusionatlas`graphs`Bigraph$`MODULE$@apply[GraphToString[g]]
@@ -150,11 +168,14 @@ AsScalaObject[{g1_BigraphWithDuals,g2_BigraphWithDuals}]:=org`fusionatlas`graphs
 AsScalaObject[X_/;JavaObjectQ[X]]:=X
 
 
+(* ::Input::Initialization:: *)
 UnpackJavaObjects[_]:=(Print["The UnpackJavaObjects function has been deprecated; please use FromScalaObject instead."];Abort[]);
 GraphToScalaObject[_]:=(Print["The GraphToScalaObject function has been deprecated; please use AsScalaObject instead."];Abort[]);
 
 
+(* ::Input::Initialization:: *)
 End[];
 
 
+(* ::Input::Initialization:: *)
 EndPackage[];
