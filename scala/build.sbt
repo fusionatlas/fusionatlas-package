@@ -37,8 +37,6 @@ libraryDependencies ++= Seq(
 	"org.apache.httpcomponents" % "httpclient" % "4.3.2"
 )
 
-EclipseKeys.withSource := true
-
 publishTo := Some(Resolver.sftp("toolkit.tqft.net Maven repository", "tqft.net", "tqft.net/releases") as ("scottmorrison", new java.io.File("/Users/scott/.ssh/id_rsa")))
 
 
