@@ -19,3 +19,4 @@ scala/sbt.err
 scala/sbt.out
 java/target
 java/.*
+scala/project/build.properties
