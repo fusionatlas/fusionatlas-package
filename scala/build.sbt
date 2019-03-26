@@ -41,6 +41,4 @@ EclipseKeys.withSource := true
 
 publishTo := Some(Resolver.sftp("toolkit.tqft.net Maven repository", "tqft.net", "tqft.net/releases") as ("scottmorrison", new java.io.File("/Users/scott/.ssh/id_rsa")))
 
-// 'sbt dependency-graph'
-net.virtualvoid.sbt.graph.Plugin.graphSettings
 
