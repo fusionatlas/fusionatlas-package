@@ -9,6 +9,9 @@ scalaVersion := "2.11.11"
 // we need local copies of all the jars for mathematica
 retrieveManaged := true
 
+// comment this out if you need to grab the latest version of toolkit
+updateOptions := updateOptions.value.withLatestSnapshots(false)
+
 resolvers ++= Seq(
 	"Java.net Maven2 Repository" at "http://download.java.net/maven/2/",
 	"tqft.net Maven repository" at "https://tqft.net/releases",
