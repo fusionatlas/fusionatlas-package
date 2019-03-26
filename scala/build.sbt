@@ -4,7 +4,7 @@ organization := "fusionatlas.org"
 
 version := "0.1.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.11"
 
 // we need local copies of all the jars for mathematica
 retrieveManaged := true
@@ -20,7 +20,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-	"org.scala-lang" % "scala-actors" % "2.11.7",
+	"org.scala-lang" % "scala-actors" % "2.11.11",
 	"junit" % "junit" % "4.12",
     "org.scalatest" %% "scalatest" % "3.0.5" % "test",
 	"org.slf4j" % "slf4j-log4j12" % "1.7.12",
@@ -34,7 +34,8 @@ libraryDependencies ++= Seq(
 	"com.google.code.typica" % "typica" % "1.7.2",
 	"com.google.guava" % "guava" % "21.0",
 	"org.apache.httpcomponents" % "httpcore" % "4.3.1",
-	"org.apache.httpcomponents" % "httpclient" % "4.3.2"
+	"org.apache.httpcomponents" % "httpclient" % "4.3.2",
+	"javax.xml.bind" % "jaxb-api" % "2.3.0"
 )
 
 publishTo := Some(Resolver.sftp("toolkit.tqft.net Maven repository", "tqft.net", "tqft.net/releases") as ("scottmorrison", new java.io.File("/Users/scott/.ssh/id_rsa")))
