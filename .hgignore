@@ -9,6 +9,7 @@ graphs
 
 tikz-diagrams/log
 
+target/
 scala/target
 scala/lib_managed
 scala/project/target
