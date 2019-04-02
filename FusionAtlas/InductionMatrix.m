@@ -40,6 +40,7 @@ permuteColumns[inductionMatrix_]:=Transpose[SortBy[Transpose[inductionMatrix],{T
 Clear[InductionMatrices]
 InductionMatrices[fr_FusionRules]:=InductionMatrices[fr]=Module[{n,dimensionData},
 dimensionData=DimensionData[fr];
+(* n is the conductor of the global dimension of the fusion category *)
 n=If[IntegerQ[dimensionData[[1]]],1,IdentifyRootOfUnity[dimensionData[[1,1]]]];
 permuteColumns/@Select[
 Cases[AlgebraicDecompositions[AnnularHoms[fr],dimensionData],m_/;Count[Transpose[m],UnitVector[Length[m],1]]>=1],
@@ -69,8 +70,10 @@ InductionMatrices[g_GradedBigraph]:={#,InductionMatrices[#]}&/@(EvenPartFusionRu
 
 
 (* ::Input::Initialization:: *)
+(* Checks that each Galois group element preserves the list of normalised dimensions, up to some signed permutation *)
 CheckGaloisAction[n_,dimensionData_][inductionMatrix_]:=Module[{\[ScriptCapitalD],dimensions},
 \[ScriptCapitalD]=dimensionData[[1]];
+(* dimensions is the list of dimensions of objects in the centre *)
 dimensions=Sort[Transpose[inductionMatrix].(dimensionData[[2,1]])];
 And@@Table[Sort[abs[GaloisAction[n][l][#/\[ScriptCapitalD]]\[ScriptCapitalD]]&/@dimensions]==dimensions,{l,GaloisGroup[n]}]
 ]
@@ -119,6 +122,9 @@ dNumberQ=FusionAtlas`dTest`Private`dNumberQ;
 
 
 (* ::Input::Initialization:: *)
+(* The "True" here means the formal codegree test is disabled. Why? *)
+(* One explanation might be the code is dumb: you can't use Complement like that *)
+(* What is the maths going on here anyway?? *)
 Clear[columnCondition]
 columnCondition[{\[ScriptCapitalD]_,dims_,dimsForFormalCodegrees_}][v_]:=columnCondition[{\[ScriptCapitalD],dims,dimsForFormalCodegrees}][v]=With[{d=dims.v},
 numberOfColumnsToCheck--;
