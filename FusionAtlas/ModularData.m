@@ -656,8 +656,8 @@ addRepresentation[{},conductor_Integer][pr_PartialRepresentation]:={pr};
 addRepresentation[{t:{__Integer},others___},conductor_Integer][pr:PartialRepresentation[ts:{{__Integer}...},remainingDimension_Integer,open_List,signedMultiplicities_List]]:=Module[{max,min},
 (*pr0=Take[pr,2];*)
 max=Floor[remainingDimension/RepresentationDimension[n,t]];
-(* check that either this representation has 1, or all eigenvalues have appeared previously *)
-max=Min[max,If[MemberQ[TEigenvalues[n,t],0]\[Or]Length[Complement[TEigenvalues[n,t],open]]==0,\[Infinity],0]];If[!MemberQ[TEigenvalues[n,t],0]\[And]Negative[RepresentationSign[n,t]],
+(* TODO: check that either this representation has 0, or any eigenvalues which could not appear *later*, have already appeared. *)
+If[!MemberQ[TEigenvalues[n,t],0]\[And]Negative[RepresentationSign[n,t]],
 (* look at the signed multiplicities *)
 min=Min@@(Replace[#[[1]],signedMultiplicities~Join~{_->0}]/#[[2]]&/@Tally[TEigenvalues[n,t]]);
 max=Min[max,min];
@@ -694,6 +694,7 @@ trivial=tuples[[-1,2,1]];
 representations=Map[{#,RepresentationDimension[n,#]}&,representations,{2}];
 representations=#~Join~Table[{trivial,1},{r-Total[#[[All,2]]]}]&/@representations;
 representations={#,TEigenvalues[n,#[[All,1]]]}&/@representations;
+representations=Cases[representations,{V_,Ts_}/;And@@Table[MemberQ[Ts,T_/;MemberQ[T,0]\[And]MemberQ[T,t]],{t,Union[Flatten[Ts]]}]];
 representations=Cases[representations,{V_,Ts_}/;And@@Table[(RepresentationSign[n,#]&/@(V[[All,1]])).(Count[#,t]&/@Ts)>=0,{t,Union[Flatten[Ts]]}]];
 RepresentationsForRankDirty=Union[RepresentationsForRankDirty,{n}];
 Print["Found ",Length[representations]," allowed representation types for conductor ",n, " and rank " ,r,"."];
@@ -1407,6 +1408,8 @@ det:=(det0=report[Factor[Collect[det0,_q]]]);
 variables:=Cases[timesToList[det],(v:q[_,_])^_.:>v];
 equations=If[ga===Null,
 {Sp.Q-Q.S},
+(* it seems this equation has already been solved, in its linear version as Sp.Sp.Q=Qp.C *)
+(* TODO try removing, and verifying everything(!) still works *)
 C=IdentityMatrix[Length[inductionMatrix[[1]]]][[n-1/.ga[[1]]]];
 {Sp.Q-Q.S,S.S-C}
 ];
