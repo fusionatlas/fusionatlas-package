@@ -646,22 +646,33 @@ RepresentationsForRank[n_,r_]:=RepresentationsForRank[n,r]=Module[{characterTabl
 Print["Enumerating allowed representation types for conductor ",n, " and rank " ,r,"."];
 characterTables=CharacterTable[GAP[SL[2,Subscript[Z, #]]]]&/@PrimePowers[n];
 (*characterTables0=characterTables;*)
+(* We assemble a list of all the irreps, whose dimensions is at most r *)
+(* If PrimePowers[n]={5,13}, an element {3,7} in tuples indicates the tensor product of the 3rd irrep of SL(2,Z/5Z) and the 7th irrep of
+SL(2,Z/13Z). *)
 tuples=Cases[Flatten[Outer[List,Sequence@@ Range[Length/@characterTables]],Length[PrimePowers[n]]-1],t_/;RepresentationDimension[n,t]<=r];
 (*tuples0=tuples;*)
+(* We next clump the irreps according to their conductor, and sort the list of clumps so that conductors divisible by Subscript[p, i]^Subscript[n, i] for the largest Subscript[p, i] come first, after that conductors divisible by the prime power corresponding to the second largest prime come next, and so one, and then we put the largest conductors first. *)
 tuples=SortBy[Normal[GroupBy[tuples,RepresentationConductor[n,#]&]],Function[p,{!Divisible[p[[1]],#]&/@Reverse[PrimePowers[n]],-p[[1]]}]];
 (*tuples0=tuples;*)
+(* We next sort each clump, so that irreps with a T eigenvalue of 0 come first, and after that so even representations come before odd representatiosn. *)
 tuples=#[[1]]->SortBy[#[[2]],Function[ts,{!MemberQ[TEigenvalues[n,ts],0],-RepresentationSign[n,ts]}]]&/@tuples;
 (*tuples0=tuples;*)
 addRepresentation[{},conductor_Integer][pr_PartialRepresentation]:={pr};
+(* This function takes care of adding all representations with a given conductor. *)
+(* Implementation note: the arguments open and signedMultiplicities are not actually used. Respectively, they keep track of
+eigenvalues which have appeared alonside 0, and the signed multiplicities of each eigenvalue so far. *)
 addRepresentation[{t:{__Integer},others___},conductor_Integer][pr:PartialRepresentation[ts:{{__Integer}...},remainingDimension_Integer,open_List,signedMultiplicities_List]]:=Module[{max,min},
 (*pr0=Take[pr,2];*)
 max=Floor[remainingDimension/RepresentationDimension[n,t]];
-(* TODO: check that either this representation has 0, or any eigenvalues which could not appear *later*, have already appeared. *)
-If[!MemberQ[TEigenvalues[n,t],0]\[And]Negative[RepresentationSign[n,t]],
+(* TODO?: check that either this representation has 0, or any eigenvalues which could not appear *later*, have already appeared alongside 0 (and so are recorded in "open"). *)
+(* TODO?: We could try checking multiplicities of eigenvalues in even and odd representations: if we're sure some eigenvalue
+can _only_ appear in odd representations from now on, that gives us a potentially tighter upper bound on how many times we can use an odd representations containing that eigenvalue. *)
+(* This next commented block of code was an earlier attempt to do this, which seems to have been incorrect. *)
+(*If[!MemberQ[TEigenvalues[n,t],0]\[And]Negative[RepresentationSign[n,t]],
 (* look at the signed multiplicities *)
-min=Min@@(Replace[#[[1]],signedMultiplicities~Join~{_->0}]/#[[2]]&/@Tally[TEigenvalues[n,t]]);
+min=Min@@(Replace[#\[LeftDoubleBracket]1\[RightDoubleBracket],signedMultiplicities~Join~{_\[Rule]0}]/#\[LeftDoubleBracket]2\[RightDoubleBracket]&/@Tally[TEigenvalues[n,t]]);
 max=Min[max,min];
-];
+];*)
 Join@@(addRepresentation[{others},conductor]/@Table[
 If[k==0,
 pr,
@@ -678,23 +689,31 @@ addMaps[signedMultiplicities,Rule@@({1,k RepresentationSign[n,t]}#)&/@Tally[TEig
 ],{k,0,max}])
 ];
 addRepresentations[{}][pr_PartialRepresentation]:={pr};
+(* This function takes care of adding all representations, by calling the previous function for each conductor. *)
 addRepresentations[{conductor_Integer->(ts:{{__Integer}...}),others___}][pr_PartialRepresentation]:=Module[{result},
 result=addRepresentation[ts,conductor][pr];
 (*Print[Length[result]];*)
-(* if the conductor is a prime power, make sure that by now we've actually used something with large enough conductor *)
+(*If the conductor is a prime power, that's the last time we will see that prime power, so make sure that by now we've actually used something with large enough conductor *)
 If[MemberQ[PrimePowers[n],conductor],
+If[MemberQ[{others}[[All,1]],N_/;Divisible[N,conductor]],
+Print["Something seems to have gone wrong with the ordering of the irreps!"];Abort[]];
 (*Print[RepresentationConductor[n,#]&/@result\[LeftDoubleBracket]All,1\[RightDoubleBracket]];*)
 result=Cases[result,PartialRepresentation[Ts:{{__Integer}...},___]/;Divisible[RepresentationConductor[n,Ts],conductor]];
 ];
 (*Print[Length[result]];*)
 Join@@(addRepresentations[{others}]/@result)
-]; 
+];
+If[tuples[[-1,1]]!=1, Print["Oops, I was expecting the last conductor to be 1!"];Abort[]];
+If[Length[tuples[[-1,2]]]!=1,Print["Oops, I was expecting the only irrep with conductor 1 to be the trivial irrep!"];Abort[]];
 representations=addRepresentations[Most[tuples]][PartialRepresentation[{},r-1,{},{}]][[All,1]];
 trivial=tuples[[-1,2,1]];
 representations=Map[{#,RepresentationDimension[n,#]}&,representations,{2}];
+(* Fill up the remaining space with trivial representations *)
 representations=#~Join~Table[{trivial,1},{r-Total[#[[All,2]]]}]&/@representations;
 representations={#,TEigenvalues[n,#[[All,1]]]}&/@representations;
+(* Check that every eigenvalue that appears appears with 0 in some irrep. *)
 representations=Cases[representations,{V_,Ts_}/;And@@Table[MemberQ[Ts,T_/;MemberQ[T,0]\[And]MemberQ[T,t]],{t,Union[Flatten[Ts]]}]];
+(* Check that the signed multiplicity of each irrep that appears is non-negative. *)
 representations=Cases[representations,{V_,Ts_}/;And@@Table[(RepresentationSign[n,#]&/@(V[[All,1]])).(Count[#,t]&/@Ts)>=0,{t,Union[Flatten[Ts]]}]];
 RepresentationsForRankDirty=Union[RepresentationsForRankDirty,{n}];
 Print["Found ",Length[representations]," allowed representation types for conductor ",n, " and rank " ,r,"."];
@@ -814,6 +833,7 @@ Join@@(Function[{p},AllocateEigenvaluesToGaloisOrbitClumpsImpl[ReplacePart[alloc
 EigenvalueClumps[{}]:={};
 EigenvalueClumps[eigenvalues:{__?NumericQ}]:=EigenvalueClumps[eigenvalues]=Module[{clump},
 clump=Union[Table[Mod[l^2 eigenvalues[[1]],1],{l,GaloisGroup[n]}]];
+(* TODO does it matter whether we clump then join, or join then clump? *)
 {clump}~Join~EigenvalueClumps[ListDifference[eigenvalues,clump]]
 ];
 EigenvalueClumps[eigenvalueLists:{{__?NumericQ}..}]:=Join@@(EigenvalueClumps[#]&/@eigenvalueLists);
