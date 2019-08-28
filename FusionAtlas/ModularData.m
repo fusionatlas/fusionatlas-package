@@ -92,8 +92,8 @@ ExecuteGAP[cmd_]:=Module[{lines,return},
 Print["Calling GAP:"];
 Print[cmd];
 return=Run["echo '"<>cmd<>"' | "<>GAPPath<>" -x 10000 -o 16g > /tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out"];
-lines=StringSplit[Import["/tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out","String"],"\n"];
-If[StringTake[lines[[1]],11]=!=" ********* "(*\[Or]
+lines=Import["/tmp/gap"<>ToString[$KernelID]<>"-"<>ToString[$ProcessID]<>".out","Lines",CharacterEncoding->"UTF8"];
+    If[StringTake[lines[[1]],11]=!=" ********* "\[And]StringTake[lines[[1]],11]=!=" \:250c\[HorizontalLine]\[HorizontalLine]\[HorizontalLine]\[HorizontalLine]\[HorizontalLine]\[HorizontalLine]\[HorizontalLine]\:2510 "(*\[Or]
 (lines\[LeftDoubleBracket]-1\[RightDoubleBracket]=!="gap> "\[And]lines\[LeftDoubleBracket]-1\[RightDoubleBracket]=!="gap> gap> ")*),
 Print["It looks like something went wrong running GAP (error code "<>ToString[return]<>"). Please check that you have GAP installed, and modify FusionAtlas`ModularData`Private`GAPPath if necessary."];
 Print[cmd];
